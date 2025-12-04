@@ -74,6 +74,9 @@ importers:
       vite-plugin-svgr:
         specifier: ^4.5.0
         version: 4.5.0(rollup@4.53.3)(typescript@5.9.3)(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))
+      zod:
+        specifier: ^4.1.13
+        version: 4.1.13
       zustand:
         specifier: ^5.0.9
         version: 5.0.9(@types/react@19.2.7)(immer@11.0.1)(react@19.2.1)
@@ -87,6 +90,9 @@ importers:
       '@eslint/js':
         specifier: ^9.39.1
         version: 9.39.1
+      '@nabla/vite-plugin-eslint':
+        specifier: ^2.0.6
+        version: 2.0.6(eslint@9.39.1(jiti@2.6.1))(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))
       '@tailwindcss/vite':
         specifier: ^4.1.17
         version: 4.1.17(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))
@@ -600,6 +606,12 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
+  '@nabla/vite-plugin-eslint@2.0.6':
+    resolution: {integrity: sha512-QQZwq7aTx2WtG2/c2ASF+amNAytbLY8LYYc71bECIMzRr7Y7Cx3o6oAQrcb1qQbq2+z2S2rq7i7o5LTskQi8sA==}
+    peerDependencies:
+      eslint: ^8.45 || ^9
+      vite: ^4 || ^5 || ^6 || ^7
+
   '@radix-ui/react-compose-refs@1.1.2':
     resolution: {integrity: sha512-z4eqJvfiNnFMHIIvXP3CY57y2WJs5g2v3X0zm9mEJkrkNv4rDxu+sg9Jh8EkXyeqBkB7SOcboo9dMVqhyrACIg==}
     peerDependencies:
@@ -968,6 +980,9 @@ packages:
 
   '@types/deep-eql@4.0.2':
     resolution: {integrity: sha512-c9h9dVVMigMPc4bwTvC5dxqtqJZwQPePsWjPlpSOnojbor6pGqdk541lfA7AqFQr5pB1BRdq0juY9db81BwyFw==}
+
+  '@types/eslint@9.6.1':
+    resolution: {integrity: sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==}
 
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
@@ -3125,6 +3140,16 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
+  '@nabla/vite-plugin-eslint@2.0.6(eslint@9.39.1(jiti@2.6.1))(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2))':
+    dependencies:
+      '@types/eslint': 9.6.1
+      chalk: 4.1.2
+      debug: 4.4.3
+      eslint: 9.39.1(jiti@2.6.1)
+      vite: 7.2.6(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(yaml@2.8.2)
+    transitivePeerDependencies:
+      - supports-color
+
   '@radix-ui/react-compose-refs@1.1.2(@types/react@19.2.7)(react@19.2.1)':
     dependencies:
       react: 19.2.1
@@ -3421,6 +3446,11 @@ snapshots:
       '@types/node': 24.10.1
 
   '@types/deep-eql@4.0.2': {}
+
+  '@types/eslint@9.6.1':
+    dependencies:
+      '@types/estree': 1.0.8
+      '@types/json-schema': 7.0.15
 
   '@types/estree@1.0.8': {}
 
