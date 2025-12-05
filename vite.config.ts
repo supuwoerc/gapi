@@ -18,11 +18,11 @@ export default ({ mode }: ConfigEnv): UserConfig => {
             environment: 'jsdom',
             include: [
                 'src/components/**/*.{test,spec}.?(c|m)[jt]s?(x)',
-                'src/utils/**/*.{test,spec}.?(c|m)[jt]s?(x)',
+                'src/test/**/*.{test,spec}.?(c|m)[jt]s?(x)',
             ],
             coverage: {
                 provider: 'v8',
-                include: ['src/components/**/*.tsx', 'src/utils/**/*.tsx'],
+                include: ['src/components/**/*.tsx', 'src/test/**/*.tsx'],
             },
             setupFiles: ['./setup-test.ts'],
             globals: true,

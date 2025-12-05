@@ -1,4 +1,4 @@
-import type { Theme } from '@/lib/zod/theme'
+import type { Theme } from '@/types/theme'
 import { createContext, useEffect, useState, type FC, type PropsWithChildren } from 'react'
 
 export type ThemeProviderState = {
