@@ -2,6 +2,11 @@
    <img src="./gapi.png" alt="Logo" width="280" height="auto" style="border-radius: 10px">
 </p>
 
+<div align="center">
+   <a href="./README_zh.md">中文</a> |
+   <a href="./README.md">English</a>
+</div>
+
 ## 📖 项目简介
 
 本项目是一个可以自托管的 API 管理平台，目的是提供更优雅的接口管理服务给开发和测试等人员，集成了现代化的UI和交互逻辑，如果你愿意，还可以接入相关 AI 服务来提升开发和测试效率。

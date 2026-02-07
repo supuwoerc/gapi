@@ -2,6 +2,11 @@
    <img src="./gapi.png" alt="Logo" width="280" height="auto" style="border-radius: 10px">
 </p>
 
+<div align="center">
+   <a href="./README_zh.md">中文</a> |
+   <a href="./README.md">English</a>
+</div>
+
 ## 📖 Project Introduction
 
 This project is a self-hosted API management platform designed to provide elegant API management services for developers, testers, and other personnel. It integrates modern UI and interaction logic, and if desired, can be connected to relevant AI services to enhance development and testing efficiency.
