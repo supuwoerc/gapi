@@ -1,0 +1,57 @@
+#!/bin/bash
+
+COMPONENTS=(
+    "accordion"
+    "alert"
+    "alert-dialog"
+    "aspect-ratio"
+    "avatar"
+    "badge"
+    "breadcrumb"
+    "button"
+    "calendar"
+    "card"
+    "carousel"
+    "chart"
+    "checkbox"
+    "collapsible"
+    "command"
+    "context-menu"
+    "dialog"
+    "drawer"
+    "dropdown-menu"
+    "form"
+    "hover-card"
+    "input"
+    "label"
+    "navigation-menu"
+    "pagination"
+    "popover"
+    "progress"
+    "radio-group"
+    "resizable"
+    "scroll-area"
+    "select"
+    "separator"
+    "sheet"
+    "sidebar"
+    "skeleton"
+    "slider"
+    "sonner"
+    "switch"
+    "table"
+    "tabs"
+    "textarea"
+    "toggle"
+    "toggle-group"
+    "tooltip"
+)
+
+echo "start install shadcn/ui components..."
+
+for component in "${COMPONENTS[@]}"; do
+    echo "install: $component"
+    pnpm dlx shadcn@latest add $component
+done
+
+echo "✅ install successed！"
