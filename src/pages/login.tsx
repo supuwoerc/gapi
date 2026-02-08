@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { useTheme } from '@/hooks/useTheme'
+import { useTheme } from '@/hooks/use-theme'
 
 export type LoginProps = {
   d?: number
