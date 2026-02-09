@@ -1,8 +1,17 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@import './theme/theme-cyberpunk.css';
+@import './theme/theme-green.css';
+@import './theme/theme-kupikod.css';
+@import './theme/theme-orange.css';
+@import './theme/theme-red.css';
+@import './theme/theme-rose.css';
+@import './theme/theme-violet.css';
+@import './theme/theme-yellow.css';
+@import './theme/theme-blue.css';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&: is(.dark *));
 
 @layer base {
   * {
@@ -14,7 +23,7 @@
     @apply overflow-x-hidden;
   }
   body {
-    @apply bg-background text-foreground has-[div[data-variant='inset']]:bg-sidebar min-h-svh w-full;
+    @apply min-h-svh w-full bg-background text-foreground has-[div[data-variant='inset']]:bg-sidebar;
   }
 
   /* Override Radix scroll locking for sticky headers */

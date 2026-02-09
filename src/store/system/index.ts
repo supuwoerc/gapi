@@ -1,17 +1,18 @@
+import type { Theme, ThemeMode } from '@/types/theme'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-import type { Theme } from '@/types/theme'
-
 type TSystemConfigStore = {
   sidebarCollapsed: boolean
+  themeMode: ThemeMode
   theme: Theme
 }
 
 const initialSystemConfig: TSystemConfigStore = {
   sidebarCollapsed: false,
-  theme: 'system',
+  themeMode: 'system',
+  theme: 'default',
 }
 
 const SYSTEM_CONFIG_STORE_NAME = 'systemConfigStore'
@@ -22,8 +23,9 @@ export const useSystemConfigStore = create<TSystemConfigStore>()(
       persist(() => initialSystemConfig, {
         name: SYSTEM_CONFIG_STORE_NAME,
         partialize: (state) => ({
-          theme: state.theme,
           sidebarCollapsed: state.sidebarCollapsed,
+          themeMode: state.themeMode,
+          theme: state.theme,
         }),
       }),
       {
@@ -36,6 +38,12 @@ export const useSystemConfigStore = create<TSystemConfigStore>()(
 export const setSystemSidebarCollapsed = (sidebarCollapsed: boolean) => {
   useSystemConfigStore.setState((state) => {
     state.sidebarCollapsed = sidebarCollapsed
+  })
+}
+
+export const setSystemThemeMode = (theme: TSystemConfigStore['themeMode']) => {
+  useSystemConfigStore.setState((state) => {
+    state.themeMode = theme
   })
 }
 

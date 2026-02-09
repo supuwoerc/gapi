@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import { ThemeProviderContext } from '@/providers/theme-provider'
 
-export const useTheme = () => {
+export function useTheme() {
   const context = useContext(ThemeProviderContext)
 
   if (context === undefined) {
