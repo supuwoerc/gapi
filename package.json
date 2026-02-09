@@ -5,17 +5,18 @@
   "type": "module",
   "description": "gapi-front",
   "engines": {
-    "node": "22.16.0",
-    "pnpm": "10.24.0"
+    "node": "24.13.0",
+    "pnpm": "10.29.2"
   },
   "volta": {
-    "node": "22.16.0",
-    "pnpm": "10.24.0"
+    "node": "24.13.0",
+    "pnpm": "10.29.2"
   },
   "keywords": [
-    "React",
-    "TypeScript",
-    "Vite"
+    "react",
+    "typescript",
+    "vite",
+    "shadcn"
   ],
   "author": "zhangzhouou@gmail.com",
   "scripts": {
