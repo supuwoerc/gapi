@@ -1,4 +1,4 @@
-import type { Theme, ThemeMode } from '@/types/theme'
+import type { Theme, ThemeMode } from '@/schema/theme'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'

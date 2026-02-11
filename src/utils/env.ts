@@ -9,3 +9,7 @@
 export function getAppEnv() {
   return import.meta.env
 }
+
+export const appEnv = getAppEnv()
+
+export const isDevEnv = appEnv.VITE_APP_ENV === 'dev'

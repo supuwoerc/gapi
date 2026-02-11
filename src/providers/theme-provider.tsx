@@ -1,7 +1,7 @@
 import { type FC, type PropsWithChildren, createContext, useEffect } from 'react'
 
+import type { Theme, ThemeMode } from '@/schema/theme'
 import { setSystemTheme, setSystemThemeMode, useSystemConfigStore } from '@/store/system'
-import type { Theme, ThemeMode } from '@/types/theme'
 import { useShallow } from 'zustand/react/shallow'
 
 export type ThemeProviderState = {
