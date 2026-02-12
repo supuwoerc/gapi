@@ -15,7 +15,7 @@ i18n
     lng: language,
     fallbackLng: 'zh',
     debug: isDevEnv,
-    ns: ['common', 'auth'],
+    ns: ['common', 'auth', 'error'],
     nsSeparator: '.',
     keySeparator: '.',
     interpolation: {

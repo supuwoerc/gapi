@@ -1,0 +1,7 @@
+{
+  "routeError": {
+    "pageLoadError": "💥",
+    "loadError": "Page failed to load",
+    "loadingTips": "You can contact the administrator or click the button below to go to another page"
+  }
+}

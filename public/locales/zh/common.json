@@ -1,4 +1,6 @@
 {
-  "welcome": "欢迎",
-  "goodbye": "再见"
+  "button": {
+    "goBack": "后退",
+    "backToHome": "去首页"
+  }
 }

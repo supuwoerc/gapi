@@ -3,7 +3,7 @@ import { Navigate, Outlet } from 'react-router'
 
 import { loadComponent } from '@/utils/route'
 
-import { RouteError } from '@/components/route-error/route-error'
+import { RouteError } from '@/components/route-error'
 
 const authRoutes: CustomRouteObject[] = [
   {
@@ -25,7 +25,7 @@ const authRoutes: CustomRouteObject[] = [
           auth: 'anonymous',
         },
         errorElement: <RouteError />,
-        lazy: loadComponent(() => import('@/components/layout/fullscreen/index')),
+        lazy: loadComponent(() => import('@/components/layout/fullscreen')),
         children: [
           {
             path: '',

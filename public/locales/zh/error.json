@@ -1,0 +1,7 @@
+{
+  "routeError": {
+    "pageLoadError": "💥",
+    "loadError": "当前页面加载失败",
+    "loadingTips": "你可以联系管理员或点击下面的按钮前往其他页面"
+  }
+}

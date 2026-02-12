@@ -1,4 +1,6 @@
 {
-  "welcome": "Welcome",
-  "goodbye": "Goodbye"
+  "button": {
+    "goBack": "Go Back",
+    "backToHome": "Back to Home"
+  }
 }

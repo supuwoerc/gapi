@@ -23,16 +23,11 @@ const theme = [
 
 const Login: React.FC<LoginProps> = () => {
   const { themeMode, setTheme, setThemeMode } = useTheme()
-  const { t, i18n } = useTranslation()
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng)
-  }
+  const { t } = useTranslation()
 
   return (
     <>
-      <h1>{t('common.welcome')}</h1>
-      <button onClick={() => changeLanguage('en')}>en</button>
-      <button onClick={() => changeLanguage('zh')}>zh</button>
+      <h1 className="text-2xl">{t('common.button.backToHome')}</h1>
 
       <Button onClick={() => setThemeMode(themeMode == 'dark' ? 'light' : 'dark')}>mode</Button>
 
