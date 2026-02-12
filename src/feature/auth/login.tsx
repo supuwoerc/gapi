@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { useTheme } from '@/hooks/use-theme'
 
 import { Button } from '@/components/ui/button'
@@ -21,9 +23,17 @@ const theme = [
 
 const Login: React.FC<LoginProps> = () => {
   const { themeMode, setTheme, setThemeMode } = useTheme()
+  const { t, i18n } = useTranslation()
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng)
+  }
 
   return (
     <>
+      <h1>{t('common.welcome')}</h1>
+      <button onClick={() => changeLanguage('en')}>en</button>
+      <button onClick={() => changeLanguage('zh')}>zh</button>
+
       <Button onClick={() => setThemeMode(themeMode == 'dark' ? 'light' : 'dark')}>mode</Button>
 
       {theme.map((item) => {

@@ -8,6 +8,8 @@ import '@/style/index.css'
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 
+import '@/lib/i18n.ts'
+
 import { reactQueryClient } from './lib/react-query.ts'
 import { ThemeProvider } from './providers/theme-provider.tsx'
 import routes from './routes/index.tsx'

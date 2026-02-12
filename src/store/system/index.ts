@@ -1,3 +1,4 @@
+import type { Language } from '@/schema/language'
 import type { Theme, ThemeMode } from '@/schema/theme'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
@@ -7,12 +8,14 @@ type TSystemConfigStore = {
   sidebarCollapsed: boolean
   themeMode: ThemeMode
   theme: Theme
+  language: Language
 }
 
 const initialSystemConfig: TSystemConfigStore = {
   sidebarCollapsed: false,
   themeMode: 'system',
   theme: 'default',
+  language: 'zh',
 }
 
 const SYSTEM_CONFIG_STORE_NAME = 'systemConfigStore'
@@ -26,6 +29,7 @@ export const useSystemConfigStore = create<TSystemConfigStore>()(
           sidebarCollapsed: state.sidebarCollapsed,
           themeMode: state.themeMode,
           theme: state.theme,
+          language: state.language,
         }),
       }),
       {
@@ -50,5 +54,11 @@ export const setSystemThemeMode = (theme: TSystemConfigStore['themeMode']) => {
 export const setSystemTheme = (theme: TSystemConfigStore['theme']) => {
   useSystemConfigStore.setState((state) => {
     state.theme = theme
+  })
+}
+
+export const setSystemLanguage = (language: TSystemConfigStore['language']) => {
+  useSystemConfigStore.setState((state) => {
+    state.language = language
   })
 }

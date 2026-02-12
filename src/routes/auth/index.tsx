@@ -29,7 +29,7 @@ const authRoutes: CustomRouteObject[] = [
         children: [
           {
             path: '',
-            lazy: loadComponent(() => import('@/feature/login')),
+            lazy: loadComponent(() => import('@/feature/auth/login')),
           },
         ],
       },

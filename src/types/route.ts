@@ -1,6 +1,6 @@
 import type { IndexRouteObject, NonIndexRouteObject } from 'react-router'
 
-import type { Auth } from '../schema/system'
+import type { Auth } from '../schema/auth'
 
 export interface RouteHandle {
   handle?: {
