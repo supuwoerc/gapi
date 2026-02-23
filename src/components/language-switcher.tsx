@@ -24,7 +24,7 @@ const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ style, className }) => {
   const { i18n } = useTranslation()
   const language = useSystemConfigStore((state) => state.language)
 
-  const changeLanguage = (lng: Language) => {
+  const changeLanguageHandle = (lng: Language) => {
     if (lng !== language) {
       i18n.changeLanguage(lng)
       toast.info(lng == 'en' ? 'Switch language to English' : '切换语言为简体中文')
@@ -41,10 +41,10 @@ const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ style, className }) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className="cursor-pointer" onClick={() => changeLanguage('zh')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => changeLanguageHandle('zh')}>
             中文 <Check size={14} className={cn('ms-auto', language !== 'zh' && 'hidden')} />
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer" onClick={() => changeLanguage('en')}>
+          <DropdownMenuItem className="cursor-pointer" onClick={() => changeLanguageHandle('en')}>
             English
             <Check size={14} className={cn('ms-auto', language !== 'en' && 'hidden')} />
           </DropdownMenuItem>

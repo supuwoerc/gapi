@@ -2,5 +2,12 @@
   "button": {
     "goBack": "Go Back",
     "backToHome": "Back to Home"
+  },
+  "system": {
+    "themeMode": {
+      "system": "System",
+      "dark": "Dark",
+      "light": "Light"
+    }
   }
 }

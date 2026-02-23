@@ -2,5 +2,12 @@
   "button": {
     "goBack": "后退",
     "backToHome": "去首页"
+  },
+  "system": {
+    "themeMode": {
+      "system": "系统",
+      "dark": "暗黑",
+      "light": "光亮"
+    }
   }
 }

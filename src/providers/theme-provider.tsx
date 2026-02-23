@@ -21,11 +21,8 @@ const initialState: ThemeProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 const ThemeProvider: FC<PropsWithChildren> = ({ children, ...props }) => {
-  const { themeMode, theme } = useSystemConfigStore(
-    useShallow((state) => ({
-      themeMode: state.themeMode,
-      theme: state.theme,
-    }))
+  const [themeMode, theme] = useSystemConfigStore(
+    useShallow((state) => [state.themeMode, state.theme])
   )
 
   useEffect(() => {
