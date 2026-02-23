@@ -1,23 +1,17 @@
-import type { FC } from 'react'
+import type { FC, PropsWithChildren } from 'react'
 
 import { useOutlet } from 'react-router'
-
-import { cn } from '@/lib/utils'
 
 import { LanguageSwitcher } from '../language-switcher'
 import { Logo } from '../logo'
 import { NavigationProgress } from '../navigation-progress'
 
-interface FullscreenLayoutProps {
-  pure?: boolean
-}
-
-const FullscreenLayout: FC<FullscreenLayoutProps> = ({ pure = false }) => {
+const AuthenticedLayout: FC<PropsWithChildren> = () => {
   const currentOutlet = useOutlet()
   return (
     <>
       <NavigationProgress />
-      <main className={cn('relative h-svh w-svw overflow-x-hidden pt-20', pure && 'pt-0')}>
+      <main className="relative h-svh w-svw overflow-x-hidden pt-20">
         <Logo className="fixed top-5 left-5" />
         <div className="fixed top-5 right-5 flex gap-2">
           <LanguageSwitcher />
@@ -30,4 +24,4 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({ pure = false }) => {
   )
 }
 
-export default FullscreenLayout
+export default AuthenticedLayout

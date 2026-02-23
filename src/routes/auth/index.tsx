@@ -25,7 +25,7 @@ const authRoutes: CustomRouteObject[] = [
           auth: 'anonymous',
         },
         errorElement: <RouteError />,
-        lazy: loadComponent(() => import('@/components/layout/fullscreen')),
+        lazy: loadComponent(() => import('@/components/layout/fullscreen'), { pure: false }),
         children: [
           {
             path: '',

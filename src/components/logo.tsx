@@ -69,15 +69,15 @@ const Logo: FC<LogoProps> = ({ pure = false, to, style, className }) => {
     <div
       ref={logoRef}
       className={cn(
-        'z-99 flex h-15 items-center justify-center gap-0.5 overflow-y-hidden px-2',
-        to ? 'cursor-pointer' : '',
+        'z-99 flex h-9 items-center justify-center gap-0.5 overflow-y-hidden px-2',
+        to && 'cursor-pointer',
         className
       )}
       style={style}
       onClick={onClickHandle}
     >
       <Favicon width={30} stroke="var(--primary)" strokeWidth={16} />
-      {pure ? null : <span style={{ marginLeft: 10 }}>{appEnv.VITE_APP_NAME}</span>}
+      {pure ? null : <span className="ml-2.5 font-bold">{appEnv.VITE_APP_NAME}</span>}
     </div>
   )
 }

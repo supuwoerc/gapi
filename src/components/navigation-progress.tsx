@@ -13,7 +13,6 @@ nprogress.configure({
 const NavigationProgress = () => {
   const navigation = useNavigation()
 
-  // TODO:custom css
   useEffect(() => {
     if (navigation.state !== 'idle') {
       nprogress.start()
