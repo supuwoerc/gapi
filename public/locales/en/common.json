@@ -8,6 +8,18 @@
       "system": "System",
       "dark": "Dark",
       "light": "Light"
+    },
+    "theme": {
+      "default": "Default",
+      "cyberpunk": "Cyberpunk",
+      "green": "Green",
+      "kupikod": "Kupikod",
+      "orange": "Orange",
+      "red": "Red",
+      "rose": "Rose",
+      "violet": "Violet",
+      "yellow": "Yellow",
+      "blue": "Blue"
     }
   }
 }

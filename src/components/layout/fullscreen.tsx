@@ -8,6 +8,7 @@ import { LanguageSwitcher } from '../language-switcher'
 import { Logo } from '../logo'
 import { NavigationProgress } from '../navigation-progress'
 import { ThemeModeSwitcher } from '../theme-mode-switcher'
+import { ThemeSwitcher } from '../theme-switcher'
 
 interface FullscreenLayoutProps {
   pure?: boolean
@@ -23,6 +24,7 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({ pure = false }) => {
         <div className="fixed top-5 right-5 flex gap-2">
           <LanguageSwitcher />
           <ThemeModeSwitcher />
+          <ThemeSwitcher />
         </div>
         <main>
           <div>{currentOutlet}</div>

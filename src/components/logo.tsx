@@ -77,7 +77,7 @@ const Logo: FC<LogoProps> = ({ pure = false, to, style, className }) => {
       onClick={onClickHandle}
     >
       <Favicon width={30} stroke="var(--primary)" strokeWidth={16} />
-      {pure ? null : <span className="ml-2.5 font-bold">{appEnv.VITE_APP_NAME}</span>}
+      {pure ? null : <span className="ml-2.5 font-bold text-primary">{appEnv.VITE_APP_NAME}</span>}
     </div>
   )
 }

@@ -8,6 +8,18 @@
       "system": "系统",
       "dark": "暗黑",
       "light": "光亮"
+    },
+    "theme": {
+      "default": "默认",
+      "cyberpunk": "赛博朋克",
+      "green": "翠绿",
+      "kupikod": "库比科德",
+      "orange": "橙色",
+      "red": "红色",
+      "rose": "玫瑰",
+      "violet": "紫罗兰",
+      "yellow": "金黄",
+      "blue": "深蓝"
     }
   }
 }
