@@ -11,10 +11,11 @@ import gsap from 'gsap'
 import { TextPlugin } from 'gsap/all'
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
-import { Toaster } from 'sonner'
 
 import '@/lib/i18n.ts'
 import { reactQueryClient } from '@/lib/react-query.ts'
+
+import { Toaster } from '@/components/ui/sonner'
 
 gsap.registerPlugin(TextPlugin)
 
@@ -28,7 +29,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={reactQueryClient}>
         <ThemeProvider>
-          <Toaster duration={3000} />
+          <Toaster duration={5000} position="top-center" />
           <RouterProvider router={router} />
         </ThemeProvider>
       </QueryClientProvider>

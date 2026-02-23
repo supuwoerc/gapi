@@ -27,7 +27,7 @@ const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ style, className }) => {
   const changeLanguageHandle = (lng: Language) => {
     if (lng !== language) {
       i18n.changeLanguage(lng)
-      toast.info(lng == 'en' ? 'Switch language to English' : '切换语言为简体中文')
+      toast.success(lng == 'en' ? 'Switch language to English' : '切换语言为简体中文')
     }
   }
 

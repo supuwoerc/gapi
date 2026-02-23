@@ -48,7 +48,7 @@ const ThemeModeSwitcher: FC<ThemeModeSwitcherProps> = ({ style, className }) => 
   const changeThemeModeHandle = (mode: ThemeMode, localKey: string) => {
     if (mode !== themeMode) {
       setSystemThemeMode(mode)
-      toast.info(language == 'en' ? `Switch to ${t(localKey)} mode` : `切换为${t(localKey)}模式`)
+      toast.success(language == 'en' ? `Switch to ${t(localKey)} mode` : `切换为${t(localKey)}模式`)
     }
   }
 
