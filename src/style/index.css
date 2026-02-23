@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
-@import './nprogress.css';
 @import './theme/theme-cyberpunk.css';
 @import './theme/theme-green.css';
 @import './theme/theme-kupikod.css';

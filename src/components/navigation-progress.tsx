@@ -1,27 +1,21 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
-import nprogress from 'nprogress'
-import 'nprogress/nprogress.css'
 import { useNavigation } from 'react-router'
-
-nprogress.configure({
-  showSpinner: false,
-  easing: 'ease',
-  speed: 500,
-})
+import LoadingBar, { type LoadingBarRef } from 'react-top-loading-bar'
 
 const NavigationProgress = () => {
   const navigation = useNavigation()
+  const ref = useRef<LoadingBarRef>(null)
 
   useEffect(() => {
     if (navigation.state !== 'idle') {
-      nprogress.start()
+      ref.current?.continuousStart()
     } else {
-      nprogress.done()
+      ref.current?.complete()
     }
   }, [navigation.state])
 
-  return null
+  return <LoadingBar color="var(--color-primary)" ref={ref} shadow={true} height={2} />
 }
 
 export { NavigationProgress }
