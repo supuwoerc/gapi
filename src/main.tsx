@@ -29,7 +29,7 @@ if (!rootElement.innerHTML) {
     <StrictMode>
       <QueryClientProvider client={reactQueryClient}>
         <ThemeProvider>
-          <Toaster duration={5000} position="top-center" />
+          <Toaster duration={2200} position="top-center" />
           <RouterProvider router={router} />
         </ThemeProvider>
       </QueryClientProvider>
