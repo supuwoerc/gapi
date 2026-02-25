@@ -2,7 +2,7 @@ import type { IndexRouteObject, NonIndexRouteObject } from 'react-router'
 
 import type { Auth } from '../schema/auth'
 
-export interface RouteHandle {
+interface RouteHandle {
   handle?: {
     title?: string
     icon?: React.ReactNode

@@ -4,7 +4,7 @@ import { isError } from 'lodash-es'
 import { toast } from 'sonner'
 
 // https://tkdodo.eu/blog/breaking-react-querys-api-on-purpose#a-bad-api
-export const generateQueryConfig = (): DefaultOptions => {
+const generateQueryConfig = (): DefaultOptions => {
   return {
     queries: {
       throwOnError: false,
@@ -20,7 +20,7 @@ export const generateQueryConfig = (): DefaultOptions => {
   }
 }
 
-export const generateQueryClient = (
+const generateQueryClient = (
   onQueryError: QueryCache['config']['onError'],
   onMutationError: MutationCache['config']['onError']
 ) => {

@@ -27,10 +27,6 @@ const options: Array<{ key: Theme; localeKey: string }> = [
     localeKey: 'common.system.theme.default',
   },
   {
-    key: 'cyberpunk',
-    localeKey: 'common.system.theme.cyberpunk',
-  },
-  {
     key: 'green',
     localeKey: 'common.system.theme.green',
   },

@@ -12,10 +12,12 @@ const authRoutes: CustomRouteObject[] = [
       hidden: true,
       auth: 'anonymous',
     },
+    errorElement: <RouteError />,
     element: <Outlet />,
     children: [
       {
         path: '',
+        errorElement: <RouteError />,
         element: <Navigate to={'/login'} replace />,
       },
       {
@@ -31,6 +33,7 @@ const authRoutes: CustomRouteObject[] = [
         children: [
           {
             path: '',
+            errorElement: <RouteError />,
             lazy: loadComponent(() => import('@/feature/auth/login')),
           },
         ],

@@ -33,5 +33,3 @@ i18n
 i18n.on('languageChanged', (lng: Language) => {
   setSystemLanguage(lng)
 })
-
-export default i18n

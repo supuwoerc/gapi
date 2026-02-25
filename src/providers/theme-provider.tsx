@@ -4,7 +4,7 @@ import type { Theme, ThemeMode } from '@/schema/theme'
 import { setSystemTheme, setSystemThemeMode, useSystemConfigStore } from '@/store/system'
 import { useShallow } from 'zustand/react/shallow'
 
-export type ThemeProviderState = {
+type ThemeProviderState = {
   themeMode: ThemeMode
   theme: Theme
   setThemeMode: (mode: ThemeMode) => void

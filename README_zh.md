@@ -30,7 +30,7 @@
 - **shadcn/ui** - 高质量 React 组件库
 - **Tailwind CSS** - 实用优先的 CSS 框架
 - **Radix UI** - 无障碍的底层组件
-- **Zustand** / **Jotai** - 轻量级状态管理（二选一）
+- **Zustand** - 轻量级状态管理（二选一）
 - **TanStack Query** - 服务端状态管理
 - **React Router** - 路由管理
 - **Axios** - HTTP 客户端

@@ -93,7 +93,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
               <FormMessage />
               <Link
                 to="/forgot-password"
-                className="absolute end-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75"
+                className="absolute inset-e-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75"
               >
                 Forgot password?
               </Link>
