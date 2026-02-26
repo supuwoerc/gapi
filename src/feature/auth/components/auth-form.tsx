@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { sleep } from '@supuwoerc/toolkit'
 import { Link as LinkIcon, Loader2, LogIn, QrCode } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 
@@ -31,18 +32,20 @@ interface AuthFormProps {
 
 const authFormSchema = z.object({
   email: z.email({
-    error: (iss) => (iss.input === '' ? 'Please enter your email' : undefined),
+    error: (iss) => (iss.input === '' ? 'Please enter your email' : undefined), // TODO: i18n
   }),
   password: z
     .string()
     .min(1, 'Please enter your password')
-    .min(7, 'Password must be at least 7 characters long'),
+    .min(7, 'Password must be at least 7 characters long'), // TODO: i18n
 })
 
 type authForm = z.infer<typeof authFormSchema>
 
 const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   const navigate = useNavigate()
+
+  const { t } = useTranslation()
 
   const form = useForm<authForm>({
     resolver: zodResolver(authFormSchema),
@@ -73,7 +76,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t('auth.email')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -86,7 +89,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           name="password"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel>Password</FormLabel>
+              <FormLabel> {t('auth.password')}</FormLabel>
               <FormControl>
                 <PasswordInput placeholder="********" {...field} />
               </FormControl>
@@ -95,14 +98,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
                 to="/forgot-password"
                 className="absolute inset-e-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75"
               >
-                Forgot password?
+                {t('auth.forgotPassword')}
               </Link>
             </FormItem>
           )}
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <LogIn />}
-          Sign in
+          {t('auth.signIn')}
         </Button>
 
         <div className="relative my-2">
@@ -110,7 +113,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+            <span className="bg-background px-2 text-muted-foreground">{t('common.or')}</span>
           </div>
         </div>
 

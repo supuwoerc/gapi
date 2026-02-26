@@ -4,8 +4,6 @@ import i18n from 'i18next'
 import backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 
-import { isDevEnv } from '@/utils/env'
-
 const { language } = useSystemConfigStore.getState()
 
 i18n
@@ -14,7 +12,6 @@ i18n
   .init({
     lng: language,
     fallbackLng: 'zh',
-    debug: isDevEnv,
     ns: ['common', 'auth', 'error'],
     nsSeparator: '.',
     keySeparator: '.',

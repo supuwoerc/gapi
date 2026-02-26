@@ -13,8 +13,8 @@ type TSystemConfigStore = {
 
 const initialSystemConfig: TSystemConfigStore = {
   sidebarCollapsed: false,
-  themeMode: 'system',
-  theme: 'default',
+  themeMode: 'light',
+  theme: 'kupikod',
   language: 'zh',
 }
 
