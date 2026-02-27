@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { z } from 'zod'
 
 import { type SubmitHandler, useForm } from 'react-hook-form'
@@ -11,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 
+import { i18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -32,13 +35,18 @@ interface AuthFormProps {
 }
 
 const authFormSchema = z.object({
-  email: z.email({
-    error: (iss) => (iss.input === '' ? 'Please enter your email' : undefined), // TODO: i18n
-  }),
+  email: z.email(),
   password: z
     .string()
-    .min(1, 'Please enter your password')
-    .min(7, 'Password must be at least 7 characters long'), // TODO: i18n
+    .min(8, {
+      error: () => i18n.t('auth.form.password.min'),
+    })
+    .max(20, {
+      error: () => i18n.t('auth.form.password.max'),
+    })
+    .refine((value) => /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9A-Za-z~!@#$%^&*._?]{8,20}$/.test(value), {
+      error: i18n.t('auth.form.password.pattern'),
+    }),
 })
 
 type authForm = z.infer<typeof authFormSchema>
@@ -46,7 +54,7 @@ type authForm = z.infer<typeof authFormSchema>
 const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   const navigate = useNavigate()
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const form = useForm<authForm>({
     resolver: zodResolver(authFormSchema),
@@ -55,6 +63,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
       password: '',
     },
   })
+
+  useEffect(() => {
+    if (Object.keys(form.formState.errors).length) {
+      form.trigger()
+    }
+  }, [i18n.language, form])
 
   const submithandle: SubmitHandler<authForm> = async (data: authForm) => {
     await toast
