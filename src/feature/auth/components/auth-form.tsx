@@ -5,6 +5,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { sleep } from '@supuwoerc/toolkit'
+import { isError } from 'lodash-es'
 import { Link as LinkIcon, Loader2, LogIn, QrCode } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
@@ -58,12 +59,17 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   const submithandle: SubmitHandler<authForm> = async (data: authForm) => {
     await toast
       .promise(sleep(2000), {
-        loading: 'Signing in...',
+        loading: t('auth.signInLoading'),
         success: () => {
           navigate(redirectTo || '/', { replace: true })
-          return `Welcome back, ${data.email}!`
+          return t('auth.welcomeMessage', { email: data.email })
         },
-        error: 'Error',
+        error: (err) => {
+          if (isError(err)) {
+            return err.message
+          }
+          return t('common.error')
+        },
       })
       .unwrap()
   }
