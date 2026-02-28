@@ -45,7 +45,7 @@ const authFormSchema = z.object({
       error: () => i18n.t('auth.form.password.max'),
     })
     .refine((value) => /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9A-Za-z~!@#$%^&*._?]{8,20}$/.test(value), {
-      error: i18n.t('auth.form.password.pattern'),
+      error: () => i18n.t('auth.form.password.pattern'),
     }),
 })
 
