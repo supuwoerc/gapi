@@ -102,7 +102,7 @@ const Login: React.FC = () => {
 
       const scopeSelector = `.item[data-index='${currentIndex}']`
       const titleSelector = `${scopeSelector} .title`
-      const subTitleSelector = `${scopeSelector} .sub-title`
+      const subTitleSelector = `${scopeSelector} .subtitle`
       const coverSelector = `${scopeSelector} .cover`
 
       const titleSplit = SplitText.create(titleSelector, { type: 'chars' })
@@ -195,7 +195,7 @@ const Login: React.FC = () => {
                           </h2>
                           <h4
                             key={`st${key}`}
-                            className="sub-title mb-2 text-sm text-white opacity-80"
+                            className="subtitle mb-2 text-sm text-white opacity-80"
                           >
                             {t(item.subTitle)}
                           </h4>
@@ -214,7 +214,7 @@ const Login: React.FC = () => {
                             </h2>
                             <h4
                               key={`st${key}`}
-                              className="sub-title mb-2 text-sm text-white opacity-80"
+                              className="subtitle mb-2 text-sm text-white opacity-80"
                             >
                               {t(item.subTitle)}
                             </h4>

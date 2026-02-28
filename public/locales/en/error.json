@@ -1,7 +1,12 @@
 {
   "routeError": {
-    "pageLoadError": "💥",
-    "loadError": "Page failed to load",
-    "loadingTips": "You can contact the administrator or click the button below to go to another page"
+    "loadError": {
+      "title": "Page failed to load",
+      "subtitle": "You can contact the administrator or click the button below to go to another page"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "subtitle": "Please confirm that the access path is correct"
+    }
   }
 }
