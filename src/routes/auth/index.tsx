@@ -40,6 +40,15 @@ const authRoutes: CustomRouteObject[] = [
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/auth/forgot-password')),
       },
+      {
+        path: 'otp',
+        handle: {
+          title: 'route.otp',
+          auth: 'anonymous',
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/auth/otp')),
+      },
     ],
   },
 ]
