@@ -127,7 +127,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <LogIn />}
           {t('auth.signIn')}
         </Button>
-
         <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
@@ -136,7 +135,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
             <span className="bg-background px-2 text-muted-foreground">{t('common.or')}</span>
           </div>
         </div>
-
         <div className="grid grid-cols-2 gap-2">
           <Button variant="outline" type="button" disabled={form.formState.isSubmitting}>
             <QrCode className="h-4 w-4" /> QrCode

@@ -1,8 +1,12 @@
 {
   "error": "似乎出错了，请稍后再试",
+  "loading": "处理中...",
   "button": {
     "goBack": "后退",
-    "backToHome": "去首页"
+    "backToHome": "去首页",
+    "continue": "继续",
+    "prevStep": "上一步",
+    "nextStep": "下一步"
   },
   "or": "或",
   "system": {

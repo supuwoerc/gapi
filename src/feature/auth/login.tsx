@@ -10,6 +10,7 @@ import { createHighlighter } from 'shiki'
 import 'shiki-magic-move/dist/style.css'
 import { ShikiMagicMove } from 'shiki-magic-move/react'
 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 
 import AuthForm from './components/auth-form'
@@ -242,13 +243,15 @@ const Login: React.FC = () => {
         )}
       </div>
       <div className="flex h-full w-full items-center justify-center lg:p-8">
-        <div>
-          <div className="mb-2 flex flex-col gap-y-2 text-start sm:px-8">
-            <h2 className="text-lg font-semibold tracking-tight">{t('auth.login')}</h2>
-            <p className="text-sm text-muted-foreground">{t('auth.loginTip')}</p>
-          </div>
-          <AuthForm className="mx-auto my-auto space-y-2 sm:w-120 sm:px-8" />
-        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg tracking-tight">{t('auth.login')}</CardTitle>
+            <CardDescription>{t('auth.loginTip')}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <AuthForm className="space-y-2 sm:w-120" />
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

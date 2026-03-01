@@ -1,5 +1,5 @@
 import type { CustomRouteObject } from '@/types/route'
-import { Navigate, Outlet } from 'react-router'
+import { Navigate } from 'react-router'
 
 import { loadComponent } from '@/utils/route'
 
@@ -13,7 +13,9 @@ const authRoutes: CustomRouteObject[] = [
       auth: 'anonymous',
     },
     errorElement: <RouteError />,
-    element: <Outlet />,
+    lazy: loadComponent(() => import('@/components/layout/fullscreen'), {
+      pure: true,
+    }),
     children: [
       {
         path: '',
@@ -27,16 +29,16 @@ const authRoutes: CustomRouteObject[] = [
           auth: 'anonymous',
         },
         errorElement: <RouteError />,
-        lazy: loadComponent(() => import('@/components/layout/fullscreen'), {
-          pure: true,
-        }),
-        children: [
-          {
-            path: '',
-            errorElement: <RouteError />,
-            lazy: loadComponent(() => import('@/feature/auth/login')),
-          },
-        ],
+        lazy: loadComponent(() => import('@/feature/auth/login')),
+      },
+      {
+        path: 'forgot-password',
+        handle: {
+          title: 'route.forgotPassword',
+          auth: 'anonymous',
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/auth/forgot-password')),
       },
     ],
   },
