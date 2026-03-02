@@ -249,7 +249,7 @@ const Login: React.FC = () => {
             <CardDescription>{t('auth.loginTip')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <AuthForm className="space-y-2 sm:w-120" />
+            <AuthForm className="space-y-2 sm:w-102" />
           </CardContent>
         </Card>
       </div>

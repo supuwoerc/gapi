@@ -104,8 +104,8 @@ const OTPForm: React.FC<OTPFormProps> = ({ className }) => {
           )}
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
-          {t('auth.verify')}
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <ShieldEllipsis />}
+          {t('auth.verify')}
         </Button>
       </form>
     </Form>

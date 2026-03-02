@@ -17,6 +17,11 @@ const errorRoutes: CustomRouteObject[] = [
     }),
     children: [
       {
+        path: '500',
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/error/500.tsx')),
+      },
+      {
         path: '*',
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/error/404.tsx')),
