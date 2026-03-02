@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import { LanguageSwitcher } from '../language-switcher'
 import { Logo } from '../logo'
 import { NavigationProgress } from '../navigation-progress'
+import { NavigationTitle } from '../navigation-title'
 import { ThemeModeSwitcher } from '../theme-mode-switcher'
 import { ThemeSwitcher } from '../theme-switcher'
 
@@ -25,6 +26,7 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
   return (
     <>
       <NavigationProgress />
+      <NavigationTitle />
       <main className={cn('relative h-svh w-svw overflow-x-hidden pt-20', pure && 'pt-0')}>
         {logo && <Logo className="fixed top-5 left-5" />}
         {setting && (

@@ -2,7 +2,7 @@ import type { IndexRouteObject, NonIndexRouteObject } from 'react-router'
 
 import type { Auth } from '../schema/auth'
 
-interface RouteHandle {
+export interface RouteHandle {
   handle?: {
     title?: string
     icon?: React.ReactNode
@@ -19,5 +19,3 @@ type AppNonIndexRouteObject = Omit<NonIndexRouteObject, 'children'> &
   }
 
 export type CustomRouteObject = AppIndexRouteObject | AppNonIndexRouteObject
-
-export type RouterLoader = CustomRouteObject['loader']

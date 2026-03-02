@@ -1,6 +1,6 @@
 {
   "error": "似乎出错了，请稍后再试",
-  "loading": "处理中...",
+  "loading": "加载中...",
   "button": {
     "goBack": "后退",
     "backToHome": "去首页",
