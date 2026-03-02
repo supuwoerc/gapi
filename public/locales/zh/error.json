@@ -12,5 +12,9 @@
   "serverError": {
     "title": "服务器异常",
     "subtitle": "给您带来的不便，我们深表歉意，请稍后再试"
+  },
+  "forbidden": {
+    "title": "无权限访问",
+    "subtitle": "当前页面无权限访问，请申请权限后刷新重试"
   }
 }
