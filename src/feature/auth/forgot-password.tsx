@@ -14,6 +14,7 @@ import ForgotPasswordForm from './components/forgot-password-form'
 
 const ForgotPassword: React.FC = () => {
   const { t } = useTranslation()
+
   return (
     <div className="relative flex h-svh w-full items-center justify-center lg:p-8">
       <Card>

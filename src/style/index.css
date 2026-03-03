@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@import './transition.css';
 @import './theme/theme-green.css';
 @import './theme/theme-kupikod.css';
 @import './theme/theme-orange.css';
@@ -174,6 +175,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-  -ms-overflow-style: none; 
-  scrollbar-width: none;  
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -1,0 +1,17 @@
+@layer components {
+  .fade-slide-enter {
+    @apply -translate-x-8 opacity-0;
+  }
+
+  .fade-slide-enter-active {
+    @apply translate-x-0 opacity-100 transition-transform duration-500 ease-out;
+  }
+
+  .fade-slide-exit {
+    @apply translate-x-0 opacity-100;
+  }
+
+  .fade-slide-exit-active {
+    @apply translate-x-8 opacity-0 transition-transform duration-500 ease-in;
+  }
+}

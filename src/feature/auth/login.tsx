@@ -12,6 +12,7 @@ import { ShikiMagicMove } from 'shiki-magic-move/react'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
+import { Spinner } from '@/components/ui/spinner'
 
 import AuthForm from './components/auth-form'
 import { carouselItems, codeSnippets, langs } from './data/constant'
@@ -165,7 +166,7 @@ const Login: React.FC = () => {
   return (
     <div className="relative grid h-svh lg:grid-cols-[11fr_14fr]">
       <div className="h-full w-full overflow-hidden text-ellipsis whitespace-nowrap max-lg:hidden">
-        {highlighter && (
+        {
           <Carousel
             ref={carouselRef}
             className="h-full w-full cursor-pointer"
@@ -219,18 +220,24 @@ const Login: React.FC = () => {
                             >
                               {t(item.subTitle)}
                             </h4>
-                            <ShikiMagicMove
-                              lang={lang}
-                              theme={'github-dark-high-contrast'}
-                              highlighter={highlighter}
-                              code={code}
-                              options={{
-                                duration: 800,
-                                stagger: 0.3,
-                                lineNumbers: true,
-                              }}
-                              className="cover bg-transparent!"
-                            />
+                            {highlighter ? (
+                              <ShikiMagicMove
+                                lang={lang}
+                                theme={'github-dark-high-contrast'}
+                                highlighter={highlighter}
+                                code={code}
+                                options={{
+                                  duration: 800,
+                                  stagger: 0.3,
+                                  lineNumbers: true,
+                                }}
+                                className="cover bg-transparent!"
+                              />
+                            ) : (
+                              <div className="cover flex h-78 w-78 items-center justify-center">
+                                <Spinner className="size-8 text-white" />
+                              </div>
+                            )}
                           </div>
                         </div>
                       </CarouselItem>
@@ -240,7 +247,7 @@ const Login: React.FC = () => {
               })}
             </CarouselContent>
           </Carousel>
-        )}
+        }
       </div>
       <div className="flex h-full w-full items-center justify-center lg:p-8">
         <Card>
