@@ -13,7 +13,7 @@ export interface RouteHandle {
 
 type AppIndexRouteObject = Omit<IndexRouteObject, 'handle'> & RouteHandle
 
-type AppNonIndexRouteObject = Omit<NonIndexRouteObject, 'children'> &
+type AppNonIndexRouteObject = Omit<NonIndexRouteObject, 'children' | 'handle'> &
   RouteHandle & {
     children?: (AppIndexRouteObject | AppNonIndexRouteObject)[]
   }

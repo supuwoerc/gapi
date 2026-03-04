@@ -7,7 +7,7 @@ import { RouteError } from '@/components/route-error'
 
 const authRoutes: CustomRouteObject[] = [
   {
-    path: '/',
+    path: '',
     handle: {
       hidden: true,
       auth: 'anonymous',
@@ -20,7 +20,7 @@ const authRoutes: CustomRouteObject[] = [
       {
         path: '',
         errorElement: <RouteError />,
-        element: <Navigate to={'/login'} replace />,
+        element: <Navigate to={'/dashboard'} replace />,
       },
       {
         path: 'login',
