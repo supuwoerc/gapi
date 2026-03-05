@@ -9,8 +9,9 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 
+import RoleSwitcher from './componnets/role-switcher'
+import SidebarUser from './componnets/sidebar-user'
 import { roles } from './data/constant'
-import RoleSwitcher from './role-switcher'
 
 // import { AppTitle } from './app-title'
 // import { sidebarData } from './data/sidebar-data'
@@ -32,7 +33,11 @@ export function AppSidebar() {
         <RoleSwitcher roles={roles} />
       </SidebarHeader>
       <SidebarContent>12312321321321</SidebarContent>
-      <SidebarFooter>user</SidebarFooter>
+      <SidebarFooter>
+        <SidebarUser
+          user={{ name: '123', email: 'ddd', avatar: 'https://github.com/shadcn.png' }}
+        />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )

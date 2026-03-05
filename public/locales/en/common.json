@@ -6,7 +6,9 @@
     "backToHome": "Back to Home",
     "continue": "Continue",
     "prevStep": "Previous step",
-    "nextStep": "Next step"
+    "nextStep": "Next step",
+    "cancel": "Cancel",
+    "confirm": "Confirm"
   },
   "or": "Or",
   "system": {
@@ -26,5 +28,11 @@
       "yellow": "Yellow",
       "blue": "Blue"
     }
-  }
+  },
+  "roles": "Roles",
+  "role": "Role",
+  "add": "Add",
+  "addRole": "Add role",
+  "account": "账户",
+  "notifications": "Notifications"
 }

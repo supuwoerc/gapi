@@ -3,6 +3,7 @@ import { type FC, useState } from 'react'
 import type { Role } from '@/schema/role'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { DynamicIcon } from 'lucide-react/dynamic.mjs'
+import { useTranslation } from 'react-i18next'
 
 import {
   DropdownMenu,
@@ -25,6 +26,7 @@ interface TeamSwitcherProps {
 
 const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
   const { isMobile } = useSidebar()
+  const { t } = useTranslation()
   const [activeRole, setActiveRole] = useState(roles[0])
 
   return (
@@ -52,7 +54,9 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
             side={isMobile ? 'bottom' : 'right'}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">Roles</DropdownMenuLabel>
+            <DropdownMenuLabel className="text-xs text-muted-foreground">
+              {t('common.roles')}
+            </DropdownMenuLabel>
             {roles.map((role) => (
               <DropdownMenuItem
                 key={role.name}
@@ -70,7 +74,7 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add role</div>
+              <div className="font-medium text-muted-foreground">{t('common.addRole')}</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

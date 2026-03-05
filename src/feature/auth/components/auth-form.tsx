@@ -31,7 +31,7 @@ import { PasswordInput } from '@/components/password-input'
 
 interface AuthFormProps {
   className?: string
-  redirectTo?: string
+  redirectTo?: string | null
 }
 
 const authFormSchema = z.object({

@@ -5,6 +5,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/all'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router'
 import type { HighlighterCore } from 'shiki'
 import { createHighlighter } from 'shiki'
 import 'shiki-magic-move/dist/style.css'
@@ -163,6 +164,11 @@ const Login: React.FC = () => {
     }
   }, [])
 
+  const location = useLocation()
+
+  const searchParams = new URLSearchParams(location.search)
+  const redirect = searchParams.get('redirect')
+
   return (
     <div className="relative grid h-svh lg:grid-cols-[11fr_14fr]">
       <div className="h-full w-full overflow-hidden text-ellipsis whitespace-nowrap max-lg:hidden">
@@ -256,7 +262,7 @@ const Login: React.FC = () => {
             <CardDescription>{t('auth.loginTip')}</CardDescription>
           </CardHeader>
           <CardContent>
-            <AuthForm className="space-y-2 sm:w-102" />
+            <AuthForm className="space-y-2 sm:w-102" redirectTo={redirect} />
           </CardContent>
         </Card>
       </div>

@@ -6,7 +6,9 @@
     "backToHome": "去首页",
     "continue": "继续",
     "prevStep": "上一步",
-    "nextStep": "下一步"
+    "nextStep": "下一步",
+    "cancel": "取消",
+    "confirm": "确认"
   },
   "or": "或",
   "system": {
@@ -26,5 +28,11 @@
       "yellow": "金黄",
       "blue": "深蓝"
     }
-  }
+  },
+  "roles": "角色",
+  "role": "角色",
+  "add": "添加",
+  "addRole": "添加角色",
+  "account": "账户",
+  "notifications": "消息通知"
 }
