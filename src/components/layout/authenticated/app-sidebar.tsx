@@ -9,6 +9,9 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 
+import { roles } from './data/constant'
+import RoleSwitcher from './role-switcher'
+
 // import { AppTitle } from './app-title'
 // import { sidebarData } from './data/sidebar-data'
 // import { NavGroup } from './nav-group'
@@ -25,7 +28,9 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
-      <SidebarHeader>123</SidebarHeader>
+      <SidebarHeader>
+        <RoleSwitcher roles={roles} />
+      </SidebarHeader>
       <SidebarContent>12312321321321</SidebarContent>
       <SidebarFooter>user</SidebarFooter>
       <SidebarRail />
