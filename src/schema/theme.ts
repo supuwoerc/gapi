@@ -7,7 +7,6 @@ export type ThemeMode = z.infer<typeof themeModeSchema>
 export const themeSchema = z.enum([
   'default',
   'green',
-  'kupikod',
   'orange',
   'red',
   'rose',

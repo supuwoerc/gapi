@@ -31,10 +31,6 @@ const options: Array<{ key: Theme; localeKey: string }> = [
     localeKey: 'common.system.theme.green',
   },
   {
-    key: 'kupikod',
-    localeKey: 'common.system.theme.kupikod',
-  },
-  {
     key: 'orange',
     localeKey: 'common.system.theme.orange',
   },

@@ -15,7 +15,7 @@ type TSystemConfigStore = {
 
 const initialSystemConfig: TSystemConfigStore = {
   themeMode: 'light',
-  theme: 'kupikod',
+  theme: 'green',
   language: 'zh',
   sidebarOpen: true,
   collapsible: 'icon',
