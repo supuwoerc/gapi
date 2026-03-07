@@ -4,7 +4,6 @@ import { createRoot } from 'react-dom/client'
 
 import { QueryClientProvider } from '@tanstack/react-query'
 
-import { ThemeProvider } from '@/providers/theme-provider.tsx'
 import routes from '@/routes/index.tsx'
 import '@/style/index.css'
 import gsap from 'gsap'
@@ -14,6 +13,8 @@ import { RouterProvider } from 'react-router/dom'
 
 import '@/lib/i18n.ts'
 import { reactQueryClient } from '@/lib/react-query.ts'
+
+import { ThemeProvider } from '@/context/theme-provider'
 
 import { Toaster } from '@/components/ui/sonner'
 
