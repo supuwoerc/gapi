@@ -1,3 +1,4 @@
+import { ConfigDrawer } from '@/components/config-drawer'
 import AppHeader from '@/components/layout/authenticated/app-header'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import Search from '@/components/search'
@@ -10,7 +11,7 @@ const Forbidden = () => {
         <Search />{' '}
         <div className="ms-auto flex items-center space-x-4">
           <ThemeModeSwitcher />
-          {/* <ConfigDrawer /> */}
+          <ConfigDrawer />
           <ProfileDropdown />
         </div>
       </AppHeader>

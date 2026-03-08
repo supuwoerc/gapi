@@ -12,12 +12,15 @@
   },
   "or": "或",
   "system": {
+    "configTips": "调整外观和布局以满足您的喜好",
     "themeMode": {
+      "name": "主题模式",
       "system": "系统",
       "dark": "暗黑",
       "light": "光亮"
     },
     "theme": {
+      "name": "主题",
       "default": "默认",
       "green": "翠绿",
       "orange": "橙色",
@@ -26,8 +29,22 @@
       "violet": "紫罗兰",
       "yellow": "金黄",
       "blue": "深蓝"
+    },
+    "sidebar": {
+      "name": "侧边栏",
+      "inset": "嵌入",
+      "floating": "悬浮",
+      "side": "侧边"
+    },
+    "layout": {
+      "name": "布局",
+      "default": "默认",
+      "compact": "紧凑",
+      "full": "全屏"
     }
   },
+  "setting": "设置",
+  "reset": "重置",
   "roles": "角色",
   "role": "角色",
   "add": "添加",

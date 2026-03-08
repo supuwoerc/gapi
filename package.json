@@ -52,6 +52,7 @@
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-radio-group": "^1.3.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@supuwoerc/toolkit": "^1.0.1",
     "@tailwindcss/vite": "^4.1.18",

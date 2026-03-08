@@ -17,7 +17,7 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
   const nodeRef = useRef<HTMLDivElement | null>(null)
   const [sidebarOpen] = useSystemConfigStore(
     useShallow((state) => {
-      return [state.sidebarOpen]
+      return [state.sidebar.open]
     })
   )
 

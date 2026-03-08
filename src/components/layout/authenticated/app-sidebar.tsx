@@ -17,7 +17,7 @@ import { roles, sidebarData } from './data/constant'
 export function AppSidebar() {
   const [collapsible, variant] = useSystemConfigStore(
     useShallow((state) => {
-      return [state.collapsible, state.variant]
+      return [state.sidebar.collapsible, state.sidebar.variant]
     })
   )
 

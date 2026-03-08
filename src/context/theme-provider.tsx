@@ -7,15 +7,25 @@ import { useShallow } from 'zustand/react/shallow'
 type ThemeProviderState = {
   themeMode: ThemeMode
   theme: Theme
+  defaultThemeMode: ThemeMode
+  defaultTheme: Theme
   setThemeMode: (mode: ThemeMode) => void
   setTheme: (theme: Theme) => void
+  reset: () => void
 }
 
+export const defaultThemeMode: ThemeMode = 'system'
+
+export const defaultTheme: Theme = 'green'
+
 const initialState: ThemeProviderState = {
-  themeMode: 'system',
-  theme: 'default',
+  themeMode: defaultThemeMode,
+  theme: defaultTheme,
+  defaultThemeMode: defaultThemeMode,
+  defaultTheme: defaultTheme,
   setThemeMode: () => null,
   setTheme: () => null,
+  reset: () => null,
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
@@ -45,8 +55,14 @@ const ThemeProvider: FC<PropsWithChildren> = ({ children, ...props }) => {
   const value: ThemeProviderState = {
     themeMode,
     theme,
+    defaultThemeMode,
+    defaultTheme,
     setThemeMode: (mode: ThemeMode) => setSystemThemeMode(mode),
     setTheme: (t: Theme) => setSystemTheme(t),
+    reset: () => {
+      setSystemThemeMode(defaultThemeMode)
+      setSystemTheme(defaultTheme)
+    },
   }
 
   return (

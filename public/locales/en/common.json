@@ -12,12 +12,15 @@
   },
   "or": "Or",
   "system": {
+    "configTips": "Adjust the appearance and layout to suit your preferences",
     "themeMode": {
+      "name": "Theme mode",
       "system": "System",
       "dark": "Dark",
       "light": "Light"
     },
     "theme": {
+      "name": "Theme",
       "default": "Default",
       "green": "Green",
       "orange": "Orange",
@@ -26,8 +29,22 @@
       "violet": "Violet",
       "yellow": "Yellow",
       "blue": "Blue"
+    },
+    "sidebar": {
+      "name": "Sidebar",
+      "inset": "inset",
+      "floating": "Floating",
+      "side": "Side"
+    },
+    "layout": {
+      "name": "Layout",
+      "default": "Default",
+      "compact": "Compact",
+      "full": "Full"
     }
   },
+  "setting": "Setting",
+  "reset": "Reset",
   "roles": "Roles",
   "role": "Role",
   "add": "Add",

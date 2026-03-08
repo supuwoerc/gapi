@@ -4,22 +4,32 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-type TSystemConfigStore = {
+import { defaultTheme, defaultThemeMode } from '@/context/theme-provider'
+
+export type TSystemConfigStore = {
   themeMode: ThemeMode
   theme: Theme
   language: Language
-  sidebarOpen: boolean
-  collapsible: 'offcanvas' | 'icon' | 'none'
-  variant: 'sidebar' | 'floating' | 'inset'
+  sidebar: {
+    open: boolean
+    collapsible: 'offcanvas' | 'icon' | 'none'
+    variant: 'sidebar' | 'floating' | 'inset'
+  }
 }
 
+export const defaultVariant = 'inset'
+
+export const defaultCollapsible = 'icon'
+
 const initialSystemConfig: TSystemConfigStore = {
-  themeMode: 'light',
-  theme: 'green',
+  themeMode: defaultThemeMode,
+  theme: defaultTheme,
   language: 'zh',
-  sidebarOpen: true,
-  collapsible: 'icon',
-  variant: 'inset',
+  sidebar: {
+    open: true,
+    collapsible: defaultCollapsible,
+    variant: defaultVariant,
+  },
 }
 
 const SYSTEM_CONFIG_STORE_NAME = 'systemConfigStore'
@@ -33,9 +43,7 @@ export const useSystemConfigStore = create<TSystemConfigStore>()(
           themeMode: state.themeMode,
           theme: state.theme,
           language: state.language,
-          sidebarOpen: state.sidebarOpen,
-          collapsible: state.collapsible,
-          variant: state.variant,
+          sidebar: state.sidebar,
         }),
       }),
       {
@@ -63,20 +71,22 @@ export const setSystemLanguage = (language: TSystemConfigStore['language']) => {
   })
 }
 
-export const setSidebarOpen = (sidebarOpen: TSystemConfigStore['sidebarOpen']) => {
+export const setSidebarOpen = (open: TSystemConfigStore['sidebar']['open']) => {
   useSystemConfigStore.setState((state) => {
-    state.sidebarOpen = sidebarOpen
+    state.sidebar.open = open
   })
 }
 
-export const setSidebarCollapsible = (collapsible: TSystemConfigStore['collapsible']) => {
+export const setSidebarCollapsible = (
+  collapsible: TSystemConfigStore['sidebar']['collapsible']
+) => {
   useSystemConfigStore.setState((state) => {
-    state.collapsible = collapsible
+    state.sidebar.collapsible = collapsible
   })
 }
 
-export const setSidebarVariant = (variant: TSystemConfigStore['variant']) => {
+export const setSidebarVariant = (variant: TSystemConfigStore['sidebar']['variant']) => {
   useSystemConfigStore.setState((state) => {
-    state.variant = variant
+    state.sidebar.variant = variant
   })
 }
