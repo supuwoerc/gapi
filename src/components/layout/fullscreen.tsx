@@ -33,9 +33,9 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
         {logo && <Logo className="fixed top-5 left-5" to="/" />}
         {setting && (
           <div className="fixed top-5 right-5 z-99 flex gap-2 max-[320px]:hidden">
-            <LanguageSwitcher />
-            <ThemeModeSwitcher />
-            <ThemeSwitcher />
+            <LanguageSwitcher accent />
+            <ThemeModeSwitcher accent />
+            <ThemeSwitcher accent />
           </div>
         )}
         <main>

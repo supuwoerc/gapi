@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from 'react'
+import type { FC } from 'react'
 
 import type { Theme } from '@/schema/theme'
 import { setSystemTheme, useSystemConfigStore } from '@/store/system'
@@ -17,8 +17,8 @@ import {
 } from './ui/dropdown-menu'
 
 interface ThemeSwitcherProps {
-  style?: CSSProperties
   className?: string
+  accent?: boolean
 }
 
 const options: Array<{ key: Theme; localeKey: string }> = [
@@ -56,7 +56,7 @@ const options: Array<{ key: Theme; localeKey: string }> = [
   },
 ]
 
-const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ style, className }) => {
+const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
   const [theme, language] = useSystemConfigStore(
     useShallow((state) => {
       return [state.theme, state.language]
@@ -73,10 +73,15 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ style, className }) => {
   }
 
   return (
-    <div style={style} className={cn('cursor-pointer', className)}>
+    <div className={cn('cursor-pointer', className)}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <div className="flex h-9 w-9 items-center justify-center rounded-[50%] bg-accent text-accent-foreground dark:bg-accent/50">
+          <div
+            className={cn(
+              'flex h-9 w-9 items-center justify-center rounded-[50%] text-accent-foreground hover:bg-accent dark:hover:bg-accent/50',
+              accent && 'bg-accent dark:bg-accent/50'
+            )}
+          >
             <Palette size={16} />
           </div>
         </DropdownMenuTrigger>

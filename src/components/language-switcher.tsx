@@ -1,4 +1,4 @@
-import type { CSSProperties, FC } from 'react'
+import type { FC } from 'react'
 
 import type { Language } from '@/schema/language'
 import { useSystemConfigStore } from '@/store/system'
@@ -16,11 +16,11 @@ import {
 } from './ui/dropdown-menu'
 
 interface LanguageSwitcherProps {
-  style?: CSSProperties
+  accent?: boolean
   className?: string
 }
 
-const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ style, className }) => {
+const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ accent, className }) => {
   const { i18n } = useTranslation()
   const language = useSystemConfigStore((state) => state.language)
 
@@ -32,10 +32,15 @@ const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ style, className }) => {
   }
 
   return (
-    <div style={style} className={cn('cursor-pointer', className)}>
+    <div className={cn('cursor-pointer', className)}>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <div className="flex h-9 w-9 items-center justify-center rounded-[50%] bg-accent text-accent-foreground dark:bg-accent/50">
+          <div
+            className={cn(
+              'flex h-9 w-9 items-center justify-center rounded-[50%] text-accent-foreground hover:bg-accent dark:hover:bg-accent/50',
+              accent && 'bg-accent dark:bg-accent/50'
+            )}
+          >
             <Languages size={16} />
           </div>
         </DropdownMenuTrigger>
