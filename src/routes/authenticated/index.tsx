@@ -16,6 +16,10 @@ const authenticatedRoutes: CustomRouteObject[] = [
     children: [
       {
         path: 'dashboard',
+        handle: {
+          title: 'route.dashboard',
+          auth: 'loginRequired',
+        },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/authenticated/dashboard/index'), {
           pure: true,

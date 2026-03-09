@@ -73,7 +73,7 @@ export function ConfigDrawer() {
         <SheetHeader className="pb-0 text-start">
           <SheetTitle>{t('common.setting')}</SheetTitle>
           <SheetDescription id="config-drawer-description">
-            {t('common.system.configTips') || 'desc'}
+            {t('common.system.configTips')}
           </SheetDescription>
         </SheetHeader>
         <div className="space-y-6 overflow-y-auto px-4">

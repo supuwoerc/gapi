@@ -1,5 +1,6 @@
 {
   "login": "Login",
   "forgotPassword": "Forgot Password",
-  "otp": "One-Time Password"
+  "otp": "One-Time Password",
+  "dashboard": "Dashboard"
 }

@@ -1,5 +1,6 @@
 {
   "login": "登录",
   "forgotPassword": "忘记密码",
-  "otp": "OTP验证"
+  "otp": "OTP验证",
+  "dashboard": "仪表盘"
 }
