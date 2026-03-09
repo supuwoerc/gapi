@@ -2,10 +2,12 @@ import { type FC, type SVGProps } from 'react'
 
 import { Item, Root as Radio } from '@radix-ui/react-radio-group'
 
+import type { Theme } from '@/schema/theme'
 import {
   type TSystemConfigStore,
   defaultCollapsible,
   defaultVariant,
+  resetSidebar,
   setSidebarCollapsible,
   setSidebarVariant,
   useSystemConfigStore,
@@ -20,11 +22,14 @@ import IconLayoutFull from '@/assets/config/layout-full.svg?react'
 import IconSidebarFloating from '@/assets/config/sidebar-floating.svg?react'
 import IconSidebarInset from '@/assets/config/sidebar-inset.svg?react'
 import IconSidebarSide from '@/assets/config/sidebar-side.svg?react'
-import IconThemeDark from '@/assets/config/theme-dark.svg?react'
-import IconThemeSystem from '@/assets/config/theme-default.svg?react'
-import IconThemeLight from '@/assets/config/theme-light.svg?react'
+import IconTheme from '@/assets/config/theme-default.svg?react'
+import IconThemeModeDark from '@/assets/config/theme-mode-dark.svg?react'
+import IconThemeModeSystem from '@/assets/config/theme-mode-default.svg?react'
+import IconThemeModeLight from '@/assets/config/theme-mode-light.svg?react'
 
 import { cn } from '@/lib/utils'
+
+import { themeOptions } from '@/context/theme-provider'
 
 import { useTheme } from '@/hooks/use-theme'
 
@@ -42,15 +47,13 @@ import {
 import { useSidebar } from './ui/sidebar'
 
 export function ConfigDrawer() {
-  const { reset } = useTheme()
-  const { setOpen } = useSidebar()
+  const { resetTheme, resetThemeMode } = useTheme()
   const { t } = useTranslation()
 
   const handleReset = () => {
-    reset()
-    setOpen(true)
-    setSidebarVariant(defaultVariant)
-    setSidebarCollapsible(defaultCollapsible)
+    resetTheme()
+    resetThemeMode()
+    resetSidebar()
   }
 
   return (
@@ -77,14 +80,15 @@ export function ConfigDrawer() {
           <ThemeModeConfig />
           <SidebarConfig />
           <LayoutConfig />
+          <ThemeConfig />
         </div>
         <SheetFooter className="gap-2">
           <Button
-            variant="destructive"
+            variant="default"
             onClick={handleReset}
             aria-label="Reset all settings to default values"
           >
-            {t('common.reset')}
+            <RotateCcw /> {t('common.reset')}
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -122,13 +126,16 @@ function SectionTitle({
 
 function RadioGroupItem({
   item,
+  isThemeMode = false,
   isTheme = false,
 }: {
   item: {
     value: string
     label: string
     icon: FC<SVGProps<SVGSVGElement>>
+    iconClassName?: string
   }
+  isThemeMode?: boolean
   isTheme?: boolean
 }) {
   return (
@@ -158,8 +165,11 @@ function RadioGroupItem({
         />
         <item.icon
           className={cn(
-            !isTheme &&
-              'fill-primary stroke-primary group-data-[state=unchecked]:fill-muted-foreground group-data-[state=unchecked]:stroke-muted-foreground'
+            !isThemeMode &&
+              !isTheme &&
+              'fill-primary stroke-primary group-data-[state=unchecked]:fill-muted-foreground group-data-[state=unchecked]:stroke-muted-foreground',
+            item.iconClassName
+            // 'fill-[oklch(0.586_0.253_17.585)]'
           )}
           aria-hidden="true"
         />
@@ -193,20 +203,20 @@ function ThemeModeConfig() {
           {
             value: 'system',
             label: t('common.system.themeMode.system'),
-            icon: IconThemeSystem,
+            icon: IconThemeModeSystem,
           },
           {
             value: 'light',
             label: t('common.system.themeMode.light'),
-            icon: IconThemeLight,
+            icon: IconThemeModeLight,
           },
           {
             value: 'dark',
             label: t('common.system.themeMode.dark'),
-            icon: IconThemeDark,
+            icon: IconThemeModeDark,
           },
         ].map((item) => (
-          <RadioGroupItem key={item.value} item={item} isTheme />
+          <RadioGroupItem key={item.value} item={item} isThemeMode />
         ))}
       </Radio>
     </div>
@@ -313,6 +323,45 @@ function LayoutConfig() {
           },
         ].map((item) => (
           <RadioGroupItem key={item.value} item={item} />
+        ))}
+      </Radio>
+    </div>
+  )
+}
+
+function ThemeConfig() {
+  const { resetTheme, theme, defaultTheme, setTheme } = useTheme()
+
+  const { t } = useTranslation()
+
+  const options = themeOptions.map((item) => {
+    return {
+      value: item.key,
+      label: t(item.localeKey),
+      icon: IconTheme,
+      iconClassName: item.fillStroke,
+    }
+  })
+  return (
+    <div className="max-md:hidden">
+      <SectionTitle
+        title={t('common.system.theme.name')}
+        showReset={theme !== defaultTheme}
+        onReset={() => {
+          resetTheme()
+        }}
+      />
+      <Radio
+        value={theme}
+        onValueChange={(v) => {
+          setTheme(v as Theme)
+        }}
+        className="grid w-full max-w-md grid-cols-3 gap-4"
+        aria-label="Select layout style"
+        aria-describedby="layout-description"
+      >
+        {options.map((item) => (
+          <RadioGroupItem key={item.value} item={item} isTheme />
         ))}
       </Radio>
     </div>

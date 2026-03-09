@@ -90,3 +90,11 @@ export const setSidebarVariant = (variant: TSystemConfigStore['sidebar']['varian
     state.sidebar.variant = variant
   })
 }
+
+export const resetSidebar = () => {
+  useSystemConfigStore.setState((state) => {
+    state.sidebar.open = true
+    state.sidebar.collapsible = defaultCollapsible
+    state.sidebar.variant = defaultVariant
+  })
+}

@@ -9,6 +9,8 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { cn } from '@/lib/utils'
 
+import { themeOptions } from '@/context/theme-provider'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,41 +22,6 @@ interface ThemeSwitcherProps {
   className?: string
   accent?: boolean
 }
-
-const options: Array<{ key: Theme; localeKey: string }> = [
-  {
-    key: 'default',
-    localeKey: 'common.system.theme.default',
-  },
-  {
-    key: 'green',
-    localeKey: 'common.system.theme.green',
-  },
-  {
-    key: 'orange',
-    localeKey: 'common.system.theme.orange',
-  },
-  {
-    key: 'red',
-    localeKey: 'common.system.theme.red',
-  },
-  {
-    key: 'rose',
-    localeKey: 'common.system.theme.rose',
-  },
-  {
-    key: 'violet',
-    localeKey: 'common.system.theme.violet',
-  },
-  {
-    key: 'yellow',
-    localeKey: 'common.system.theme.yellow',
-  },
-  {
-    key: 'blue',
-    localeKey: 'common.system.theme.blue',
-  },
-]
 
 const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
   const [theme, language] = useSystemConfigStore(
@@ -87,7 +54,7 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
-          {options.map(({ key, localeKey }) => {
+          {themeOptions.map(({ key, localeKey }) => {
             return (
               <DropdownMenuItem
                 key={key}
