@@ -1,0 +1,27 @@
+{
+  "loading": "Loading",
+  "error": "An error occurred, please try again later",
+  "or": "Or",
+  "tips": {
+    "hydrate": "Requesting data, please wait"
+  },
+  "button": {
+    "goBack": "Go Back",
+    "backToHome": "Back to Home",
+    "continue": "Continue",
+    "prevStep": "Previous step",
+    "nextStep": "Next step",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "resend": "Resend"
+  },
+  "menu": {
+    "account": "Account",
+    "notifications": "Notifications",
+    "signOut": "Sign out",
+    "role": "Role",
+    "roles": "Roles",
+    "addRole": "Add roles",
+    "signUp": "Sign Up"
+  }
+}

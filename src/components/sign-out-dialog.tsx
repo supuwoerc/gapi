@@ -21,9 +21,9 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
-      title={t('auth.signOut')}
-      desc={t('auth.signOutTips')}
-      confirmText={t('auth.signOut')}
+      title={t('component.signOutDialog.signOut')}
+      desc={t('component.signOutDialog.tips')}
+      confirmText={t('component.signOutDialog.signOut')}
       destructive
       handleConfirm={handleSignOut}
       className="sm:max-w-sm!"

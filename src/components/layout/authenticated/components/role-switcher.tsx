@@ -55,7 +55,7 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {t('common.roles')}
+              {t('global.menu.roles')}
             </DropdownMenuLabel>
             {roles.map((role) => (
               <DropdownMenuItem

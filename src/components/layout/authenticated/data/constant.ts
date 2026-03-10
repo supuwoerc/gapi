@@ -168,3 +168,18 @@ export const sidebarData: Menu[] = [
     ],
   },
 ]
+
+export const topMenu = [
+  {
+    title: 'component.topMenu.overview',
+    href: '/dashboard',
+    isActive: true,
+    disabled: false,
+  },
+  {
+    title: 'component.topMenu.projects',
+    href: '/projects',
+    isActive: false,
+    disabled: true,
+  },
+]

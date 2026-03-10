@@ -18,20 +18,20 @@ const OneTimePassword: React.FC = () => {
     <div className="relative flex h-svh w-full items-center justify-center lg:p-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg tracking-tight">{t('auth.tfa')}</CardTitle>
-          <CardDescription>{t('auth.optTips')}</CardDescription>
+          <CardTitle className="text-lg tracking-tight">{t('feature.otp.tfa')}</CardTitle>
+          <CardDescription>{t('feature.otp.tips')}</CardDescription>
         </CardHeader>
         <CardContent className="sm:w-110">
           <OTPForm className="space-y-2" />
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            {t('auth.dontHaveRecived')}{' '}
+            {t('feature.otp.dontHaveRecived')}{' '}
             <Link
               className="underline underline-offset-4 hover:text-primary"
               to={'/forgot-password'}
             >
-              {t('auth.resend')}
+              {t('global.button.resend')}
             </Link>
           </p>
         </CardFooter>

@@ -1,0 +1,66 @@
+{
+  "forgotPassword": {
+    "name": "Forgot password",
+    "tips": "Please enter your registered email address. After confirmation, you will receive a link to reset your password",
+    "dontHaveAccount": "Don't have an account?",
+    "sendMail": "Email sent to {{email}}",
+    "form": {
+      "email": {
+        "name": "Email"
+      }
+    }
+  },
+  "login": {
+    "carousel": {
+      "t1": "Automatic data structure conversion",
+      "st1": "transform the definition to different languages",
+      "t2": "Friendly document display and powerful editing capabilities",
+      "st2": "change notifications and content tags",
+      "t3": "Integrating SSO and AI capabilities",
+      "st3": "quick login and configurable large models"
+    },
+    "button": {
+      "login": "Login"
+    },
+    "tips": "Enter your email and password below to log into your account",
+    "authForm": {
+      "email": {
+        "name": "Email"
+      },
+      "password": {
+        "name": "Password",
+        "min": "Password must be at least 8 characters long",
+        "max": "Passwords can be up to 20 characters long",
+        "pattern": "Passwords must contain numbers, letters, and special characters"
+      },
+      "signIn": "Sign In",
+      "signInLoading": "Signing in...",
+      "welcomeMessage": "Welcome back, {{email}}!",
+      "forgotPassword": "Forgot Password"
+    }
+  },
+  "otp": {
+    "tfa": "Two-factor Authentication",
+    "tips": "Please enter the 2FA code",
+    "dontHaveRecived": "Haven't received it?",
+    "verify": "Verify",
+    "verifySuccess": "Verification successful",
+    "otpForm": {
+      "opt": {
+        "tip": "Please enter the 6-digit code"
+      }
+    }
+  },
+  "notFound": {
+    "title": "页面不存在",
+    "subtitle": "请确认访问路径正确"
+  },
+  "serverError": {
+    "title": "服务器异常",
+    "subtitle": "给您带来的不便，我们深表歉意，请稍后再试"
+  },
+  "forbidden": {
+    "title": "无权限访问",
+    "subtitle": "当前页面无权限访问，请申请权限后刷新重试"
+  }
+}

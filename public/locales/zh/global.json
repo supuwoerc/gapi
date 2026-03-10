@@ -1,0 +1,27 @@
+{
+  "loading": "加载中",
+  "error": "似乎出错了，请稍后再试",
+  "or": "或",
+  "tips": {
+    "hydrate": "正在请求数据，请稍候"
+  },
+  "button": {
+    "goBack": "返回",
+    "backToHome": "返回首页",
+    "continue": "继续",
+    "prevStep": "上一步",
+    "nextStep": "下一步",
+    "cancel": "取消",
+    "confirm": "确认",
+    "resend": "重新发送"
+  },
+  "menu": {
+    "account": "账户",
+    "notifications": "通知",
+    "signOut": "退出",
+    "role": "角色",
+    "roles": "角色",
+    "addRole": "添加角色",
+    "signUp": "注册"
+  }
+}

@@ -70,8 +70,8 @@ export function ConfigDrawer() {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="pb-0 text-start">
-          <SheetTitle>{t('common.setting')}</SheetTitle>
-          <SheetDescription>{t('common.system.configTips')}</SheetDescription>
+          <SheetTitle>{t('component.configDrawer.setting')}</SheetTitle>
+          <SheetDescription>{t('component.configDrawer.settingTips')}</SheetDescription>
         </SheetHeader>
         <div className="space-y-6 overflow-y-auto px-4">
           <ThemeModeConfig />
@@ -85,7 +85,7 @@ export function ConfigDrawer() {
             onClick={handleReset}
             aria-label="Reset all settings to default values"
           >
-            <RotateCcw /> {t('common.reset')}
+            <RotateCcw /> {t('component.configDrawer.reset')}
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -185,7 +185,7 @@ function ThemeModeConfig() {
   return (
     <div>
       <SectionTitle
-        title={t('common.system.themeMode.name')}
+        title={t('component.configDrawer.themeMode.name')}
         showReset={themeMode !== defaultThemeMode}
         onReset={() => setThemeMode(defaultThemeMode)}
       />
@@ -199,17 +199,17 @@ function ThemeModeConfig() {
         {[
           {
             value: 'system',
-            label: t('common.system.themeMode.system'),
+            label: t('component.configDrawer.themeMode.system'),
             icon: IconThemeModeSystem,
           },
           {
             value: 'light',
-            label: t('common.system.themeMode.light'),
+            label: t('component.configDrawer.themeMode.light'),
             icon: IconThemeModeLight,
           },
           {
             value: 'dark',
-            label: t('common.system.themeMode.dark'),
+            label: t('component.configDrawer.themeMode.dark'),
             icon: IconThemeModeDark,
           },
         ].map((item) => (
@@ -231,7 +231,7 @@ function SidebarConfig() {
   return (
     <div className="max-md:hidden">
       <SectionTitle
-        title={t('common.system.sidebar.name')}
+        title={t('component.configDrawer.sidebar.name')}
         showReset={defaultVariant !== variant}
         onReset={() => setSidebarVariant(defaultVariant)}
       />
@@ -245,17 +245,17 @@ function SidebarConfig() {
         {[
           {
             value: 'inset',
-            label: t('common.system.sidebar.inset'),
+            label: t('component.configDrawer.sidebar.inset'),
             icon: IconSidebarInset,
           },
           {
             value: 'floating',
-            label: t('common.system.sidebar.floating'),
+            label: t('component.configDrawer.sidebar.floating'),
             icon: IconSidebarFloating,
           },
           {
             value: 'sidebar',
-            label: t('common.system.sidebar.side'),
+            label: t('component.configDrawer.sidebar.side'),
             icon: IconSidebarSide,
           },
         ].map((item) => (
@@ -281,7 +281,7 @@ function LayoutConfig() {
   return (
     <div className="max-md:hidden">
       <SectionTitle
-        title={t('common.system.layout.name')}
+        title={t('component.configDrawer.layout.name')}
         showReset={radioState !== 'default'}
         onReset={() => {
           setOpen(true)
@@ -305,17 +305,17 @@ function LayoutConfig() {
         {[
           {
             value: 'default',
-            label: t('common.system.layout.default'),
+            label: t('component.configDrawer.layout.default'),
             icon: IconLayoutDefault,
           },
           {
             value: 'icon',
-            label: t('common.system.layout.compact'),
+            label: t('component.configDrawer.layout.compact'),
             icon: IconLayoutCompact,
           },
           {
             value: 'offcanvas',
-            label: t('common.system.layout.full'),
+            label: t('component.configDrawer.layout.full'),
             icon: IconLayoutFull,
           },
         ].map((item) => (
@@ -342,7 +342,7 @@ function ThemeConfig() {
   return (
     <div className="max-md:hidden">
       <SectionTitle
-        title={t('common.system.theme.name')}
+        title={t('component.configDrawer.theme.name')}
         showReset={theme !== defaultTheme}
         onReset={() => {
           resetTheme()

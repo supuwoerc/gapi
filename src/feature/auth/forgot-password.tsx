@@ -19,17 +19,19 @@ const ForgotPassword: React.FC = () => {
     <div className="relative flex h-svh w-full items-center justify-center lg:p-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg tracking-tight">{t('auth.forgotPassword')}</CardTitle>
-          <CardDescription>{t('auth.forgotPasswordTip')}</CardDescription>
+          <CardTitle className="text-lg tracking-tight">
+            {t('feature.forgotPassword.name')}
+          </CardTitle>
+          <CardDescription>{t('feature.forgotPassword.tips')}</CardDescription>
         </CardHeader>
         <CardContent className="sm:w-110">
           <ForgotPasswordForm className="space-y-2" />
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            {t('auth.dontHaveAccount')}{' '}
+            {t('feature.forgotPassword.dontHaveAccount')}{' '}
             <Link className="underline underline-offset-4 hover:text-primary" to={'/sign-up'}>
-              {t('auth.signUp')}
+              {t('global.menu.signUp')}
             </Link>
           </p>
         </CardFooter>

@@ -1,0 +1,54 @@
+{
+  "configDrawer": {
+    "setting": "设置",
+    "settingTips": "调整外观和布局以适合您的偏好",
+    "reset": "重置",
+    "themeMode": {
+      "name": "主题模式",
+      "system": "系统",
+      "light": "浅色",
+      "dark": "深色"
+    },
+    "sidebar": {
+      "name": "侧边栏",
+      "inset": "嵌入",
+      "floating": "浮动",
+      "side": "侧边"
+    },
+    "layout": {
+      "name": "布局",
+      "default": "默认",
+      "compact": "紧凑",
+      "full": "全屏"
+    },
+    "theme": {
+      "name": "主题",
+      "default": "默认",
+      "green": "绿色",
+      "orange": "橙色",
+      "red": "红色",
+      "rose": "玫瑰色",
+      "violet": "紫色",
+      "yellow": "黄色",
+      "blue": "蓝色"
+    }
+  },
+  "routeError": {
+    "title": "页面加载失败",
+    "subtitle": "您可以联系管理员或点击下方按钮前往其他页面"
+  },
+  "signOutDialog": {
+    "signOut": "退出",
+    "tips": "您确定要退出吗？"
+  },
+  "themeModeSwitcher": {
+    "tips": "切换为{{mode}}模式"
+  },
+  "themeSwitcher": {
+    "tips": "切换主题为{{mode}}"
+  },
+  "topMenu": {
+    "overview": "概览",
+    "projects": "项目"
+  }
+}

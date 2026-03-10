@@ -15,7 +15,7 @@ i18n
   .init({
     lng: language,
     fallbackLng: 'zh',
-    ns: ['common', 'auth', 'error', 'route'],
+    ns: ['route', 'component', 'global', 'feature'],
     nsSeparator: '.',
     keySeparator: '.',
     interpolation: {

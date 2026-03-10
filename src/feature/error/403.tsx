@@ -12,13 +12,13 @@ const Forbidden = () => {
     <div className="h-svh w-svw">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
         <img src={forbidden} alt="not-fount" className="w-32" />
-        <span className="font-medium">{t('error.forbidden.title')}</span>
-        <p className="text-center text-muted-foreground">{t('error.forbidden.subtitle')}</p>
+        <span className="font-medium">{t('feature.forbidden.title')}</span>
+        <p className="text-center text-muted-foreground">{t('feature.forbidden.subtitle')}</p>
         <div className="mt-6 flex gap-4">
           <Button variant="outline" onClick={() => navigate(-1)}>
-            {t('common.button.goBack')}
+            {t('global.button.goBack')}
           </Button>
-          <Button onClick={() => navigate('/')}>{t('common.button.backToHome')}</Button>
+          <Button onClick={() => navigate('/')}>{t('global.button.backToHome')}</Button>
         </div>
       </div>
     </div>

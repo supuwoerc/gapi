@@ -39,13 +39,13 @@ const authFormSchema = z.object({
   password: z
     .string()
     .min(8, {
-      error: () => i18n.t('auth.form.password.min'),
+      error: () => i18n.t('feature.login.authForm.password.min'),
     })
     .max(20, {
-      error: () => i18n.t('auth.form.password.max'),
+      error: () => i18n.t('feature.login.authForm.password.max'),
     })
     .refine((value) => /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9A-Za-z~!@#$%^&*._?]{8,20}$/.test(value), {
-      error: () => i18n.t('auth.form.password.pattern'),
+      error: () => i18n.t('feature.login.authForm.password.pattern'),
     }),
 })
 
@@ -73,16 +73,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   const submithandle: SubmitHandler<authForm> = async (data: authForm) => {
     await toast
       .promise(sleep(2000), {
-        loading: t('auth.signInLoading'),
+        loading: t('feature.login.authForm.signInLoading'),
         success: () => {
           navigate(redirectTo || '/', { replace: true })
-          return t('auth.welcomeMessage', { email: data.email })
+          return t('feature.login.authForm.welcomeMessage', { email: data.email })
         },
         error: (err) => {
           if (isError(err)) {
             return err.message
           }
-          return t('common.error')
+          return t('global.error')
         },
       })
       .unwrap()
@@ -96,7 +96,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('auth.email')}</FormLabel>
+              <FormLabel>{t('feature.login.authForm.email.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -109,7 +109,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           name="password"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel> {t('auth.password')}</FormLabel>
+              <FormLabel> {t('feature.login.authForm.password.name')}</FormLabel>
               <FormControl>
                 <PasswordInput placeholder="********" {...field} />
               </FormControl>
@@ -118,21 +118,21 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
                 to="/forgot-password"
                 className="absolute inset-e-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75"
               >
-                {t('auth.forgotPassword')}
+                {t('feature.login.authForm.forgotPassword')}
               </Link>
             </FormItem>
           )}
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <LogIn />}
-          {t('auth.signIn')}
+          {t('feature.login.authForm.signIn')}
         </Button>
         <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">{t('common.or')}</span>
+            <span className="bg-background px-2 text-muted-foreground">{t('global.or')}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2">

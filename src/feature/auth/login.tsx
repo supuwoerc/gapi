@@ -205,7 +205,7 @@ const Login: React.FC = () => {
                             key={`st${key}`}
                             className="subtitle mb-2 text-sm text-white opacity-80"
                           >
-                            {t(item.subTitle)}
+                            {t(item.subtitle)}
                           </h4>
                           <img className="cover w-66 lg:w-72" src={item.image} />
                         </div>
@@ -224,7 +224,7 @@ const Login: React.FC = () => {
                               key={`st${key}`}
                               className="subtitle mb-2 text-sm text-white opacity-80"
                             >
-                              {t(item.subTitle)}
+                              {t(item.subtitle)}
                             </h4>
                             {highlighter ? (
                               <ShikiMagicMove
@@ -258,8 +258,10 @@ const Login: React.FC = () => {
       <div className="flex h-full w-full items-center justify-center lg:p-8">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg tracking-tight">{t('auth.login')}</CardTitle>
-            <CardDescription>{t('auth.loginTip')}</CardDescription>
+            <CardTitle className="text-lg tracking-tight">
+              {t('feature.login.button.login')}
+            </CardTitle>
+            <CardDescription>{t('feature.login.tips')}</CardDescription>
           </CardHeader>
           <CardContent>
             <AuthForm className="space-y-2 sm:w-102" redirectTo={redirect} />

@@ -24,7 +24,7 @@ interface ThemeSwitcherProps {
 }
 
 const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
-  const [theme, language] = useSystemConfigStore(
+  const [theme] = useSystemConfigStore(
     useShallow((state) => {
       return [state.theme, state.language]
     })
@@ -32,10 +32,10 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
 
   const { t } = useTranslation()
 
-  const changeThemeModeHandle = (mode: Theme, localKey: string) => {
+  const changeThemeHandle = (mode: Theme, localKey: string) => {
     if (mode !== theme) {
       setSystemTheme(mode)
-      toast.success(language == 'en' ? `Switch to ${t(localKey)} mode` : `切换为${t(localKey)}模式`)
+      toast.success(t('component.themeModeSwitcher.tips', { mode: t(localKey) }))
     }
   }
 
@@ -59,7 +59,7 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
               <DropdownMenuItem
                 key={key}
                 className="cursor-pointer"
-                onClick={() => changeThemeModeHandle(key, localeKey)}
+                onClick={() => changeThemeHandle(key, localeKey)}
               >
                 {t(localeKey)}
                 <Check size={14} className={cn('ms-auto', theme !== key && 'hidden')} />

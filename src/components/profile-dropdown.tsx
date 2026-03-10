@@ -45,20 +45,20 @@ export function ProfileDropdown() {
             <DropdownMenuItem asChild>
               <Link to="/settings/account">
                 <BadgeCheck />
-                {t('common.account')}
+                {t('global.menu.account')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/settings/notifications">
                 <Bell />
-                {t('common.notifications')}
+                {t('global.menu.notifications')}
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onClick={() => setOpen(true)}>
             <LogOut />
-            {t('auth.signOut')}
+            {t('global.menu.signOut')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -57,16 +57,16 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
   const submithandle: SubmitHandler<forgotPasswordForm> = async (data: forgotPasswordForm) => {
     await toast
       .promise(sleep(2000), {
-        loading: t('common.loading'),
+        loading: t('global.loading'),
         success: () => {
           navigate('/otp')
-          return t('auth.toast.sendMail', { email: data.email })
+          return t('feature.forgotPassword.sendMail', { email: data.email })
         },
         error: (err) => {
           if (isError(err)) {
             return err.message
           }
-          return t('common.error')
+          return t('global.error')
         },
       })
       .unwrap()
@@ -80,7 +80,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('auth.email')}</FormLabel>
+              <FormLabel>{t('feature.forgotPassword.form.email.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -89,7 +89,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
           )}
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
-          {t('common.button.continue')}
+          {t('global.button.continue')}
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <ArrowRight />}
         </Button>
       </form>

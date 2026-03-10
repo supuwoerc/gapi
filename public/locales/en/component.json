@@ -1,0 +1,54 @@
+{
+  "configDrawer": {
+    "setting": "Setting",
+    "settingTips": "Adjust the appearance and layout to suit your preferences",
+    "reset": "Reset",
+    "themeMode": {
+      "name": "Theme mode",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "sidebar": {
+      "name": "Sidebar",
+      "inset": "Inset",
+      "floating": "Floating",
+      "side": "Side"
+    },
+    "layout": {
+      "name": "Layout",
+      "default": "Default",
+      "compact": "Compact",
+      "full": "Full"
+    },
+    "theme": {
+      "name": "Theme",
+      "default": "Default",
+      "green": "Green",
+      "orange": "Orange",
+      "red": "Red",
+      "rose": "Rose",
+      "violet": "Violet",
+      "yellow": "Yellow",
+      "blue": "Blue"
+    }
+  },
+  "routeError": {
+    "title": "Page failed to load",
+    "subtitle": "You can contact the administrator or click the button below to go to another page"
+  },
+  "signOutDialog": {
+    "signOut": "Sign out",
+    "tips": "Are you sure you want to sign out?"
+  },
+  "themeModeSwitcher": {
+    "tips": "Switch to {{mode}} mode"
+  },
+  "themeSwitcher": {
+    "tips": "Switch theme to {{mode}}"
+  },
+  "topMenu": {
+    "overview": "Overview",
+    "projects": "Projects"
+  }
+}

@@ -12,8 +12,8 @@ const HydrateFallback = () => {
           <EmptyMedia variant="icon">
             <Spinner />
           </EmptyMedia>
-          <EmptyTitle>{t('common.loading')}</EmptyTitle>
-          <EmptyDescription>{t('common.hydrateTips')}</EmptyDescription>
+          <EmptyTitle>{t('global.loading')}</EmptyTitle>
+          <EmptyDescription>{t('global.tips.hydrate')}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     </div>

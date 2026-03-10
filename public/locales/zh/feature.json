@@ -1,0 +1,66 @@
+{
+  "forgotPassword": {
+    "name": "忘记密码",
+    "tips": "请输入您注册的邮箱地址，确认后您会收到重置密码的链接",
+    "dontHaveAccount": "没有账户？",
+    "sendMail": "邮件已经发送到{{email}}",
+    "form": {
+      "email": {
+        "name": "邮件"
+      }
+    }
+  },
+  "login": {
+    "carousel": {
+      "t1": "自动转换数据结构",
+      "st1": "定义转换到不同语言",
+      "t2": "友好的文档展示和强大的编辑能力",
+      "st2": "变更提醒和内容标记",
+      "t3": "集成单点登录和AI能力",
+      "st3": "快速登录以及可配置的大模型"
+    },
+    "button": {
+      "login": "登录"
+    },
+    "tips": "请在下方输入您的电子邮件地址和密码以登录您的帐户",
+    "authForm": {
+      "email": {
+        "name": "邮箱"
+      },
+      "password": {
+        "name": "密码",
+        "min": "密码至少8位",
+        "max": "密码最多20位",
+        "pattern": "密码必须包含数字,字母以及特殊字符"
+      },
+      "signIn": "登录",
+      "signInLoading": "登录中...",
+      "welcomeMessage": "欢迎回来，{{email}}！",
+      "forgotPassword": "忘记密码"
+    }
+  },
+  "otp": {
+    "tfa": "双因素认证",
+    "tips": "请输入验证码",
+    "dontHaveRecived": "没收到验证码？",
+    "verify": "验证",
+    "verifySuccess": "验证成功",
+    "otpForm": {
+      "opt": {
+        "tip": "请输入6位验证码"
+      }
+    }
+  },
+  "notFound": {
+    "title": "页面不存在",
+    "subtitle": "请确认访问路径正确"
+  },
+  "serverError": {
+    "title": "服务器异常",
+    "subtitle": "给您带来的不便，我们深表歉意，请稍后再试"
+  },
+  "forbidden": {
+    "title": "无权限访问",
+    "subtitle": "当前页面无权限访问，请申请权限后刷新重试"
+  }
+}

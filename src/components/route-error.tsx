@@ -10,16 +10,13 @@ const RouteError = () => {
     <div className="h-svh w-svw">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
         <h1 className="text-[7rem] leading-tight font-bold">💥</h1>
-        <span className="font-medium">{t('error.routeError.loadError.title')}</span>
-        <p className="text-center text-muted-foreground">
-          {' '}
-          {t('error.routeError.loadError.subtitle')}
-        </p>
+        <span className="font-medium">{t('component.routeError.title')}</span>
+        <p className="text-center text-muted-foreground">{t('component.routeError.subtitle')}</p>
         <div className="mt-6 flex gap-4">
           <Button variant="outline" onClick={() => navigate(-1)}>
-            {t('common.button.goBack')}
+            {t('global.button.goBack')}
           </Button>
-          <Button onClick={() => navigate('/')}>{t('common.button.backToHome')}</Button>
+          <Button onClick={() => navigate('/')}>{t('global.button.backToHome')}</Button>
         </div>
       </div>
     </div>

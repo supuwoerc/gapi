@@ -56,14 +56,14 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
         {children}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>
-            {cancelBtnText ?? t('common.button.cancel')}
+            {cancelBtnText ?? t('global.button.cancel')}
           </AlertDialogCancel>
           <Button
             variant={destructive ? 'destructive' : 'default'}
             onClick={handleConfirm}
             disabled={disabled || isLoading}
           >
-            {confirmText ?? t('common.button.continue')}
+            {confirmText ?? t('global.button.continue')}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

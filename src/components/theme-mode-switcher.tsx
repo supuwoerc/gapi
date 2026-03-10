@@ -24,20 +24,20 @@ interface ThemeModeSwitcherProps {
 const options: Array<{ key: ThemeMode; localeKey: string }> = [
   {
     key: 'system',
-    localeKey: 'common.system.themeMode.system',
+    localeKey: 'component.configDrawer.themeMode.system',
   },
   {
     key: 'light',
-    localeKey: 'common.system.themeMode.light',
+    localeKey: 'component.configDrawer.themeMode.light',
   },
   {
     key: 'dark',
-    localeKey: 'common.system.themeMode.dark',
+    localeKey: 'component.configDrawer.themeMode.dark',
   },
 ]
 
 const ThemeModeSwitcher: FC<ThemeModeSwitcherProps> = ({ className, accent }) => {
-  const [themeMode, language] = useSystemConfigStore(
+  const [themeMode] = useSystemConfigStore(
     useShallow((state) => {
       return [state.themeMode, state.language]
     })
@@ -48,7 +48,7 @@ const ThemeModeSwitcher: FC<ThemeModeSwitcherProps> = ({ className, accent }) =>
   const changeThemeModeHandle = (mode: ThemeMode, localKey: string) => {
     if (mode !== themeMode) {
       setSystemThemeMode(mode)
-      toast.success(language == 'en' ? `Switch to ${t(localKey)} mode` : `切换为${t(localKey)}模式`)
+      toast.success(t('component.themeModeSwitcher.tips', { mode: t(localKey) }))
     }
   }
 
