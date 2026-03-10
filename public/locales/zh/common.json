@@ -50,5 +50,6 @@
   "add": "添加",
   "addRole": "添加角色",
   "account": "账户",
-  "notifications": "消息通知"
+  "notifications": "消息通知",
+  "hydrateTips": "正在请求数据，请稍作等待"
 }

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router'
 
 import { loadComponent } from '@/utils/route'
 
+import { HydrateFallback } from '@/components/hydrate-fallback'
 import { RouteError } from '@/components/route-error'
 
 const authRoutes: CustomRouteObject[] = [
@@ -12,6 +13,7 @@ const authRoutes: CustomRouteObject[] = [
       hidden: true,
       auth: 'anonymous',
     },
+    HydrateFallback: HydrateFallback,
     errorElement: <RouteError />,
     lazy: loadComponent(() => import('@/components/layout/fullscreen'), {
       pure: true,

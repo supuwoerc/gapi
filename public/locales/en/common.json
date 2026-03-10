@@ -49,6 +49,7 @@
   "role": "Role",
   "add": "Add",
   "addRole": "Add role",
-  "account": "账户",
-  "notifications": "Notifications"
+  "account": "Account",
+  "notifications": "Notifications",
+  "hydrateTips": "Requesting data, please wait"
 }

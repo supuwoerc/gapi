@@ -63,7 +63,6 @@ export function ConfigDrawer() {
           size="icon"
           variant="ghost"
           aria-label="Open theme settings"
-          aria-describedby="config-drawer-description"
           className="rounded-full"
         >
           <Settings aria-hidden="true" />
@@ -72,9 +71,7 @@ export function ConfigDrawer() {
       <SheetContent className="flex flex-col">
         <SheetHeader className="pb-0 text-start">
           <SheetTitle>{t('common.setting')}</SheetTitle>
-          <SheetDescription id="config-drawer-description">
-            {t('common.system.configTips')}
-          </SheetDescription>
+          <SheetDescription>{t('common.system.configTips')}</SheetDescription>
         </SheetHeader>
         <div className="space-y-6 overflow-y-auto px-4">
           <ThemeModeConfig />

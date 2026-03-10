@@ -2,6 +2,7 @@ import type { CustomRouteObject } from '@/types/route'
 
 import { loadComponent } from '@/utils/route'
 
+import { HydrateFallback } from '@/components/hydrate-fallback'
 import { RouteError } from '@/components/route-error'
 
 const errorRoutes: CustomRouteObject[] = [
@@ -12,6 +13,8 @@ const errorRoutes: CustomRouteObject[] = [
       auth: 'anonymous',
       title: 'route.notFound',
     },
+    HydrateFallback: HydrateFallback,
+    errorElement: <RouteError />,
     lazy: loadComponent(() => import('@/components/layout/fullscreen'), {
       pure: true,
     }),
