@@ -13,7 +13,8 @@
     "nextStep": "下一步",
     "cancel": "取消",
     "confirm": "确认",
-    "resend": "重新发送"
+    "resend": "重新发送",
+    "reload": "刷新"
   },
   "menu": {
     "account": "账户",

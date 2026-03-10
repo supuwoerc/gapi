@@ -13,7 +13,8 @@
     "nextStep": "Next step",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "resend": "Resend"
+    "resend": "Resend",
+    "reload": "Reload"
   },
   "menu": {
     "account": "Account",
