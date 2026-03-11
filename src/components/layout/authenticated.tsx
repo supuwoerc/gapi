@@ -47,7 +47,11 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
                 exit={false}
                 classNames="fade-slide"
               >
-                {() => <div ref={nodeRef}>{children ?? currentOutlet}</div>}
+                {() => (
+                  <div ref={nodeRef} className="h-full w-full">
+                    {children ?? currentOutlet}
+                  </div>
+                )}
               </CSSTransition>
             </SwitchTransition>
           </SidebarInset>

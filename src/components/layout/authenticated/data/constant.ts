@@ -20,7 +20,7 @@ export const sidebarData: Menu[] = [
     items: [
       {
         title: 'Dashboard',
-        url: '/',
+        url: '/dashboard',
         icon: 'layout-dashboard',
       },
       {
