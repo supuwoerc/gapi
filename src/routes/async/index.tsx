@@ -24,6 +24,7 @@ const asyncRoutes: CustomRouteObject[] = [
           title: 'route.general.dashboard',
           auth: 'loginRequired',
           icon: 'layout-dashboard',
+          badge: 110,
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/authenticated/dashboard/index'), {

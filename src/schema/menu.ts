@@ -37,6 +37,8 @@ export type CollapsibleMenu = z.infer<typeof collapsibleMenuSchema>
 
 const menuItemSchema = z.union([linkMenuSchema, collapsibleMenuSchema])
 
+export type MenuItem = z.infer<typeof menuItemSchema>
+
 export const menuSchema = z.object({
   title: z.string(),
   items: z.array(menuItemSchema),
