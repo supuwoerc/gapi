@@ -3,6 +3,7 @@ import type { FC, PropsWithChildren } from 'react'
 import type { CollapsibleMenu, LinkMenu, Menu } from '@/schema/menu'
 import { ChevronRight } from 'lucide-react'
 import { DynamicIcon } from 'lucide-react/dynamic.mjs'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { Badge } from '@/components/ui/badge'
@@ -29,9 +30,10 @@ import {
 
 const MenuGroup: FC<Menu> = ({ title, items }) => {
   const { state, isMobile } = useSidebar()
+  const { t } = useTranslation()
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{title}</SidebarGroupLabel>
+      <SidebarGroupLabel>{t(title)}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           const key = `${item.title}-${item.url}`
@@ -57,12 +59,13 @@ const MenuBadge: FC<PropsWithChildren> = ({ children }) => {
 
 const SidebarMenuLink: FC<{ item: LinkMenu }> = ({ item }) => {
   const { setOpenMobile } = useSidebar()
+  const { t } = useTranslation()
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild isActive={false} tooltip={item.title}>
+      <SidebarMenuButton asChild isActive={false} tooltip={t(item.title)}>
         <Link to={item.url} onClick={() => setOpenMobile(false)}>
           {item.icon && <DynamicIcon name={item.icon} />}
-          <span>{item.title}</span>
+          <span>{t(item.title)}</span>
           {item.badge && <MenuBadge>{item.badge}</MenuBadge>}
         </Link>
       </SidebarMenuButton>
@@ -72,13 +75,14 @@ const SidebarMenuLink: FC<{ item: LinkMenu }> = ({ item }) => {
 
 const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
   const { setOpenMobile } = useSidebar()
+  const { t } = useTranslation()
   return (
     <Collapsible asChild defaultOpen={false} className="group/collapsible">
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={item.title}>
+          <SidebarMenuButton tooltip={t(item.title)}>
             {item.icon && <DynamicIcon name={item.icon} />}
-            <span>{item.title}</span>
+            <span>{t(item.title)}</span>
             {item.badge && <MenuBadge>{item.badge}</MenuBadge>}
             <ChevronRight className="ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180" />
           </SidebarMenuButton>
@@ -90,7 +94,7 @@ const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
                 <SidebarMenuSubButton asChild isActive={false}>
                   <Link to={subItem.url} onClick={() => setOpenMobile(false)}>
                     {subItem.icon && <DynamicIcon name={subItem.icon} />}
-                    <span>{subItem.title}</span>
+                    <span>{t(subItem.title)}</span>
                     {subItem.badge && <MenuBadge>{subItem.badge}</MenuBadge>}
                   </Link>
                 </SidebarMenuSubButton>
@@ -104,27 +108,28 @@ const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
 }
 
 const SidebarMenuCollapsedDropdown: FC<{ item: CollapsibleMenu }> = ({ item }) => {
+  const { t } = useTranslation()
   return (
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton tooltip={item.title} isActive={false}>
+          <SidebarMenuButton tooltip={t(item.title)} isActive={false}>
             {item.icon && <DynamicIcon name={item.icon} />}
-            <span>{item.title}</span>
+            <span>{t(item.title)}</span>
             {item.badge && <MenuBadge>{item.badge}</MenuBadge>}
             <ChevronRight className="ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start" sideOffset={4}>
           <DropdownMenuLabel>
-            {item.title} {item.badge ? `(${item.badge})` : ''}
+            {t(item.title)} {item.badge ? `(${item.badge})` : ''}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {item.items.map((sub) => (
             <DropdownMenuItem key={`${sub.title}-${sub.url}`} asChild>
               <Link to={sub.url} className={`bg-secondary`}>
                 {sub.icon && <DynamicIcon name={sub.icon} />}
-                <span className="max-w-52 text-wrap">{sub.title}</span>
+                <span className="max-w-52 text-wrap">{t(item.title)}</span>
                 {sub.badge && <span className="ms-auto text-xs">{sub.badge}</span>}
               </Link>
             </DropdownMenuItem>

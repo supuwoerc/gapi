@@ -6,12 +6,13 @@ import { loadComponent } from '@/utils/route'
 import { HydrateFallback } from '@/components/hydrate-fallback'
 import { RouteError } from '@/components/route-error'
 
-const authRoutes: CustomRouteObject[] = [
+const publicRoutes: CustomRouteObject[] = [
   {
     path: '',
     handle: {
       hidden: true,
       auth: 'anonymous',
+      title: 'route.notFound',
     },
     HydrateFallback: HydrateFallback,
     errorElement: <RouteError />,
@@ -51,8 +52,28 @@ const authRoutes: CustomRouteObject[] = [
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/auth/otp')),
       },
+      {
+        path: '500',
+        handle: {
+          hidden: true,
+          auth: 'anonymous',
+          title: 'route.serverError',
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/error/500.tsx')),
+      },
+      {
+        path: '*',
+        handle: {
+          hidden: true,
+          auth: 'anonymous',
+          title: 'route.notFound',
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/error/404.tsx')),
+      },
     ],
   },
 ]
 
-export default authRoutes
+export default publicRoutes

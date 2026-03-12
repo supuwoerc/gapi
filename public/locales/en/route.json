@@ -2,5 +2,27 @@
   "login": "Login",
   "forgotPassword": "Forgot Password",
   "otp": "One-Time Password",
-  "dashboard": "Dashboard"
+  "serverError": "Server Error",
+  "notFound": "Not Found",
+  "general": {
+    "name": "General",
+    "dashboard": "Dashboard",
+    "tasks": "Tasks",
+    "notifications": "Notifications"
+  },
+  "pages": {
+    "name": "Pages",
+    "groups": "Groups",
+    "projects": "Projects",
+    "documents": "Documents"
+  },
+  "other": {
+    "name": "Other",
+    "admin": {
+      "name": "Admin",
+      "users": "Users",
+      "roles": "Roles",
+      "permissions": "Permissions"
+    }
+  }
 }

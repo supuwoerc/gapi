@@ -1,9 +1,8 @@
 import type { CustomRouteObject } from '@/types/route'
 
-import authRoutes from './auth'
-import authenticatedRoutes from './authenticated'
-import errorRoutes from './error'
+import asyncRoutes from './async'
+import publicRoutes from './public'
 
-const routes: CustomRouteObject[] = [...authRoutes, ...authenticatedRoutes, ...errorRoutes]
+const routes: CustomRouteObject[] = [...publicRoutes, ...asyncRoutes]
 
 export default routes

@@ -2,5 +2,27 @@
   "login": "登录",
   "forgotPassword": "忘记密码",
   "otp": "OTP验证",
-  "dashboard": "仪表盘"
+  "serverError": "服务器错误",
+  "notFound": "路径不存在",
+  "general": {
+    "name": "通用",
+    "dashboard": "仪表盘",
+    "tasks": "任务",
+    "notifications": "消息"
+  },
+  "pages": {
+    "name": "页面",
+    "groups": "空间",
+    "projects": "项目",
+    "documents": "文档"
+  },
+  "other": {
+    "name": "其他",
+    "admin": {
+      "name": "管理",
+      "users": "用户",
+      "roles": "角色",
+      "permissions": "权限"
+    }
+  }
 }

@@ -74,7 +74,7 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">{t('common.addRole')}</div>
+              <div className="font-medium text-muted-foreground">{t('global.menu.addRole')}</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
