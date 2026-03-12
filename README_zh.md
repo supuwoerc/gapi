@@ -33,7 +33,7 @@
 - **Zustand** - 轻量级状态管理（二选一）
 - **TanStack Query** - 服务端状态管理
 - **React Router** - 路由管理
-- **Axios** - HTTP 客户端
+- **ky** - HTTP 客户端
 - **Zod** - 数据验证
 
 ## 🚀 快速开始

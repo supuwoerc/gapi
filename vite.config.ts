@@ -69,7 +69,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
         output: {
           manualChunks: {
             react: ['react', 'react-dom'], // 单独打包 React 相关库
-            utils: ['lodash-es', 'axios'], // 工具库单独打包
+            utils: ['lodash-es', 'ky'], // 工具库单独打包
           },
         },
       },

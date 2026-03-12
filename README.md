@@ -33,7 +33,7 @@ This project is a self-hosted API management platform designed to provide elegan
 - **Zustand** - Lightweight state management (choose one)
 - **TanStack Query** - Server state management
 - **React Router** - Routing management
-- **Axios** - HTTP client
+- **ky** - HTTP client
 - **Zod** - Data validation
 
 ## 🚀 Quick Start
