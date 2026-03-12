@@ -30,7 +30,7 @@ This project is a self-hosted API management platform designed to provide elegan
 - **shadcn/ui** - High-quality React component library
 - **Tailwind CSS** - Utility-first CSS framework
 - **Radix UI** - Accessible low-level components
-- **Zustand** - Lightweight state management (choose one)
+- **Zustand** - Lightweight state management
 - **TanStack Query** - Server state management
 - **React Router** - Routing management
 - **ky** - HTTP client
