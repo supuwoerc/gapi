@@ -62,5 +62,12 @@
   "forbidden": {
     "title": "无权限访问",
     "subtitle": "当前页面无权限访问，请申请权限后刷新重试"
+  },
+  "dashboard": {
+    "name": "仪表盘",
+    "tabs": {
+      "overview": "概览",
+      "analytics": "分析"
+    }
   }
 }

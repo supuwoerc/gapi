@@ -38,7 +38,7 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
             <ThemeSwitcher accent />
           </div>
         )}
-        <main>
+        <main className="h-full w-full">
           <SwitchTransition>
             <CSSTransition
               key={location.pathname}
@@ -49,7 +49,11 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
               exit={false}
               classNames="fade-slide"
             >
-              {() => <div ref={nodeRef}>{currentOutlet}</div>}
+              {() => (
+                <div ref={nodeRef} className="h-full w-full">
+                  {currentOutlet}
+                </div>
+              )}
             </CSSTransition>
           </SwitchTransition>
         </main>
