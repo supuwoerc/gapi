@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "workspace": {
+    "name": "gapi",
+    "createdAt": 1773397000800,
+    "preset": "starter"
+  },
+  "authorizedRoots": ["/Users/qimeng_zhang/workspace/fe/gapi"]
+}
