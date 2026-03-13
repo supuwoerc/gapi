@@ -8,6 +8,7 @@ import routes from '@/routes/index.tsx'
 import '@/style/index.css'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/all'
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 
@@ -31,7 +32,9 @@ if (!rootElement.innerHTML) {
       <QueryClientProvider client={reactQueryClient}>
         <ThemeProvider>
           <Toaster duration={2200} position="top-center" />
-          <RouterProvider router={router} />
+          <NuqsAdapter>
+            <RouterProvider router={router} />
+          </NuqsAdapter>
         </ThemeProvider>
       </QueryClientProvider>
     </StrictMode>
