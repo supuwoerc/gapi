@@ -6,6 +6,10 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import Search from '@/components/search'
 import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
+import { UsersProvider } from './components/users-provider'
+import { UsersTable } from './components/users-table'
+import { users } from './data/users'
+
 const Users = () => {
   return (
     <>
@@ -25,7 +29,9 @@ const Users = () => {
             <p className="text-muted-foreground">Manage your users and their permissions here.</p>
           </div>
         </div>
-        123
+        <UsersProvider>
+          <UsersTable data={users} />
+        </UsersProvider>
       </AppMain>
     </>
   )
