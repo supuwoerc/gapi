@@ -171,7 +171,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="relative grid h-svh lg:grid-cols-[11fr_14fr]">
-      <div className="h-full w-full overflow-hidden text-ellipsis whitespace-nowrap max-lg:hidden">
+      <div className="h-full w-full truncate max-lg:hidden">
         {
           <Carousel
             ref={carouselRef}
@@ -195,10 +195,7 @@ const Login: React.FC = () => {
                           data-index={index}
                           className="item flex flex-col items-center justify-center gap-2"
                         >
-                          <h2
-                            key={`t${key}`}
-                            className="title text-[20px] font-semibold text-white"
-                          >
+                          <h2 key={`t${key}`} className="title text-xl font-semibold text-white">
                             {t(item.title)}
                           </h2>
                           <h4
@@ -214,10 +211,7 @@ const Login: React.FC = () => {
                       <CarouselItem className="h-svh bg-[linear-gradient(163.85deg,#1d2129,#00308f)]">
                         <div className="flex h-full items-center justify-center">
                           <div className="item" data-index={index}>
-                            <h2
-                              key={`t${key}`}
-                              className="title text-[20px] font-semibold text-white"
-                            >
+                            <h2 key={`t${key}`} className="title text-xl font-semibold text-white">
                               {t(item.title)}
                             </h2>
                             <h4
