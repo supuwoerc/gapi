@@ -54,3 +54,21 @@ export function getPageNumbers(currentPage: number, totalPages: number) {
 
   return rangeWithDots
 }
+
+export function parsePositiveInt(value: unknown, fallback: number) {
+  if (typeof value === 'number' && Number.isInteger(value) && value > 0) {
+    return value
+  }
+  if (typeof value === 'string') {
+    const parsed = Number(value)
+    if (Number.isInteger(parsed) && parsed > 0) {
+      return parsed
+    }
+  }
+  return fallback
+}
+
+export function parsePageSize(value: unknown, fallback: number, allowed: number[]) {
+  const parsed = parsePositiveInt(value, fallback)
+  return allowed.includes(parsed) ? parsed : fallback
+}

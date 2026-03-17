@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   type SortingState,
@@ -12,6 +12,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
+import { useSearchParams } from 'react-router'
 
 import { cn } from '@/lib/utils'
 
@@ -43,9 +45,13 @@ export function UsersTable({ data }: DataTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [sorting, setSorting] = useState<SortingState>([])
 
-  // Local state management for table (uncomment to use local-only state, not synced with URL)
-  // const [columnFilters, onColumnFiltersChange] = useState<ColumnFiltersState>([])
-  // const [pagination, onPaginationChange] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 })
+  const [searchParams] = useSearchParams()
+
+  const search = useMemo(() => {
+    return Object.fromEntries(searchParams.entries())
+  }, [searchParams])
+
+  console.log(search)
 
   const {
     columnFilters,
@@ -54,7 +60,7 @@ export function UsersTable({ data }: DataTableProps) {
     onPaginationChange,
     ensurePageInRange,
   } = useTableUrlState({
-    // navigate,
+    search: search,
     pagination: { defaultPage: 1, defaultPageSize: 10 },
     globalFilter: { enabled: false },
     columnFilters: [

@@ -2,9 +2,16 @@ import { useMemo, useState } from 'react'
 
 import type { ColumnFiltersState, OnChangeFn, PaginationState } from '@tanstack/react-table'
 
-import { useSearchParams } from 'react-router'
+import { type useNavigate, useSearchParams } from 'react-router'
+
+import { parsePositiveInt } from '@/lib/utils'
+
+type SearchRecord = Record<string, unknown>
+
+export type NavigateFn = ReturnType<typeof useNavigate>
 
 type UseTableUrlStateParams = {
+  search: SearchRecord
   pagination?: {
     pageKey?: string
     pageSizeKey?: string
@@ -21,6 +28,7 @@ type UseTableUrlStateParams = {
         columnId: string
         searchKey: string
         type?: 'string'
+        // Optional transformers for custom types
         serialize?: (value: unknown) => unknown
         deserialize?: (value: unknown) => unknown
       }
@@ -35,135 +43,98 @@ type UseTableUrlStateParams = {
 }
 
 type UseTableUrlStateReturn = {
+  // Global filter
   globalFilter?: string
   onGlobalFilterChange?: OnChangeFn<string>
+  // Column filters
   columnFilters: ColumnFiltersState
   onColumnFiltersChange: OnChangeFn<ColumnFiltersState>
+  // Pagination
   pagination: PaginationState
   onPaginationChange: OnChangeFn<PaginationState>
+  // Helpers
   ensurePageInRange: (pageCount: number, opts?: { resetTo?: 'first' | 'last' }) => void
-}
-
-/**
- * 更新 URLSearchParams，undefined 值会删除对应 key
- */
-function patchSearchParams(
-  current: URLSearchParams,
-  updates: Record<string, string | number | undefined | null>
-): URLSearchParams {
-  const params = new URLSearchParams(current)
-  for (const [key, value] of Object.entries(updates)) {
-    if (value === undefined || value === null || value === '') {
-      params.delete(key)
-    } else {
-      params.set(key, String(value))
-    }
-  }
-  return params
 }
 
 export function useTableUrlState(params: UseTableUrlStateParams): UseTableUrlStateReturn {
   const {
+    search,
     pagination: paginationCfg,
     globalFilter: globalFilterCfg,
     columnFilters: columnFiltersCfg = [],
   } = params
 
-  const [searchParams, setSearchParams] = useSearchParams()
-
-  const pageKey = paginationCfg?.pageKey ?? 'page'
-  const pageSizeKey = paginationCfg?.pageSizeKey ?? 'pageSize'
+  const pageKey = paginationCfg?.pageKey ?? ('page' as string)
+  const pageSizeKey = paginationCfg?.pageSizeKey ?? ('pageSize' as string)
   const defaultPage = paginationCfg?.defaultPage ?? 1
   const defaultPageSize = paginationCfg?.defaultPageSize ?? 10
 
-  const globalFilterKey = globalFilterCfg?.key ?? 'filter'
+  const globalFilterKey = globalFilterCfg?.key ?? ('filter' as string)
   const globalFilterEnabled = globalFilterCfg?.enabled ?? true
   const trimGlobal = globalFilterCfg?.trim ?? true
 
-  // ─── Column Filters ───────────────────────────────────────
+  const [_, setSearchParams] = useSearchParams()
 
+  // Build initial column filters from the current search params
   const initialColumnFilters: ColumnFiltersState = useMemo(() => {
     const collected: ColumnFiltersState = []
     for (const cfg of columnFiltersCfg) {
-      const raw = searchParams.get(cfg.searchKey)
-      if (raw === null) continue
-
+      const raw = (search as SearchRecord)[cfg.searchKey]
       const deserialize = cfg.deserialize ?? ((v: unknown) => v)
-
-      if (cfg.type === 'array') {
-        const arr = raw.split(',').filter(Boolean)
-        const value = (deserialize(arr) as unknown[]) ?? []
-        if (Array.isArray(value) && value.length > 0) {
+      if (cfg.type === 'string') {
+        const value = (deserialize(raw) as string) ?? ''
+        if (typeof value === 'string' && value.trim() !== '') {
           collected.push({ id: cfg.columnId, value })
         }
       } else {
-        const value = (deserialize(raw) as string) ?? ''
-        if (typeof value === 'string' && value.trim() !== '') {
+        // default to array type
+        const value = (deserialize(raw) as unknown[]) ?? []
+        if (Array.isArray(value) && value.length > 0) {
           collected.push({ id: cfg.columnId, value })
         }
       }
     }
     return collected
-     
-  }, [searchParams, columnFiltersCfg])
+  }, [columnFiltersCfg, search])
 
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(initialColumnFilters)
 
-  const onColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (updater) => {
-    const next = typeof updater === 'function' ? updater(columnFilters) : updater
-    setColumnFilters(next)
-
-    const patch: Record<string, string | undefined> = {}
-    patch[pageKey] = undefined // 筛选变化时重置页码
-
-    for (const cfg of columnFiltersCfg) {
-      const found = next.find((f) => f.id === cfg.columnId)
-      const serialize = cfg.serialize ?? ((v: unknown) => v)
-
-      if (cfg.type === 'array') {
-        const value = Array.isArray(found?.value) ? (found!.value as unknown[]) : []
-        patch[cfg.searchKey] = value.length > 0 ? String(serialize(value)) : undefined
-      } else {
-        const value = typeof found?.value === 'string' ? (found.value as string) : ''
-        patch[cfg.searchKey] = value.trim() !== '' ? String(serialize(value)) : undefined
-      }
-    }
-
-    setSearchParams(patchSearchParams(searchParams, patch), { replace: true })
-  }
-
-  // ─── Pagination ───────────────────────────────────────────
-
   const pagination: PaginationState = useMemo(() => {
-    const rawPage = searchParams.get(pageKey)
-    const rawPageSize = searchParams.get(pageSizeKey)
-    const pageNum = rawPage !== null ? Number(rawPage) : defaultPage
-    const pageSizeNum = rawPageSize !== null ? Number(rawPageSize) : defaultPageSize
+    const rawPage = search[pageKey]
+    const rawPageSize = search[pageSizeKey]
+    const pageNum = parsePositiveInt(rawPage, defaultPage)
+    const pageSizeNum = parsePositiveInt(rawPageSize, defaultPageSize)
+    console.log(pageNum, pageSizeNum)
     return {
-      pageIndex: Math.max(0, (Number.isNaN(pageNum) ? defaultPage : pageNum) - 1),
-      pageSize: Number.isNaN(pageSizeNum) ? defaultPageSize : pageSizeNum,
+      pageIndex: pageNum - 1,
+      pageSize: pageSizeNum,
     }
-  }, [searchParams, pageKey, pageSizeKey, defaultPage, defaultPageSize])
+  }, [search, pageKey, pageSizeKey, defaultPage, defaultPageSize])
 
   const onPaginationChange: OnChangeFn<PaginationState> = (updater) => {
     const next = typeof updater === 'function' ? updater(pagination) : updater
     const nextPage = next.pageIndex + 1
     const nextPageSize = next.pageSize
-
-    setSearchParams(
-      patchSearchParams(searchParams, {
-        [pageKey]: nextPage <= defaultPage ? undefined : nextPage,
-        [pageSizeKey]: nextPageSize === defaultPageSize ? undefined : nextPageSize,
-      }),
-      { replace: true }
-    )
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      if (nextPage <= defaultPage) {
+        next.delete(pageKey)
+      } else {
+        next.set(pageKey, nextPage.toString())
+      }
+      if (nextPageSize === defaultPageSize) {
+        next.delete(pageSizeKey)
+      } else {
+        next.set(pageSizeKey, nextPageSize.toString())
+      }
+      return next
+    })
   }
-
-  // ─── Global Filter ────────────────────────────────────────
 
   const [globalFilter, setGlobalFilter] = useState<string | undefined>(() => {
     if (!globalFilterEnabled) return undefined
-    return searchParams.get(globalFilterKey) ?? ''
+    const raw = (search as SearchRecord)[globalFilterKey]
+    return typeof raw === 'string' ? raw : ''
   })
 
   const onGlobalFilterChange: OnChangeFn<string> | undefined = globalFilterEnabled
@@ -171,30 +142,68 @@ export function useTableUrlState(params: UseTableUrlStateParams): UseTableUrlSta
         const next = typeof updater === 'function' ? updater(globalFilter ?? '') : updater
         const value = trimGlobal ? next.trim() : next
         setGlobalFilter(value)
-
-        setSearchParams(
-          patchSearchParams(searchParams, {
-            [pageKey]: undefined, // 搜索时重置页码
-            [globalFilterKey]: value || undefined,
-          }),
-          { replace: true }
-        )
+        setSearchParams((prev) => {
+          const next = new URLSearchParams(prev)
+          next.delete(pageKey)
+          if (value) {
+            next.set(globalFilterKey, value)
+          } else {
+            next.delete(globalFilterKey)
+          }
+          return next
+        })
       }
     : undefined
 
-  // ─── Ensure Page In Range ─────────────────────────────────
+  const onColumnFiltersChange: OnChangeFn<ColumnFiltersState> = (updater) => {
+    const next = typeof updater === 'function' ? updater(columnFilters) : updater
+    setColumnFilters(next)
+
+    const patch: Record<string, unknown> = {}
+
+    for (const cfg of columnFiltersCfg) {
+      const found = next.find((f) => f.id === cfg.columnId)
+      const serialize = cfg.serialize ?? ((v: unknown) => v)
+      if (cfg.type === 'string') {
+        const value = typeof found?.value === 'string' ? (found.value as string) : ''
+        patch[cfg.searchKey] = value.trim() !== '' ? serialize(value) : undefined
+      } else {
+        const value = Array.isArray(found?.value) ? (found!.value as unknown[]) : []
+        patch[cfg.searchKey] = value.length > 0 ? serialize(value) : undefined
+      }
+    }
+
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev)
+      next.delete(pageKey)
+      Object.entries(patch).forEach(([key, val]) => {
+        if (val === undefined || val === null) {
+          next.delete(key)
+        } else {
+          next.set(key, String(val))
+        }
+      })
+      return next
+    })
+  }
 
   const ensurePageInRange = (
     pageCount: number,
     opts: { resetTo?: 'first' | 'last' } = { resetTo: 'first' }
   ) => {
-    const rawPage = searchParams.get(pageKey)
-    const pageNum = rawPage !== null ? Number(rawPage) : defaultPage
+    const currentPage = (search as SearchRecord)[pageKey]
+    const pageNum = typeof currentPage === 'number' ? currentPage : defaultPage
     if (pageCount > 0 && pageNum > pageCount) {
       setSearchParams(
-        patchSearchParams(searchParams, {
-          [pageKey]: opts.resetTo === 'last' ? pageCount : undefined,
-        }),
+        (prev) => {
+          const next = new URLSearchParams(prev)
+          if (opts.resetTo === 'last') {
+            next.set(pageKey, String(pageCount))
+          } else {
+            next.delete(pageKey)
+          }
+          return next
+        },
         { replace: true }
       )
     }
