@@ -29,7 +29,7 @@ const Search = ({ className = '', placeholder = 'Search' }: SearchProps) => {
         size={16}
       />
       <span className="ms-4">{placeholder}</span>
-      <kbd className="text-2.5 pointer-events-none absolute inset-e-[0.3rem] top-[0.3rem] hidden h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono font-medium opacity-100 select-none group-hover:bg-accent sm:flex">
+      <kbd className="pointer-events-none absolute inset-e-[0.3rem] top-[0.3rem] hidden h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 select-none group-hover:bg-accent sm:flex">
         <span className="text-xs">⌘</span>K
       </kbd>
     </Button>
