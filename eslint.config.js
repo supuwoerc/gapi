@@ -53,7 +53,6 @@ export default defineConfig([
       ],
       'tailwindcss/classnames-order': 'off', // prettier do it
       'tailwindcss/no-custom-classname': 'off',
-      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])

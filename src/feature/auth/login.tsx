@@ -19,8 +19,6 @@ import AuthForm from './components/auth-form'
 import { carouselItems, codeSnippets, langs } from './data/constant'
 
 const Login: React.FC = () => {
-  const [code, setCode] = useState(codeSnippets[0])
-  const [lang, setLang] = useState(langs[0])
   const [currentCodeIndex, setCodeCurrentIndex] = useState(0)
   const [highlighter, setHighlighter] = useState<HighlighterCore>()
   const [plugin] = useState(() => Autoplay({ delay: 30000, stopOnInteraction: true }))
@@ -31,13 +29,7 @@ const Login: React.FC = () => {
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const splitRef = useRef<{ title?: SplitText; sub?: SplitText }>({})
 
-  const [key, setKey] = useState(0)
-
   const { t, i18n } = useTranslation()
-
-  useEffect(() => {
-    setKey((p) => p + 1)
-  }, [i18n.language])
 
   useEffect(() => {
     let ins: HighlighterCore
@@ -83,10 +75,8 @@ const Login: React.FC = () => {
     }
   }, [])
 
-  useEffect(() => {
-    setCode(codeSnippets[currentCodeIndex])
-    setLang(langs[currentCodeIndex])
-  }, [currentCodeIndex])
+  const code = codeSnippets[currentCodeIndex]
+  const lang = langs[currentCodeIndex]
 
   useGSAP(
     () => {
@@ -195,11 +185,14 @@ const Login: React.FC = () => {
                           data-index={index}
                           className="item flex flex-col items-center justify-center gap-2"
                         >
-                          <h2 key={`t${key}`} className="title text-xl font-semibold text-white">
+                          <h2
+                            key={`t${i18n.language}`}
+                            className="title text-xl font-semibold text-white"
+                          >
                             {t(item.title)}
                           </h2>
                           <h4
-                            key={`st${key}`}
+                            key={`st${i18n.language}`}
                             className="subtitle mb-2 text-sm text-white opacity-80"
                           >
                             {t(item.subtitle)}
@@ -211,11 +204,14 @@ const Login: React.FC = () => {
                       <CarouselItem className="h-svh bg-[linear-gradient(163.85deg,#1d2129,#00308f)]">
                         <div className="flex h-full items-center justify-center">
                           <div className="item" data-index={index}>
-                            <h2 key={`t${key}`} className="title text-xl font-semibold text-white">
+                            <h2
+                              key={`t${i18n.language}`}
+                              className="title text-xl font-semibold text-white"
+                            >
                               {t(item.title)}
                             </h2>
                             <h4
-                              key={`st${key}`}
+                              key={`st${i18n.language}`}
                               className="subtitle mb-2 text-sm text-white opacity-80"
                             >
                               {t(item.subtitle)}
