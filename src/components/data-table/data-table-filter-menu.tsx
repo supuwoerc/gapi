@@ -6,11 +6,11 @@ import type { Column, Table } from '@tanstack/react-table'
 
 import type { ExtendedColumnFilter, FilterOperator } from '@/types/data-table'
 import { BadgeCheck, CalendarIcon, Check, ListFilter, Text, X } from 'lucide-react'
+import { nanoid } from 'nanoid'
 import { useQueryState } from 'nuqs'
 
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table'
 import { formatDate } from '@/lib/format'
-import { generateId } from '@/lib/id'
 import { getFiltersStateParser } from '@/lib/parsers'
 import { cn } from '@/lib/utils'
 
@@ -121,7 +121,7 @@ export function DataTableFilterMenu<TData>({
         value: filterValue,
         variant: column.columnDef.meta?.variant ?? 'text',
         operator: getDefaultFilterOperator(column.columnDef.meta?.variant ?? 'text'),
-        filterId: generateId({ length: 8 }),
+        filterId: nanoid(8),
       }
 
       debouncedSetFilters([...filters, newFilter])

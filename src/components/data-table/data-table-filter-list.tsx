@@ -7,11 +7,11 @@ import type { Column, ColumnMeta, Table } from '@tanstack/react-table'
 import { dataTableConfig } from '@/config/data-table'
 import type { ExtendedColumnFilter, FilterOperator, JoinOperator } from '@/types/data-table'
 import { CalendarIcon, Check, ChevronsUpDown, GripVertical, ListFilter, Trash2 } from 'lucide-react'
+import { nanoid } from 'nanoid'
 import { parseAsStringEnum, useQueryState } from 'nuqs'
 
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table'
 import { formatDate } from '@/lib/format'
-import { generateId } from '@/lib/id'
 import { getFiltersStateParser } from '@/lib/parsers'
 import { cn } from '@/lib/utils'
 
@@ -121,7 +121,7 @@ export function DataTableFilterList<TData>({
         value: '',
         variant: column.columnDef.meta?.variant ?? 'text',
         operator: getDefaultFilterOperator(column.columnDef.meta?.variant ?? 'text'),
-        filterId: generateId({ length: 8 }),
+        filterId: nanoid(8),
       },
     ])
   }, [columns, filters, debouncedSetFilters])
