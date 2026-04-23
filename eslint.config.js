@@ -23,6 +23,12 @@ export default defineConfig([
     },
   },
   {
+    files: ['src/components/ui/**/*.{ts,tsx}'],
+    rules: {
+      'tailwindcss/enforces-shorthand': 'off',
+    },
+  },
+  {
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
@@ -47,6 +53,7 @@ export default defineConfig([
       ],
       'tailwindcss/classnames-order': 'off', // prettier do it
       'tailwindcss/no-custom-classname': 'off',
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 ])

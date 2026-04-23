@@ -23,7 +23,7 @@ const Login: React.FC = () => {
   const [lang, setLang] = useState(langs[0])
   const [currentCodeIndex, setCodeCurrentIndex] = useState(0)
   const [highlighter, setHighlighter] = useState<HighlighterCore>()
-  const plugin = useRef(Autoplay({ delay: 30000, stopOnInteraction: true }))
+  const [plugin] = useState(() => Autoplay({ delay: 30000, stopOnInteraction: true }))
   const timer = useRef<ReturnType<typeof setInterval>>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -150,7 +150,7 @@ const Login: React.FC = () => {
     },
     {
       dependencies: [currentIndex, carouselApi, i18n.language],
-      scope: carouselRef.current!,
+      scope: carouselRef,
       revertOnUpdate: false,
     }
   )
@@ -176,10 +176,10 @@ const Login: React.FC = () => {
           <Carousel
             ref={carouselRef}
             className="h-full w-full cursor-pointer"
-            plugins={plugin.current ? [plugin.current] : []}
+            plugins={plugin ? [plugin] : []}
             opts={{ loop: true }}
-            onMouseEnter={() => plugin.current?.stop()}
-            onMouseLeave={() => plugin.current?.play()}
+            onMouseEnter={() => plugin?.stop()}
+            onMouseLeave={() => plugin?.play()}
             setApi={setCarouselApi}
           >
             <CarouselContent>

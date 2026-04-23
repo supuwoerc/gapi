@@ -4,9 +4,11 @@ import path from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import type { ConfigEnv, UserConfig } from 'vite'
 
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 
+import babel from '@rolldown/plugin-babel'
 import tailwindcss from '@tailwindcss/vite'
+import checker from 'vite-plugin-checker'
 import svgr from 'vite-plugin-svgr'
 
 // https://vite.dev/config/
@@ -30,13 +32,16 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       globals: true,
     },
     plugins: [
-      react({
-        babel: {
-          plugins: [['babel-plugin-react-compiler']],
-        },
-      }),
+      react(),
+      babel({ presets: [reactCompilerPreset()] }),
       tailwindcss(),
       svgr(),
+      checker({
+        eslint: {
+          useFlatConfig: true,
+          lintCommand: 'eslint .',
+        },
+      }),
     ],
     publicDir: 'public',
     resolve: {
@@ -67,9 +72,9 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ['react', 'react-dom'], // 单独打包 React 相关库
-            utils: ['lodash-es', 'ky'], // 工具库单独打包
+          manualChunks(id) {
+            if (id.includes('react-dom') || id.includes('react/')) return 'react'
+            if (id.includes('lodash-es') || id.includes('/ky/')) return 'utils'
           },
         },
       },
