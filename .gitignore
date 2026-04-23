@@ -30,3 +30,6 @@ coverage/
 .opencode/
 .roo/
 .vscode/
+.claude/
+.sisyphus/
+.opencode-router/
