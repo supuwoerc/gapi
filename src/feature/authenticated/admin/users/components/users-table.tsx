@@ -31,15 +31,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { DataTable } from '@/components/data-table/data-table'
+import { DataTableAdvancedToolbar } from '@/components/data-table/data-table-advanced-toolbar'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
+import { DataTableFilterList } from '@/components/data-table/data-table-filter-list'
 import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton'
+import { DataTableSortList } from '@/components/data-table/data-table-sort-list'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 
 import { getUsers } from '../api/fake-users'
 import { callTypes } from '../data/data'
 import type { User } from '../data/schema'
+import { UsersTableActionBar } from './users-table-action-bar'
 
 const statusOptions = [
   { label: 'Active', value: 'active', icon: CheckCircle },
@@ -58,23 +63,45 @@ const roleOptions = [
 const EmptyList: Array<User> = []
 
 export function DataTableDemo() {
+  const [enableAdvancedFilter, setEnableAdvancedFilter] = React.useState(false)
+
   const columnIds = React.useMemo(
     () => new Set(['username', 'email', 'status', 'role', 'createdAt']),
     []
   )
 
-  const [page] = useQueryState('page', parseAsInteger.withDefault(1))
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10))
   const [sorting] = useQueryState(
     'sort',
     getSortingStateParser<User>(columnIds).withDefault([{ id: 'createdAt', desc: true }])
   )
-  const [username] = useQueryState('username', parseAsString.withDefault(''))
-  const [status] = useQueryState('status', parseAsArrayOf(parseAsString, ',').withDefault([]))
-  const [role] = useQueryState('role', parseAsArrayOf(parseAsString, ',').withDefault([]))
+  const [username, setUsername] = useQueryState('username', parseAsString.withDefault(''))
+  const [status, setStatus] = useQueryState(
+    'status',
+    parseAsArrayOf(parseAsString, ',').withDefault([])
+  )
+  const [role, setRole] = useQueryState('role', parseAsArrayOf(parseAsString, ',').withDefault([]))
+  const [filters, setFilters] = useQueryState('filters', parseAsString.withDefault(''))
+
+  const onTabChange = React.useCallback(
+    (value: string) => {
+      const isAdvanced = value === 'advanced'
+      setEnableAdvancedFilter(isAdvanced)
+      void setPage(1)
+      if (isAdvanced) {
+        void setUsername(null)
+        void setStatus(null)
+        void setRole(null)
+      } else {
+        void setFilters(null)
+      }
+    },
+    [setPage, setUsername, setStatus, setRole, setFilters]
+  )
 
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['users', { page, perPage, sorting, username, status, role }],
+    queryKey: ['users', { page, perPage, sorting, username, status, role, filters }],
     queryFn: () =>
       getUsers({
         page,
@@ -83,6 +110,7 @@ export function DataTableDemo() {
         username: username || undefined,
         status: status.length > 0 ? status : undefined,
         role: role.length > 0 ? role : undefined,
+        filters: filters || undefined,
       }),
     placeholderData: keepPreviousData,
   })
@@ -190,6 +218,11 @@ export function DataTableDemo() {
           const date = cell.getValue<Date>()
           return <div>{new Date(date).toLocaleDateString()}</div>
         },
+        meta: {
+          label: 'Created At',
+          variant: 'date',
+        },
+        enableColumnFilter: true,
       },
       {
         id: 'actions',
@@ -219,6 +252,7 @@ export function DataTableDemo() {
     data: data?.data ?? EmptyList,
     columns,
     pageCount: data?.pageCount ?? -1,
+    enableAdvancedFilter,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
       columnPinning: { right: ['actions'] },
@@ -231,9 +265,32 @@ export function DataTableDemo() {
   }
 
   return (
-    <div className="data-table-container">
-      <DataTable table={table} isFetching={isFetching && !isLoading}>
-        <DataTableToolbar table={table} />
+    <div className="data-table-container space-y-4">
+      <Tabs value={enableAdvancedFilter ? 'advanced' : 'simple'} onValueChange={onTabChange}>
+        <TabsList>
+          <TabsTrigger value="simple">Simple</TabsTrigger>
+          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <DataTable
+        table={table}
+        isFetching={isFetching && !isLoading}
+        actionBar={
+          <UsersTableActionBar
+            table={table}
+            statusOptions={statusOptions}
+            roleOptions={roleOptions}
+          />
+        }
+      >
+        {enableAdvancedFilter ? (
+          <DataTableAdvancedToolbar table={table}>
+            <DataTableFilterList table={table} />
+            <DataTableSortList table={table} />
+          </DataTableAdvancedToolbar>
+        ) : (
+          <DataTableToolbar table={table} />
+        )}
       </DataTable>
     </div>
   )

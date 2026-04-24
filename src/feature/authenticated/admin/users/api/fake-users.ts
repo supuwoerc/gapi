@@ -1,6 +1,14 @@
 import type { User } from '../data/schema'
 import { users } from '../data/users'
 
+interface AdvancedFilter {
+  id: string
+  value: string | string[]
+  variant: string
+  operator: string
+  filterId: string
+}
+
 interface GetUsersParams {
   page: number
   perPage: number
@@ -8,12 +16,69 @@ interface GetUsersParams {
   username?: string
   status?: string[]
   role?: string[]
+  filters?: string
 }
 
 interface GetUsersResponse {
   data: User[]
   pageCount: number
   total: number
+}
+
+function applyAdvancedFilter(data: User[], filter: AdvancedFilter): User[] {
+  const { id, value, operator } = filter
+  const key = id as keyof User
+
+  if (operator === 'isEmpty') {
+    return data.filter((u) => !u[key])
+  }
+  if (operator === 'isNotEmpty') {
+    return data.filter((u) => !!u[key])
+  }
+
+  if (Array.isArray(value)) {
+    if (operator === 'inArray') {
+      return data.filter((u) => value.includes(String(u[key])))
+    }
+    if (operator === 'notInArray') {
+      return data.filter((u) => !value.includes(String(u[key])))
+    }
+    if (operator === 'isBetween' && value.length === 2) {
+      return data.filter((u) => {
+        const v = u[key] instanceof Date ? u[key].getTime() : Number(u[key])
+        return v >= Number(value[0]) && v <= Number(value[1])
+      })
+    }
+    return data
+  }
+
+  const strValue = String(value).toLowerCase()
+  return data.filter((u) => {
+    const fieldVal = u[key]
+    const fieldStr = String(fieldVal).toLowerCase()
+    const fieldNum = fieldVal instanceof Date ? fieldVal.getTime() : Number(fieldVal)
+
+    switch (operator) {
+      case 'iLike':
+        return fieldStr.includes(strValue)
+      case 'notILike':
+        return !fieldStr.includes(strValue)
+      case 'eq':
+        return fieldStr === strValue
+      case 'ne':
+        return fieldStr !== strValue
+      case 'lt':
+        return fieldNum < Number(value)
+      case 'lte':
+        return fieldNum <= Number(value)
+      case 'gt':
+        return fieldNum > Number(value)
+      case 'gte':
+        return fieldNum >= Number(value)
+      default:
+        return true
+    }
+  })
 }
 
 export async function getUsers(params: GetUsersParams): Promise<GetUsersResponse> {
@@ -38,6 +103,17 @@ export async function getUsers(params: GetUsersParams): Promise<GetUsersResponse
 
   if (params.role?.length) {
     result = result.filter((u) => params.role!.includes(u.role))
+  }
+
+  if (params.filters) {
+    try {
+      const parsed = JSON.parse(params.filters) as AdvancedFilter[]
+      for (const filter of parsed) {
+        result = applyAdvancedFilter(result, filter)
+      }
+    } catch {
+      // ignore malformed filters
+    }
   }
 
   if (params.sort.length > 0) {

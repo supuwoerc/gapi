@@ -59,6 +59,31 @@ DataTableSortList (多列排序管理)
 └── SortableContent (拖拽排序)
 ```
 
+### 组件适用场景速查
+
+| 组件                         | 适用场景                                               |
+| ---------------------------- | ------------------------------------------------------ |
+| **DataTable**                | 核心表格渲染，所有场景都要用                           |
+| **DataTableToolbar**         | 简单筛选场景，根据列 meta 自动渲染筛选控件             |
+| **DataTableAdvancedToolbar** | 只需要列可见性切换、不需要内联筛选的场景               |
+| **DataTableColumnHeader**    | 需要列头排序、隐藏列的下拉菜单                         |
+| **DataTablePagination**      | 分页导航，显示页码和每页条数选择                       |
+| **DataTableSkeleton**        | 数据加载中的骨架屏占位                                 |
+| **DataTableViewOptions**     | 让用户勾选显示/隐藏哪些列                              |
+| **DataTableFilterList**      | 高级筛选 — 弹出面板中拖拽排序多个筛选条件，支持 AND/OR |
+| **DataTableFilterMenu**      | 高级筛选 — 紧凑的药丸标签式筛选，带命令面板交互        |
+| **DataTableFacetedFilter**   | 单选/多选下拉筛选（如状态、角色）                      |
+| **DataTableDateFilter**      | 日期/日期范围筛选                                      |
+| **DataTableSliderFilter**    | 数值范围滑块筛选                                       |
+| **DataTableRangeFilter**     | 数值区间输入筛选（最小值/最大值）                      |
+| **DataTableSortList**        | 多列排序管理，弹出面板中拖拽调整排序优先级             |
+
+**选择路径：**
+
+- 基础表格：`DataTable` + `DataTableToolbar` + `DataTablePagination`
+- 需要高级筛选：把 `DataTableToolbar` 换成 `DataTableAdvancedToolbar` + `DataTableFilterList` 或 `DataTableFilterMenu`
+- 需要多列排序：加 `DataTableSortList`
+
 ---
 
 ## 快速上手
