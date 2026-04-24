@@ -3,15 +3,6 @@ import { type FC, type SVGProps } from 'react'
 import { Item, Root as Radio } from '@radix-ui/react-radio-group'
 
 import type { Theme } from '@/schema/theme'
-import {
-  type TSystemConfigStore,
-  defaultCollapsible,
-  defaultVariant,
-  resetSidebar,
-  setSidebarCollapsible,
-  setSidebarVariant,
-  useSystemConfigStore,
-} from '@/store/system'
 import { CircleCheck, RotateCcw, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
@@ -26,6 +17,16 @@ import IconTheme from '@/assets/config/theme-default.svg?react'
 import IconThemeModeDark from '@/assets/config/theme-mode-dark.svg?react'
 import IconThemeModeSystem from '@/assets/config/theme-mode-default.svg?react'
 import IconThemeModeLight from '@/assets/config/theme-mode-light.svg?react'
+
+import {
+  type TSystemConfigStore,
+  defaultCollapsible,
+  defaultVariant,
+  resetSidebar,
+  setSidebarCollapsible,
+  setSidebarVariant,
+  useSystemConfigStore,
+} from '@/store/system'
 
 import { cn } from '@/lib/utils'
 
@@ -48,7 +49,7 @@ import { useSidebar } from './ui/sidebar'
 
 export function ConfigDrawer() {
   const { resetTheme, resetThemeMode } = useTheme()
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   const handleReset = () => {
     resetTheme()
@@ -70,8 +71,8 @@ export function ConfigDrawer() {
       </SheetTrigger>
       <SheetContent className="flex flex-col">
         <SheetHeader className="pb-0 text-start">
-          <SheetTitle>{t('component.configDrawer.setting')}</SheetTitle>
-          <SheetDescription>{t('component.configDrawer.settingTips')}</SheetDescription>
+          <SheetTitle>{t('configDrawer.setting')}</SheetTitle>
+          <SheetDescription>{t('configDrawer.settingTips')}</SheetDescription>
         </SheetHeader>
         <div className="space-y-6 overflow-y-auto px-4">
           <ThemeModeConfig />
@@ -85,7 +86,7 @@ export function ConfigDrawer() {
             onClick={handleReset}
             aria-label="Reset all settings to default values"
           >
-            <RotateCcw /> {t('component.configDrawer.reset')}
+            <RotateCcw /> {t('configDrawer.reset')}
           </Button>
         </SheetFooter>
       </SheetContent>
@@ -180,12 +181,12 @@ function RadioGroupItem({
 
 function ThemeModeConfig() {
   const { defaultThemeMode, themeMode, setThemeMode } = useTheme()
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   return (
     <div>
       <SectionTitle
-        title={t('component.configDrawer.themeMode.name')}
+        title={t('configDrawer.themeMode.name')}
         showReset={themeMode !== defaultThemeMode}
         onReset={() => setThemeMode(defaultThemeMode)}
       />
@@ -199,17 +200,17 @@ function ThemeModeConfig() {
         {[
           {
             value: 'system',
-            label: t('component.configDrawer.themeMode.system'),
+            label: t('configDrawer.themeMode.system'),
             icon: IconThemeModeSystem,
           },
           {
             value: 'light',
-            label: t('component.configDrawer.themeMode.light'),
+            label: t('configDrawer.themeMode.light'),
             icon: IconThemeModeLight,
           },
           {
             value: 'dark',
-            label: t('component.configDrawer.themeMode.dark'),
+            label: t('configDrawer.themeMode.dark'),
             icon: IconThemeModeDark,
           },
         ].map((item) => (
@@ -226,12 +227,12 @@ function SidebarConfig() {
       return [state.sidebar.variant]
     })
   )
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   return (
     <div className="max-md:hidden">
       <SectionTitle
-        title={t('component.configDrawer.sidebar.name')}
+        title={t('configDrawer.sidebar.name')}
         showReset={defaultVariant !== variant}
         onReset={() => setSidebarVariant(defaultVariant)}
       />
@@ -245,17 +246,17 @@ function SidebarConfig() {
         {[
           {
             value: 'inset',
-            label: t('component.configDrawer.sidebar.inset'),
+            label: t('configDrawer.sidebar.inset'),
             icon: IconSidebarInset,
           },
           {
             value: 'floating',
-            label: t('component.configDrawer.sidebar.floating'),
+            label: t('configDrawer.sidebar.floating'),
             icon: IconSidebarFloating,
           },
           {
             value: 'sidebar',
-            label: t('component.configDrawer.sidebar.side'),
+            label: t('configDrawer.sidebar.side'),
             icon: IconSidebarSide,
           },
         ].map((item) => (
@@ -274,14 +275,14 @@ function LayoutConfig() {
     })
   )
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   const radioState = open ? 'default' : collapsible
 
   return (
     <div className="max-md:hidden">
       <SectionTitle
-        title={t('component.configDrawer.layout.name')}
+        title={t('configDrawer.layout.name')}
         showReset={radioState !== 'default'}
         onReset={() => {
           setOpen(true)
@@ -305,17 +306,17 @@ function LayoutConfig() {
         {[
           {
             value: 'default',
-            label: t('component.configDrawer.layout.default'),
+            label: t('configDrawer.layout.default'),
             icon: IconLayoutDefault,
           },
           {
             value: 'icon',
-            label: t('component.configDrawer.layout.compact'),
+            label: t('configDrawer.layout.compact'),
             icon: IconLayoutCompact,
           },
           {
             value: 'offcanvas',
-            label: t('component.configDrawer.layout.full'),
+            label: t('configDrawer.layout.full'),
             icon: IconLayoutFull,
           },
         ].map((item) => (
@@ -329,12 +330,12 @@ function LayoutConfig() {
 function ThemeConfig() {
   const { resetTheme, theme, defaultTheme, setTheme } = useTheme()
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   const options = themeOptions.map((item) => {
     return {
       value: item.key,
-      label: t(item.localeKey),
+      label: t(item.localeKey as never),
       icon: IconTheme,
       iconClassName: item.fillStroke,
     }
@@ -342,7 +343,7 @@ function ThemeConfig() {
   return (
     <div className="max-md:hidden">
       <SectionTitle
-        title={t('component.configDrawer.theme.name')}
+        title={t('configDrawer.theme.name')}
         showReset={theme !== defaultTheme}
         onReset={() => {
           resetTheme()

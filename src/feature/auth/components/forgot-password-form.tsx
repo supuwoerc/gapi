@@ -39,7 +39,7 @@ type forgotPasswordForm = z.infer<typeof forgotPasswordFormSchema>
 const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) => {
   const navigate = useNavigate()
 
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation(['feature', 'global'])
 
   const form = useForm<forgotPasswordForm>({
     resolver: zodResolver(forgotPasswordFormSchema),
@@ -57,16 +57,16 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
   const submithandle: SubmitHandler<forgotPasswordForm> = async (data: forgotPasswordForm) => {
     await toast
       .promise(sleep(2000), {
-        loading: t('global.loading'),
+        loading: t('global:loading'),
         success: () => {
           navigate('/otp')
-          return t('feature.forgotPassword.sendMail', { email: data.email })
+          return t('forgotPassword.sendMail', { email: data.email })
         },
         error: (err) => {
           if (isError(err)) {
             return err.message
           }
-          return t('global.error')
+          return t('global:error')
         },
       })
       .unwrap()
@@ -80,7 +80,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('feature.forgotPassword.form.email.name')}</FormLabel>
+              <FormLabel>{t('forgotPassword.form.email.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -89,7 +89,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
           )}
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
-          {t('global.button.continue')}
+          {t('global:button.continue')}
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <ArrowRight />}
         </Button>
       </form>

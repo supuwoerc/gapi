@@ -1,11 +1,12 @@
 import { z } from 'zod'
 
 import type { Language } from '@/schema/language'
-import { setSystemLanguage, useSystemConfigStore } from '@/store/system'
 import i18n from 'i18next'
 import backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 import { en, zhCN } from 'zod/locales'
+
+import { setSystemLanguage, useSystemConfigStore } from '@/store/system'
 
 const { language } = useSystemConfigStore.getState()
 
@@ -15,16 +16,17 @@ i18n
   .init({
     lng: language,
     fallbackLng: 'zh',
-    ns: ['route', 'component', 'global', 'feature'],
-    nsSeparator: '.',
+    ns: ['global', 'route'],
+    nsSeparator: ':',
     keySeparator: '.',
+    partialBundledLanguages: true,
     interpolation: {
       escapeValue: false,
     },
     react: {
       useSuspense: true,
     },
-    preload: ['zh'],
+    preload: ['zh', 'en'],
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },

@@ -1,8 +1,9 @@
 import { type FC, type PropsWithChildren, createContext, useEffect } from 'react'
 
 import type { Theme, ThemeMode } from '@/schema/theme'
-import { setSystemTheme, setSystemThemeMode, useSystemConfigStore } from '@/store/system'
 import { useShallow } from 'zustand/react/shallow'
+
+import { setSystemTheme, setSystemThemeMode, useSystemConfigStore } from '@/store/system'
 
 type ThemeProviderState = {
   themeMode: ThemeMode
@@ -23,42 +24,42 @@ export const themeOptions: Array<{ key: Theme; fillStroke: string; localeKey: st
   {
     key: 'default',
     fillStroke: 'fill-[oklch(0.205_0_0)] stroke-[oklch(0.205_0_0)]',
-    localeKey: 'component.configDrawer.theme.default',
+    localeKey: 'component:configDrawer.theme.default',
   },
   {
     key: 'green',
     fillStroke: 'fill-[oklch(0.648_0.2_131.684)] stroke-[oklch(0.648_0.2_131.684)]',
-    localeKey: 'component.configDrawer.theme.green',
+    localeKey: 'component:configDrawer.theme.green',
   },
   {
     key: 'orange',
     fillStroke: 'fill-[oklch(0.646_0.222_41.116)] stroke-[oklch(0.646_0.222_41.116)]',
-    localeKey: 'component.configDrawer.theme.orange',
+    localeKey: 'component:configDrawer.theme.orange',
   },
   {
     key: 'red',
     fillStroke: 'fill-[oklch(0.577_0.245_27.325)] stroke-[oklch(0.577_0.245_27.325)]',
-    localeKey: 'component.configDrawer.theme.red',
+    localeKey: 'component:configDrawer.theme.red',
   },
   {
     key: 'rose',
     fillStroke: 'fill-[oklch(0.586_0.253_17.585)] stroke-[oklch(0.586_0.253_17.585)]',
-    localeKey: 'component.configDrawer.theme.rose',
+    localeKey: 'component:configDrawer.theme.rose',
   },
   {
     key: 'violet',
     fillStroke: 'fill-[oklch(0.541_0.281_293.009)] stroke-[oklch(0.541_0.281_293.009)]',
-    localeKey: 'component.configDrawer.theme.violet',
+    localeKey: 'component:configDrawer.theme.violet',
   },
   {
     key: 'yellow',
     fillStroke: 'fill-[oklch(0.852_0.199_91.936)] stroke-[oklch(0.852_0.199_91.936)]',
-    localeKey: 'component.configDrawer.theme.yellow',
+    localeKey: 'component:configDrawer.theme.yellow',
   },
   {
     key: 'blue',
     fillStroke: 'fill-[oklch(0.488_0.243_264.376)] stroke-[oklch(0.488_0.243_264.376)]',
-    localeKey: 'component.configDrawer.theme.blue',
+    localeKey: 'component:configDrawer.theme.blue',
   },
 ]
 

@@ -29,7 +29,7 @@ const Login: React.FC = () => {
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const splitRef = useRef<{ title?: SplitText; sub?: SplitText }>({})
 
-  const { t, i18n } = useTranslation()
+  const { t, i18n } = useTranslation('feature')
 
   useEffect(() => {
     let ins: HighlighterCore
@@ -189,13 +189,13 @@ const Login: React.FC = () => {
                             key={`t${i18n.language}`}
                             className="title text-xl font-semibold text-white"
                           >
-                            {t(item.title)}
+                            {t(item.title as never)}
                           </h2>
                           <h4
                             key={`st${i18n.language}`}
                             className="subtitle mb-2 text-sm text-white opacity-80"
                           >
-                            {t(item.subtitle)}
+                            {t(item.subtitle as never)}
                           </h4>
                           <img className="cover w-66 lg:w-72" src={item.image} />
                         </div>
@@ -208,13 +208,13 @@ const Login: React.FC = () => {
                               key={`t${i18n.language}`}
                               className="title text-xl font-semibold text-white"
                             >
-                              {t(item.title)}
+                              {t(item.title as never)}
                             </h2>
                             <h4
                               key={`st${i18n.language}`}
                               className="subtitle mb-2 text-sm text-white opacity-80"
                             >
-                              {t(item.subtitle)}
+                              {t(item.subtitle as never)}
                             </h4>
                             {highlighter ? (
                               <ShikiMagicMove
@@ -248,10 +248,8 @@ const Login: React.FC = () => {
       <div className="flex h-full w-full items-center justify-center lg:p-8">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg tracking-tight">
-              {t('feature.login.button.login')}
-            </CardTitle>
-            <CardDescription>{t('feature.login.tips')}</CardDescription>
+            <CardTitle className="text-lg tracking-tight">{t('login.button.login')}</CardTitle>
+            <CardDescription>{t('login.tips')}</CardDescription>
           </CardHeader>
           <CardContent>
             <AuthForm className="space-y-2 sm:w-102" redirectTo={redirect} />

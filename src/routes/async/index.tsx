@@ -12,7 +12,7 @@ const asyncRoutes: CustomRouteObject[] = [
     handle: {
       hidden: true,
       auth: 'loginRequired',
-      group: 'route.general.name',
+      group: 'route:general.name',
     },
     HydrateFallback: HydrateFallback,
     errorElement: <RouteError />,
@@ -21,7 +21,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/dashboard',
         handle: {
-          title: 'route.general.dashboard',
+          title: 'route:general.dashboard',
           auth: 'loginRequired',
           icon: 'layout-dashboard',
           badge: 110,
@@ -34,7 +34,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/tasks',
         handle: {
-          title: 'route.general.tasks',
+          title: 'route:general.tasks',
           auth: 'loginRequired',
           icon: 'list-todo',
           badge: 3,
@@ -45,7 +45,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/notifications',
         handle: {
-          title: 'route.general.notifications',
+          title: 'route:general.notifications',
           auth: 'loginRequired',
           icon: 'bell',
           badge: 110,
@@ -60,7 +60,7 @@ const asyncRoutes: CustomRouteObject[] = [
     handle: {
       hidden: true,
       auth: 'loginRequired',
-      group: 'route.pages.name',
+      group: 'route:pages.name',
     },
     HydrateFallback: HydrateFallback,
     errorElement: <RouteError />,
@@ -69,7 +69,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/groups',
         handle: {
-          title: 'route.pages.groups',
+          title: 'route:pages.groups',
           auth: 'loginRequired',
           icon: 'boxes',
         },
@@ -79,7 +79,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/projects',
         handle: {
-          title: 'route.pages.projects',
+          title: 'route:pages.projects',
           auth: 'loginRequired',
           icon: 'panels-top-left',
         },
@@ -89,7 +89,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/documents',
         handle: {
-          title: 'route.pages.documents',
+          title: 'route:pages.documents',
           auth: 'loginRequired',
           icon: 'file-code',
         },
@@ -103,7 +103,7 @@ const asyncRoutes: CustomRouteObject[] = [
     handle: {
       hidden: true,
       auth: 'loginRequired',
-      group: 'route.other.name',
+      group: 'route:other.name',
     },
     HydrateFallback: HydrateFallback,
     errorElement: <RouteError />,
@@ -112,7 +112,7 @@ const asyncRoutes: CustomRouteObject[] = [
       {
         path: '/admin',
         handle: {
-          title: 'route.other.admin.name',
+          title: 'route:other.admin.name',
           auth: 'loginRequired',
           icon: 'user-star',
         },
@@ -122,7 +122,7 @@ const asyncRoutes: CustomRouteObject[] = [
           {
             path: '/admin/users',
             handle: {
-              title: 'route.other.admin.users',
+              title: 'route:other.admin.users',
               auth: 'loginRequired',
               icon: 'users',
             },
@@ -132,7 +132,7 @@ const asyncRoutes: CustomRouteObject[] = [
           {
             path: '/admin/roles',
             handle: {
-              title: 'route.other.admin.roles',
+              title: 'route:other.admin.roles',
               auth: 'loginRequired',
               icon: 'hat-glasses',
             },
@@ -142,7 +142,7 @@ const asyncRoutes: CustomRouteObject[] = [
           {
             path: '/admin/permissions',
             handle: {
-              title: 'route.other.admin.permissions',
+              title: 'route:other.admin.permissions',
               auth: 'loginRequired',
               icon: 'key-round',
             },

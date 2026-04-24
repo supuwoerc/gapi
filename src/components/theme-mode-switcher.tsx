@@ -1,11 +1,12 @@
 import type { FC } from 'react'
 
 import type { ThemeMode } from '@/schema/theme'
-import { setSystemThemeMode, useSystemConfigStore } from '@/store/system'
 import { Check, Moon, Sun, SunMoon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
+
+import { setSystemThemeMode, useSystemConfigStore } from '@/store/system'
 
 import { cn } from '@/lib/utils'
 
@@ -24,15 +25,15 @@ interface ThemeModeSwitcherProps {
 const options: Array<{ key: ThemeMode; localeKey: string }> = [
   {
     key: 'system',
-    localeKey: 'component.configDrawer.themeMode.system',
+    localeKey: 'component:configDrawer.themeMode.system',
   },
   {
     key: 'light',
-    localeKey: 'component.configDrawer.themeMode.light',
+    localeKey: 'component:configDrawer.themeMode.light',
   },
   {
     key: 'dark',
-    localeKey: 'component.configDrawer.themeMode.dark',
+    localeKey: 'component:configDrawer.themeMode.dark',
   },
 ]
 
@@ -43,12 +44,12 @@ const ThemeModeSwitcher: FC<ThemeModeSwitcherProps> = ({ className, accent }) =>
     })
   )
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   const changeThemeModeHandle = (mode: ThemeMode, localKey: string) => {
     if (mode !== themeMode) {
       setSystemThemeMode(mode)
-      toast.success(t('component.themeModeSwitcher.tips', { mode: t(localKey) }))
+      toast.success(t('themeModeSwitcher.tips', { mode: t(localKey as never) }))
     }
   }
 
@@ -76,7 +77,7 @@ const ThemeModeSwitcher: FC<ThemeModeSwitcherProps> = ({ className, accent }) =>
                 className="cursor-pointer"
                 onClick={() => changeThemeModeHandle(key, localeKey)}
               >
-                {t(localeKey)}
+                {t(localeKey as never)}
                 <Check size={14} className={cn('ms-auto', themeMode !== key && 'hidden')} />
               </DropdownMenuItem>
             )

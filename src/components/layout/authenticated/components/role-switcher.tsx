@@ -26,7 +26,7 @@ interface TeamSwitcherProps {
 
 const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
   const { isMobile } = useSidebar()
-  const { t } = useTranslation()
+  const { t } = useTranslation('global')
   const [activeRole, setActiveRole] = useState(roles[0])
 
   return (
@@ -55,7 +55,7 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {t('global.menu.roles')}
+              {t('menu.roles')}
             </DropdownMenuLabel>
             {roles.map((role) => (
               <DropdownMenuItem
@@ -74,7 +74,7 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">{t('global.menu.addRole')}</div>
+              <div className="font-medium text-muted-foreground">{t('menu.addRole')}</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

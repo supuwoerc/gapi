@@ -20,7 +20,7 @@ import { SignOutDialog } from '@/components/sign-out-dialog'
 
 export function ProfileDropdown() {
   const [open, setOpen] = useState(false)
-  const { t } = useTranslation()
+  const { t } = useTranslation('global')
 
   return (
     <>
@@ -45,20 +45,20 @@ export function ProfileDropdown() {
             <DropdownMenuItem asChild>
               <Link to="/settings/account">
                 <BadgeCheck />
-                {t('global.menu.account')}
+                {t('menu.account')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link to="/settings/notifications">
                 <Bell />
-                {t('global.menu.notifications')}
+                {t('menu.notifications')}
               </Link>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive" onClick={() => setOpen(true)}>
             <LogOut />
-            {t('global.menu.signOut')}
+            {t('menu.signOut')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

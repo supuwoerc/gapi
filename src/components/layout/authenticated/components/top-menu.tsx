@@ -25,7 +25,7 @@ interface TopMenuProps {
 }
 
 const TopMenu: FC<TopMenuProps> = ({ links, className }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('route')
   return (
     <>
       <div className="lg:hidden">
@@ -45,7 +45,7 @@ const TopMenu: FC<TopMenuProps> = ({ links, className }) => {
                     disabled ? 'pointer-events-none' : ''
                   )}
                 >
-                  {t(title)}
+                  {t(title as never)}
                 </Link>
               </DropdownMenuItem>
             ))}
@@ -62,7 +62,7 @@ const TopMenu: FC<TopMenuProps> = ({ links, className }) => {
             to={href}
             className={`text-sm font-medium transition-colors hover:text-primary ${isActive ? '' : 'text-muted-foreground'} ${disabled ? 'pointer-events-none' : ''}`}
           >
-            {t(title)}
+            {t(title as never)}
           </Link>
         ))}
       </nav>

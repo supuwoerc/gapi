@@ -1,11 +1,12 @@
 import type { FC } from 'react'
 
 import type { Theme } from '@/schema/theme'
-import { setSystemTheme, useSystemConfigStore } from '@/store/system'
 import { Check, Palette } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
+
+import { setSystemTheme, useSystemConfigStore } from '@/store/system'
 
 import { cn } from '@/lib/utils'
 
@@ -30,12 +31,12 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
     })
   )
 
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   const changeThemeHandle = (mode: Theme, localKey: string) => {
     if (mode !== theme) {
       setSystemTheme(mode)
-      toast.success(t('component.themeModeSwitcher.tips', { mode: t(localKey) }))
+      toast.success(t('themeModeSwitcher.tips', { mode: t(localKey as never) }))
     }
   }
 
@@ -61,7 +62,7 @@ const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className, accent }) => {
                 className="cursor-pointer"
                 onClick={() => changeThemeHandle(key, localeKey)}
               >
-                {t(localeKey)}
+                {t(localeKey as never)}
                 <Check size={14} className={cn('ms-auto', theme !== key && 'hidden')} />
               </DropdownMenuItem>
             )

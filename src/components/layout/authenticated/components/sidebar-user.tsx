@@ -30,7 +30,7 @@ interface SidebarUserProps {
 
 const SidebarUser: FC<SidebarUserProps> = ({ user }) => {
   const { isMobile } = useSidebar()
-  const { t } = useTranslation()
+  const { t } = useTranslation('global')
   const [open, setOpen] = useState(false)
 
   return (
@@ -77,20 +77,20 @@ const SidebarUser: FC<SidebarUserProps> = ({ user }) => {
                 <DropdownMenuItem asChild>
                   <Link to="/settings/account">
                     <BadgeCheck />
-                    {t('global.menu.account')}
+                    {t('menu.account')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/settings/notifications">
                     <Bell />
-                    {t('global.menu.notifications')}
+                    {t('menu.notifications')}
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem variant="destructive" onClick={() => setOpen(true)}>
                 <LogOut />
-                {t('global.menu.signOut')}
+                {t('menu.signOut')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

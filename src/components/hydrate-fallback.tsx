@@ -4,7 +4,7 @@ import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from './
 import { Spinner } from './ui/spinner'
 
 const HydrateFallback = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('global')
   return (
     <div className="flex h-svh w-full items-center justify-center">
       <Empty className="w-full">
@@ -12,8 +12,8 @@ const HydrateFallback = () => {
           <EmptyMedia variant="icon">
             <Spinner />
           </EmptyMedia>
-          <EmptyTitle>{t('global.loading')}</EmptyTitle>
-          <EmptyDescription>{t('global.tips.hydrate')}</EmptyDescription>
+          <EmptyTitle>{t('loading')}</EmptyTitle>
+          <EmptyDescription>{t('tips.hydrate')}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     </div>

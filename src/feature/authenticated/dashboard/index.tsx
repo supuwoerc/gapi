@@ -27,7 +27,7 @@ import { Overview } from './components/overview'
 import { RecentSales } from './components/recent-sales'
 
 const Forbidden = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation(['feature', 'global'])
   return (
     <>
       <AppHeader fixed>
@@ -42,16 +42,16 @@ const Forbidden = () => {
       </AppHeader>
       <AppMain>
         <div className="mb-2 flex items-center justify-between space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight">{t('feature.dashboard.name')}</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('dashboard.name')}</h1>
           <div className="flex items-center space-x-2">
-            <Button size="default">{t('global.button.reload')}</Button>
+            <Button size="default">{t('global:button.reload')}</Button>
           </div>
         </div>
         <Tabs orientation="horizontal" defaultValue="overview" className="space-y-4">
           <div className="w-full overflow-x-auto pb-2">
             <TabsList>
-              <TabsTrigger value="overview">{t('feature.dashboard.tabs.overview')}</TabsTrigger>
-              <TabsTrigger value="analytics">{t('feature.dashboard.tabs.analytics')}</TabsTrigger>
+              <TabsTrigger value="overview">{t('dashboard.tabs.overview')}</TabsTrigger>
+              <TabsTrigger value="analytics">{t('dashboard.tabs.analytics')}</TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="overview" className="space-y-4">

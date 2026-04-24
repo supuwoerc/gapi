@@ -12,7 +12,7 @@ const publicRoutes: CustomRouteObject[] = [
     handle: {
       hidden: true,
       auth: 'anonymous',
-      title: 'route.notFound',
+      title: 'route:notFound',
     },
     HydrateFallback: HydrateFallback,
     errorElement: <RouteError />,
@@ -28,7 +28,7 @@ const publicRoutes: CustomRouteObject[] = [
       {
         path: 'login',
         handle: {
-          title: 'route.login',
+          title: 'route:login',
           auth: 'anonymous',
         },
         errorElement: <RouteError />,
@@ -37,7 +37,7 @@ const publicRoutes: CustomRouteObject[] = [
       {
         path: 'forgot-password',
         handle: {
-          title: 'route.forgotPassword',
+          title: 'route:forgotPassword',
           auth: 'anonymous',
         },
         errorElement: <RouteError />,
@@ -46,7 +46,7 @@ const publicRoutes: CustomRouteObject[] = [
       {
         path: 'otp',
         handle: {
-          title: 'route.otp',
+          title: 'route:otp',
           auth: 'anonymous',
         },
         errorElement: <RouteError />,
@@ -57,7 +57,7 @@ const publicRoutes: CustomRouteObject[] = [
         handle: {
           hidden: true,
           auth: 'anonymous',
-          title: 'route.serverError',
+          title: 'route:serverError',
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/error/500.tsx')),
@@ -67,7 +67,7 @@ const publicRoutes: CustomRouteObject[] = [
         handle: {
           hidden: true,
           auth: 'anonymous',
-          title: 'route.notFound',
+          title: 'route:notFound',
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/error/404.tsx')),

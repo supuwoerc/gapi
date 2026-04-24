@@ -43,7 +43,7 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
   handleConfirm,
   ...actions
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('global')
   return (
     <AlertDialog {...actions}>
       <AlertDialogContent className={cn(className && className)}>
@@ -56,14 +56,14 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
         {children}
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>
-            {cancelBtnText ?? t('global.button.cancel')}
+            {cancelBtnText ?? t('button.cancel')}
           </AlertDialogCancel>
           <Button
             variant={destructive ? 'destructive' : 'default'}
             onClick={handleConfirm}
             disabled={disabled || isLoading}
           >
-            {confirmText ?? t('global.button.continue')}
+            {confirmText ?? t('button.continue')}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

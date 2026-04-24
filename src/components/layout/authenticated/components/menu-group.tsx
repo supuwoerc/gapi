@@ -31,10 +31,10 @@ import { Spinner } from '@/components/ui/spinner'
 
 const MenuGroup: FC<Menu> = ({ title, items }) => {
   const { state, isMobile } = useSidebar()
-  const { t } = useTranslation()
+  const { t } = useTranslation('route')
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>{t(title)}</SidebarGroupLabel>
+      <SidebarGroupLabel>{t(title as never)}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
           const key = `${item.title}-${item.url}`
@@ -60,16 +60,20 @@ const MenuBadge: FC<PropsWithChildren> = ({ children }) => {
 
 const SidebarMenuLink: FC<{ item: LinkMenu }> = ({ item }) => {
   const { setOpenMobile } = useSidebar()
-  const { t } = useTranslation()
+  const { t } = useTranslation('route')
   const { pathname } = useLocation()
   const { state, location } = useNavigation()
   const isLoading = state === 'loading' && location?.pathname === item.url
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton asChild isActive={checkIsActive(pathname, item)} tooltip={t(item.title)}>
+      <SidebarMenuButton
+        asChild
+        isActive={checkIsActive(pathname, item)}
+        tooltip={t(item.title as never)}
+      >
         <Link to={item.url} onClick={() => setOpenMobile(false)}>
           {item.icon && <DynamicIcon name={item.icon} />}
-          <span>{t(item.title)}</span>
+          <span>{t(item.title as never)}</span>
           {item.badge && <MenuBadge>{item.badge}</MenuBadge>}
           {isLoading && <Spinner />}
         </Link>
@@ -80,7 +84,7 @@ const SidebarMenuLink: FC<{ item: LinkMenu }> = ({ item }) => {
 
 const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
   const { setOpenMobile } = useSidebar()
-  const { t } = useTranslation()
+  const { t } = useTranslation('route')
   const { pathname } = useLocation()
   const { state, location } = useNavigation()
   return (
@@ -91,9 +95,9 @@ const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
     >
       <SidebarMenuItem>
         <CollapsibleTrigger asChild>
-          <SidebarMenuButton tooltip={t(item.title)}>
+          <SidebarMenuButton tooltip={t(item.title as never)}>
             {item.icon && <DynamicIcon name={item.icon} />}
-            <span>{t(item.title)}</span>
+            <span>{t(item.title as never)}</span>
             {item.badge && <MenuBadge>{item.badge}</MenuBadge>}
             <ChevronRight className="ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:rotate-180" />
           </SidebarMenuButton>
@@ -108,7 +112,7 @@ const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
                 >
                   <Link to={subItem.url} onClick={() => setOpenMobile(false)}>
                     {subItem.icon && <DynamicIcon name={subItem.icon} />}
-                    <span>{t(subItem.title)}</span>
+                    <span>{t(subItem.title as never)}</span>
                     {subItem.badge && <MenuBadge>{subItem.badge}</MenuBadge>}
                     {state === 'loading' && location?.pathname === subItem.url && (
                       <Spinner className="absolute right-2" />
@@ -125,22 +129,25 @@ const SidebarMenuCollapsible: FC<{ item: CollapsibleMenu }> = ({ item }) => {
 }
 
 const SidebarMenuCollapsedDropdown: FC<{ item: CollapsibleMenu }> = ({ item }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('route')
   const { pathname } = useLocation()
   return (
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton tooltip={t(item.title)} isActive={checkIsActive(pathname, item)}>
+          <SidebarMenuButton
+            tooltip={t(item.title as never)}
+            isActive={checkIsActive(pathname, item)}
+          >
             {item.icon && <DynamicIcon name={item.icon} />}
-            <span>{t(item.title)}</span>
+            <span>{t(item.title as never)}</span>
             {item.badge && <MenuBadge>{item.badge}</MenuBadge>}
             <ChevronRight className="ms-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start" sideOffset={4}>
           <DropdownMenuLabel>
-            {t(item.title)} {item.badge ? `(${item.badge})` : ''}
+            {t(item.title as never)} {item.badge ? `(${item.badge})` : ''}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {item.items.map((sub) => (
@@ -154,7 +161,7 @@ const SidebarMenuCollapsedDropdown: FC<{ item: CollapsibleMenu }> = ({ item }) =
                 }
               >
                 {sub.icon && <DynamicIcon name={sub.icon} />}
-                <span className="max-w-52 text-wrap">{t(sub.title)}</span>
+                <span className="max-w-52 text-wrap">{t(sub.title as never)}</span>
                 {sub.badge && <span className="ms-auto text-xs">{sub.badge}</span>}
               </Link>
             </DropdownMenuItem>

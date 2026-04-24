@@ -10,7 +10,7 @@ interface SignOutDialogProps {
 
 export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
   const navigate = useNavigate()
-  const { t } = useTranslation()
+  const { t } = useTranslation('component')
 
   const handleSignOut = () => {
     const currentUrl = location.pathname + location.search + location.hash
@@ -21,9 +21,9 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
-      title={t('component.signOutDialog.signOut')}
-      desc={t('component.signOutDialog.tips')}
-      confirmText={t('component.signOutDialog.signOut')}
+      title={t('signOutDialog.signOut')}
+      desc={t('signOutDialog.tips')}
+      confirmText={t('signOutDialog.signOut')}
       destructive
       handleConfirm={handleSignOut}
       className="sm:max-w-sm!"

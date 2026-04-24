@@ -8,14 +8,14 @@ import { appEnv } from '@/utils/env'
 
 const NavigationTitle = () => {
   const navigation = useNavigation()
-  const { t } = useTranslation()
+  const { t } = useTranslation('route')
   const matches = useMatches()
   const currentMatch = matches[matches.length - 1] as CustomRouteObject
 
   useEffect(() => {
     if (navigation.state === 'idle') {
       if (currentMatch.handle?.title) {
-        document.title = t(currentMatch.handle?.title)
+        document.title = t(currentMatch.handle?.title as never)
       } else {
         document.title = appEnv.VITE_APP_NAME
       }
