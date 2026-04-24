@@ -6,6 +6,8 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import Search from '@/components/search'
 import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
+import { DataTableDemo } from './components/users-table'
+
 const Users = () => {
   return (
     <>
@@ -25,7 +27,7 @@ const Users = () => {
             <p className="text-muted-foreground">Manage your users and their permissions here.</p>
           </div>
         </div>
-        TODO
+        <DataTableDemo />
       </AppMain>
     </>
   )

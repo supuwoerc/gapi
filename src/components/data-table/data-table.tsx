@@ -5,6 +5,7 @@ import { type Table as TanstackTable, flexRender } from '@tanstack/react-table'
 import { getColumnPinningStyle } from '@/lib/data-table'
 import { cn } from '@/lib/utils'
 
+import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
   TableBody,
@@ -19,15 +20,18 @@ import { DataTablePagination } from '@/components/data-table/data-table-paginati
 interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   table: TanstackTable<TData>
   actionBar?: React.ReactNode
+  isFetching?: boolean
 }
 
 export function DataTable<TData>({
   table,
   actionBar,
+  isFetching,
   children,
   className,
   ...props
 }: DataTableProps<TData>) {
+  'use no memo'
   return (
     <div className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...props}>
       {children}
@@ -53,7 +57,17 @@ export function DataTable<TData>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isFetching ? (
+              Array.from({ length: table.getState().pagination.pageSize }).map((_, i) => (
+                <TableRow key={i} className="hover:bg-transparent">
+                  {table.getVisibleLeafColumns().map((column) => (
+                    <TableCell key={column.id} style={{ ...getColumnPinningStyle({ column }) }}>
+                      <Skeleton className="h-6 w-full" />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (

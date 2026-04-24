@@ -1,5 +1,6 @@
 import { type FC, useRef } from 'react'
 
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import { useOutlet } from 'react-router'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 
@@ -26,7 +27,7 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
   const currentOutlet = useOutlet()
   const nodeRef = useRef<HTMLDivElement | null>(null)
   return (
-    <>
+    <NuqsAdapter>
       <NavigationProgress />
       <NavigationTitle />
       <main className={cn('relative h-svh w-svw overflow-x-hidden pt-20', pure && 'pt-0')}>
@@ -58,7 +59,7 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
           </SwitchTransition>
         </main>
       </main>
-    </>
+    </NuqsAdapter>
   )
 }
 

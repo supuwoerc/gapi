@@ -1,9 +1,11 @@
 import { type FC, type PropsWithChildren, useRef } from 'react'
 
-import { setSidebarOpen, useSystemConfigStore } from '@/store/system'
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import { useOutlet } from 'react-router'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import { useShallow } from 'zustand/react/shallow'
+
+import { setSidebarOpen, useSystemConfigStore } from '@/store/system'
 
 import { cn } from '@/lib/utils'
 
@@ -24,7 +26,7 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
   )
 
   return (
-    <>
+    <NuqsAdapter>
       <NavigationProgress />
       <NavigationTitle />
       <SearchProvider>
@@ -57,7 +59,7 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
           </SidebarInset>
         </SidebarProvider>
       </SearchProvider>
-    </>
+    </NuqsAdapter>
   )
 }
 
