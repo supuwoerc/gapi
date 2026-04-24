@@ -17,6 +17,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import { getSortingStateParser } from '@/lib/parsers'
 
@@ -46,23 +47,31 @@ import { callTypes } from '../data/data'
 import type { User } from '../data/schema'
 import { UsersTableActionBar } from './users-table-action-bar'
 
-const statusOptions = [
-  { label: 'Active', value: 'active', icon: CheckCircle },
-  { label: 'Inactive', value: 'inactive', icon: XCircle },
-  { label: 'Invited', value: 'invited', icon: CheckCircle },
-  { label: 'Suspended', value: 'suspended', icon: XCircle },
-]
-
-const roleOptions = [
-  { label: 'Superadmin', value: 'superadmin', icon: Shield },
-  { label: 'Admin', value: 'admin', icon: UserCheck },
-  { label: 'Manager', value: 'manager', icon: Users },
-  { label: 'Cashier', value: 'cashier', icon: CreditCard },
-]
-
 const EmptyList: Array<User> = []
 
 export function DataTableDemo() {
+  const { t } = useTranslation('feature')
+
+  const statusOptions = React.useMemo(
+    () => [
+      { label: t('users.status.active'), value: 'active', icon: CheckCircle },
+      { label: t('users.status.inactive'), value: 'inactive', icon: XCircle },
+      { label: t('users.status.invited'), value: 'invited', icon: CheckCircle },
+      { label: t('users.status.suspended'), value: 'suspended', icon: XCircle },
+    ],
+    [t]
+  )
+
+  const roleOptions = React.useMemo(
+    () => [
+      { label: t('users.role.superadmin'), value: 'superadmin', icon: Shield },
+      { label: t('users.role.admin'), value: 'admin', icon: UserCheck },
+      { label: t('users.role.manager'), value: 'manager', icon: Users },
+      { label: t('users.role.cashier'), value: 'cashier', icon: CreditCard },
+    ],
+    [t]
+  )
+
   const [enableAdvancedFilter, setEnableAdvancedFilter] = React.useState(false)
 
   const columnIds = React.useMemo(
@@ -144,7 +153,7 @@ export function DataTableDemo() {
         id: 'username',
         accessorKey: 'username',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label="Username" />
+          <DataTableColumnHeader column={column} label={t('users.columns.username')} />
         ),
         cell: ({ row }) => (
           <div className="flex flex-col">
@@ -153,8 +162,8 @@ export function DataTableDemo() {
           </div>
         ),
         meta: {
-          label: 'Username',
-          placeholder: 'Search users...',
+          label: t('users.columns.username'),
+          placeholder: t('users.search'),
           variant: 'text',
           icon: Text,
         },
@@ -164,7 +173,7 @@ export function DataTableDemo() {
         id: 'status',
         accessorKey: 'status',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label="Status" />
+          <DataTableColumnHeader column={column} label={t('users.columns.status')} />
         ),
         cell: ({ cell }) => {
           const status = cell.getValue<User['status']>()
@@ -177,7 +186,7 @@ export function DataTableDemo() {
           )
         },
         meta: {
-          label: 'Status',
+          label: t('users.columns.status'),
           variant: 'multiSelect',
           options: statusOptions,
         },
@@ -187,7 +196,7 @@ export function DataTableDemo() {
         id: 'role',
         accessorKey: 'role',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label="Role" />
+          <DataTableColumnHeader column={column} label={t('users.columns.role')} />
         ),
         cell: ({ cell }) => {
           const role = cell.getValue<User['role']>()
@@ -202,7 +211,7 @@ export function DataTableDemo() {
           )
         },
         meta: {
-          label: 'Role',
+          label: t('users.columns.role'),
           variant: 'multiSelect',
           options: roleOptions,
         },
@@ -212,14 +221,14 @@ export function DataTableDemo() {
         id: 'createdAt',
         accessorKey: 'createdAt',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label="Created At" />
+          <DataTableColumnHeader column={column} label={t('users.columns.createdAt')} />
         ),
         cell: ({ cell }) => {
           const date = cell.getValue<Date>()
           return <div>{new Date(date).toLocaleDateString()}</div>
         },
         meta: {
-          label: 'Created At',
+          label: t('users.columns.createdAt'),
           variant: 'date',
         },
         enableColumnFilter: true,
@@ -232,12 +241,12 @@ export function DataTableDemo() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <MoreHorizontal className="h-4 w-4" />
-                  <span className="sr-only">Open menu</span>
+                  <span className="sr-only">{t('users.openMenu')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+                <DropdownMenuItem>{t('users.edit')}</DropdownMenuItem>
+                <DropdownMenuItem variant="destructive">{t('users.delete')}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )
@@ -245,7 +254,7 @@ export function DataTableDemo() {
         size: 32,
       },
     ],
-    []
+    [t, statusOptions, roleOptions]
   )
 
   const { table } = useDataTable({
@@ -268,8 +277,8 @@ export function DataTableDemo() {
     <div className="data-table-container space-y-4">
       <Tabs value={enableAdvancedFilter ? 'advanced' : 'simple'} onValueChange={onTabChange}>
         <TabsList>
-          <TabsTrigger value="simple">Simple</TabsTrigger>
-          <TabsTrigger value="advanced">Advanced</TabsTrigger>
+          <TabsTrigger value="simple">{t('users.tabs.simple')}</TabsTrigger>
+          <TabsTrigger value="advanced">{t('users.tabs.advanced')}</TabsTrigger>
         </TabsList>
       </Tabs>
       <DataTable

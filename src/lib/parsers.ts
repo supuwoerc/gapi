@@ -1,8 +1,9 @@
 import { z } from 'zod'
 
-import { dataTableConfig } from '@/config/data-table'
 import type { ExtendedColumnFilter, ExtendedColumnSort } from '@/types/data-table'
 import { createParser } from 'nuqs/server'
+
+import { filterVariants, operators } from '@/lib/data-table'
 
 const sortingItemSchema = z.object({
   id: z.string(),
@@ -39,8 +40,8 @@ export const getSortingStateParser = <TData>(columnIds?: string[] | Set<string>)
 const filterItemSchema = z.object({
   id: z.string(),
   value: z.union([z.string(), z.array(z.string())]),
-  variant: z.enum(dataTableConfig.filterVariants),
-  operator: z.enum(dataTableConfig.operators),
+  variant: z.enum(filterVariants),
+  operator: z.enum(operators),
   filterId: z.string(),
 })
 

@@ -5,8 +5,8 @@ import * as React from 'react'
 
 import type { ColumnSort, SortDirection, Table } from '@tanstack/react-table'
 
-import { dataTableConfig } from '@/config/data-table'
 import { ArrowDownUp, ChevronsUpDown, GripVertical, Trash2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 
@@ -52,6 +52,7 @@ export function DataTableSortList<TData>({
   const id = React.useId()
   const labelId = React.useId()
   const descriptionId = React.useId()
+  const { t } = useTranslation('component')
   const [open, setOpen] = React.useState(false)
   const addButtonRef = React.useRef<HTMLButtonElement>(null)
 
@@ -155,7 +156,7 @@ export function DataTableSortList<TData>({
             disabled={disabled}
           >
             <ArrowDownUp className="text-muted-foreground" />
-            Sort
+            {t('dataTable.sortList.sort')}
             {sorting.length > 0 && (
               <Badge
                 variant="secondary"
@@ -174,15 +175,17 @@ export function DataTableSortList<TData>({
         >
           <div className="flex flex-col gap-1">
             <h4 id={labelId} className="leading-none font-medium">
-              {sorting.length > 0 ? 'Sort by' : 'No sorting applied'}
+              {sorting.length > 0
+                ? t('dataTable.sortList.sortBy')
+                : t('dataTable.sortList.noSortingApplied')}
             </h4>
             <p
               id={descriptionId}
               className={cn('text-sm text-muted-foreground', sorting.length > 0 && 'sr-only')}
             >
               {sorting.length > 0
-                ? 'Modify sorting to organize your rows.'
-                : 'Add sorting to organize your rows.'}
+                ? t('dataTable.sortList.modifySorting')
+                : t('dataTable.sortList.addSorting')}
             </p>
           </div>
           {sorting.length > 0 && (
@@ -210,11 +213,11 @@ export function DataTableSortList<TData>({
               onClick={onSortAdd}
               disabled={columns.length === 0}
             >
-              Add sort
+              {t('dataTable.sortList.addSort')}
             </Button>
             {sorting.length > 0 && (
               <Button variant="outline" size="sm" className="rounded" onClick={onSortingReset}>
-                Reset sorting
+                {t('dataTable.sortList.resetSorting')}
               </Button>
             )}
           </div>
@@ -249,6 +252,7 @@ function DataTableSortItem({
   onSortUpdate,
   onSortRemove,
 }: DataTableSortItemProps) {
+  const { t } = useTranslation('component')
   const fieldListboxId = `${sortItemId}-field-listbox`
   const fieldTriggerId = `${sortItemId}-field-trigger`
   const directionListboxId = `${sortItemId}-direction-listbox`
@@ -298,9 +302,9 @@ function DataTableSortItem({
           </PopoverTrigger>
           <PopoverContent id={fieldListboxId} className="w-(--radix-popover-trigger-width) p-0">
             <Command>
-              <CommandInput placeholder="Search fields..." />
+              <CommandInput placeholder={t('dataTable.sortList.searchFields')} />
               <CommandList>
-                <CommandEmpty>No fields found.</CommandEmpty>
+                <CommandEmpty>{t('dataTable.sortList.noFieldsFound')}</CommandEmpty>
                 <CommandGroup>
                   {columns.map((column) => (
                     <CommandItem
@@ -328,11 +332,8 @@ function DataTableSortItem({
             <SelectValue />
           </SelectTrigger>
           <SelectContent id={directionListboxId} className="min-w-(--radix-select-trigger-width)">
-            {dataTableConfig.sortOrders.map((order) => (
-              <SelectItem key={order.value} value={order.value}>
-                {order.label}
-              </SelectItem>
-            ))}
+            <SelectItem value="asc">{t('dataTable.sortOrder.asc')}</SelectItem>
+            <SelectItem value="desc">{t('dataTable.sortOrder.desc')}</SelectItem>
           </SelectContent>
         </Select>
         <Button

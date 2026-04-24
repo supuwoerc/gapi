@@ -69,5 +69,39 @@
       "overview": "Overview",
       "analytics": "Analytics"
     }
+  },
+  "users": {
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "invited": "Invited",
+      "suspended": "Suspended"
+    },
+    "role": {
+      "superadmin": "Superadmin",
+      "admin": "Admin",
+      "manager": "Manager",
+      "cashier": "Cashier"
+    },
+    "columns": {
+      "username": "Username",
+      "status": "Status",
+      "role": "Role",
+      "createdAt": "Created At"
+    },
+    "search": "Search users...",
+    "openMenu": "Open menu",
+    "edit": "Edit",
+    "delete": "Delete",
+    "tabs": {
+      "simple": "Simple",
+      "advanced": "Advanced"
+    },
+    "actionBar": {
+      "selected": "selected",
+      "status": "Status",
+      "role": "Role",
+      "delete": "Delete"
+    }
   }
 }

@@ -5,13 +5,13 @@ import * as React from 'react'
 
 import type { Column, ColumnMeta, Table } from '@tanstack/react-table'
 
-import { dataTableConfig } from '@/config/data-table'
 import type { ExtendedColumnFilter, FilterOperator, JoinOperator } from '@/types/data-table'
 import { CalendarIcon, Check, ChevronsUpDown, GripVertical, ListFilter, Trash2 } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import { parseAsStringEnum, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 
+import { joinOperators } from '@/lib/data-table'
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table'
 import { formatDate } from '@/lib/format'
 import { getFiltersStateParser } from '@/lib/parsers'
@@ -84,6 +84,7 @@ export function DataTableFilterList<TData>({
   const id = React.useId()
   const labelId = React.useId()
   const descriptionId = React.useId()
+  const { t } = useTranslation('component')
   const [open, setOpen] = React.useState(false)
   const addButtonRef = React.useRef<HTMLButtonElement>(null)
 
@@ -209,7 +210,7 @@ export function DataTableFilterList<TData>({
             disabled={disabled}
           >
             <ListFilter className="text-muted-foreground" />
-            Filter
+            {t('dataTable.filterList.filter')}
             {filters.length > 0 && (
               <Badge
                 variant="secondary"
@@ -228,15 +229,17 @@ export function DataTableFilterList<TData>({
         >
           <div className="flex flex-col gap-1">
             <h4 id={labelId} className="leading-none font-medium">
-              {filters.length > 0 ? 'Filters' : 'No filters applied'}
+              {filters.length > 0
+                ? t('dataTable.filterList.filters')
+                : t('dataTable.filterList.noFiltersApplied')}
             </h4>
             <p
               id={descriptionId}
               className={cn('text-sm text-muted-foreground', filters.length > 0 && 'sr-only')}
             >
               {filters.length > 0
-                ? 'Modify filters to refine your rows.'
-                : 'Add filters to refine your rows.'}
+                ? t('dataTable.filterList.modifyFilters')
+                : t('dataTable.filterList.addFilters')}
             </p>
           </div>
           {filters.length > 0 ? (
@@ -260,11 +263,11 @@ export function DataTableFilterList<TData>({
           ) : null}
           <div className="flex w-full items-center gap-2">
             <Button size="sm" className="rounded" ref={addButtonRef} onClick={onFilterAdd}>
-              Add filter
+              {t('dataTable.filterList.addFilter')}
             </Button>
             {filters.length > 0 ? (
               <Button variant="outline" size="sm" className="rounded" onClick={onFiltersReset}>
-                Reset filters
+                {t('dataTable.filterList.resetFilters')}
               </Button>
             ) : null}
           </div>
@@ -308,7 +311,7 @@ function DataTableFilterItem<TData>({
   onFilterUpdate,
   onFilterRemove,
 }: DataTableFilterItemProps<TData>) {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation('component')
   const [showFieldSelector, setShowFieldSelector] = React.useState(false)
   const [showOperatorSelector, setShowOperatorSelector] = React.useState(false)
   const [showValueSelector, setShowValueSelector] = React.useState(false)
@@ -354,7 +357,7 @@ function DataTableFilterItem<TData>({
       >
         <div className="min-w-[72px] text-center">
           {index === 0 ? (
-            <span className="text-sm text-muted-foreground">Where</span>
+            <span className="text-sm text-muted-foreground">{t('dataTable.filterList.where')}</span>
           ) : index === 1 ? (
             <Select
               value={joinOperator}
@@ -373,15 +376,17 @@ function DataTableFilterItem<TData>({
                 position="popper"
                 className="min-w-(--radix-select-trigger-width) lowercase"
               >
-                {dataTableConfig.joinOperators.map((joinOperator) => (
-                  <SelectItem key={joinOperator} value={joinOperator}>
-                    {joinOperator}
+                {joinOperators.map((op) => (
+                  <SelectItem key={op} value={op}>
+                    {t(`dataTable.joinOperator.${op}`)}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           ) : (
-            <span className="text-sm text-muted-foreground">{joinOperator}</span>
+            <span className="text-sm text-muted-foreground">
+              {t(`dataTable.joinOperator.${joinOperator}`)}
+            </span>
           )}
         </div>
         <Popover open={showFieldSelector} onOpenChange={setShowFieldSelector}>
@@ -394,16 +399,16 @@ function DataTableFilterItem<TData>({
             >
               <span className="truncate">
                 {columns.find((column) => column.id === filter.id)?.columnDef.meta?.label ??
-                  'Select field'}
+                  t('dataTable.filterList.selectField')}
               </span>
               <ChevronsUpDown className="opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent id={fieldListboxId} align="start" className="w-40 p-0">
             <Command>
-              <CommandInput placeholder="Search fields..." />
+              <CommandInput placeholder={t('dataTable.filterList.searchFields')} />
               <CommandList>
-                <CommandEmpty>No fields found.</CommandEmpty>
+                <CommandEmpty>{t('dataTable.filterList.noFieldsFound')}</CommandEmpty>
                 <CommandGroup>
                   {columns.map((column) => (
                     <CommandItem
@@ -458,8 +463,8 @@ function DataTableFilterItem<TData>({
           </SelectTrigger>
           <SelectContent id={operatorListboxId}>
             {filterOperators.map((operator) => (
-              <SelectItem key={operator.value} value={operator.value} className="lowercase">
-                {operator.label}
+              <SelectItem key={operator} value={operator} className="lowercase">
+                {t(`dataTable.operator.${operator}`)}
               </SelectItem>
             ))}
           </SelectContent>

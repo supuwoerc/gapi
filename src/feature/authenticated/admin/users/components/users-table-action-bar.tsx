@@ -4,6 +4,7 @@ import type { Table } from '@tanstack/react-table'
 
 import type { LucideIcon } from 'lucide-react'
 import { CheckCircle, Shield, Trash2, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import {
@@ -34,6 +35,8 @@ export function UsersTableActionBar({
   statusOptions,
   roleOptions,
 }: UsersTableActionBarProps) {
+  'use no memo'
+  const { t } = useTranslation('feature')
   const rows = table.getFilteredSelectedRowModel().rows
 
   const onOpenChange = React.useCallback(
@@ -61,7 +64,7 @@ export function UsersTableActionBar({
     <ActionBar open={rows.length > 0} onOpenChange={onOpenChange}>
       <ActionBarSelection>
         <span className="font-medium">{rows.length}</span>
-        <span>selected</span>
+        <span>{t('users.actionBar.selected')}</span>
         <ActionBarSeparator />
         <ActionBarClose>
           <X />
@@ -73,7 +76,7 @@ export function UsersTableActionBar({
           <DropdownMenuTrigger asChild>
             <ActionBarItem>
               <CheckCircle />
-              Status
+              {t('users.actionBar.status')}
             </ActionBarItem>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -92,7 +95,7 @@ export function UsersTableActionBar({
           <DropdownMenuTrigger asChild>
             <ActionBarItem>
               <Shield />
-              Role
+              {t('users.actionBar.role')}
             </ActionBarItem>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -109,7 +112,7 @@ export function UsersTableActionBar({
         </DropdownMenu>
         <ActionBarItem variant="destructive" onClick={onUserDelete}>
           <Trash2 />
-          Delete
+          {t('users.actionBar.delete')}
         </ActionBarItem>
       </ActionBarGroup>
     </ActionBar>

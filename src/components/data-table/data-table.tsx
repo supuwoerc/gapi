@@ -2,6 +2,8 @@ import type * as React from 'react'
 
 import { type Table as TanstackTable, flexRender } from '@tanstack/react-table'
 
+import { useTranslation } from 'react-i18next'
+
 import { getColumnPinningStyle } from '@/lib/data-table'
 import { cn } from '@/lib/utils'
 
@@ -21,17 +23,20 @@ interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   table: TanstackTable<TData>
   actionBar?: React.ReactNode
   isFetching?: boolean
+  paginationVariant?: 'simple' | 'numbered'
 }
 
 export function DataTable<TData>({
   table,
   actionBar,
   isFetching,
+  paginationVariant,
   children,
   className,
   ...props
 }: DataTableProps<TData>) {
   'use no memo'
+  const { t } = useTranslation('component')
   return (
     <div className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...props}>
       {children}
@@ -85,7 +90,7 @@ export function DataTable<TData>({
             ) : (
               <TableRow>
                 <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">
-                  No results.
+                  {t('dataTable.noResults')}
                 </TableCell>
               </TableRow>
             )}
@@ -93,7 +98,7 @@ export function DataTable<TData>({
         </Table>
       </div>
       <div className="flex flex-col gap-2.5">
-        <DataTablePagination table={table} />
+        <DataTablePagination table={table} variant={paginationVariant} />
         {actionBar && table.getFilteredSelectedRowModel().rows.length > 0 && actionBar}
       </div>
     </div>

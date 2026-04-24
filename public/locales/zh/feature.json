@@ -69,5 +69,39 @@
       "overview": "概览",
       "analytics": "分析"
     }
+  },
+  "users": {
+    "status": {
+      "active": "活跃",
+      "inactive": "未激活",
+      "invited": "已邀请",
+      "suspended": "已停用"
+    },
+    "role": {
+      "superadmin": "超级管理员",
+      "admin": "管理员",
+      "manager": "经理",
+      "cashier": "收银员"
+    },
+    "columns": {
+      "username": "用户名",
+      "status": "状态",
+      "role": "角色",
+      "createdAt": "创建时间"
+    },
+    "search": "搜索用户...",
+    "openMenu": "打开菜单",
+    "edit": "编辑",
+    "delete": "删除",
+    "tabs": {
+      "simple": "简单",
+      "advanced": "高级"
+    },
+    "actionBar": {
+      "selected": "已选",
+      "status": "状态",
+      "role": "角色",
+      "delete": "删除"
+    }
   }
 }

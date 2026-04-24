@@ -6,6 +6,7 @@ import * as React from 'react'
 import type { Column } from '@tanstack/react-table'
 
 import { PlusCircle, XCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 
@@ -51,6 +52,7 @@ interface DataTableSliderFilterProps<TData> {
 
 export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderFilterProps<TData>) {
   const id = React.useId()
+  const { t } = useTranslation('component')
 
   const columnFilterValue = parseValuesAsNumbers(column.getFilterValue())
 
@@ -135,7 +137,7 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
           {columnFilterValue ? (
             <div
               role="button"
-              aria-label={`Clear ${title} filter`}
+              aria-label={t('dataTable.sliderFilter.clearFilter', { title })}
               tabIndex={0}
               className="rounded-sm opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
               onClick={onReset}
@@ -165,7 +167,7 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
           </p>
           <div className="flex items-center gap-4">
             <Label htmlFor={`${id}-from`} className="sr-only">
-              From
+              {t('dataTable.sliderFilter.from')}
             </Label>
             <div className="relative">
               <Input
@@ -189,7 +191,7 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
               )}
             </div>
             <Label htmlFor={`${id}-to`} className="sr-only">
-              to
+              {t('dataTable.sliderFilter.to')}
             </Label>
             <div className="relative">
               <Input
@@ -214,7 +216,7 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
             </div>
           </div>
           <Label htmlFor={`${id}-slider`} className="sr-only">
-            {title} slider
+            {t('dataTable.sliderFilter.slider', { title })}
           </Label>
           <Slider
             id={`${id}-slider`}
@@ -225,8 +227,13 @@ export function DataTableSliderFilter<TData>({ column, title }: DataTableSliderF
             onValueChange={onSliderValueChange}
           />
         </div>
-        <Button aria-label={`Clear ${title} filter`} variant="outline" size="sm" onClick={onReset}>
-          Clear
+        <Button
+          aria-label={t('dataTable.sliderFilter.clearFilter', { title })}
+          variant="outline"
+          size="sm"
+          onClick={onReset}
+        >
+          {t('dataTable.sliderFilter.clear')}
         </Button>
       </PopoverContent>
     </Popover>

@@ -61,7 +61,7 @@ export function DataTableDateFilter<TData>({
   title,
   multiple,
 }: DataTableDateFilterProps<TData>) {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation('component')
   const columnFilterValue = column.getFilterValue()
 
   const selectedDates = React.useMemo<DateSelection>(() => {
@@ -133,7 +133,9 @@ export function DataTableDateFilter<TData>({
       if (!getIsDateRange(selectedDates)) return null
 
       const hasSelectedDates = selectedDates.from || selectedDates.to
-      const dateText = hasSelectedDates ? formatDateRange(selectedDates) : 'Select date range'
+      const dateText = hasSelectedDates
+        ? formatDateRange(selectedDates)
+        : t('dataTable.dateFilter.selectDateRange')
 
       return (
         <span className="flex items-center gap-2">
@@ -156,7 +158,7 @@ export function DataTableDateFilter<TData>({
     const hasSelectedDate = selectedDates.length > 0
     const dateText = hasSelectedDate
       ? formatDate(selectedDates[0], {}, i18n.language)
-      : 'Select date'
+      : t('dataTable.dateFilter.selectDate')
 
     return (
       <span className="flex items-center gap-2">
@@ -169,7 +171,7 @@ export function DataTableDateFilter<TData>({
         )}
       </span>
     )
-  }, [selectedDates, multiple, formatDateRange, title, i18n.language])
+  }, [selectedDates, multiple, formatDateRange, title, i18n.language, t])
 
   return (
     <Popover>

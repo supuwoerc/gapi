@@ -50,5 +50,119 @@
   "topMenu": {
     "overview": "Overview",
     "projects": "Projects"
+  },
+  "dataTable": {
+    "noResults": "No results.",
+    "columnHeader": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "reset": "Reset",
+      "hide": "Hide"
+    },
+    "pagination": {
+      "rowsPerPage": "Rows per page",
+      "pageOf": "Page {{current}} of {{total}}",
+      "goToFirstPage": "Go to first page",
+      "goToPreviousPage": "Go to previous page",
+      "goToNextPage": "Go to next page",
+      "goToLastPage": "Go to last page",
+      "goToPage": "Go to page {{page}}"
+    },
+    "toolbar": {
+      "resetFilters": "Reset filters",
+      "reset": "Reset"
+    },
+    "viewOptions": {
+      "toggleColumns": "Toggle columns",
+      "view": "View",
+      "searchColumns": "Search columns...",
+      "noColumnsFound": "No columns found."
+    },
+    "facetedFilter": {
+      "clearFilter": "Clear {{title}} filter",
+      "selected": "{{count}} selected",
+      "noResults": "No results found.",
+      "clearFilters": "Clear filters"
+    },
+    "filterMenu": {
+      "filter": "Filter",
+      "resetAllFilters": "Reset all filters",
+      "openFilterMenu": "Open filter command menu",
+      "searchFields": "Search fields...",
+      "noOptionsFound": "No options found.",
+      "noFieldsFound": "No fields found.",
+      "true": "True",
+      "false": "False",
+      "enterValue": "Enter value...",
+      "typeToAddFilter": "Type to add filter...",
+      "filterByValue": "Filter by \"{{value}}\"",
+      "selectOptions": "Select options...",
+      "selectOption": "Select option...",
+      "searchOptions": "Search options...",
+      "pickDate": "Pick date...",
+      "nSelected": "{{count}} selected"
+    },
+    "filterList": {
+      "filter": "Filter",
+      "filters": "Filters",
+      "noFiltersApplied": "No filters applied",
+      "modifyFilters": "Modify filters to refine your rows.",
+      "addFilters": "Add filters to refine your rows.",
+      "addFilter": "Add filter",
+      "resetFilters": "Reset filters",
+      "where": "Where",
+      "selectField": "Select field",
+      "searchFields": "Search fields...",
+      "noFieldsFound": "No fields found."
+    },
+    "sortList": {
+      "sort": "Sort",
+      "sortBy": "Sort by",
+      "noSortingApplied": "No sorting applied",
+      "modifySorting": "Modify sorting to organize your rows.",
+      "addSorting": "Add sorting to organize your rows.",
+      "addSort": "Add sort",
+      "resetSorting": "Reset sorting",
+      "searchFields": "Search fields...",
+      "noFieldsFound": "No fields found."
+    },
+    "dateFilter": {
+      "selectDateRange": "Select date range",
+      "selectDate": "Select date"
+    },
+    "rangeFilter": {
+      "to": "to"
+    },
+    "sliderFilter": {
+      "from": "From",
+      "to": "to",
+      "slider": "{{title}} slider",
+      "clear": "Clear",
+      "clearFilter": "Clear {{title}} filter"
+    },
+    "operator": {
+      "iLike": "Contains",
+      "notILike": "Does not contain",
+      "eq": "Is",
+      "ne": "Is not",
+      "isEmpty": "Is empty",
+      "isNotEmpty": "Is not empty",
+      "lt": "Is less than",
+      "lte": "Is less than or equal to",
+      "gt": "Is greater than",
+      "gte": "Is greater than or equal to",
+      "isBetween": "Is between",
+      "isRelativeToToday": "Is relative to today",
+      "inArray": "Has any of",
+      "notInArray": "Has none of"
+    },
+    "sortOrder": {
+      "asc": "Asc",
+      "desc": "Desc"
+    },
+    "joinOperator": {
+      "and": "and",
+      "or": "or"
+    }
   }
 }
