@@ -193,7 +193,11 @@ export function DataTableFilterList<TData>({
   )
 
   return (
-    <Sortable value={filters} onValueChange={setFilters} getItemValue={(item) => item.filterId}>
+    <Sortable
+      value={filters}
+      onValueChange={setFilters}
+      getItemValue={(item: ExtendedColumnFilter<TData>) => item.filterId}
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
