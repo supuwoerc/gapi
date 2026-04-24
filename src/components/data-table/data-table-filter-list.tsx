@@ -10,6 +10,7 @@ import type { ExtendedColumnFilter, FilterOperator, JoinOperator } from '@/types
 import { CalendarIcon, Check, ChevronsUpDown, GripVertical, ListFilter, Trash2 } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import { parseAsStringEnum, useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table'
 import { formatDate } from '@/lib/format'
@@ -307,6 +308,7 @@ function DataTableFilterItem<TData>({
   onFilterUpdate,
   onFilterRemove,
 }: DataTableFilterItemProps<TData>) {
+  const { i18n } = useTranslation()
   const [showFieldSelector, setShowFieldSelector] = React.useState(false)
   const [showOperatorSelector, setShowOperatorSelector] = React.useState(false)
   const [showValueSelector, setShowValueSelector] = React.useState(false)
@@ -468,6 +470,7 @@ function DataTableFilterItem<TData>({
             inputId,
             column,
             columnMeta,
+            locale: i18n.language,
             onFilterUpdate,
             showValueSelector,
             setShowValueSelector,
@@ -497,6 +500,7 @@ function onFilterInputRender<TData>({
   inputId,
   column,
   columnMeta,
+  locale,
   onFilterUpdate,
   showValueSelector,
   setShowValueSelector,
@@ -505,6 +509,7 @@ function onFilterInputRender<TData>({
   inputId: string
   column: Column<TData>
   columnMeta?: ColumnMeta<TData, unknown>
+  locale: string
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, 'filterId'>>
@@ -677,9 +682,9 @@ function onFilterInputRender<TData>({
 
       const displayValue =
         filter.operator === 'isBetween' && dateValue.length === 2 && !isSameDate
-          ? `${formatDate(startDate, { month: 'short' })} - ${formatDate(endDate, { month: 'short' })}`
+          ? `${formatDate(startDate, { month: 'short' }, locale)} - ${formatDate(endDate, { month: 'short' }, locale)}`
           : startDate
-            ? formatDate(startDate, { month: 'short' })
+            ? formatDate(startDate, { month: 'short' }, locale)
             : 'Pick a date'
 
       return (

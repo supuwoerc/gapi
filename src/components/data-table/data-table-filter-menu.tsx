@@ -9,6 +9,7 @@ import type { ExtendedColumnFilter, FilterOperator } from '@/types/data-table'
 import { BadgeCheck, CalendarIcon, Check, ListFilter, Text, X } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import { useQueryState } from 'nuqs'
+import { useTranslation } from 'react-i18next'
 
 import { getDefaultFilterOperator, getFilterOperators } from '@/lib/data-table'
 import { formatDate } from '@/lib/format'
@@ -318,6 +319,7 @@ function DataTableFilterItem<TData>({
   onFilterRemove,
 }: DataTableFilterItemProps<TData>) {
   {
+    const { i18n } = useTranslation()
     const [showFieldSelector, setShowFieldSelector] = React.useState(false)
     const [showOperatorSelector, setShowOperatorSelector] = React.useState(false)
     const [showValueSelector, setShowValueSelector] = React.useState(false)
@@ -439,6 +441,7 @@ function DataTableFilterItem<TData>({
           filter,
           column,
           inputId,
+          locale: i18n.language,
           onFilterUpdate,
           showValueSelector,
           setShowValueSelector,
@@ -537,6 +540,7 @@ function onFilterInputRender<TData>({
   filter,
   column,
   inputId,
+  locale,
   onFilterUpdate,
   showValueSelector,
   setShowValueSelector,
@@ -544,6 +548,7 @@ function onFilterInputRender<TData>({
   filter: ExtendedColumnFilter<TData>
   column: Column<TData>
   inputId: string
+  locale: string
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, 'filterId'>>
@@ -727,9 +732,9 @@ function onFilterInputRender<TData>({
 
       const displayValue =
         filter.operator === 'isBetween' && dateValue.length === 2 && !isSameDate
-          ? `${formatDate(startDate, { month: 'short' })} - ${formatDate(endDate, { month: 'short' })}`
+          ? `${formatDate(startDate, { month: 'short' }, locale)} - ${formatDate(endDate, { month: 'short' }, locale)}`
           : startDate
-            ? formatDate(startDate, { month: 'short' })
+            ? formatDate(startDate, { month: 'short' }, locale)
             : 'Pick date...'
 
       return (
