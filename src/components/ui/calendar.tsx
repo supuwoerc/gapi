@@ -2,12 +2,21 @@
 
 import * as React from 'react'
 
+import type { Locale } from 'date-fns'
+
+import { enUS, zhCN } from 'date-fns/locale'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import { type DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 
 import { Button, buttonVariants } from '@/components/ui/button'
+
+const localeMap: Record<string, Locale> = {
+  zh: zhCN,
+  en: enUS,
+}
 
 function Calendar({
   className,
@@ -17,15 +26,19 @@ function Calendar({
   buttonVariant = 'ghost',
   formatters,
   components,
+  locale,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
   buttonVariant?: React.ComponentProps<typeof Button>['variant']
 }) {
+  const { i18n } = useTranslation()
+  const resolvedLocale = locale ?? localeMap[i18n.language] ?? zhCN
   const defaultClassNames = getDefaultClassNames()
 
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      locale={resolvedLocale}
       className={cn(
         'group/calendar bg-background p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
@@ -34,7 +47,7 @@ function Calendar({
       )}
       captionLayout={captionLayout}
       formatters={{
-        formatMonthDropdown: (date) => date.toLocaleString('default', { month: 'short' }),
+        formatMonthDropdown: (date) => date.toLocaleString(i18n.language, { month: 'short' }),
         ...formatters,
       }}
       classNames={{
