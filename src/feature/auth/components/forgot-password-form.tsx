@@ -6,7 +6,9 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { sleep } from '@supuwoerc/toolkit'
+import { useMutation } from '@tanstack/react-query'
+
+import { forgotPassword } from '@/service/auth/auth'
 import { isError } from 'lodash-es'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -54,9 +56,13 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
     }
   }, [i18n.language, form])
 
+  const forgotPasswordMutation = useMutation({
+    mutationFn: forgotPassword,
+  })
+
   const submithandle: SubmitHandler<forgotPasswordForm> = async (data: forgotPasswordForm) => {
     await toast
-      .promise(sleep(2000), {
+      .promise(forgotPasswordMutation.mutateAsync(data), {
         loading: t('global:loading'),
         success: () => {
           navigate('/otp')

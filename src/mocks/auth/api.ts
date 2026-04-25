@@ -1,4 +1,9 @@
-import type { LoginParams, LoginResponse } from '@/service/auth/dto/auth'
+import type {
+  ForgotPasswordParams,
+  LoginParams,
+  LoginResponse,
+  VerifyOtpParams,
+} from '@/service/auth/dto/auth'
 import { faker } from '@faker-js/faker'
 
 export async function login(params: LoginParams): Promise<LoginResponse> {
@@ -12,4 +17,12 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
     token: faker.string.alphanumeric(64),
     refreshToken: faker.string.alphanumeric(64),
   }
+}
+
+export async function forgotPassword(_params: ForgotPasswordParams): Promise<void> {
+  await new Promise((r) => setTimeout(r, 1000))
+}
+
+export async function verifyOtp(_params: VerifyOtpParams): Promise<void> {
+  await new Promise((r) => setTimeout(r, 1000))
 }

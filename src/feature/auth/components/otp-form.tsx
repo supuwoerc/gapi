@@ -6,7 +6,9 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { sleep } from '@supuwoerc/toolkit'
+import { useMutation } from '@tanstack/react-query'
+
+import { verifyOtp } from '@/service/auth/auth'
 import { isError } from 'lodash-es'
 import { Loader2, ShieldEllipsis } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -51,9 +53,13 @@ const OTPForm: React.FC<OTPFormProps> = ({ className }) => {
     }
   }, [i18n.language, form])
 
-  const submithandle: SubmitHandler<otpForm> = async () => {
+  const verifyOtpMutation = useMutation({
+    mutationFn: verifyOtp,
+  })
+
+  const submithandle: SubmitHandler<otpForm> = async (data: otpForm) => {
     await toast
-      .promise(sleep(2000), {
+      .promise(verifyOtpMutation.mutateAsync(data), {
         loading: t('global:loading'),
         success: () => {
           navigate('/login')

@@ -6,3 +6,11 @@ export interface LoginParams {
 }
 
 export type LoginResponse = NonNullable<TLoginUserStore['loginUser']>
+
+export interface ForgotPasswordParams {
+  email: string
+}
+
+export interface VerifyOtpParams {
+  otp: string
+}
