@@ -1,6 +1,6 @@
 import { redirect } from 'react-router'
 
-import { useAuthStore } from '@/store/auth'
+import { loginUserStore } from '@/store/login-user'
 
 /**
  * 认证守卫 - 要求用户已登录
@@ -12,7 +12,7 @@ import { useAuthStore } from '@/store/auth'
  * @param params.request - 当前请求对象，用于提取目标路径 / Current request object, used to extract the target path
  */
 export function requireAuth({ request }: { request: Request }) {
-  const { loginUser } = useAuthStore.getState()
+  const { loginUser } = loginUserStore.getState()
   if (!loginUser) {
     const url = new URL(request.url)
     const redirectTo = url.pathname + url.search + url.hash
@@ -29,7 +29,7 @@ export function requireAuth({ request }: { request: Request }) {
  *              Used for routes accessible only to unauthenticated users (e.g., login page). Redirects authenticated users to the home page.
  */
 export function requireGuest() {
-  const { loginUser } = useAuthStore.getState()
+  const { loginUser } = loginUserStore.getState()
   if (loginUser) {
     throw redirect('/')
   }

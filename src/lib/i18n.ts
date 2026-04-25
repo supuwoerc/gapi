@@ -6,7 +6,7 @@ import backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 import { en, zhCN } from 'zod/locales'
 
-import { setSystemLanguage, useSystemConfigStore } from '@/store/system'
+import { setSystemLanguage, useSystemConfigStore } from '@/store/system-config'
 
 const { language } = useSystemConfigStore.getState()
 

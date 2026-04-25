@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useShallow } from 'zustand/react/shallow'
 
-import { setSystemThemeMode, useSystemConfigStore } from '@/store/system'
+import { setSystemThemeMode, useSystemConfigStore } from '@/store/system-config'
 
 import { cn } from '@/lib/utils'
 

@@ -1,10 +1,11 @@
 import type { FC } from 'react'
 
 import type { Language } from '@/schema/language'
-import { useSystemConfigStore } from '@/store/system'
 import { Check, Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+
+import { useSystemConfigStore } from '@/store/system-config'
 
 import { cn } from '@/lib/utils'
 

@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
-export type TAuthStore = {
+export type TLoginUserStore = {
   loginUser: {
     user: LoginUser
     token: string
@@ -11,30 +11,30 @@ export type TAuthStore = {
   } | null
 }
 
-const initialAuth: TAuthStore = {
+const initialAuth: TLoginUserStore = {
   loginUser: null,
 }
 
-const AUTH_STORE_NAME = 'authStore'
+const LOGIN_USER_STORE_NAME = 'loginUserStore'
 
-export const useAuthStore = create<TAuthStore>()(
+export const loginUserStore = create<TLoginUserStore>()(
   immer(
     devtools(
       persist(() => initialAuth, {
-        name: AUTH_STORE_NAME,
+        name: LOGIN_USER_STORE_NAME,
         partialize: (state) => ({
           loginUser: state.loginUser,
         }),
       }),
       {
-        name: AUTH_STORE_NAME,
+        name: LOGIN_USER_STORE_NAME,
       }
     )
   )
 )
 
-export const setLoginUser = (loginUser: TAuthStore['loginUser']) => {
-  useAuthStore.setState((state) => {
+export const setLoginUser = (loginUser: TLoginUserStore['loginUser']) => {
+  loginUserStore.setState((state) => {
     state.loginUser = loginUser
   })
 }

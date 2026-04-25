@@ -5,7 +5,7 @@ import { useOutlet } from 'react-router'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import { useShallow } from 'zustand/react/shallow'
 
-import { setSidebarOpen, useSystemConfigStore } from '@/store/system'
+import { setSidebarOpen, useSystemConfigStore } from '@/store/system-config'
 
 import { cn } from '@/lib/utils'
 

@@ -26,7 +26,7 @@ import {
   setSidebarCollapsible,
   setSidebarVariant,
   useSystemConfigStore,
-} from '@/store/system'
+} from '@/store/system-config'
 
 import { cn } from '@/lib/utils'
 

@@ -1,6 +1,7 @@
 import routes from '@/routes'
-import { useSystemConfigStore } from '@/store/system'
 import { useShallow } from 'zustand/react/shallow'
+
+import { useSystemConfigStore } from '@/store/system-config'
 
 import { useSidebarMenu } from '@/hooks/use-sidebar-menu'
 
