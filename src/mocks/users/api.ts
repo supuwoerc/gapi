@@ -1,5 +1,6 @@
-import type { User } from '../data/schema'
-import { users } from '../data/users'
+import type { User } from '@/feature/authenticated/admin/users/data/schema'
+
+import { users } from './data'
 
 interface AdvancedFilter {
   id: string

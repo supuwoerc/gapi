@@ -35,7 +35,6 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
           <SidebarInset
             className={cn(
               '@container/content',
-              'overflow-x-hidden',
               'has-data-[layout=fixed]:h-svh',
               'peer-data-[variant=inset]:has-data-[layout=fixed]:h-[calc(100svh-(var(--spacing)*4))]'
             )}

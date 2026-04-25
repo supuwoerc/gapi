@@ -1,6 +1,6 @@
 @layer components {
   .fade-slide-enter {
-    @apply -translate-x-8 opacity-0;
+    @apply -translate-x-4 opacity-0;
   }
 
   .fade-slide-enter-active {
@@ -12,6 +12,6 @@
   }
 
   .fade-slide-exit-active {
-    @apply translate-x-8 opacity-0 transition-transform duration-500 ease-in;
+    @apply translate-x-4 opacity-0 transition-transform duration-500 ease-in;
   }
 }

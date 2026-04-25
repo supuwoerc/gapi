@@ -6,6 +6,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
+import { getUsers } from '@/mocks/users/api'
 import {
   CheckCircle,
   CreditCard,
@@ -42,10 +43,18 @@ import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton'
 import { DataTableSortList } from '@/components/data-table/data-table-sort-list'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 
-import { getUsers } from '../api/fake-users'
-import { callTypes } from '../data/data'
-import type { User } from '../data/schema'
+import type { User, UserStatus } from '../data/schema'
 import { UsersTableActionBar } from './users-table-action-bar'
+
+const callTypes = new Map<UserStatus, string>([
+  ['active', 'bg-teal-100/30 text-teal-900 dark:text-teal-200 border-teal-200'],
+  ['inactive', 'bg-neutral-300/40 border-neutral-300'],
+  ['invited', 'bg-sky-200/40 text-sky-900 dark:text-sky-100 border-sky-300'],
+  [
+    'suspended',
+    'bg-destructive/10 dark:bg-destructive/50 text-destructive dark:text-primary border-destructive/10',
+  ],
+])
 
 const EmptyList: Array<User> = []
 
