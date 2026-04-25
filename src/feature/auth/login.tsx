@@ -5,13 +5,20 @@ import Autoplay from 'embla-carousel-autoplay'
 import gsap from 'gsap'
 import { SplitText } from 'gsap/all'
 import { useTranslation } from 'react-i18next'
-import { useLocation } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import type { HighlighterCore } from 'shiki'
 import { createHighlighter } from 'shiki'
 import 'shiki-magic-move/dist/style.css'
 import { ShikiMagicMove } from 'shiki-magic-move/react'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Carousel, type CarouselApi, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Spinner } from '@/components/ui/spinner'
 
@@ -29,7 +36,7 @@ const Login: React.FC = () => {
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const splitRef = useRef<{ title?: SplitText; sub?: SplitText }>({})
 
-  const { t, i18n } = useTranslation('feature')
+  const { t, i18n } = useTranslation(['feature', 'global'])
 
   useEffect(() => {
     let ins: HighlighterCore
@@ -254,6 +261,14 @@ const Login: React.FC = () => {
           <CardContent>
             <AuthForm className="space-y-2 sm:w-102" redirectTo={redirect} />
           </CardContent>
+          <CardFooter>
+            <p className="w-full text-center text-sm text-muted-foreground">
+              {t('forgotPassword.dontHaveAccount')}{' '}
+              <Link className="underline underline-offset-4 hover:text-primary" to={'/sign-up'}>
+                {t('global:menu.signUp')}
+              </Link>
+            </p>
+          </CardFooter>
         </Card>
       </div>
     </div>

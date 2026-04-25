@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 
 import { login } from '@/service/auth/auth'
+import SHA256 from 'crypto-js/sha256'
 import { isError } from 'lodash-es'
 import { Link as LinkIcon, Loader2, LogIn, QrCode } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -79,8 +80,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   })
 
   const submithandle: SubmitHandler<authForm> = async (data: authForm) => {
+    const hashedData = { ...data, password: SHA256(data.password).toString() }
     await toast
-      .promise(loginMutation.mutateAsync(data), {
+      .promise(loginMutation.mutateAsync(hashedData), {
         loading: t('login.authForm.signInLoading'),
         success: (res) => {
           setLoginUser(res)

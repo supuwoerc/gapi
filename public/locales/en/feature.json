@@ -39,6 +39,33 @@
       "forgotPassword": "Forgot Password"
     }
   },
+  "signUp": {
+    "name": "Create an account",
+    "tips": "Enter your details below to create your account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signUpLoading": "Creating account...",
+    "signUpSuccess": "Account created successfully!",
+    "form": {
+      "username": {
+        "name": "Username",
+        "placeholder": "Enter your username"
+      },
+      "email": {
+        "name": "Email"
+      },
+      "password": {
+        "name": "Password",
+        "min": "Password must be at least 8 characters long",
+        "max": "Passwords can be up to 20 characters long",
+        "pattern": "Passwords must contain numbers, letters, and special characters"
+      },
+      "confirmPassword": {
+        "name": "Confirm Password",
+        "mismatch": "Passwords do not match"
+      },
+      "submit": "Create Account"
+    }
+  },
   "otp": {
     "tfa": "Two-factor Authentication",
     "tips": "Please enter the 2FA code",

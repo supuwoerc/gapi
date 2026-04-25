@@ -1,6 +1,7 @@
 {
   "login": "Login",
   "forgotPassword": "Forgot Password",
+  "signUp": "Sign Up",
   "otp": "One-Time Password",
   "serverError": "Server Error",
   "notFound": "Not Found",

@@ -11,6 +11,12 @@ export interface ForgotPasswordParams {
   email: string
 }
 
+export interface SignUpParams {
+  username: string
+  email: string
+  password: string
+}
+
 export interface VerifyOtpParams {
   otp: string
 }

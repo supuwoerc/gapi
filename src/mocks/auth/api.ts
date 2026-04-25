@@ -2,6 +2,7 @@ import type {
   ForgotPasswordParams,
   LoginParams,
   LoginResponse,
+  SignUpParams,
   VerifyOtpParams,
 } from '@/service/auth/dto/auth'
 import { faker } from '@faker-js/faker'
@@ -24,5 +25,9 @@ export async function forgotPassword(_params: ForgotPasswordParams): Promise<voi
 }
 
 export async function verifyOtp(_params: VerifyOtpParams): Promise<void> {
+  await new Promise((r) => setTimeout(r, 1000))
+}
+
+export async function signUp(_params: SignUpParams): Promise<void> {
   await new Promise((r) => setTimeout(r, 1000))
 }

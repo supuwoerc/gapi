@@ -39,6 +39,33 @@
       "forgotPassword": "忘记密码"
     }
   },
+  "signUp": {
+    "name": "创建账户",
+    "tips": "请在下方填写您的信息以创建账户",
+    "alreadyHaveAccount": "已有账户？",
+    "signUpLoading": "创建账户中...",
+    "signUpSuccess": "账户创建成功！",
+    "form": {
+      "username": {
+        "name": "用户名",
+        "placeholder": "请输入用户名"
+      },
+      "email": {
+        "name": "邮箱"
+      },
+      "password": {
+        "name": "密码",
+        "min": "密码至少8位",
+        "max": "密码最多20位",
+        "pattern": "密码必须包含数字、字母以及特殊字符"
+      },
+      "confirmPassword": {
+        "name": "确认密码",
+        "mismatch": "两次输入的密码不一致"
+      },
+      "submit": "创建账户"
+    }
+  },
   "otp": {
     "tfa": "双因素认证",
     "tips": "请输入验证码",

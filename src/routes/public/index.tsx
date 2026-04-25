@@ -37,6 +37,16 @@ const publicRoutes: CustomRouteObject[] = [
         lazy: loadComponent(() => import('@/feature/auth/login')),
       },
       {
+        path: 'sign-up',
+        loader: requireGuest,
+        handle: {
+          title: 'route:signUp',
+          auth: 'anonymous',
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/auth/sign-up')),
+      },
+      {
         path: 'forgot-password',
         handle: {
           title: 'route:forgotPassword',

@@ -1,1 +1,1 @@
-export { forgotPassword, login, verifyOtp } from '@/mocks/auth/api'
+export { forgotPassword, login, signUp, verifyOtp } from '@/mocks/auth/api'

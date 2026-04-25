@@ -1,6 +1,7 @@
 {
   "login": "登录",
   "forgotPassword": "忘记密码",
+  "signUp": "注册",
   "otp": "OTP验证",
   "serverError": "服务器错误",
   "notFound": "路径不存在",
