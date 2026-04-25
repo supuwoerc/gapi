@@ -1,6 +1,6 @@
 import { type FC, useState } from 'react'
 
-import type { User } from '@/schema/user'
+import type { LoginUser } from '@/schema/user'
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
@@ -25,7 +25,7 @@ import {
 import { SignOutDialog } from '@/components/sign-out-dialog'
 
 interface SidebarUserProps {
-  user: User
+  user: LoginUser
 }
 
 const SidebarUser: FC<SidebarUserProps> = ({ user }) => {

@@ -1,3 +1,4 @@
+import { requireGuest } from '@/routes/loader/auth-guard'
 import type { CustomRouteObject } from '@/types/route'
 import { Navigate } from 'react-router'
 
@@ -27,6 +28,7 @@ const publicRoutes: CustomRouteObject[] = [
       },
       {
         path: 'login',
+        loader: requireGuest,
         handle: {
           title: 'route:login',
           auth: 'anonymous',

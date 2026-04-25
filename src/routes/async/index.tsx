@@ -1,3 +1,4 @@
+import { requireAuth } from '@/routes/loader/auth-guard'
 import type { CustomRouteObject } from '@/types/route'
 import { Outlet } from 'react-router'
 
@@ -9,6 +10,7 @@ import { RouteError } from '@/components/route-error'
 const asyncRoutes: CustomRouteObject[] = [
   {
     path: '',
+    loader: requireAuth,
     handle: {
       hidden: true,
       auth: 'loginRequired',
@@ -57,6 +59,7 @@ const asyncRoutes: CustomRouteObject[] = [
   },
   {
     path: '',
+    loader: requireAuth,
     handle: {
       hidden: true,
       auth: 'loginRequired',
@@ -100,6 +103,7 @@ const asyncRoutes: CustomRouteObject[] = [
   },
   {
     path: '',
+    loader: requireAuth,
     handle: {
       hidden: true,
       auth: 'loginRequired',
