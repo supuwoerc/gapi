@@ -6,12 +6,16 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { sleep } from '@supuwoerc/toolkit'
+import { useMutation } from '@tanstack/react-query'
+
+import { login } from '@/service/auth/auth'
 import { isError } from 'lodash-es'
 import { Link as LinkIcon, Loader2, LogIn, QrCode } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
+
+import { setLoginUser } from '@/store/login-user'
 
 import { i18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
@@ -70,11 +74,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
     }
   }, [i18n.language, form])
 
+  const loginMutation = useMutation({
+    mutationFn: login,
+  })
+
   const submithandle: SubmitHandler<authForm> = async (data: authForm) => {
     await toast
-      .promise(sleep(2000), {
+      .promise(loginMutation.mutateAsync(data), {
         loading: t('login.authForm.signInLoading'),
-        success: () => {
+        success: (res) => {
+          setLoginUser(res)
           navigate(redirectTo || '/', { replace: true })
           return t('login.authForm.welcomeMessage', { email: data.email })
         },

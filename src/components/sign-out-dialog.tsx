@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
+import { setLoginUser } from '@/store/login-user'
+
 import ConfirmDialog from './confirm-dialog'
 
 interface SignOutDialogProps {
@@ -13,6 +15,7 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
   const { t } = useTranslation('component')
 
   const handleSignOut = () => {
+    setLoginUser(null)
     const currentUrl = location.pathname + location.search + location.hash
     navigate(`/login?redirect=${encodeURIComponent(currentUrl)}`, { replace: true })
   }
