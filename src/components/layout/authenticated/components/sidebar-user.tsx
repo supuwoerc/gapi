@@ -1,6 +1,6 @@
 import { type FC, useState } from 'react'
 
-import type { LoginUser } from '@/schema/user'
+import type { LoginUser } from '@/schema/login-user'
 import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'

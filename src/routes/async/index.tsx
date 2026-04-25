@@ -1,4 +1,5 @@
 import { requireAuth } from '@/routes/loader/auth-guard'
+import { withPermissions } from '@/routes/loader/permission-guard'
 import type { CustomRouteObject } from '@/types/route'
 import { Outlet } from 'react-router'
 
@@ -22,9 +23,11 @@ const asyncRoutes: CustomRouteObject[] = [
     children: [
       {
         path: '/dashboard',
+        loader: withPermissions('dashboard'),
         handle: {
           title: 'route:general.dashboard',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'dashboard',
           icon: 'layout-dashboard',
           badge: 110,
         },
@@ -35,9 +38,11 @@ const asyncRoutes: CustomRouteObject[] = [
       },
       {
         path: '/tasks',
+        loader: withPermissions('tasks'),
         handle: {
           title: 'route:general.tasks',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'tasks',
           icon: 'list-todo',
           badge: 3,
         },
@@ -46,9 +51,11 @@ const asyncRoutes: CustomRouteObject[] = [
       },
       {
         path: '/notifications',
+        loader: withPermissions('notifications'),
         handle: {
           title: 'route:general.notifications',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'notifications',
           icon: 'bell',
           badge: 110,
         },
@@ -71,9 +78,11 @@ const asyncRoutes: CustomRouteObject[] = [
     children: [
       {
         path: '/groups',
+        loader: withPermissions('groups'),
         handle: {
           title: 'route:pages.groups',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'groups',
           icon: 'boxes',
         },
         errorElement: <RouteError />,
@@ -81,9 +90,11 @@ const asyncRoutes: CustomRouteObject[] = [
       },
       {
         path: '/projects',
+        loader: withPermissions('projects'),
         handle: {
           title: 'route:pages.projects',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'projects',
           icon: 'panels-top-left',
         },
         errorElement: <RouteError />,
@@ -91,9 +102,11 @@ const asyncRoutes: CustomRouteObject[] = [
       },
       {
         path: '/documents',
+        loader: withPermissions('documents'),
         handle: {
           title: 'route:pages.documents',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'documents',
           icon: 'file-code',
         },
         errorElement: <RouteError />,
@@ -115,9 +128,11 @@ const asyncRoutes: CustomRouteObject[] = [
     children: [
       {
         path: '/admin',
+        loader: withPermissions('admin'),
         handle: {
           title: 'route:other.admin.name',
-          auth: 'loginRequired',
+          auth: 'permissionRequired',
+          key: 'admin',
           icon: 'user-star',
         },
         errorElement: <RouteError />,
@@ -127,7 +142,8 @@ const asyncRoutes: CustomRouteObject[] = [
             path: '/admin/users',
             handle: {
               title: 'route:other.admin.users',
-              auth: 'loginRequired',
+              auth: 'permissionRequired',
+              key: 'admin:users',
               icon: 'users',
             },
             errorElement: <RouteError />,
@@ -137,7 +153,8 @@ const asyncRoutes: CustomRouteObject[] = [
             path: '/admin/roles',
             handle: {
               title: 'route:other.admin.roles',
-              auth: 'loginRequired',
+              auth: 'permissionRequired',
+              key: 'admin:roles',
               icon: 'hat-glasses',
             },
             errorElement: <RouteError />,
@@ -147,7 +164,8 @@ const asyncRoutes: CustomRouteObject[] = [
             path: '/admin/permissions',
             handle: {
               title: 'route:other.admin.permissions',
-              auth: 'loginRequired',
+              auth: 'permissionRequired',
+              key: 'admin:permissions',
               icon: 'key-round',
             },
             errorElement: <RouteError />,

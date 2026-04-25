@@ -20,3 +20,11 @@ export interface SignUpParams {
 export interface VerifyOtpParams {
   otp: string
 }
+
+export interface FetchPermissionsParams {
+  module: string
+}
+
+export interface FetchPermissionsResponse {
+  permissions: string[]
+}

@@ -1,6 +1,7 @@
 import routes from '@/routes'
 import { useShallow } from 'zustand/react/shallow'
 
+import { useLoginUserStore } from '@/store/login-user'
 import { useSystemConfigStore } from '@/store/system-config'
 
 import { useSidebarMenu } from '@/hooks/use-sidebar-menu'
@@ -25,7 +26,10 @@ export function AppSidebar() {
     })
   )
 
-  const menuData = useSidebarMenu(routes, [], { isLogin: true }) // FIXME: isLogin
+  const loginUser = useLoginUserStore((state) => state.loginUser)
+  const menuPermissions = loginUser?.menuPermissions ?? []
+
+  const menuData = useSidebarMenu(routes, menuPermissions, { isLogin: !!loginUser })
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>

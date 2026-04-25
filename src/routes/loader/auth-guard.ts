@@ -1,23 +1,25 @@
+import { fetchUserProfile } from '@/service/auth/auth'
 import { redirect } from 'react-router'
 
-import { loginUserStore } from '@/store/login-user'
+import { setLoginUser, useLoginUserStore } from '@/store/login-user'
 
-/**
- * 认证守卫 - 要求用户已登录
- * Auth guard - requires the user to be authenticated
- *
- * @description 用于需要登录才能访问的路由。未登录时重定向到登录页，并携带当前路径作为 redirect 参数。
- *              Used for routes that require authentication. Redirects unauthenticated users to the login page with the current path as a redirect parameter.
- * @param params - React Router loader 参数 / React Router loader params
- * @param params.request - 当前请求对象，用于提取目标路径 / Current request object, used to extract the target path
- */
-export function requireAuth({ request }: { request: Request }) {
-  const { loginUser } = loginUserStore.getState()
+import { reactQueryClient } from '@/lib/react-query'
+
+export async function requireAuth({ request }: { request: Request }) {
+  const { loginUser } = useLoginUserStore.getState()
   if (!loginUser) {
     const url = new URL(request.url)
     const redirectTo = url.pathname + url.search + url.hash
     throw redirect(`/login?redirect=${encodeURIComponent(redirectTo)}`)
   }
+
+  // 登录时已通过 setQueryData 预填缓存，此处仅在页面刷新等缓存失效时才实际请求
+  const profile = await reactQueryClient.ensureQueryData({
+    queryKey: ['userProfile'],
+    queryFn: fetchUserProfile,
+  })
+  setLoginUser(profile)
+
   return null
 }
 
@@ -29,7 +31,7 @@ export function requireAuth({ request }: { request: Request }) {
  *              Used for routes accessible only to unauthenticated users (e.g., login page). Redirects authenticated users to the home page.
  */
 export function requireGuest() {
-  const { loginUser } = loginUserStore.getState()
+  const { loginUser } = useLoginUserStore.getState()
   if (loginUser) {
     throw redirect('/')
   }
