@@ -83,7 +83,7 @@ function checkPermission(
   permissions: string[],
   isLogin: boolean
 ): boolean {
-  const auth = handle.auth ?? 'anonymous'
+  const auth = handle.authMode ?? 'anonymous'
   if (auth === 'anonymous') {
     return true
   }

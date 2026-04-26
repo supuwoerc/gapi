@@ -12,7 +12,7 @@ const publicRoutes: CustomRouteObject[] = [
     path: '',
     handle: {
       hidden: true,
-      auth: 'anonymous',
+      authMode: 'anonymous',
       title: 'route:notFound',
     },
     HydrateFallback: HydrateFallback,
@@ -31,7 +31,7 @@ const publicRoutes: CustomRouteObject[] = [
         loader: requireGuest,
         handle: {
           title: 'route:login',
-          auth: 'anonymous',
+          authMode: 'anonymous',
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/auth/login')),
@@ -41,7 +41,7 @@ const publicRoutes: CustomRouteObject[] = [
         loader: requireGuest,
         handle: {
           title: 'route:signUp',
-          auth: 'anonymous',
+          authMode: 'anonymous',
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/auth/sign-up')),
@@ -50,7 +50,7 @@ const publicRoutes: CustomRouteObject[] = [
         path: 'forgot-password',
         handle: {
           title: 'route:forgotPassword',
-          auth: 'anonymous',
+          authMode: 'anonymous',
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/auth/forgot-password')),
@@ -59,7 +59,7 @@ const publicRoutes: CustomRouteObject[] = [
         path: 'otp',
         handle: {
           title: 'route:otp',
-          auth: 'anonymous',
+          authMode: 'anonymous',
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/auth/otp')),
@@ -68,7 +68,7 @@ const publicRoutes: CustomRouteObject[] = [
         path: '500',
         handle: {
           hidden: true,
-          auth: 'anonymous',
+          authMode: 'anonymous',
           title: 'route:serverError',
         },
         errorElement: <RouteError />,
@@ -78,7 +78,7 @@ const publicRoutes: CustomRouteObject[] = [
         path: '*',
         handle: {
           hidden: true,
-          auth: 'anonymous',
+          authMode: 'anonymous',
           title: 'route:notFound',
         },
         errorElement: <RouteError />,

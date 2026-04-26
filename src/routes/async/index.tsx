@@ -14,7 +14,7 @@ const asyncRoutes: CustomRouteObject[] = [
     loader: requireAuth,
     handle: {
       hidden: true,
-      auth: 'loginRequired',
+      authMode: 'loginRequired',
       group: 'route:general.name',
     },
     HydrateFallback: HydrateFallback,
@@ -26,7 +26,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('dashboard'),
         handle: {
           title: 'route:general.dashboard',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'dashboard',
           icon: 'layout-dashboard',
         },
@@ -40,7 +40,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('tasks'),
         handle: {
           title: 'route:general.tasks',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'tasks',
           icon: 'list-todo',
         },
@@ -52,7 +52,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('notifications'),
         handle: {
           title: 'route:general.notifications',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'notifications',
           icon: 'bell',
         },
@@ -66,7 +66,7 @@ const asyncRoutes: CustomRouteObject[] = [
     loader: requireAuth,
     handle: {
       hidden: true,
-      auth: 'loginRequired',
+      authMode: 'loginRequired',
       group: 'route:pages.name',
     },
     HydrateFallback: HydrateFallback,
@@ -78,7 +78,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('groups'),
         handle: {
           title: 'route:pages.groups',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'groups',
           icon: 'boxes',
         },
@@ -90,7 +90,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('projects'),
         handle: {
           title: 'route:pages.projects',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'projects',
           icon: 'panels-top-left',
         },
@@ -102,7 +102,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('documents'),
         handle: {
           title: 'route:pages.documents',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'documents',
           icon: 'file-code',
         },
@@ -116,7 +116,7 @@ const asyncRoutes: CustomRouteObject[] = [
     loader: requireAuth,
     handle: {
       hidden: true,
-      auth: 'loginRequired',
+      authMode: 'loginRequired',
       group: 'route:other.name',
     },
     HydrateFallback: HydrateFallback,
@@ -128,7 +128,7 @@ const asyncRoutes: CustomRouteObject[] = [
         loader: withPermissions('admin'),
         handle: {
           title: 'route:other.admin.name',
-          auth: 'permissionRequired',
+          authMode: 'permissionRequired',
           key: 'admin',
           icon: 'user-star',
         },
@@ -139,7 +139,7 @@ const asyncRoutes: CustomRouteObject[] = [
             path: '/admin/users',
             handle: {
               title: 'route:other.admin.users',
-              auth: 'permissionRequired',
+              authMode: 'permissionRequired',
               key: 'admin:users',
               icon: 'users',
             },
@@ -150,7 +150,7 @@ const asyncRoutes: CustomRouteObject[] = [
             path: '/admin/roles',
             handle: {
               title: 'route:other.admin.roles',
-              auth: 'permissionRequired',
+              authMode: 'permissionRequired',
               key: 'admin:roles',
               icon: 'hat-glasses',
             },
@@ -161,7 +161,7 @@ const asyncRoutes: CustomRouteObject[] = [
             path: '/admin/permissions',
             handle: {
               title: 'route:other.admin.permissions',
-              auth: 'permissionRequired',
+              authMode: 'permissionRequired',
               key: 'admin:permissions',
               icon: 'key-round',
             },
