@@ -4,6 +4,7 @@ import type {
   ForgotPasswordParams,
   LoginParams,
   LoginResponse,
+  RefreshTokenResponse,
   SignUpParams,
   VerifyOtpParams,
 } from '@/service/auth/dto/auth'
@@ -70,6 +71,14 @@ export async function fetchPermissions(
   await new Promise((r) => setTimeout(r, 300))
   return {
     permissions: modulePermissionsMap[params.module] ?? [],
+  }
+}
+
+export async function refreshToken(): Promise<RefreshTokenResponse> {
+  await new Promise((r) => setTimeout(r, 300))
+  return {
+    token: faker.string.alphanumeric(64),
+    refreshToken: faker.string.alphanumeric(64),
   }
 }
 

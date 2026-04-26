@@ -28,3 +28,8 @@ export interface FetchPermissionsParams {
 export interface FetchPermissionsResponse {
   permissions: string[]
 }
+
+export interface RefreshTokenResponse {
+  token: string
+  refreshToken: string
+}
