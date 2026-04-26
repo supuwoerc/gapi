@@ -25,7 +25,7 @@ import {
 import { SignOutDialog } from '@/components/sign-out-dialog'
 
 interface SidebarUserProps {
-  user: LoginUser
+  user: LoginUser['user']
 }
 
 const SidebarUser: FC<SidebarUserProps> = ({ user }) => {

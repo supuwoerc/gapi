@@ -1,4 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
+
 import routes from '@/routes'
+import { fetchMenuBadges } from '@/service/menu/menu'
 import { useShallow } from 'zustand/react/shallow'
 
 import { useLoginUserStore } from '@/store/login-user'
@@ -28,8 +31,13 @@ export function AppSidebar() {
 
   const loginUser = useLoginUserStore((state) => state.loginUser)
   const menuPermissions = loginUser?.menuPermissions ?? []
+  const { data: badges } = useQuery({
+    queryKey: ['menuBadges'],
+    queryFn: fetchMenuBadges,
+    refetchInterval: 10_000,
+  })
 
-  const menuData = useSidebarMenu(routes, menuPermissions, { isLogin: !!loginUser })
+  const menuData = useSidebarMenu(routes, menuPermissions, { isLogin: !!loginUser, badges })
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>

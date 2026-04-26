@@ -29,7 +29,6 @@ const asyncRoutes: CustomRouteObject[] = [
           auth: 'permissionRequired',
           key: 'dashboard',
           icon: 'layout-dashboard',
-          badge: 110,
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/authenticated/dashboard/index'), {
@@ -44,7 +43,6 @@ const asyncRoutes: CustomRouteObject[] = [
           auth: 'permissionRequired',
           key: 'tasks',
           icon: 'list-todo',
-          badge: 3,
         },
         errorElement: <RouteError />,
         element: 'tasks',
@@ -57,7 +55,6 @@ const asyncRoutes: CustomRouteObject[] = [
           auth: 'permissionRequired',
           key: 'notifications',
           icon: 'bell',
-          badge: 110,
         },
         errorElement: <RouteError />,
         element: 'notifications',

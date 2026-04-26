@@ -102,5 +102,8 @@ function resolveBadge(
   badges?: Record<string, string | number>
 ): string | undefined {
   const value = (key ? badges?.[key] : undefined) ?? staticBadge
+  if (!value) {
+    return undefined
+  }
   return value != null ? String(value) : undefined
 }
