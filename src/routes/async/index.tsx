@@ -3,7 +3,7 @@ import { withPermissions } from '@/routes/loader/permission-guard'
 import type { CustomRouteObject } from '@/types/route'
 import { Outlet } from 'react-router'
 
-import { loadComponent } from '@/utils/route'
+import { loadComponent } from '@/lib/route'
 
 import { HydrateFallback } from '@/components/hydrate-fallback'
 import { RouteError } from '@/components/route-error'

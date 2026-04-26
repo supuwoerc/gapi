@@ -4,7 +4,7 @@ import type { CustomRouteObject } from '@/types/route'
 import { useTranslation } from 'react-i18next'
 import { useMatches, useNavigation } from 'react-router'
 
-import { appEnv } from '@/utils/env'
+import { appEnv } from '@/lib/env'
 
 const NavigationTitle = () => {
   const navigation = useNavigation()

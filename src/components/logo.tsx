@@ -6,9 +6,8 @@ import { useLocation, useNavigate } from 'react-router'
 
 import Favicon from '@/assets/logo.svg?react'
 
+import { appEnv } from '@/lib/env'
 import { cn } from '@/lib/utils'
-
-import { appEnv } from '@/utils/env'
 
 interface LogoProps {
   style?: CSSProperties

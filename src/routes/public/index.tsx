@@ -2,7 +2,7 @@ import { requireGuest } from '@/routes/loader/auth-guard'
 import type { CustomRouteObject } from '@/types/route'
 import { Navigate } from 'react-router'
 
-import { loadComponent } from '@/utils/route'
+import { loadComponent } from '@/lib/route'
 
 import { HydrateFallback } from '@/components/hydrate-fallback'
 import { RouteError } from '@/components/route-error'
