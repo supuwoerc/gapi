@@ -9,7 +9,7 @@ const Forbidden = () => {
   const { t } = useTranslation(['feature', 'global'])
   const navigate = useNavigate()
   return (
-    <div className="h-svh w-svw">
+    <div className="h-full w-full">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
         <img src={forbidden} alt="not-fount" className="w-32" />
         <span className="font-medium">{t('forbidden.title')}</span>

@@ -33,6 +33,18 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
       'admin:roles',
       'admin:permissions',
     ],
+    routePermissions: [
+      'dashboard',
+      'tasks',
+      'notifications',
+      'groups',
+      'projects',
+      'documents',
+      'admin',
+      // 'admin:users',
+      'admin:roles',
+      'admin:permissions',
+    ],
   }
 }
 
@@ -102,6 +114,18 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       'documents',
       'admin',
       'admin:users',
+      'admin:roles',
+      'admin:permissions',
+    ],
+    routePermissions: [
+      'dashboard',
+      'tasks',
+      'notifications',
+      'groups',
+      'projects',
+      'documents',
+      'admin',
+      // 'admin:users',
       'admin:roles',
       'admin:permissions',
     ],

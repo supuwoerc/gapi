@@ -1,4 +1,5 @@
 import type { LoginUser } from '@/schema/login-user'
+import { omit } from 'lodash-es'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -21,7 +22,9 @@ export const useLoginUserStore = create<TLoginUserStore>()(
       persist(() => initialAuth, {
         name: LOGIN_USER_STORE_NAME,
         partialize: (state) => ({
-          loginUser: state.loginUser,
+          loginUser: state.loginUser
+            ? omit(state.loginUser, ['menuPermissions', 'routePermissions', 'role'])
+            : null,
         }),
       }),
       {

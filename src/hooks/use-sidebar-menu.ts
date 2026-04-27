@@ -8,6 +8,14 @@ interface UseSidebarMenuOptions {
   badges?: Record<string, string | number>
 }
 
+/**
+ * 根据路由配置和用户权限生成侧边栏菜单数据
+ *
+ * @param routes - 路由配置数组
+ * @param permissions - 用户的菜单权限列表，与 route.handle.key 匹配
+ * @param options - 可选配置（isLogin、badges）
+ * @returns 分组后的菜单数据
+ */
 export function useSidebarMenu(
   routes: CustomRouteObject[],
   permissions: string[],
@@ -21,6 +29,7 @@ export function useSidebarMenu(
   )
 }
 
+/** 将路由树转换为按 handle.group 分组的菜单结构 */
 function generateMenus(
   routes: CustomRouteObject[],
   permissions: string[],
@@ -36,6 +45,7 @@ function generateMenus(
     .filter((menu) => menu.items.length > 0)
 }
 
+/** 递归构建菜单项，过滤无权限和隐藏路由，处理嵌套子菜单 */
 function buildMenuItems(
   routes: CustomRouteObject[],
   permissions: string[],
@@ -78,6 +88,7 @@ function buildMenuItems(
     })
 }
 
+/** 根据 authMode 检查用户是否有权访问该路由 */
 function checkPermission(
   handle: NonNullable<CustomRouteObject['handle']>,
   permissions: string[],
@@ -96,6 +107,7 @@ function checkPermission(
   return false
 }
 
+/** 解析徽章值，优先使用动态 badges，回退到静态 badge */
 function resolveBadge(
   key?: string,
   staticBadge?: number,
