@@ -37,6 +37,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       tailwindcss(),
       svgr(),
       checker({
+        typescript: true,
         eslint: {
           useFlatConfig: true,
           lintCommand: 'eslint .',
