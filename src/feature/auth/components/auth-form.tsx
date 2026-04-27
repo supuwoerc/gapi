@@ -87,7 +87,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
         loading: t('login.authForm.signInLoading'),
         success: (res) => {
           setLoginUser(res)
-          // 预填缓存，避免登录跳转后 requireAuth 中 ensureQueryData 重复请求
+          /**
+           * 预填缓存，避免登录跳转后 requireAuth 中 ensureQueryData 重复请求
+           * Pre-populate cache to avoid redundant ensureQueryData request in requireAuth after login redirect
+           */
           reactQueryClient.setQueryData(['userProfile'], res)
           navigate(redirectTo || '/', { replace: true })
           return t('login.authForm.welcomeMessage', { email: data.email })

@@ -15,12 +15,13 @@ export const loadComponent = <T extends ComponentType>(
 
 /**
  * 根据权限递归处理路由树，无权限的路由替换为 403 页面
+ * Recursively processes the route tree based on permissions, replacing unauthorized routes with the 403 page
  *
- * @param routes - 原始路由配置
- * @param permissions - 用户的路由权限列表，与 route.handle.key 匹配
- * @param isLogin - 用户是否已登录
- * @param forbidden - 403 页面的懒加载函数
- * @returns 处理后的路由配置（不修改原始数组）
+ * @param routes - 原始路由配置 / Original route configuration
+ * @param permissions - 用户的路由权限列表，与 route.handle.key 匹配 / User route permission list, matched against route.handle.key
+ * @param isLogin - 用户是否已登录 / Whether the user is authenticated
+ * @param forbidden - 403 页面的懒加载函数 / Lazy-load function for the 403 page
+ * @returns 处理后的路由配置（不修改原始数组） / Processed route configuration (does not mutate the original array)
  */
 export function getPermissionRoutes(
   routes: CustomRouteObject[],

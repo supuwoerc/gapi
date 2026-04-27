@@ -33,7 +33,10 @@ export function DataTableToolbar<TData>({
 
   const columns = React.useMemo(
     () => table.getAllColumns().filter((column) => column.getCanFilter()),
-    // table 引用稳定，需要额外依赖 table.options.columns 以响应 column 定义变化（如语言切换）
+    /**
+     * table 引用稳定，需要额外依赖 table.options.columns 以响应 column 定义变化（如语言切换）
+     * Table ref is stable; extra dependency on table.options.columns to react to column definition changes (e.g. locale switch)
+     */
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [table, table.options.columns]
   )

@@ -14,23 +14,35 @@ import {
 } from './constants'
 import { BizRequestError } from './error'
 
-/** 后端统一响应结构 */
+/**
+ * 后端统一响应结构
+ * Unified API response structure from the backend
+ */
 interface ApiResponse<T = unknown> {
   code: number
   data: T
   message: string
 }
 
-/** 独立的 ky 实例，专用于 refresh 请求，不挂载自定义 hooks 以避免循环触发 */
+/**
+ * 独立的 ky 实例，专用于 refresh 请求，不挂载自定义 hooks 以避免循环触发
+ * Standalone ky instance dedicated to refresh requests, without custom hooks to avoid circular triggers
+ */
 const refreshClient = ky.create({
   prefix: import.meta.env.VITE_APP_DEFAULT_SERVER,
   retry: 0,
 })
 
-/** 并发刷新锁：多个请求同时遇到 token 过期时，共享同一个 refresh Promise */
+/**
+ * 并发刷新锁：多个请求同时遇到 token 过期时，共享同一个 refresh Promise
+ * Concurrent refresh lock: shares a single refresh Promise when multiple requests encounter token expiration simultaneously
+ */
 let refreshPromise: Promise<{ token: string; refreshToken: string }> | null = null
 
-/** 执行 token 刷新请求 */
+/**
+ * 执行 token 刷新请求
+ * Perform the token refresh request
+ */
 async function doRefreshToken(): Promise<{ token: string; refreshToken: string }> {
   const { loginUser } = useLoginUserStore.getState()
   if (!loginUser?.refreshToken) {
@@ -56,7 +68,10 @@ async function doRefreshToken(): Promise<{ token: string; refreshToken: string }
   return result.data
 }
 
-/** 获取或复用正在进行的 refresh Promise，确保并发场景下只发起一次刷新 */
+/**
+ * 获取或复用正在进行的 refresh Promise，确保并发场景下只发起一次刷新
+ * Get or reuse the in-flight refresh Promise, ensuring only one refresh is issued under concurrency
+ */
 function refreshToken(): Promise<{ token: string; refreshToken: string }> {
   if (!refreshPromise) {
     refreshPromise = doRefreshToken().finally(() => {
@@ -66,14 +81,20 @@ function refreshToken(): Promise<{ token: string; refreshToken: string }> {
   return refreshPromise
 }
 
-/** 刷新失败时清除登录态并跳转登录页 */
+/**
+ * 刷新失败时清除登录态并跳转登录页
+ * Clear login state and redirect to the login page on refresh failure
+ */
 function handleRefreshFailure() {
   clearLoginUserState()
   const currentUrl = location.pathname + location.search + location.hash
   window.location.href = `/login?redirect=${encodeURIComponent(currentUrl)}`
 }
 
-/** 请求拦截：从 store 读取 token 和 locale 注入请求头 */
+/**
+ * 请求拦截：从 store 读取 token 和 locale 注入请求头
+ * Request interceptor: reads token and locale from the store and injects them into request headers
+ */
 export const beforeRequestHook: BeforeRequestHook = ({ request }) => {
   const { loginUser } = useLoginUserStore.getState()
   const { language } = useSystemConfigStore.getState()
@@ -87,6 +108,10 @@ export const beforeRequestHook: BeforeRequestHook = ({ request }) => {
 /**
  * 响应拦截：检测 token 过期（code=100001）时自动刷新并通过 ky.retry() 重试原请求。
  * 仅在首次请求（retryCount===0）时触发刷新，避免无限循环。
+ *
+ * Response interceptor: auto-refreshes the token on expiration (code=100001) and retries
+ * the original request via ky.retry(). Only triggers on the first attempt (retryCount===0)
+ * to avoid infinite loops.
  */
 export const afterResponseHook: AfterResponseHook = async ({ request, response, retryCount }) => {
   if (response.status >= 500) {
@@ -128,6 +153,9 @@ export const afterResponseHook: AfterResponseHook = async ({ request, response, 
 /**
  * 自定义 JSON 解析：解包后端 { code, data, message } 信封。
  * code=100000 时返回 data，其他情况抛出 BizRequestError。
+ *
+ * Custom JSON parser: unwraps the backend { code, data, message } envelope.
+ * Returns data when code=100000, otherwise throws BizRequestError.
  */
 export const parseJson = (text: string): unknown => {
   const parsed: ApiResponse = JSON.parse(text)

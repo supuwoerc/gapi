@@ -10,11 +10,12 @@ interface UseSidebarMenuOptions {
 
 /**
  * 根据路由配置和用户权限生成侧边栏菜单数据
+ * Generates sidebar menu data based on route configuration and user permissions
  *
- * @param routes - 路由配置数组
- * @param permissions - 用户的菜单权限列表，与 route.handle.key 匹配
- * @param options - 可选配置（isLogin、badges）
- * @returns 分组后的菜单数据
+ * @param routes - 路由配置数组 / Route configuration array
+ * @param permissions - 用户的菜单权限列表，与 route.handle.key 匹配 / User menu permission list, matched against route.handle.key
+ * @param options - 可选配置（isLogin、badges） / Optional config (isLogin, badges)
+ * @returns 分组后的菜单数据 / Grouped menu data
  */
 export function useSidebarMenu(
   routes: CustomRouteObject[],
@@ -29,7 +30,10 @@ export function useSidebarMenu(
   )
 }
 
-/** 将路由树转换为按 handle.group 分组的菜单结构 */
+/**
+ * 将路由树转换为按 handle.group 分组的菜单结构
+ * Converts the route tree into a menu structure grouped by handle.group
+ */
 function generateMenus(
   routes: CustomRouteObject[],
   permissions: string[],
@@ -45,7 +49,10 @@ function generateMenus(
     .filter((menu) => menu.items.length > 0)
 }
 
-/** 递归构建菜单项，过滤无权限和隐藏路由，处理嵌套子菜单 */
+/**
+ * 递归构建菜单项，过滤无权限和隐藏路由，处理嵌套子菜单
+ * Recursively builds menu items, filtering unauthorized and hidden routes, and handling nested submenus
+ */
 function buildMenuItems(
   routes: CustomRouteObject[],
   permissions: string[],
@@ -88,7 +95,10 @@ function buildMenuItems(
     })
 }
 
-/** 根据 authMode 检查用户是否有权访问该路由 */
+/**
+ * 根据 authMode 检查用户是否有权访问该路由
+ * Checks whether the user has permission to access the route based on authMode
+ */
 function checkPermission(
   handle: NonNullable<CustomRouteObject['handle']>,
   permissions: string[],
@@ -107,7 +117,10 @@ function checkPermission(
   return false
 }
 
-/** 解析徽章值，优先使用动态 badges，回退到静态 badge */
+/**
+ * 解析徽章值，优先使用动态 badges，回退到静态 badge
+ * Resolves badge value, preferring dynamic badges and falling back to the static badge
+ */
 function resolveBadge(
   key?: string,
   staticBadge?: number,

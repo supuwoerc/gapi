@@ -13,7 +13,10 @@ export async function requireAuth({ request }: { request: Request }) {
     throw redirect(`/login?redirect=${encodeURIComponent(redirectTo)}`)
   }
 
-  // 登录时已通过 setQueryData 预填缓存，此处仅在页面刷新等缓存失效时才实际请求
+  /**
+   * 登录时已通过 setQueryData 预填缓存，此处仅在页面刷新等缓存失效时才实际请求
+   * Cache is pre-populated via setQueryData at login; this only fetches on cache miss (e.g. page refresh)
+   */
   const profile = await reactQueryClient.ensureQueryData({
     queryKey: ['userProfile'],
     queryFn: fetchUserProfile,
@@ -28,7 +31,8 @@ export async function requireAuth({ request }: { request: Request }) {
  * Guest guard - requires the user to be unauthenticated
  *
  * @description 用于登录页等仅限未登录用户访问的路由。已登录时重定向到首页。
- *              Used for routes accessible only to unauthenticated users (e.g., login page). Redirects authenticated users to the home page.
+ *              Used for routes accessible only to unauthenticated users (e.g., login page).
+ *              Redirects authenticated users to the home page.
  */
 export function requireGuest() {
   const { loginUser } = useLoginUserStore.getState()
