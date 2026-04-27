@@ -125,7 +125,7 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       'projects',
       'documents',
       'admin',
-      // 'admin:users',
+      'admin:users',
       'admin:roles',
       'admin:permissions',
     ],

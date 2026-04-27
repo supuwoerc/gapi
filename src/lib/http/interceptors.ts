@@ -89,6 +89,11 @@ export const beforeRequestHook: BeforeRequestHook = ({ request }) => {
  * 仅在首次请求（retryCount===0）时触发刷新，避免无限循环。
  */
 export const afterResponseHook: AfterResponseHook = async ({ request, response, retryCount }) => {
+  if (response.status >= 500) {
+    window.location.href = '/500'
+    return
+  }
+
   if (retryCount > 0) return
 
   let body: ApiResponse
