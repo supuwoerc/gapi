@@ -1,3 +1,5 @@
+import { ZodError } from 'zod'
+
 import { type DefaultOptions, MutationCache, QueryCache, QueryClient } from '@tanstack/react-query'
 
 import { isError } from 'lodash-es'
@@ -36,7 +38,9 @@ const generateQueryClient = (
 }
 
 const toastErrorMessage = (err: unknown) => {
-  if (isError(err)) {
+  if (err instanceof ZodError) {
+    toast.error(err.issues.map((i) => i.message).join(','))
+  } else if (isError(err)) {
     toast.error(`${err.message}`)
   } else if (err) {
     toast.error(`${err}`)

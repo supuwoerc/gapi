@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import type { Table } from '@tanstack/react-table'
 
+import type { User } from '@/schema/admin/users'
 import type { LucideIcon } from 'lucide-react'
 import { CheckCircle, Shield, Trash2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -21,8 +22,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-import type { User } from '../data/schema'
 
 interface UsersTableActionBarProps {
   table: Table<User>

@@ -48,13 +48,13 @@ interface UseDataTableProps<TData>
     Omit<
       TableOptions<TData>,
       | 'state'
-      | 'pageCount'
+      | 'rowCount'
       | 'getCoreRowModel'
       | 'manualFiltering'
       | 'manualPagination'
       | 'manualSorting'
     >,
-    Required<Pick<TableOptions<TData>, 'pageCount'>> {
+    Required<Pick<TableOptions<TData>, 'rowCount'>> {
   initialState?: Omit<Partial<TableState>, 'sorting'> & {
     sorting?: ExtendedColumnSort<TData>[]
   }
@@ -72,7 +72,7 @@ interface UseDataTableProps<TData>
 export function useDataTable<TData>(props: UseDataTableProps<TData>) {
   const {
     columns,
-    pageCount = -1,
+    rowCount = 0,
     initialState,
     queryKeys,
     history = 'replace',
@@ -254,7 +254,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     ...tableProps,
     columns,
     initialState,
-    pageCount,
+    rowCount,
     state: {
       pagination,
       sorting,

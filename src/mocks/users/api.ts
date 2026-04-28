@@ -1,30 +1,26 @@
-import type { User } from '@/feature/authenticated/admin/users/data/schema'
+import type { User } from '@/schema/admin/users'
+import type { AdvancedFilter, GetUsersParams, GetUsersResponse } from '@/service/users/dto/users'
+import { faker } from '@faker-js/faker'
 
-import { users } from './data'
+// Set a fixed seed for consistent data generation
+faker.seed(67890)
 
-interface AdvancedFilter {
-  id: string
-  value: string | string[]
-  variant: string
-  operator: string
-  filterId: string
-}
-
-interface GetUsersParams {
-  page: number
-  perPage: number
-  sort: { id: string; desc: boolean }[]
-  username?: string
-  status?: string[]
-  role?: string[]
-  filters?: string
-}
-
-interface GetUsersResponse {
-  data: User[]
-  pageCount: number
-  total: number
-}
+const users = Array.from({ length: 500 }, () => {
+  const firstName = faker.person.firstName()
+  const lastName = faker.person.lastName()
+  return {
+    id: faker.string.uuid(),
+    firstName,
+    lastName,
+    username: faker.internet.username({ firstName, lastName }).toLocaleLowerCase(),
+    email: faker.internet.email({ firstName }).toLocaleLowerCase(),
+    phoneNumber: faker.phone.number({ style: 'international' }),
+    status: faker.helpers.arrayElement(['active', 'inactive', 'invited', 'suspended']),
+    role: faker.helpers.arrayElement(['superadmin', 'admin', 'cashier', 'manager']),
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.recent(),
+  }
+})
 
 function applyAdvancedFilter(data: User[], filter: AdvancedFilter): User[] {
   const { id, value, operator } = filter
@@ -130,9 +126,8 @@ export async function getUsers(params: GetUsersParams): Promise<GetUsersResponse
   }
 
   const total = result.length
-  const pageCount = Math.ceil(total / params.perPage)
   const start = (params.page - 1) * params.perPage
   const data = result.slice(start, start + params.perPage)
 
-  return { data, pageCount, total }
+  return { data, total }
 }

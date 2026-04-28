@@ -6,7 +6,8 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
-import { getUsers } from '@/mocks/users/api'
+import type { User, UserStatus } from '@/schema/admin/users'
+import { getUsers } from '@/service/users/users'
 import {
   CheckCircle,
   CreditCard,
@@ -43,7 +44,6 @@ import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton'
 import { DataTableSortList } from '@/components/data-table/data-table-sort-list'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 
-import type { User, UserStatus } from '../data/schema'
 import { UsersTableActionBar } from './users-table-action-bar'
 
 const callTypes = new Map<UserStatus, string>([
@@ -58,7 +58,7 @@ const callTypes = new Map<UserStatus, string>([
 
 const EmptyList: Array<User> = []
 
-export function DataTableDemo() {
+export function UsersTable() {
   const { t } = useTranslation('feature')
 
   const statusOptions = React.useMemo(
@@ -269,7 +269,7 @@ export function DataTableDemo() {
   const { table } = useDataTable({
     data: data?.data ?? EmptyList,
     columns,
-    pageCount: data?.pageCount ?? -1,
+    rowCount: data?.total ?? 0,
     enableAdvancedFilter,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
