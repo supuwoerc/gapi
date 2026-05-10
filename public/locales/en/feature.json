@@ -129,6 +129,8 @@
       "status": "Status",
       "role": "Role",
       "delete": "Delete"
-    }
+    },
+    "title": "User List",
+    "description": "Manage your users and their permissions here"
   }
 }

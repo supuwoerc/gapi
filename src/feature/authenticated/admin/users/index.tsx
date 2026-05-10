@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+
 import { ConfigDrawer } from '@/components/config-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import AppHeader from '@/components/layout/authenticated/app-header'
@@ -9,6 +11,8 @@ import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 import { UsersTable } from './components/users-table'
 
 const Users = () => {
+  const { t } = useTranslation('feature')
+
   return (
     <>
       <AppHeader fixed>
@@ -23,8 +27,8 @@ const Users = () => {
       <AppMain className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">User List</h2>
-            <p className="text-muted-foreground">Manage your users and their permissions here.</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t('users.title')}</h2>
+            <p className="text-muted-foreground">{t('users.description')}</p>
           </div>
         </div>
         <UsersTable />

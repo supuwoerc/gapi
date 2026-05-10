@@ -11,10 +11,12 @@ import { DataTableViewOptions } from '@/components/data-table/data-table-view-op
 
 interface DataTableAdvancedToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>
+  actions?: React.ReactNode
 }
 
 export function DataTableAdvancedToolbar<TData>({
   table,
+  actions,
   children,
   className,
   ...props
@@ -28,6 +30,7 @@ export function DataTableAdvancedToolbar<TData>({
     >
       <div className="flex flex-1 flex-wrap items-center gap-2">{children}</div>
       <div className="flex items-center gap-2">
+        {actions}
         <DataTableViewOptions table={table} align="end" />
       </div>
     </div>

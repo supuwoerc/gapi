@@ -34,7 +34,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 import { DataTable } from '@/components/data-table/data-table'
 import { DataTableAdvancedToolbar } from '@/components/data-table/data-table-advanced-toolbar'
@@ -282,14 +282,23 @@ export function UsersTable() {
     return <DataTableSkeleton columnCount={6} filterCount={3} />
   }
 
+  const filterToggle = (
+    <ToggleGroup
+      type="single"
+      value={enableAdvancedFilter ? 'advanced' : 'simple'}
+      onValueChange={(value) => {
+        if (value) onTabChange(value)
+      }}
+      variant="outline"
+      size="sm"
+    >
+      <ToggleGroupItem value="simple">{t('users.tabs.simple')}</ToggleGroupItem>
+      <ToggleGroupItem value="advanced">{t('users.tabs.advanced')}</ToggleGroupItem>
+    </ToggleGroup>
+  )
+
   return (
-    <div className="data-table-container space-y-4">
-      <Tabs value={enableAdvancedFilter ? 'advanced' : 'simple'} onValueChange={onTabChange}>
-        <TabsList>
-          <TabsTrigger value="simple">{t('users.tabs.simple')}</TabsTrigger>
-          <TabsTrigger value="advanced">{t('users.tabs.advanced')}</TabsTrigger>
-        </TabsList>
-      </Tabs>
+    <div className="data-table-container">
       <DataTable
         table={table}
         isFetching={isFetching && !isLoading}
@@ -302,12 +311,12 @@ export function UsersTable() {
         }
       >
         {enableAdvancedFilter ? (
-          <DataTableAdvancedToolbar table={table}>
+          <DataTableAdvancedToolbar table={table} actions={filterToggle}>
             <DataTableFilterList table={table} />
             <DataTableSortList table={table} />
           </DataTableAdvancedToolbar>
         ) : (
-          <DataTableToolbar table={table} />
+          <DataTableToolbar table={table}>{filterToggle}</DataTableToolbar>
         )}
       </DataTable>
     </div>
