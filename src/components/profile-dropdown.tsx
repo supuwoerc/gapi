@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { BadgeCheck, Bell, LogOut } from 'lucide-react'
+import { Bell, LogOut, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
@@ -43,13 +43,13 @@ export function ProfileDropdown() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
-              <Link to="/settings/account">
-                <BadgeCheck />
-                {t('menu.account')}
+              <Link to="/settings">
+                <Settings />
+                {t('menu.accountSettings')}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to="/settings/notifications">
+              <Link to="/notifications">
                 <Bell />
                 {t('menu.notifications')}
               </Link>

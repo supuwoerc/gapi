@@ -132,5 +132,24 @@
     },
     "title": "User List",
     "description": "Manage your users and their permissions here"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings and preferences",
+    "nav": {
+      "title": "Navigate",
+      "profile": "Profile",
+      "notifications": "Notifications"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "This is how others will see you on the site",
+      "placeholder": "Profile form coming soon"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Configure how you receive notifications",
+      "placeholder": "Notification settings coming soon"
+    }
   }
 }

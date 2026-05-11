@@ -24,6 +24,11 @@
       "users": "用户",
       "roles": "角色",
       "permissions": "权限"
+    },
+    "accountSettings": {
+      "name": "账户设置",
+      "profile": "个人资料",
+      "notifications": "通知"
     }
   }
 }

@@ -24,6 +24,11 @@
       "users": "Users",
       "roles": "Roles",
       "permissions": "Permissions"
+    },
+    "accountSettings": {
+      "name": "Account settings",
+      "profile": "Profile",
+      "notifications": "Notifications"
     }
   }
 }

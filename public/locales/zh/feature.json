@@ -132,5 +132,24 @@
     },
     "title": "用户列表",
     "description": "在这里管理用户及其权限"
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理您的账户设置和偏好",
+    "nav": {
+      "title": "导航",
+      "profile": "个人资料",
+      "notifications": "通知"
+    },
+    "profile": {
+      "title": "个人资料",
+      "description": "这是其他人在站点上看到的您的信息",
+      "placeholder": "个人资料表单即将推出"
+    },
+    "notifications": {
+      "title": "通知",
+      "description": "配置您接收通知的方式",
+      "placeholder": "通知设置即将推出"
+    }
   }
 }

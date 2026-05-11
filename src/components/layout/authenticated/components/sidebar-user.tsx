@@ -1,7 +1,7 @@
 import { type FC, useState } from 'react'
 
 import type { LoginUser } from '@/schema/login-user'
-import { BadgeCheck, Bell, ChevronsUpDown, LogOut } from 'lucide-react'
+import { Bell, ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
@@ -75,13 +75,13 @@ const SidebarUser: FC<SidebarUserProps> = ({ user }) => {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <Link to="/settings/account">
-                    <BadgeCheck />
-                    {t('menu.account')}
+                  <Link to="/settings">
+                    <Settings />
+                    {t('menu.accountSettings')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/settings/notifications">
+                  <Link to="/notifications">
                     <Bell />
                     {t('menu.notifications')}
                   </Link>

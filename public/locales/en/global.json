@@ -23,6 +23,7 @@
     "role": "Role",
     "roles": "Roles",
     "addRole": "Add roles",
-    "signUp": "Sign Up"
+    "signUp": "Sign Up",
+    "accountSettings": "Account settings"
   }
 }

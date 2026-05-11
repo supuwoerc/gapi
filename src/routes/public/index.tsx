@@ -22,7 +22,7 @@ const publicRoutes: CustomRouteObject[] = [
     }),
     children: [
       {
-        path: '',
+        index: true,
         errorElement: <RouteError />,
         element: <Navigate to={'/dashboard'} replace />,
       },
