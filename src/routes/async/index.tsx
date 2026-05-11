@@ -177,6 +177,7 @@ const asyncRoutes: CustomRouteObject[] = [
           title: 'route:other.accountSettings.name',
           authMode: 'loginRequired',
           icon: 'settings',
+          hasLayout: true,
         },
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/authenticated/settings/layout')),
@@ -184,7 +185,7 @@ const asyncRoutes: CustomRouteObject[] = [
           {
             index: true,
             handle: {
-              title: 'route:other.settings.profile',
+              title: 'route:other.accountSettings.profile',
               authMode: 'loginRequired',
               icon: 'user',
               hidden: true,
@@ -195,7 +196,7 @@ const asyncRoutes: CustomRouteObject[] = [
           {
             path: '/settings/notifications',
             handle: {
-              title: 'route:other.settings.notifications',
+              title: 'route:other.accountSettings.notifications',
               authMode: 'loginRequired',
               icon: 'bell',
               hidden: true,

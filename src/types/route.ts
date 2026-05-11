@@ -13,6 +13,7 @@ export interface RouteHandle {
     order?: number
     badge?: number
     authMode: AuthMode
+    hasLayout?: boolean
   }
 }
 

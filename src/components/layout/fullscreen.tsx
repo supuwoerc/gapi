@@ -6,6 +6,8 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group'
 
 import { cn } from '@/lib/utils'
 
+import { useTransitionKey } from '@/hooks/use-transition-key'
+
 import { LanguageSwitcher } from '../language-switcher'
 import { Logo } from '../logo'
 import { NavigationProgress } from '../navigation-progress'
@@ -25,7 +27,9 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
   setting = true,
 }) => {
   const currentOutlet = useOutlet()
+  const transitionKey = useTransitionKey()
   const nodeRef = useRef<HTMLDivElement | null>(null)
+
   return (
     <NuqsAdapter>
       <NavigationProgress />
@@ -42,7 +46,7 @@ const FullscreenLayout: FC<FullscreenLayoutProps> = ({
         <main className="h-full w-full">
           <SwitchTransition>
             <CSSTransition
-              key={location.pathname}
+              key={transitionKey}
               nodeRef={nodeRef}
               timeout={500}
               mountOnEnter

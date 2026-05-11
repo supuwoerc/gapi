@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils'
 
 import { SearchProvider } from '@/context/search-provider'
 
+import { useTransitionKey } from '@/hooks/use-transition-key'
+
 import { NavigationProgress } from '../navigation-progress'
 import { NavigationTitle } from '../navigation-title'
 import { SidebarInset, SidebarProvider } from '../ui/sidebar'
@@ -18,6 +20,7 @@ import { AppSidebar } from './authenticated/app-sidebar'
 
 const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
   const currentOutlet = useOutlet()
+  const transitionKey = useTransitionKey()
   const nodeRef = useRef<HTMLDivElement | null>(null)
   const [sidebarOpen] = useSystemConfigStore(
     useShallow((state) => {
@@ -41,7 +44,7 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
           >
             <SwitchTransition>
               <CSSTransition
-                key={location.pathname}
+                key={transitionKey}
                 nodeRef={nodeRef}
                 timeout={500}
                 mountOnEnter
