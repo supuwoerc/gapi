@@ -6,6 +6,7 @@ import * as React from 'react'
 import type { Column, Table } from '@tanstack/react-table'
 
 import type { ExtendedColumnFilter, FilterOperator } from '@/types/data-table'
+import type { TFunction } from 'i18next'
 import { BadgeCheck, CalendarIcon, Check, ListFilter, Text, X } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import { useQueryState } from 'nuqs'
@@ -466,7 +467,7 @@ function DataTableFilterItem<TData>({
 interface FilterValueSelectorProps<TData> {
   column: Column<TData>
   value: string
-  t: (key: string, options?: Record<string, unknown>) => string
+  t: TFunction<'component'>
   onSelect: (value: string) => void
 }
 
@@ -561,7 +562,7 @@ function onFilterInputRender<TData>({
   column: Column<TData>
   inputId: string
   locale: string
-  t: (key: string, options?: Record<string, unknown>) => string
+  t: TFunction<'component'>
   onFilterUpdate: (
     filterId: string,
     updates: Partial<Omit<ExtendedColumnFilter<TData>, 'filterId'>>
