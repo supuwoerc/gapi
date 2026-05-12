@@ -80,7 +80,7 @@ function buildMenuItems(
             .sort((a, b) => (a.handle?.order ?? 0) - (b.handle?.order ?? 0))
             .map((child) => ({
               title: child.handle!.title!,
-              url: child.path || '',
+              url: child.path || ('index' in child && child.index ? routePath || '' : ''),
               icon: child.handle?.icon,
               badge: resolveBadge(child.handle?.key, child.handle?.badge, badges),
             })),
