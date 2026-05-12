@@ -79,16 +79,16 @@
     }
   },
   "notFound": {
-    "title": "页面不存在",
-    "subtitle": "请确认访问路径正确"
+    "title": "Page Not Found",
+    "subtitle": "Please verify the URL is correct"
   },
   "serverError": {
-    "title": "服务器异常",
-    "subtitle": "给您带来的不便，我们深表歉意，请稍后再试"
+    "title": "Server Error",
+    "subtitle": "We apologize for the inconvenience, please try again later"
   },
   "forbidden": {
-    "title": "无权限访问",
-    "subtitle": "当前页面无权限访问，请申请权限后刷新重试"
+    "title": "Access Denied",
+    "subtitle": "You do not have permission to access this page. Please request access and try again"
   },
   "dashboard": {
     "name": "Dashboard",

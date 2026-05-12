@@ -49,7 +49,9 @@ export function getPermissionRoutes(
       const replaced = {
         ...route,
         lazy: loadComponent(forbidden),
-        loader: undefined,
+        // loginRequired 路由的 loader（requireAuth）负责未登录时 redirect 到 /login，必须保留；其余 loader 无意义，清空避免无用请求
+        // Keep loader for loginRequired routes (requireAuth handles redirect to /login); clear others to avoid unnecessary requests
+        loader: authMode === 'loginRequired' ? route.loader : undefined,
         element: undefined,
       }
       if (filteredChildren) {

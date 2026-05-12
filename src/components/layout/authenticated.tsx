@@ -53,7 +53,7 @@ const AuthenticedLayout: FC<PropsWithChildren> = ({ children }) => {
                 classNames="fade-slide"
               >
                 {() => (
-                  <div ref={nodeRef} className="h-full w-full">
+                  <div ref={nodeRef} className="flex w-full flex-1 flex-col">
                     {children ?? currentOutlet}
                   </div>
                 )}

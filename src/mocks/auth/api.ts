@@ -41,8 +41,8 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
       'projects',
       'documents',
       'admin',
-      // 'admin:users',
-      'admin:roles',
+      'admin:users',
+      // 'admin:roles',
       'admin:permissions',
     ],
   }
@@ -126,7 +126,7 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       'documents',
       'admin',
       'admin:users',
-      'admin:roles',
+      // 'admin:roles',
       'admin:permissions',
     ],
   }
