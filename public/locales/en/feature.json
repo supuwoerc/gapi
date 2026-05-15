@@ -144,7 +144,37 @@
     "profile": {
       "title": "Profile",
       "description": "This is how others will see you on the site",
-      "placeholder": "Profile form coming soon"
+      "form": {
+        "avatar": {
+          "label": "Avatar",
+          "change": "Change avatar",
+          "description": "Click avatar or button to upload a new photo",
+          "fileTooLarge": "File must be smaller than 2MB",
+          "invalidFileType": "Only JPEG, PNG and WebP images are allowed",
+          "dialogTitle": "Crop Avatar",
+          "selectFile": "Select file"
+        },
+        "email": {
+          "label": "Email",
+          "description": "Your email address cannot be changed"
+        },
+        "name": {
+          "label": "Display Name",
+          "placeholder": "Enter your display name",
+          "description": "This is your public display name (max 20 characters)",
+          "required": "Display name is required",
+          "max": "Display name must be 20 characters or less"
+        },
+        "bio": {
+          "label": "Bio",
+          "placeholder": "Tell us about yourself",
+          "description": "Brief description for your profile (max 100 characters)",
+          "max": "Bio must be 100 characters or less"
+        },
+        "submit": "Save changes",
+        "saving": "Saving profile...",
+        "saveSuccess": "Profile updated successfully"
+      }
     },
     "notifications": {
       "title": "Notifications",

@@ -164,5 +164,11 @@
       "and": "and",
       "or": "or"
     }
+  },
+  "imageCropDialog": {
+    "title": "Crop Image",
+    "selectFile": "Select file",
+    "fileTooLarge": "File must be smaller than {{maxSize}}MB",
+    "invalidFileType": "Unsupported file type"
   }
 }

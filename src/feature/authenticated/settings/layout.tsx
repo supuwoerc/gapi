@@ -37,7 +37,7 @@ const SettingsLayout = () => {
           <ProfileDropdown />
         </div>
       </AppHeader>
-      <AppMain fixed>
+      <AppMain>
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">{t('settings.title')}</h2>
           <p className="text-muted-foreground">{t('settings.description')}</p>

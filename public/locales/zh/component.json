@@ -164,5 +164,11 @@
       "and": "且",
       "or": "或"
     }
+  },
+  "imageCropDialog": {
+    "title": "裁剪图片",
+    "selectFile": "选择文件",
+    "fileTooLarge": "文件大小不能超过 {{maxSize}}MB",
+    "invalidFileType": "不支持的文件类型"
   }
 }

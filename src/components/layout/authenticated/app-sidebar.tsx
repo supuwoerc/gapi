@@ -51,7 +51,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarUser
-          user={{ name: '123', email: 'ddd', avatar: 'https://github.com/shadcn.png' }}
+          user={{ name: '123', email: 'ddd', avatar: 'https://github.com/shadcn.png', bio: '' }}
         />
       </SidebarFooter>
       <SidebarRail />

@@ -5,6 +5,7 @@ export const loginUserSchema = z.object({
     name: z.string(),
     email: z.string(),
     avatar: z.string(),
+    bio: z.string(),
   }),
   token: z.string(),
   refreshToken: z.string(),
