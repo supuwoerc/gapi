@@ -52,9 +52,7 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <SidebarUser
-          user={{ name: '123', email: 'ddd', avatar: 'https://github.com/shadcn.png', bio: '' }}
-        />
+        <SidebarUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

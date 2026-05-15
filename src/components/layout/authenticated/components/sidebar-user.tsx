@@ -1,9 +1,10 @@
-import { type FC, useState } from 'react'
+import { useState } from 'react'
 
-import type { LoginUser } from '@/schema/login-user'
 import { Bell, ChevronsUpDown, LogOut, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+
+import { useLoginUserStore } from '@/store/login-user'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
@@ -24,14 +25,13 @@ import {
 
 import { SignOutDialog } from '@/components/sign-out-dialog'
 
-interface SidebarUserProps {
-  user: LoginUser['user']
-}
-
-const SidebarUser: FC<SidebarUserProps> = ({ user }) => {
+const SidebarUser = () => {
+  const user = useLoginUserStore((state) => state.loginUser?.user)
   const { isMobile } = useSidebar()
   const { t } = useTranslation('global')
   const [open, setOpen] = useState(false)
+
+  if (!user) return null
 
   return (
     <>

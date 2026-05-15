@@ -4,6 +4,8 @@ import { Bell, LogOut, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
+import { useLoginUserStore } from '@/store/login-user'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,8 +21,11 @@ import {
 import { SignOutDialog } from '@/components/sign-out-dialog'
 
 export function ProfileDropdown() {
+  const user = useLoginUserStore((state) => state.loginUser?.user)
   const [open, setOpen] = useState(false)
   const { t } = useTranslation('global')
+
+  if (!user) return null
 
   return (
     <>
@@ -28,16 +33,16 @@ export function ProfileDropdown() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src="https://github.com/shadcn.png" alt="profile-avatar" />
-              <AvatarFallback>SN</AvatarFallback>
+              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col gap-1.5">
-              <p className="text-sm leading-none font-medium">supuwoerc</p>
-              <p className="text-xs leading-none text-muted-foreground">zhangzhouou@gmail.com</p>
+              <p className="text-sm leading-none font-medium">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
