@@ -179,7 +179,27 @@
     "notifications": {
       "title": "Notifications",
       "description": "Configure how you receive notifications",
-      "placeholder": "Notification settings coming soon"
+      "taskEmail": {
+        "title": "Task Email Notifications",
+        "description": "Receive email notifications about tasks"
+      },
+      "messageEmail": {
+        "title": "Message Email Notifications",
+        "description": "Receive email notifications about messages"
+      },
+      "versionUpdate": {
+        "title": "Version Updates",
+        "description": "Get notified when new versions are released"
+      },
+      "security": {
+        "title": "Security Alerts",
+        "description": "Receive notifications about account security"
+      },
+      "form": {
+        "submit": "Save changes",
+        "saving": "Saving...",
+        "saveSuccess": "Notification settings updated successfully"
+      }
     }
   }
 }

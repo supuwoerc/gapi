@@ -179,7 +179,27 @@
     "notifications": {
       "title": "通知",
       "description": "配置您接收通知的方式",
-      "placeholder": "通知设置即将推出"
+      "taskEmail": {
+        "title": "任务邮件通知",
+        "description": "接收任务相关的邮件通知"
+      },
+      "messageEmail": {
+        "title": "消息邮件通知",
+        "description": "接收消息相关的邮件通知"
+      },
+      "versionUpdate": {
+        "title": "版本更新通知",
+        "description": "在有新版本发布时接收通知"
+      },
+      "security": {
+        "title": "安全通知",
+        "description": "接收账户安全相关的通知"
+      },
+      "form": {
+        "submit": "保存更改",
+        "saving": "正在保存...",
+        "saveSuccess": "通知设置更新成功"
+      }
     }
   }
 }
