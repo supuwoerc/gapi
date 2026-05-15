@@ -11,6 +11,7 @@ import gsap from 'gsap'
 import { TextPlugin } from 'gsap/all'
 import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
+import { useShallow } from 'zustand/react/shallow'
 
 import { useLoginUserStore } from '@/store/login-user'
 
@@ -25,11 +26,12 @@ import { Toaster } from '@/components/ui/sonner'
 gsap.registerPlugin(TextPlugin)
 
 function App() {
-  const loginUser = useLoginUserStore((state) => state.loginUser)
+  const isLogin = useLoginUserStore((state) => !!state.loginUser)
+  const routePermissions = useLoginUserStore(
+    useShallow((state) => state.loginUser?.routePermissions ?? [])
+  )
 
   const router = useMemo(() => {
-    const routePermissions = loginUser?.routePermissions ?? []
-    const isLogin = !!loginUser
     const permissionRoutes = getPermissionRoutes(
       asyncRoutes,
       routePermissions,
@@ -37,7 +39,7 @@ function App() {
       () => import('@/feature/error/403')
     )
     return createBrowserRouter([...publicRoutes, ...permissionRoutes])
-  }, [loginUser])
+  }, [isLogin, routePermissions])
 
   return <RouterProvider router={router} />
 }

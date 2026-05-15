@@ -29,15 +29,17 @@ export function AppSidebar() {
     })
   )
 
-  const loginUser = useLoginUserStore((state) => state.loginUser)
-  const menuPermissions = loginUser?.menuPermissions ?? []
+  const isLogin = useLoginUserStore((state) => !!state.loginUser)
+  const menuPermissions = useLoginUserStore(
+    useShallow((state) => state.loginUser?.menuPermissions ?? [])
+  )
   const { data: badges } = useQuery({
     queryKey: ['menuBadges'],
     queryFn: fetchMenuBadges,
     refetchInterval: 10_000,
   })
 
-  const menuData = useSidebarMenu(routes, menuPermissions, { isLogin: !!loginUser, badges })
+  const menuData = useSidebarMenu(routes, menuPermissions, { isLogin, badges })
 
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
