@@ -22,3 +22,11 @@ export interface GetUsersResponse {
   data: User[]
   total: number
 }
+
+export interface PatchTourParams {
+  completedTours: string[]
+}
+
+export interface PatchTourResponse {
+  completedTours: string[]
+}

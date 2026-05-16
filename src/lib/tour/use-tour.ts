@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react'
 
+import { useMutation } from '@tanstack/react-query'
+
+import { patchTour } from '@/service/users/users'
 import { driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
 import { useTranslation } from 'react-i18next'
@@ -12,6 +15,13 @@ export function useTour() {
   const { t } = useTranslation('component')
   const loginUser = useLoginUserStore((state) => state.loginUser)
   const initialized = useRef(false)
+
+  const { mutate } = useMutation({
+    mutationFn: patchTour,
+    onSuccess: () => {
+      markTourCompleted(CURRENT_TOUR_VERSION)
+    },
+  })
 
   useEffect(() => {
     if (initialized.current) return
@@ -66,7 +76,7 @@ export function useTour() {
         },
       ],
       onDestroyed: () => {
-        markTourCompleted(CURRENT_TOUR_VERSION)
+        mutate({ completedTours: [CURRENT_TOUR_VERSION] })
       },
     })
 
@@ -77,5 +87,5 @@ export function useTour() {
       instance.destroy()
       initialized.current = false
     }
-  }, [loginUser, t])
+  }, [loginUser, t, mutate])
 }

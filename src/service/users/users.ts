@@ -3,6 +3,8 @@ import { userListSchema } from '@/schema/admin/users'
 
 import type { GetUsersParams } from './dto/users'
 
+export { patchTour } from '@/mocks/tour/api'
+
 // import { userListSchema } from '@/schema/admin/users'
 // import { client } from '@/lib/ky' // 你封装的 ky 实例
 
