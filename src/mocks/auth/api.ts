@@ -46,6 +46,7 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
       // 'admin:roles',
       'admin:permissions',
     ],
+    completedTours: [],
   }
 }
 
@@ -131,5 +132,6 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       // 'admin:roles',
       'admin:permissions',
     ],
+    completedTours: [],
   }
 }

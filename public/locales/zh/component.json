@@ -170,5 +170,31 @@
     "selectFile": "选择文件",
     "fileTooLarge": "文件大小不能超过 {{maxSize}}MB",
     "invalidFileType": "不支持的文件类型"
+  },
+  "tour": {
+    "sidebar": {
+      "title": "侧边栏导航",
+      "description": "在这里浏览所有功能页面，菜单根据您的权限动态展示"
+    },
+    "search": {
+      "title": "全局搜索",
+      "description": "使用 Cmd+K 快捷键快速搜索页面、功能和设置"
+    },
+    "themeMode": {
+      "title": "主题模式",
+      "description": "在浅色、深色和跟随系统三种模式间切换"
+    },
+    "language": {
+      "title": "语言切换",
+      "description": "点击这里切换中文/英文界面语言"
+    },
+    "configDrawer": {
+      "title": "个性化设置",
+      "description": "点击这里调整主题颜色、侧边栏样式和布局偏好"
+    },
+    "progress": "{{current}} / {{total}}",
+    "next": "下一步",
+    "prev": "上一步",
+    "done": "完成"
   }
 }

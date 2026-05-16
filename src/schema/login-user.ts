@@ -12,6 +12,7 @@ export const loginUserSchema = z.object({
   role: z.array(z.string()),
   menuPermissions: z.array(z.string()),
   routePermissions: z.array(z.string()),
+  completedTours: z.array(z.string()),
 })
 
 export type LoginUser = z.infer<typeof loginUserSchema>

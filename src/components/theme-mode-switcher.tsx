@@ -54,7 +54,7 @@ const ThemeModeSwitcher: FC<ThemeModeSwitcherProps> = ({ className, accent }) =>
   }
 
   return (
-    <div className={cn('cursor-pointer', className)}>
+    <div className={cn('cursor-pointer', className)} data-tour="theme-mode">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <div

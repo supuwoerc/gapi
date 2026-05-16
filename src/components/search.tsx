@@ -22,6 +22,7 @@ const Search = ({ className = '', placeholder = 'Search' }: SearchProps) => {
         className
       )}
       onClick={() => setOpen(true)}
+      data-tour="search"
     >
       <SearchIcon
         aria-hidden="true"

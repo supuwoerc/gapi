@@ -33,7 +33,7 @@ const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ accent, className }) => {
   }
 
   return (
-    <div className={cn('cursor-pointer', className)}>
+    <div className={cn('cursor-pointer', className)} data-tour="language-switcher">
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <div

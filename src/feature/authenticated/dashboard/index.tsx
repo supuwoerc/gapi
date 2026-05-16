@@ -1,6 +1,8 @@
 import { ArrowDown, ArrowUp, DollarSign, MoreHorizontal, ShoppingCart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { useTour } from '@/lib/tour/use-tour'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -26,8 +28,9 @@ import { Analytics } from './components/analytics'
 import { Overview } from './components/overview'
 import { RecentSales } from './components/recent-sales'
 
-const Forbidden = () => {
+const Dashboard = () => {
   const { t } = useTranslation(['feature', 'global'])
+  useTour()
   return (
     <>
       <AppHeader fixed>
@@ -136,4 +139,4 @@ const Forbidden = () => {
   )
 }
 
-export default Forbidden
+export default Dashboard

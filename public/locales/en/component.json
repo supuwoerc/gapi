@@ -170,5 +170,31 @@
     "selectFile": "Select file",
     "fileTooLarge": "File must be smaller than {{maxSize}}MB",
     "invalidFileType": "Unsupported file type"
+  },
+  "tour": {
+    "sidebar": {
+      "title": "Sidebar Navigation",
+      "description": "Browse all feature pages here. The menu adapts to your permissions dynamically."
+    },
+    "search": {
+      "title": "Global Search",
+      "description": "Use Cmd+K shortcut to quickly search pages, features, and settings."
+    },
+    "themeMode": {
+      "title": "Theme Mode",
+      "description": "Switch between light, dark, and system theme modes."
+    },
+    "language": {
+      "title": "Language",
+      "description": "Switch the interface language between Chinese and English."
+    },
+    "configDrawer": {
+      "title": "Customization Settings",
+      "description": "Click here to adjust theme colors, sidebar style, and layout preferences."
+    },
+    "progress": "{{current}} / {{total}}",
+    "next": "Next",
+    "prev": "Previous",
+    "done": "Done"
   }
 }

@@ -65,6 +65,7 @@ export function ConfigDrawer() {
           variant="ghost"
           aria-label="Open theme settings"
           className="rounded-full"
+          data-tour="config-drawer"
         >
           <Settings aria-hidden="true" />
         </Button>

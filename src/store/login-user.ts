@@ -50,6 +50,14 @@ export const getModulePermissions = (module: string): string[] | undefined => {
   return useLoginUserStore.getState().permissions[module]
 }
 
+export const markTourCompleted = (version: string) => {
+  useLoginUserStore.setState((state) => {
+    if (state.loginUser && !state.loginUser.completedTours?.includes(version)) {
+      state.loginUser.completedTours = [...(state.loginUser.completedTours || []), version]
+    }
+  })
+}
+
 export const clearLoginUserState = () => {
   useLoginUserStore.setState((state) => {
     state.loginUser = null
