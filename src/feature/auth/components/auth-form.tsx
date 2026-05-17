@@ -92,6 +92,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
            * Pre-populate cache to avoid redundant ensureQueryData request in requireAuth after login redirect
            */
           reactQueryClient.setQueryData(['userProfile'], res)
+          reactQueryClient.setQueryDefaults(['userProfile'], {
+            staleTime: Infinity,
+            gcTime: Infinity,
+          })
           navigate(redirectTo || '/', { replace: true })
           return t('login.authForm.welcomeMessage', { email: data.email })
         },

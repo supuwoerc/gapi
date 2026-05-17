@@ -20,6 +20,8 @@ export async function requireAuth({ request }: { request: Request }) {
   const profile = await reactQueryClient.ensureQueryData({
     queryKey: ['userProfile'],
     queryFn: fetchUserProfile,
+    staleTime: Infinity,
+    gcTime: Infinity,
   })
   setLoginUser(profile)
 
