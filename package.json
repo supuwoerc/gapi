@@ -21,6 +21,7 @@
     "dev": "vite",
     "build:test": "tsc && vite build --mode test",
     "build": "tsc && vite build --mode prod",
+    "build:gh": "tsc && vite build --mode gh",
     "test": "vitest",
     "test:staged": "vitest --run",
     "test:ui": "vitest --ui",
