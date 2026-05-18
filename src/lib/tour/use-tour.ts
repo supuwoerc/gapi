@@ -31,10 +31,6 @@ export function useTour() {
           }
         })
       )
-      queryClient.setQueryDefaults(['userProfile'], {
-        staleTime: Infinity,
-        gcTime: Infinity,
-      })
     },
   })
 

@@ -16,7 +16,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { useLoginUserStore } from '@/store/login-user'
 
 import '@/lib/i18n.ts'
-import { reactQueryClient } from '@/lib/react-query.ts'
+import { reactQueryClient } from '@/lib/react-query'
 import { getPermissionRoutes } from '@/lib/route'
 
 import { ThemeProvider } from '@/context/theme-provider'
