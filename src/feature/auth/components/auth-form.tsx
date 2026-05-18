@@ -6,7 +6,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { login } from '@/service/auth/auth'
 import SHA256 from 'crypto-js/sha256'
@@ -19,7 +19,6 @@ import { toast } from 'sonner'
 import { setLoginUser } from '@/store/login-user'
 
 import { i18n } from '@/lib/i18n'
-import { reactQueryClient } from '@/lib/react-query'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -59,6 +58,7 @@ type authForm = z.infer<typeof authFormSchema>
 
 const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
 
   const { t, i18n } = useTranslation(['feature', 'global'])
 
@@ -91,8 +91,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
            * 预填缓存，避免登录跳转后 requireAuth 中 ensureQueryData 重复请求
            * Pre-populate cache to avoid redundant ensureQueryData request in requireAuth after login redirect
            */
-          reactQueryClient.setQueryData(['userProfile'], res)
-          reactQueryClient.setQueryDefaults(['userProfile'], {
+          queryClient.setQueryData(['userProfile'], res)
+          queryClient.setQueryDefaults(['userProfile'], {
             staleTime: Infinity,
             gcTime: Infinity,
           })
