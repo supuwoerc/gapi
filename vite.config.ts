@@ -76,8 +76,37 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes('react-dom') || id.includes('react/')) return 'react'
-            if (id.includes('lodash-es') || id.includes('/ky/')) return 'utils'
+            if (id.includes('react-dom') || id.includes('node_modules/react/')) return 'react'
+            if (id.includes('react-router')) return 'router'
+            if (
+              id.includes('radix-ui') ||
+              id.includes('react-day-picker') ||
+              id.includes('react-resizable-panels') ||
+              id.includes('/cmdk/') ||
+              id.includes('/vaul/') ||
+              id.includes('embla-carousel') ||
+              id.includes('input-otp') ||
+              id.includes('sonner') ||
+              id.includes('lucide-react')
+            )
+              return 'ui'
+            if (id.includes('recharts') || id.includes('d3-')) return 'charts'
+            if (id.includes('@tanstack')) return 'query'
+            if (
+              id.includes('lodash-es') ||
+              id.includes('/ky/') ||
+              id.includes('/zod/') ||
+              id.includes('i18next') ||
+              id.includes('date-fns') ||
+              id.includes('gsap') ||
+              id.includes('nanoid') ||
+              id.includes('immer') ||
+              id.includes('zustand') ||
+              id.includes('clsx') ||
+              id.includes('class-variance-authority') ||
+              id.includes('tailwind-merge')
+            )
+              return 'utils'
           },
         },
       },
