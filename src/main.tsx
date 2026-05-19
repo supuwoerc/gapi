@@ -38,7 +38,9 @@ function App() {
       isLogin,
       () => import('@/feature/error/403')
     )
-    return createBrowserRouter([...publicRoutes, ...permissionRoutes])
+    return createBrowserRouter([...publicRoutes, ...permissionRoutes], {
+      basename: import.meta.env.BASE_URL,
+    })
   }, [isLogin, routePermissions])
 
   return <RouterProvider router={router} />
