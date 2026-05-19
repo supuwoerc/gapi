@@ -1,11 +1,15 @@
 'use no memo'
 
+import { useEffect } from 'react'
+
 import { useQuery } from '@tanstack/react-query'
 
 import { getTaskDetail } from '@/service/tasks/detail'
 import { ArrowLeft } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Link, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+
+import { Button } from '@/components/ui/button'
 
 import { ConfigDrawer } from '@/components/config-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
@@ -22,7 +26,12 @@ import { TaskTimelineCard } from './components/task-timeline-card'
 const TaskDetailPage = () => {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation('feature')
+  const navigate = useNavigate()
   const taskId = Number(id)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   const { data: detail, isLoading } = useQuery({
     queryKey: ['task-detail', taskId],
@@ -45,13 +54,14 @@ const TaskDetailPage = () => {
       </AppHeader>
       <AppMain className="flex flex-col gap-2 sm:gap-4">
         <div className="flex items-center gap-4">
-          <Link
-            to="/tasks"
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          <Button
+            variant="link"
+            onClick={() => navigate(-1)}
+            className="gap-1 text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="size-4" />
             {t('taskDetail.back')}
-          </Link>
+          </Button>
         </div>
 
         {task && (

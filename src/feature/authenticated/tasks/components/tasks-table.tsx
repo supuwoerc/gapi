@@ -160,7 +160,7 @@ export function TasksTable() {
         header: t('tasks.columns.title'),
         cell: ({ row }) => (
           <Link
-            to={`/tasks/${row.original.id}`}
+            to={`/task/${row.original.id}`}
             className="font-medium text-primary hover:underline"
           >
             {row.original.title}

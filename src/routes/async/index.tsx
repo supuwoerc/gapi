@@ -50,7 +50,7 @@ const asyncRoutes: CustomRouteObject[] = [
         }),
       },
       {
-        path: '/tasks/:id',
+        path: '/task/:id',
         loader: withPermissions('tasks'),
         handle: {
           title: 'route:general.taskDetail',

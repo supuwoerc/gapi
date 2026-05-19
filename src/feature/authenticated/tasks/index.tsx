@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 
+import { useScrollRestoration } from '@/hooks/use-scroll-restoration'
+
 import { ConfigDrawer } from '@/components/config-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import AppHeader from '@/components/layout/authenticated/app-header'
@@ -12,6 +14,7 @@ import { TasksTable } from './components/tasks-table'
 
 const Tasks = () => {
   const { t } = useTranslation('feature')
+  useScrollRestoration()
 
   return (
     <>
