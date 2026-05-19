@@ -45,7 +45,9 @@ const asyncRoutes: CustomRouteObject[] = [
           icon: 'list-todo',
         },
         errorElement: <RouteError />,
-        element: 'tasks',
+        lazy: loadComponent(() => import('@/feature/authenticated/tasks/index'), {
+          pure: true,
+        }),
       },
       {
         path: '/notifications',
