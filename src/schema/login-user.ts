@@ -8,11 +8,11 @@ export const loginUserSchema = z.object({
     bio: z.string(),
   }),
   token: z.string(),
-  refreshToken: z.string(),
+  refresh_token: z.string(),
   role: z.array(z.string()),
-  menuPermissions: z.array(z.string()),
-  routePermissions: z.array(z.string()),
-  completedTours: z.array(z.string()),
+  menu_permissions: z.array(z.string()),
+  route_permissions: z.array(z.string()),
+  completed_tours: z.array(z.string()),
 })
 
 export type LoginUser = z.infer<typeof loginUserSchema>

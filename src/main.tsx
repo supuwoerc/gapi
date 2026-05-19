@@ -28,7 +28,7 @@ gsap.registerPlugin(TextPlugin)
 function App() {
   const isLogin = useLoginUserStore((state) => !!state.loginUser)
   const routePermissions = useLoginUserStore(
-    useShallow((state) => state.loginUser?.routePermissions ?? [])
+    useShallow((state) => state.loginUser?.route_permissions ?? [])
   )
 
   const router = useMemo(() => {

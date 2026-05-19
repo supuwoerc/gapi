@@ -27,7 +27,7 @@ export function useTour() {
         ['userProfile'],
         produce((draft: LoginUser | undefined) => {
           if (draft) {
-            draft.completedTours = [...(draft.completedTours ?? []), CURRENT_TOUR_VERSION]
+            draft.completed_tours = [...(draft.completed_tours ?? []), CURRENT_TOUR_VERSION]
           }
         })
       )
@@ -37,7 +37,7 @@ export function useTour() {
   useEffect(() => {
     if (initialized.current) return
     if (!loginUser) return
-    if (loginUser.completedTours?.includes(CURRENT_TOUR_VERSION)) return
+    if (loginUser.completed_tours?.includes(CURRENT_TOUR_VERSION)) return
 
     initialized.current = true
 
@@ -87,7 +87,7 @@ export function useTour() {
         },
       ],
       onDestroyed: () => {
-        mutate({ completedTours: [CURRENT_TOUR_VERSION] })
+        mutate({ completed_tours: [CURRENT_TOUR_VERSION] })
       },
     })
 

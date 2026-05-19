@@ -20,9 +20,9 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
       bio: faker.lorem.sentence({ min: 3, max: 8 }),
     },
     token: faker.string.alphanumeric(64),
-    refreshToken: faker.string.alphanumeric(64),
+    refresh_token: faker.string.alphanumeric(64),
     role: ['admin'],
-    menuPermissions: [
+    menu_permissions: [
       'dashboard',
       'tasks',
       'notifications',
@@ -34,7 +34,7 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
       'admin:roles',
       'admin:permissions',
     ],
-    routePermissions: [
+    route_permissions: [
       'dashboard',
       'tasks',
       'notifications',
@@ -46,7 +46,7 @@ export async function login(params: LoginParams): Promise<LoginResponse> {
       // 'admin:roles',
       'admin:permissions',
     ],
-    completedTours: [],
+    completed_tours: [],
   }
 }
 
@@ -92,7 +92,7 @@ export async function refreshToken(): Promise<RefreshTokenResponse> {
   await new Promise((r) => setTimeout(r, 300))
   return {
     token: faker.string.alphanumeric(64),
-    refreshToken: faker.string.alphanumeric(64),
+    refresh_token: faker.string.alphanumeric(64),
   }
 }
 
@@ -106,9 +106,9 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       bio: faker.lorem.sentence({ min: 3, max: 8 }),
     },
     token: faker.string.alphanumeric(64),
-    refreshToken: faker.string.alphanumeric(64),
+    refresh_token: faker.string.alphanumeric(64),
     role: ['admin'],
-    menuPermissions: [
+    menu_permissions: [
       'dashboard',
       'tasks',
       'notifications',
@@ -120,7 +120,7 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       'admin:roles',
       'admin:permissions',
     ],
-    routePermissions: [
+    route_permissions: [
       'dashboard',
       'tasks',
       'notifications',
@@ -132,6 +132,6 @@ export async function fetchUserProfile(): Promise<LoginResponse> {
       // 'admin:roles',
       'admin:permissions',
     ],
-    completedTours: [],
+    completed_tours: [],
   }
 }

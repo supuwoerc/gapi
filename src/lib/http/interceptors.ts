@@ -37,15 +37,15 @@ const refreshClient = ky.create({
  * 并发刷新锁：多个请求同时遇到 token 过期时，共享同一个 refresh Promise
  * Concurrent refresh lock: shares a single refresh Promise when multiple requests encounter token expiration simultaneously
  */
-let refreshPromise: Promise<{ token: string; refreshToken: string }> | null = null
+let refreshPromise: Promise<{ token: string; refresh_token: string }> | null = null
 
 /**
  * 执行 token 刷新请求
  * Perform the token refresh request
  */
-async function doRefreshToken(): Promise<{ token: string; refreshToken: string }> {
+async function doRefreshToken(): Promise<{ token: string; refresh_token: string }> {
   const { loginUser } = useLoginUserStore.getState()
-  if (!loginUser?.refreshToken) {
+  if (!loginUser?.refresh_token) {
     throw new Error('No refresh token available')
   }
 
@@ -56,10 +56,10 @@ async function doRefreshToken(): Promise<{ token: string; refreshToken: string }
       headers: {
         [tokenKey]: `${tokenPrefix}${loginUser.token}`,
         [localeKey]: language,
-        [refreshTokenKey]: loginUser.refreshToken,
+        [refreshTokenKey]: loginUser.refresh_token,
       },
     })
-    .json<ApiResponse<{ token: string; refreshToken: string }>>()
+    .json<ApiResponse<{ token: string; refresh_token: string }>>()
 
   if (result.code !== BizCode.SUCCESS) {
     throw new BizRequestError(result.code, result.message)
@@ -72,7 +72,7 @@ async function doRefreshToken(): Promise<{ token: string; refreshToken: string }
  * 获取或复用正在进行的 refresh Promise，确保并发场景下只发起一次刷新
  * Get or reuse the in-flight refresh Promise, ensuring only one refresh is issued under concurrency
  */
-function refreshToken(): Promise<{ token: string; refreshToken: string }> {
+function refreshToken(): Promise<{ token: string; refresh_token: string }> {
   if (!refreshPromise) {
     refreshPromise = doRefreshToken().finally(() => {
       refreshPromise = null
@@ -134,7 +134,7 @@ export const afterResponseHook: AfterResponseHook = async ({ request, response, 
       const tokens = await refreshToken()
       const { loginUser } = useLoginUserStore.getState()
       if (loginUser) {
-        setLoginUser({ ...loginUser, token: tokens.token, refreshToken: tokens.refreshToken })
+        setLoginUser({ ...loginUser, token: tokens.token, refresh_token: tokens.refresh_token })
       }
 
       const headers = new Headers(request.headers)

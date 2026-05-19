@@ -31,5 +31,5 @@ export interface FetchPermissionsResponse {
 
 export interface RefreshTokenResponse {
   token: string
-  refreshToken: string
+  refresh_token: string
 }

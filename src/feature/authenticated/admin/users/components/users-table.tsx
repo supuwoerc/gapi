@@ -84,7 +84,7 @@ export function UsersTable() {
   const [enableAdvancedFilter, setEnableAdvancedFilter] = React.useState(false)
 
   const columnIds = React.useMemo(
-    () => new Set(['username', 'email', 'status', 'role', 'createdAt']),
+    () => new Set(['username', 'email', 'status', 'role', 'created_at']),
     []
   )
 
@@ -92,7 +92,7 @@ export function UsersTable() {
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10))
   const [sorting] = useQueryState(
     'sort',
-    getSortingStateParser<User>(columnIds).withDefault([{ id: 'createdAt', desc: true }])
+    getSortingStateParser<User>(columnIds).withDefault([{ id: 'created_at', desc: true }])
   )
   const [username, setUsername] = useQueryState('username', parseAsString.withDefault(''))
   const [status, setStatus] = useQueryState(
@@ -227,8 +227,8 @@ export function UsersTable() {
         enableColumnFilter: true,
       },
       {
-        id: 'createdAt',
-        accessorKey: 'createdAt',
+        id: 'created_at',
+        accessorKey: 'created_at',
         header: ({ column }: { column: Column<User, unknown> }) => (
           <DataTableColumnHeader column={column} label={t('users.columns.createdAt')} />
         ),
@@ -272,7 +272,7 @@ export function UsersTable() {
     rowCount: data?.total ?? 0,
     enableAdvancedFilter,
     initialState: {
-      sorting: [{ id: 'createdAt', desc: true }],
+      sorting: [{ id: 'created_at', desc: true }],
       columnPinning: { right: ['actions'] },
     },
     getRowId: (row) => row.id,

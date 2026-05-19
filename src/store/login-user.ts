@@ -23,7 +23,7 @@ export const useLoginUserStore = create<TLoginUserStore>()(
         name: LOGIN_USER_STORE_NAME,
         partialize: (state) => ({
           loginUser: state.loginUser
-            ? omit(state.loginUser, ['menuPermissions', 'routePermissions', 'role'])
+            ? omit(state.loginUser, ['menu_permissions', 'route_permissions', 'role'])
             : null,
         }),
       }),
@@ -52,8 +52,8 @@ export const getModulePermissions = (module: string): string[] | undefined => {
 
 export const markTourCompleted = (version: string) => {
   useLoginUserStore.setState((state) => {
-    if (state.loginUser && !state.loginUser.completedTours?.includes(version)) {
-      state.loginUser.completedTours = [...(state.loginUser.completedTours || []), version]
+    if (state.loginUser && !state.loginUser.completed_tours?.includes(version)) {
+      state.loginUser.completed_tours = [...(state.loginUser.completed_tours || []), version]
     }
   })
 }

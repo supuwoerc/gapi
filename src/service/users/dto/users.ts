@@ -24,9 +24,9 @@ export interface GetUsersResponse {
 }
 
 export interface PatchTourParams {
-  completedTours: string[]
+  completed_tours: string[]
 }
 
 export interface PatchTourResponse {
-  completedTours: string[]
+  completed_tours: string[]
 }

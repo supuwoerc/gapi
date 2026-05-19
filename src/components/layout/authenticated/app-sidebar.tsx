@@ -31,7 +31,7 @@ export function AppSidebar() {
 
   const isLogin = useLoginUserStore((state) => !!state.loginUser)
   const menuPermissions = useLoginUserStore(
-    useShallow((state) => state.loginUser?.menuPermissions ?? [])
+    useShallow((state) => state.loginUser?.menu_permissions ?? [])
   )
   const { data: badges } = useQuery({
     queryKey: ['menuBadges'],

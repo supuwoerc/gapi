@@ -10,15 +10,15 @@ const users = Array.from({ length: 500 }, () => {
   const lastName = faker.person.lastName()
   return {
     id: faker.string.uuid(),
-    firstName,
-    lastName,
+    first_name: firstName,
+    last_name: lastName,
     username: faker.internet.username({ firstName, lastName }).toLocaleLowerCase(),
     email: faker.internet.email({ firstName }).toLocaleLowerCase(),
-    phoneNumber: faker.phone.number({ style: 'international' }),
+    phone_number: faker.phone.number({ style: 'international' }),
     status: faker.helpers.arrayElement(['active', 'inactive', 'invited', 'suspended']),
     role: faker.helpers.arrayElement(['superadmin', 'admin', 'cashier', 'manager']),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
+    created_at: faker.date.past(),
+    updated_at: faker.date.recent(),
   }
 })
 
@@ -89,8 +89,8 @@ export async function getUsers(params: GetUsersParams): Promise<GetUsersResponse
       (u) =>
         u.username.toLowerCase().includes(keyword) ||
         u.email.toLowerCase().includes(keyword) ||
-        u.firstName.toLowerCase().includes(keyword) ||
-        u.lastName.toLowerCase().includes(keyword)
+        u.first_name.toLowerCase().includes(keyword) ||
+        u.last_name.toLowerCase().includes(keyword)
     )
   }
 
