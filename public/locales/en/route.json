@@ -9,6 +9,7 @@
     "name": "General",
     "dashboard": "Dashboard",
     "tasks": "Tasks",
+    "taskDetail": "Task Detail",
     "notifications": "Notifications"
   },
   "pages": {

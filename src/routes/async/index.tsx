@@ -50,6 +50,18 @@ const asyncRoutes: CustomRouteObject[] = [
         }),
       },
       {
+        path: '/tasks/:id',
+        loader: withPermissions('tasks'),
+        handle: {
+          title: 'route:general.taskDetail',
+          authMode: 'permissionRequired',
+          key: 'tasks',
+          hidden: true,
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/authenticated/tasks/detail')),
+      },
+      {
         path: '/notifications',
         loader: withPermissions('notifications'),
         handle: {

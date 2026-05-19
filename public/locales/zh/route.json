@@ -9,6 +9,7 @@
     "name": "通用",
     "dashboard": "仪表盘",
     "tasks": "任务",
+    "taskDetail": "任务详情",
     "notifications": "消息"
   },
   "pages": {

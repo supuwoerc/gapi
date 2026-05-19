@@ -164,6 +164,34 @@
       "advanced": "Advanced"
     }
   },
+  "taskDetail": {
+    "back": "Back to Tasks",
+    "info": "Basic Info",
+    "description": "Description",
+    "noDescription": "No description",
+    "fields": {
+      "type": "Type",
+      "creator": "Creator",
+      "assignee": "Assignee",
+      "resolver": "Resolver",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "created": "created this task",
+      "assigned": "assigned to {{target}}",
+      "levelChanged": "changed level to {{level}}",
+      "resolved": "resolved this task",
+      "commented": "commented",
+      "loading": "Loading..."
+    },
+    "comments": {
+      "title": "Comments",
+      "empty": "No comments yet",
+      "loading": "Loading..."
+    }
+  },
   "settings": {
     "title": "Settings",
     "description": "Manage your account settings and preferences",
