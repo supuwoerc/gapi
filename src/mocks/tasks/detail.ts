@@ -1,5 +1,7 @@
-import type { Comment, TaskDetail, TimelineEvent } from '@/schema/tasks/detail'
+import type { Comment, CommentAttachment, TaskDetail, TimelineEvent } from '@/schema/tasks/detail'
 import type {
+  CreateCommentParams,
+  CreateCommentResponse,
   GetTaskCommentsParams,
   GetTaskCommentsResponse,
   GetTaskDetailParams,
@@ -69,6 +71,45 @@ function generateTimeline(taskId: number): TimelineEvent[] {
 
 const commentsCache = new Map<number, Comment[]>()
 
+const sampleImageUrls = [
+  'https://picsum.photos/seed/a1/800/600',
+  'https://picsum.photos/seed/b2/800/600',
+  'https://picsum.photos/seed/c3/800/600',
+]
+
+function generateAttachments(seed: number): CommentAttachment[] {
+  faker.seed(seed)
+  const hasAttachments = faker.datatype.boolean({ probability: 0.3 })
+  if (!hasAttachments) return []
+
+  const count = faker.number.int({ min: 1, max: 3 })
+  const attachments: CommentAttachment[] = []
+
+  for (let i = 0; i < count; i++) {
+    const isImage = faker.datatype.boolean({ probability: 0.6 })
+    if (isImage) {
+      attachments.push({
+        id: seed * 100 + i,
+        file_name: `${faker.word.noun()}.png`,
+        file_url: faker.helpers.arrayElement(sampleImageUrls),
+        file_size: faker.number.int({ min: 50000, max: 2000000 }),
+        mime_type: 'image/png',
+      })
+    } else {
+      const ext = faker.helpers.arrayElement(['pdf', 'docx', 'xlsx', 'zip'])
+      attachments.push({
+        id: seed * 100 + i,
+        file_name: `${faker.word.noun()}.${ext}`,
+        file_url: `https://example.com/files/${faker.string.uuid()}.${ext}`,
+        file_size: faker.number.int({ min: 10000, max: 5000000 }),
+        mime_type: `application/${ext}`,
+      })
+    }
+  }
+
+  return attachments
+}
+
 function generateComments(taskId: number): Comment[] {
   if (commentsCache.has(taskId)) return commentsCache.get(taskId)!
 
@@ -77,10 +118,19 @@ function generateComments(taskId: number): Comment[] {
   const comments: Comment[] = []
 
   for (let i = 0; i < count; i++) {
+    const hasMentions = faker.datatype.boolean({ probability: 0.2 })
+    const mentions = hasMentions
+      ? [{ id: faker.string.uuid(), username: faker.internet.username() }]
+      : []
+
     comments.push({
       id: i + 1,
       author: faker.person.fullName(),
       content: faker.lorem.paragraph({ min: 1, max: 3 }),
+      parent_id: null,
+      reply_to_user: null,
+      mentions,
+      attachments: generateAttachments(taskId * 1000 + i),
       created_at: faker.date.recent({ days: 14 }),
     })
   }
@@ -131,4 +181,23 @@ export async function getTaskComments(
   const data = all.slice(start, start + params.page_size)
 
   return { data, total: all.length }
+}
+
+export async function createComment(params: CreateCommentParams): Promise<CreateCommentResponse> {
+  await new Promise((r) => setTimeout(r, 300))
+
+  const all = generateComments(params.task_id)
+  const newComment: Comment = {
+    id: all.length + 1,
+    author: 'Current User',
+    content: params.content,
+    parent_id: params.parent_id ?? null,
+    reply_to_user: params.reply_to_user ?? null,
+    mentions: params.mention_user_ids.map((id) => ({ id, username: id })),
+    attachments: params.attachments,
+    created_at: new Date(),
+  }
+
+  all.unshift(newComment)
+  return { data: newComment }
 }

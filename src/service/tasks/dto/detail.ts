@@ -1,4 +1,4 @@
-import type { Comment, TaskDetail, TimelineEvent } from '@/schema/tasks/detail'
+import type { Comment, CommentAttachment, TaskDetail, TimelineEvent } from '@/schema/tasks/detail'
 
 export interface GetTaskDetailParams {
   id: number
@@ -28,4 +28,17 @@ export interface GetTaskCommentsParams {
 export interface GetTaskCommentsResponse {
   data: Comment[]
   total: number
+}
+
+export interface CreateCommentParams {
+  task_id: number
+  content: string
+  parent_id?: number
+  reply_to_user?: string
+  mention_user_ids: string[]
+  attachments: CommentAttachment[]
+}
+
+export interface CreateCommentResponse {
+  data: Comment
 }

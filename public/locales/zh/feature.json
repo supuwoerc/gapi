@@ -189,7 +189,14 @@
     "comments": {
       "title": "评论",
       "empty": "暂无评论",
-      "loading": "加载中..."
+      "loading": "加载中...",
+      "create": "评论",
+      "reply": "回复",
+      "replyTo": "回复 {{user}}",
+      "placeholder": "输入评论内容，@ 提及用户...",
+      "send": "发送",
+      "upload": "上传附件",
+      "download": "下载"
     }
   },
   "notifications": {

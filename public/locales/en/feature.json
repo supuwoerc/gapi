@@ -189,7 +189,14 @@
     "comments": {
       "title": "Comments",
       "empty": "No comments yet",
-      "loading": "Loading..."
+      "loading": "Loading...",
+      "create": "Comment",
+      "reply": "Reply",
+      "replyTo": "Reply to {{user}}",
+      "placeholder": "Type a comment, @ to mention...",
+      "send": "Send",
+      "upload": "Upload",
+      "download": "Download"
     }
   },
   "notifications": {

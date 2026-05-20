@@ -4,14 +4,20 @@ import * as React from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import type { Comment } from '@/schema/tasks/detail'
 import { getTaskComments } from '@/service/tasks/detail'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { Loader2, MessageSquare } from 'lucide-react'
+import { Download, FileIcon, Loader2, MessageSquare, MessageSquarePlus, Reply } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+
+import { CommentDialog } from './comment-dialog'
 
 const PAGE_SIZE = 10
 
@@ -22,6 +28,9 @@ interface TaskCommentsCardProps {
 export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
   const { t } = useTranslation('feature')
   const scrollRef = React.useRef<HTMLDivElement>(null)
+
+  const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [replyTarget, setReplyTarget] = React.useState<{ id: number; author: string } | undefined>()
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['task-comments', taskId],
@@ -57,6 +66,16 @@ export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
     }
   }, [virtualItems, allItems.length, hasNextPage, isFetchingNextPage, fetchNextPage])
 
+  function handleCreateComment() {
+    setReplyTarget(undefined)
+    setDialogOpen(true)
+  }
+
+  function handleReply(comment: Comment) {
+    setReplyTarget({ id: comment.id, author: comment.author })
+    setDialogOpen(true)
+  }
+
   if (isLoading) {
     return (
       <Card>
@@ -79,56 +98,141 @@ export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
   }
 
   return (
-    <Card className="gap-1 py-4">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-1">
-          <MessageSquare className="size-4" />
-          {t('taskDetail.comments.title')}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {allItems.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t('taskDetail.comments.empty')}</p>
-        ) : (
-          <div ref={scrollRef} className="max-h-[500px] overflow-y-auto">
-            <div className="relative w-full" style={{ height: `${virtualizer.getTotalSize()}px` }}>
-              {virtualItems.map((virtualItem) => {
-                const isLoaderRow = virtualItem.index >= allItems.length
-                const comment = allItems[virtualItem.index]
+    <>
+      <Card className="gap-1 py-4">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-1">
+            <MessageSquare className="size-4" />
+            {t('taskDetail.comments.title')}
+          </CardTitle>
+          <CardAction>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon-sm" onClick={handleCreateComment}>
+                  <MessageSquarePlus className="size-4 font-bold" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('taskDetail.comments.create')}</TooltipContent>
+            </Tooltip>
+          </CardAction>
+        </CardHeader>
+        <CardContent>
+          {allItems.length === 0 ? (
+            <p className="text-sm text-muted-foreground">{t('taskDetail.comments.empty')}</p>
+          ) : (
+            <div ref={scrollRef} className="max-h-[500px] overflow-y-auto">
+              <div
+                className="relative w-full"
+                style={{ height: `${virtualizer.getTotalSize()}px` }}
+              >
+                {virtualItems.map((virtualItem) => {
+                  const isLoaderRow = virtualItem.index >= allItems.length
+                  const comment = allItems[virtualItem.index]
 
-                return (
-                  <div
-                    key={virtualItem.key}
-                    ref={virtualizer.measureElement}
-                    data-index={virtualItem.index}
-                    className="absolute top-0 left-0 w-full"
-                    style={{
-                      transform: `translateY(${virtualItem.start}px)`,
-                    }}
-                  >
-                    {isLoaderRow ? (
-                      <div className="flex items-center justify-center py-2">
-                        <Loader2 className="size-4 animate-spin text-muted-foreground" />
-                      </div>
-                    ) : comment ? (
-                      <div className="py-2">
-                        <div className="flex items-center gap-1">
-                          <span className="text-sm font-medium">{comment.author}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {comment.created_at.toLocaleString()}
-                          </span>
+                  return (
+                    <div
+                      key={virtualItem.key}
+                      ref={virtualizer.measureElement}
+                      data-index={virtualItem.index}
+                      className="absolute top-0 left-0 w-full"
+                      style={{
+                        transform: `translateY(${virtualItem.start}px)`,
+                      }}
+                    >
+                      {isLoaderRow ? (
+                        <div className="flex items-center justify-center py-2">
+                          <Loader2 className="size-4 animate-spin text-muted-foreground" />
                         </div>
-                        <p className="mt-1 text-sm text-muted-foreground">{comment.content}</p>
-                        {virtualItem.index < allItems.length - 1 && <Separator className="mt-2" />}
-                      </div>
-                    ) : null}
-                  </div>
-                )
-              })}
+                      ) : comment ? (
+                        <div className="group py-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1">
+                              <span className="text-sm font-medium">{comment.author}</span>
+                              {comment.reply_to_user && (
+                                <span className="text-xs text-muted-foreground">
+                                  {t('taskDetail.comments.reply')} {comment.reply_to_user}
+                                </span>
+                              )}
+                              <span className="text-xs text-muted-foreground">
+                                {comment.created_at.toLocaleString()}
+                              </span>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="icon-xs"
+                              className="opacity-0 group-hover:opacity-100"
+                              onClick={() => handleReply(comment)}
+                            >
+                              <Reply className="size-4 font-bold" />
+                            </Button>
+                          </div>
+                          <p className="mt-1 text-sm text-muted-foreground">{comment.content}</p>
+
+                          {comment.attachments.length > 0 && (
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {comment.attachments.map((attachment) =>
+                                attachment.mime_type.startsWith('image/') ? (
+                                  <HoverCard key={attachment.id}>
+                                    <HoverCardTrigger asChild>
+                                      <img
+                                        src={attachment.file_url}
+                                        alt={attachment.file_name}
+                                        className="size-12 cursor-pointer rounded border object-cover"
+                                      />
+                                    </HoverCardTrigger>
+                                    <HoverCardContent className="w-80 p-2">
+                                      <img
+                                        src={attachment.file_url}
+                                        alt={attachment.file_name}
+                                        className="w-full rounded"
+                                      />
+                                    </HoverCardContent>
+                                  </HoverCard>
+                                ) : (
+                                  <div
+                                    key={attachment.id}
+                                    className="flex items-center gap-1 rounded border px-2 py-1"
+                                  >
+                                    <FileIcon className="size-3.5 text-muted-foreground" />
+                                    <span className="max-w-24 truncate text-xs">
+                                      {attachment.file_name}
+                                    </span>
+                                    <a
+                                      href={attachment.file_url}
+                                      download={attachment.file_name}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      <Button variant="ghost" size="icon-xs">
+                                        <Download className="size-3" />
+                                      </Button>
+                                    </a>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          )}
+
+                          {virtualItem.index < allItems.length - 1 && (
+                            <Separator className="mt-2" />
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          )}
+        </CardContent>
+      </Card>
+
+      <CommentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        taskId={taskId}
+        parentComment={replyTarget}
+      />
+    </>
   )
 }
