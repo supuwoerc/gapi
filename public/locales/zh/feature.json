@@ -230,7 +230,8 @@
       "deleteSuccess": "删除成功"
     },
     "dialog": {
-      "from": "来自"
+      "from": "来自",
+      "source": "来源"
     }
   },
   "settings": {

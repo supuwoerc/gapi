@@ -5,11 +5,7 @@ import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { getTaskDetail } from '@/service/tasks/detail'
-import { ArrowLeft } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router'
-
-import { Button } from '@/components/ui/button'
+import { useParams } from 'react-router'
 
 import { ConfigDrawer } from '@/components/config-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
@@ -25,8 +21,6 @@ import { TaskTimelineCard } from './components/task-timeline-card'
 
 const TaskDetailPage = () => {
   const { id } = useParams<{ id: string }>()
-  const { t } = useTranslation('feature')
-  const navigate = useNavigate()
   const taskId = Number(id)
 
   useEffect(() => {
@@ -53,17 +47,6 @@ const TaskDetailPage = () => {
         </div>
       </AppHeader>
       <AppMain className="flex flex-col gap-2 sm:gap-4">
-        <div className="flex items-center gap-4">
-          <Button
-            variant="link"
-            onClick={() => navigate(-1)}
-            className="gap-1 px-0! text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="size-4" />
-            {t('taskDetail.back')}
-          </Button>
-        </div>
-
         {task && (
           <div className="flex items-center gap-3">
             <h2 className="max-w-[600px] truncate text-2xl font-bold tracking-tight text-primary">

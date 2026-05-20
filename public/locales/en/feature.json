@@ -230,7 +230,8 @@
       "deleteSuccess": "Deleted successfully"
     },
     "dialog": {
-      "from": "From"
+      "from": "From",
+      "source": "Source"
     }
   },
   "settings": {

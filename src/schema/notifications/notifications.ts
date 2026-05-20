@@ -16,6 +16,7 @@ export const notificationSchema = z.object({
   sender: z.string(),
   is_read: z.boolean(),
   created_at: z.coerce.date(),
+  source: z.string().optional(),
 })
 export type Notification = z.infer<typeof notificationSchema>
 

@@ -4,7 +4,9 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { Notification } from '@/schema/notifications/notifications'
 import { getNotificationDetail } from '@/service/notifications/list'
+import { ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 
 import {
   Dialog,
@@ -51,6 +53,19 @@ export function NotificationDetailDialog({
           <DialogDescription className="space-x-1">
             {t('notifications.dialog.from')}: {displayData?.sender} ·{' '}
             {displayData?.created_at.toLocaleDateString()}
+            {displayData?.source && (
+              <>
+                {' · '}
+                <Link
+                  to={displayData.source}
+                  className="inline-flex items-center gap-1 text-primary hover:underline"
+                  onClick={() => onOpenChange(false)}
+                >
+                  {t('notifications.dialog.source')}
+                  <ExternalLink className="size-3.5" />
+                </Link>
+              </>
+            )}
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col">
