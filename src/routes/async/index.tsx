@@ -71,7 +71,9 @@ const asyncRoutes: CustomRouteObject[] = [
           icon: 'bell',
         },
         errorElement: <RouteError />,
-        element: 'notifications',
+        lazy: loadComponent(() => import('@/feature/authenticated/notifications/index'), {
+          pure: true,
+        }),
       },
     ],
   },

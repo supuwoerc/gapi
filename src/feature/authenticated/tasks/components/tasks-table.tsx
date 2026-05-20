@@ -136,7 +136,7 @@ export function TasksTable() {
         accessorKey: 'title',
         header: t('tasks.columns.title'),
         cell: ({ row }) => (
-          <HoverCard openDelay={10} closeDelay={100}>
+          <HoverCard openDelay={500} closeDelay={100}>
             <HoverCardTrigger asChild>
               <Link
                 to={`/task/${row.original.id}`}
