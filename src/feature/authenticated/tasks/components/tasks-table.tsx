@@ -18,7 +18,7 @@ import { getSortingStateParser } from '@/lib/parsers'
 import { useDataTable } from '@/hooks/use-data-table'
 
 import { Badge } from '@/components/ui/badge'
-import { Checkbox } from '@/components/ui/checkbox'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 import { DataTable } from '@/components/data-table/data-table'
@@ -123,29 +123,6 @@ export function TasksTable() {
   const columns = React.useMemo<ColumnDef<Task>[]>(
     () => [
       {
-        id: 'select',
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && 'indeterminate')
-            }
-            onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        size: 32,
-        enableSorting: false,
-        enableHiding: false,
-      },
-      {
         id: 'id',
         accessorKey: 'id',
         header: t('tasks.columns.id'),
@@ -159,12 +136,23 @@ export function TasksTable() {
         accessorKey: 'title',
         header: t('tasks.columns.title'),
         cell: ({ row }) => (
-          <Link
-            to={`/task/${row.original.id}`}
-            className="font-medium text-primary hover:underline"
-          >
-            {row.original.title}
-          </Link>
+          <HoverCard openDelay={10} closeDelay={100}>
+            <HoverCardTrigger asChild>
+              <Link
+                to={`/task/${row.original.id}`}
+                className="font-medium text-primary hover:underline"
+              >
+                {row.original.title}
+              </Link>
+            </HoverCardTrigger>
+            <HoverCardContent className="flex w-64 flex-col gap-0.5">
+              <div className="text-[14px] font-semibold">@{row.original.assignee}</div>
+              <div className="line-clamp-2 text-xs">{row.original.title}</div>
+              <div className="mt-1 text-xs text-muted-foreground">
+                {new Date(row.original.created_at).toLocaleDateString()}
+              </div>
+            </HoverCardContent>
+          </HoverCard>
         ),
         meta: {
           label: t('tasks.columns.title'),

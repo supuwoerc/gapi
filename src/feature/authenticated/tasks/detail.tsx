@@ -57,7 +57,7 @@ const TaskDetailPage = () => {
           <Button
             variant="link"
             onClick={() => navigate(-1)}
-            className="gap-1 text-muted-foreground hover:text-foreground"
+            className="gap-1 px-0! text-muted-foreground hover:text-foreground"
           >
             <ArrowLeft className="size-4" />
             {t('taskDetail.back')}
