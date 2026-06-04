@@ -1,2 +1,7 @@
-export { fetchMenuBadges } from '@/mocks/menu/api'
-export type { FetchMenuBadgesResponse } from '@/mocks/menu/api'
+import { get } from '@/lib/http'
+
+export type FetchMenuBadgesResponse = Record<string, number>
+
+export function fetchMenuBadges() {
+  return get<FetchMenuBadgesResponse>('/menu/badges')
+}

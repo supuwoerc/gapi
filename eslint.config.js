@@ -13,7 +13,7 @@ import tseslint from 'typescript-eslint'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'public/mockServiceWorker.js']),
   ...tailwindcss.configs['flat/recommended'],
   {
     settings: {

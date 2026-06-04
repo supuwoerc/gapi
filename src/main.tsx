@@ -15,6 +15,7 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { useLoginUserStore } from '@/store/login-user'
 
+import { enableMsw } from '@/lib/env'
 import '@/lib/i18n.ts'
 import { reactQueryClient } from '@/lib/react-query'
 import { getPermissionRoutes } from '@/lib/route'
@@ -46,18 +47,27 @@ function App() {
   return <RouterProvider router={router} />
 }
 
-const rootElement = document.getElementById('root')!
+async function bootstrap() {
+  if (import.meta.env.DEV && enableMsw) {
+    const { worker } = await import('./mocks/browser')
+    await worker.start({ onUnhandledRequest: 'bypass' })
+  }
 
-if (!rootElement.innerHTML) {
-  const root = createRoot(rootElement)
-  root.render(
-    <StrictMode>
-      <QueryClientProvider client={reactQueryClient}>
-        <ThemeProvider>
-          <Toaster duration={2200} position="top-center" />
-          <App />
-        </ThemeProvider>
-      </QueryClientProvider>
-    </StrictMode>
-  )
+  const rootElement = document.getElementById('root')!
+
+  if (!rootElement.innerHTML) {
+    const root = createRoot(rootElement)
+    root.render(
+      <StrictMode>
+        <QueryClientProvider client={reactQueryClient}>
+          <ThemeProvider>
+            <Toaster duration={2200} position="top-center" />
+            <App />
+          </ThemeProvider>
+        </QueryClientProvider>
+      </StrictMode>
+    )
+  }
 }
+
+bootstrap()

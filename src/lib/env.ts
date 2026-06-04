@@ -11,3 +11,5 @@ export function getAppEnv() {
 export const appEnv = getAppEnv()
 
 export const isDevEnv = appEnv.VITE_APP_ENV === 'dev'
+
+export const enableMsw = appEnv.VITE_APP_ENABLE_MSW === 'true'
