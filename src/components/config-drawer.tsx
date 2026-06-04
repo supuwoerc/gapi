@@ -77,9 +77,9 @@ export function ConfigDrawer() {
         </SheetHeader>
         <div className="space-y-6 overflow-y-auto px-4">
           <ThemeModeConfig />
+          <ThemeConfig />
           <SidebarConfig />
           <LayoutConfig />
-          <ThemeConfig />
         </div>
         <SheetFooter className="gap-2">
           <Button
@@ -342,7 +342,7 @@ function ThemeConfig() {
     }
   })
   return (
-    <div className="max-md:hidden">
+    <div>
       <SectionTitle
         title={t('configDrawer.theme.name')}
         showReset={theme !== defaultTheme}
