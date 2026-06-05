@@ -125,7 +125,7 @@ export function NotificationsTable() {
     [setPage, setTitle, setType, setIsRead, setFilters]
   )
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['notifications', { page, perPage, sorting, title, type, isRead, filters }],
     queryFn: () =>
       getNotifications({
@@ -344,7 +344,9 @@ export function NotificationsTable() {
             <DataTableSortList table={table} />
           </DataTableAdvancedToolbar>
         ) : (
-          <DataTableToolbar table={table}>{filterToggle}</DataTableToolbar>
+          <DataTableToolbar table={table} onSearch={() => refetch()}>
+            {filterToggle}
+          </DataTableToolbar>
         )}
       </DataTable>
       <NotificationDetailDialog

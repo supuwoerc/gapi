@@ -118,7 +118,7 @@ export function UsersTable() {
     [setPage, setUsername, setStatus, setRole, setFilters]
   )
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['users', { page, perPage, sorting, username, status, role, filters }],
     queryFn: () =>
       getUsers({
@@ -316,7 +316,9 @@ export function UsersTable() {
             <DataTableSortList table={table} />
           </DataTableAdvancedToolbar>
         ) : (
-          <DataTableToolbar table={table}>{filterToggle}</DataTableToolbar>
+          <DataTableToolbar table={table} onSearch={() => refetch()}>
+            {filterToggle}
+          </DataTableToolbar>
         )}
       </DataTable>
     </div>

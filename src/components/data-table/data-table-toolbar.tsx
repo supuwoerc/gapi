@@ -20,12 +20,14 @@ import { DataTableViewOptions } from '@/components/data-table/data-table-view-op
 
 interface DataTableToolbarProps<TData> extends React.ComponentProps<'div'> {
   table: Table<TData>
+  onSearch?: () => void
 }
 
 export function DataTableToolbar<TData>({
   table,
   children,
   className,
+  onSearch,
   ...props
 }: DataTableToolbarProps<TData>) {
   const { t } = useTranslation('component')
@@ -54,7 +56,7 @@ export function DataTableToolbar<TData>({
     >
       <div className="flex flex-1 flex-wrap items-center gap-2">
         {columns.map((column) => (
-          <DataTableToolbarFilter key={column.id} column={column} />
+          <DataTableToolbarFilter key={column.id} column={column} onSearch={onSearch} />
         ))}
         {isFiltered && (
           <Button
@@ -78,9 +80,10 @@ export function DataTableToolbar<TData>({
 }
 interface DataTableToolbarFilterProps<TData> {
   column: Column<TData>
+  onSearch?: () => void
 }
 
-function DataTableToolbarFilter<TData>({ column }: DataTableToolbarFilterProps<TData>) {
+function DataTableToolbarFilter<TData>({ column, onSearch }: DataTableToolbarFilterProps<TData>) {
   {
     const columnMeta = column.columnDef.meta
 
@@ -94,6 +97,11 @@ function DataTableToolbarFilter<TData>({ column }: DataTableToolbarFilterProps<T
               placeholder={columnMeta.placeholder ?? columnMeta.label}
               value={(column.getFilterValue() as string) ?? ''}
               onChange={(event) => column.setFilterValue(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  onSearch?.()
+                }
+              }}
               className="h-8 w-40 lg:w-56"
             />
           )
@@ -144,7 +152,7 @@ function DataTableToolbarFilter<TData>({ column }: DataTableToolbarFilterProps<T
         default:
           return null
       }
-    }, [column, columnMeta])
+    }, [column, columnMeta, onSearch])
 
     return onFilterRender()
   }

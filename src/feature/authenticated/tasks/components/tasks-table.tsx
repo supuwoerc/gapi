@@ -105,7 +105,7 @@ export function TasksTable() {
     [setPage, setTitle, setLevel, setType, setFilters]
   )
 
-  const { data, isLoading, isFetching } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['tasks', { page, perPage, sorting, title, level, type, filters }],
     queryFn: () =>
       getTasks({
@@ -292,7 +292,9 @@ export function TasksTable() {
             <DataTableSortList table={table} />
           </DataTableAdvancedToolbar>
         ) : (
-          <DataTableToolbar table={table}>{filterToggle}</DataTableToolbar>
+          <DataTableToolbar table={table} onSearch={() => refetch()}>
+            {filterToggle}
+          </DataTableToolbar>
         )}
       </DataTable>
     </div>
