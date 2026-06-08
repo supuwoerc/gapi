@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 
-import type { CollapsibleMenu, LinkMenu, Menu } from '@/schema/menu/menu'
 import type { CustomRouteObject } from '@/types/route'
+
+import type { CollapsibleMenu, LinkMenu, Menu } from '@/components/layout/authenticated/types/menu'
 
 interface UseSidebarMenuOptions {
   isLogin?: boolean

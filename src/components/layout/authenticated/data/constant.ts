@@ -1,5 +1,5 @@
-import type { Menu } from '@/schema/menu/menu'
-import type { Role } from '@/schema/role/role'
+import type { Menu } from '@/components/layout/authenticated/types/menu'
+import type { Role } from '@/components/layout/authenticated/types/role'
 
 export const roles: Array<Role> = [
   {

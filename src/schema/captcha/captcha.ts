@@ -29,17 +29,6 @@ export const generateRotateResponseSchema = z.object({
 
 export type GenerateRotateResponse = z.infer<typeof generateRotateResponseSchema>
 
-export const validateCaptchaParamsSchema = z.object({
-  captcha_type: captchaTypeSchema,
-  captcha_id: z.string(),
-  x: z.number().optional(),
-  y: z.number().optional(),
-  dots: z.array(z.object({ x: z.number(), y: z.number() })).optional(),
-  angle: z.number().optional(),
-})
-
-export type ValidateCaptchaParams = z.infer<typeof validateCaptchaParamsSchema>
-
 export const validateCaptchaResponseSchema = z.object({
   captcha_token: z.string(),
 })

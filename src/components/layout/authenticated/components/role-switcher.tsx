@@ -1,6 +1,5 @@
 import { type FC, useState } from 'react'
 
-import type { Role } from '@/schema/role/role'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { DynamicIcon } from 'lucide-react/dynamic.mjs'
 import { useTranslation } from 'react-i18next'
@@ -19,6 +18,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+
+import type { Role } from '@/components/layout/authenticated/types/role'
 
 interface TeamSwitcherProps {
   roles: Array<Role>

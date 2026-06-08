@@ -6,35 +6,39 @@ import backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 import { en, zhCN } from 'zod/locales'
 
-import { setSystemLanguage, useSystemConfigStore } from '@/store/system-config'
+let onLanguageChangedCallback: ((lng: Language) => void) | null = null
 
-const { language } = useSystemConfigStore.getState()
+export function onI18nLanguageChanged(callback: (lng: Language) => void) {
+  onLanguageChangedCallback = callback
+}
 
-i18n
-  .use(backend)
-  .use(initReactI18next)
-  .init({
-    lng: language,
-    fallbackLng: 'zh',
-    ns: ['global', 'route'],
-    nsSeparator: ':',
-    keySeparator: '.',
-    partialBundledLanguages: true,
-    interpolation: {
-      escapeValue: false,
-    },
-    react: {
-      useSuspense: true,
-    },
-    preload: ['zh', 'en'],
-    backend: {
-      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
-    },
+export function initI18n(language: Language) {
+  i18n
+    .use(backend)
+    .use(initReactI18next)
+    .init({
+      lng: language,
+      fallbackLng: 'zh',
+      ns: ['global', 'route'],
+      nsSeparator: ':',
+      keySeparator: '.',
+      partialBundledLanguages: true,
+      interpolation: {
+        escapeValue: false,
+      },
+      react: {
+        useSuspense: true,
+      },
+      preload: ['zh', 'en'],
+      backend: {
+        loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
+      },
+    })
+
+  i18n.on('languageChanged', async (lng: Language) => {
+    onLanguageChangedCallback?.(lng)
+    z.config(lng === 'en' ? en() : zhCN())
   })
-
-i18n.on('languageChanged', async (lng: Language) => {
-  setSystemLanguage(lng)
-  z.config(lng === 'en' ? en() : zhCN())
-})
+}
 
 export { i18n }

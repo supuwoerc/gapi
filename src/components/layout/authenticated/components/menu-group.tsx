@@ -1,6 +1,5 @@
 import type { FC, PropsWithChildren } from 'react'
 
-import type { CollapsibleMenu, LinkMenu, Menu, MenuItem } from '@/schema/menu/menu'
 import { ChevronRight } from 'lucide-react'
 import { DynamicIcon } from 'lucide-react/dynamic.mjs'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +27,13 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { Spinner } from '@/components/ui/spinner'
+
+import type {
+  CollapsibleMenu,
+  LinkMenu,
+  Menu,
+  MenuItem,
+} from '@/components/layout/authenticated/types/menu'
 
 const MenuGroup: FC<Menu> = ({ title, items }) => {
   const { state, isMobile } = useSidebar()

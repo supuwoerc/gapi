@@ -13,10 +13,12 @@ import { createBrowserRouter } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
 import { useShallow } from 'zustand/react/shallow'
 
-import { useLoginUserStore } from '@/store/login-user'
+import { clearLoginUserState, setLoginUser, useLoginUserStore } from '@/store/login-user'
+import { setSystemLanguage, useSystemConfigStore } from '@/store/system-config'
 
 import { enableMsw } from '@/lib/env'
-import '@/lib/i18n.ts'
+import { setAuthProvider } from '@/lib/http/auth-provider'
+import { initI18n, onI18nLanguageChanged } from '@/lib/i18n'
 import { reactQueryClient } from '@/lib/react-query'
 import { getPermissionRoutes } from '@/lib/route'
 
@@ -25,6 +27,22 @@ import { ThemeProvider } from '@/context/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 
 gsap.registerPlugin(TextPlugin)
+
+setAuthProvider({
+  getToken: () => useLoginUserStore.getState().loginUser?.token ?? null,
+  getRefreshToken: () => useLoginUserStore.getState().loginUser?.refresh_token ?? null,
+  getLanguage: () => useSystemConfigStore.getState().language,
+  onTokenRefreshed: (token, refreshToken) => {
+    const { loginUser } = useLoginUserStore.getState()
+    if (loginUser) {
+      setLoginUser({ ...loginUser, token, refresh_token: refreshToken })
+    }
+  },
+  onAuthFailed: () => clearLoginUserState(),
+})
+
+initI18n(useSystemConfigStore.getState().language)
+onI18nLanguageChanged((lng) => setSystemLanguage(lng))
 
 function App() {
   const isLogin = useLoginUserStore((state) => !!state.loginUser)

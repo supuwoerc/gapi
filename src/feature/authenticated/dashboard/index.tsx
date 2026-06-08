@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowUp, DollarSign, MoreHorizontal, ShoppingCart } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { useTour } from '@/lib/tour/use-tour'
+import { useTour } from '@/hooks/tour/use-tour'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
