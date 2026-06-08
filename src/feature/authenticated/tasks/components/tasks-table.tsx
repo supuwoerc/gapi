@@ -6,7 +6,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
-import type { Task, TaskLevel, TaskType } from '@/schema/tasks/tasks'
+import type { Task, TaskLevel, TaskType } from '@/schema/task/task'
 import { getTasks } from '@/service/tasks/tasks'
 import { Bug, ListTodo, Sparkles, Text, Zap } from 'lucide-react'
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs'

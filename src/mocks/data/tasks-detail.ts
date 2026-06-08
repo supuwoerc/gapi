@@ -1,4 +1,4 @@
-import type { CommentAttachment } from '@/schema/tasks/detail'
+import type { CommentAttachment } from '@/schema/task/detail'
 import { faker } from '@faker-js/faker'
 
 faker.seed(54321)

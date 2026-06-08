@@ -1,5 +1,5 @@
-import type { Language } from '@/schema/language'
-import type { Theme, ThemeMode } from '@/schema/theme'
+import type { Language } from '@/types/language'
+import type { Theme, ThemeMode } from '@/types/theme'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'

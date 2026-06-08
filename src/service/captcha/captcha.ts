@@ -1,12 +1,12 @@
-import { get, post } from '@/lib/http'
-
 import type {
   GenerateClickResponse,
   GenerateRotateResponse,
   GenerateSlideResponse,
   ValidateCaptchaParams,
   ValidateCaptchaResponse,
-} from './dto/captcha'
+} from '@/schema/captcha/captcha'
+
+import { get, post } from '@/lib/http'
 
 export function generateSlide() {
   return get<GenerateSlideResponse>('/captcha/slide')

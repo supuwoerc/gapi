@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import type { Table } from '@tanstack/react-table'
 
-import type { Notification } from '@/schema/notifications/notifications'
+import type { Notification } from '@/schema/notification/notification'
 import { deleteNotifications, markNotificationsRead } from '@/service/notifications/list'
 import { CheckCheck, Trash2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'

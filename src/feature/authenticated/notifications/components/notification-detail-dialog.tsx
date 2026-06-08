@@ -2,7 +2,7 @@
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import type { Notification } from '@/schema/notifications/notifications'
+import type { Notification } from '@/schema/notification/notification'
 import { getNotificationDetail } from '@/service/notifications/list'
 import { ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'

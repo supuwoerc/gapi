@@ -2,7 +2,7 @@ import { type FC, type SVGProps } from 'react'
 
 import { Item, Root as Radio } from '@radix-ui/react-radio-group'
 
-import type { Theme } from '@/schema/theme'
+import type { Theme } from '@/types/theme'
 import { CircleCheck, RotateCcw, Settings } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'

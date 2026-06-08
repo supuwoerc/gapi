@@ -1,7 +1,7 @@
 'use no memo'
 
-import type { TaskDetail } from '@/schema/tasks/detail'
-import type { TaskLevel, TaskType } from '@/schema/tasks/tasks'
+import type { TaskDetail } from '@/schema/task/detail'
+import type { TaskLevel, TaskType } from '@/schema/task/task'
 import { Bug, Calendar, ListTodo, Sparkles, User, Zap } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 

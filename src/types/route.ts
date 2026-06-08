@@ -1,7 +1,7 @@
 import type { IconName } from 'lucide-react/dynamic'
 import type { IndexRouteObject, NonIndexRouteObject } from 'react-router'
 
-import type { AuthMode } from '../schema/auth-mode'
+import type { AuthMode } from './auth-mode'
 
 export interface RouteHandle {
   handle?: {

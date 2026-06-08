@@ -6,7 +6,7 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 
 import type { ColumnDef } from '@tanstack/react-table'
 
-import type { Notification, NotificationType } from '@/schema/notifications/notifications'
+import type { Notification, NotificationType } from '@/schema/notification/notification'
 import {
   deleteNotifications,
   getNotifications,

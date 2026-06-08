@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react'
 
-import type { CollapsibleMenu, LinkMenu, Menu, MenuItem } from '@/schema/menu'
+import type { CollapsibleMenu, LinkMenu, Menu, MenuItem } from '@/schema/menu/menu'
 import { ChevronRight } from 'lucide-react'
 import { DynamicIcon } from 'lucide-react/dynamic.mjs'
 import { useTranslation } from 'react-i18next'

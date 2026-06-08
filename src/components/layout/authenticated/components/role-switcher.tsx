@@ -1,6 +1,6 @@
 import { type FC, useState } from 'react'
 
-import type { Role } from '@/schema/role'
+import type { Role } from '@/schema/role/role'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { DynamicIcon } from 'lucide-react/dynamic.mjs'
 import { useTranslation } from 'react-i18next'

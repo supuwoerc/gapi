@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import type { CommentAttachment } from '@/schema/tasks/detail'
+import type { CommentAttachment } from '@/schema/task/detail'
 import { createComment } from '@/service/tasks/detail'
 import { getUsers } from '@/service/users/users'
 import * as MentionPrimitive from '@diceui/mention'

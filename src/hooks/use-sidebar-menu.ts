@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import type { CollapsibleMenu, LinkMenu, Menu } from '@/schema/menu'
+import type { CollapsibleMenu, LinkMenu, Menu } from '@/schema/menu/menu'
 import type { CustomRouteObject } from '@/types/route'
 
 interface UseSidebarMenuOptions {

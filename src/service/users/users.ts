@@ -1,14 +1,26 @@
-import { userListSchema } from '@/schema/admin/users'
+import { userListSchema } from '@/schema/user/user'
+import type { User } from '@/schema/user/user'
+import type { PaginatedResponse } from '@/types/shared'
 
-import { get } from '@/lib/http'
-import { patch } from '@/lib/http'
+import { get, patch } from '@/lib/http'
 
-import type {
-  GetUsersParams,
-  GetUsersResponse,
-  PatchTourParams,
-  PatchTourResponse,
-} from './dto/users'
+export interface GetUsersParams {
+  page: number
+  perPage: number
+  sort: { id: string; desc: boolean }[]
+  username?: string
+  status?: string[]
+  role?: string[]
+  filters?: string
+}
+
+export interface PatchTourParams {
+  completed_tours: string[]
+}
+
+export interface PatchTourResponse {
+  completed_tours: string[]
+}
 
 export async function getUsers(params: GetUsersParams) {
   const searchParams: Record<string, string> = {
@@ -24,7 +36,7 @@ export async function getUsers(params: GetUsersParams) {
   params.status?.forEach((v) => arrayParams.append('status', v))
   params.role?.forEach((v) => arrayParams.append('role', v))
 
-  const res = await get<GetUsersResponse>('/users', { searchParams: arrayParams })
+  const res = await get<PaginatedResponse<User>>('/users', { searchParams: arrayParams })
   return { ...res, data: userListSchema.parse(res.data) }
 }
 

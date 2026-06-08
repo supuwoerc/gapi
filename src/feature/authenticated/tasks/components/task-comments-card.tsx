@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import type { Comment } from '@/schema/tasks/detail'
+import type { Comment } from '@/schema/task/detail'
 import { getTaskComments } from '@/service/tasks/detail'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Download, FileIcon, Loader2, MessageSquare, MessageSquarePlus, Reply } from 'lucide-react'

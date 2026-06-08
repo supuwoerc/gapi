@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import type { Table } from '@tanstack/react-table'
 
-import type { User } from '@/schema/admin/users'
+import type { User } from '@/schema/user/user'
 import type { LucideIcon } from 'lucide-react'
 import { CheckCircle, Shield, Trash2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'

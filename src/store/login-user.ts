@@ -1,4 +1,4 @@
-import type { LoginUser } from '@/schema/login-user'
+import type { LoginUser } from '@/schema/auth/auth'
 import { omit } from 'lodash-es'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'

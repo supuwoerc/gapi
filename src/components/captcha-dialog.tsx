@@ -7,7 +7,7 @@ import type {
   GenerateClickResponse,
   GenerateRotateResponse,
   GenerateSlideResponse,
-} from '@/schema/captcha'
+} from '@/schema/captcha/captcha'
 import {
   generateClick,
   generateRotate,

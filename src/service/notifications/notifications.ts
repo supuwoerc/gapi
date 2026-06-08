@@ -1,6 +1,18 @@
 import { put } from '@/lib/http'
 
-import type { UpdateNotificationsParams, UpdateNotificationsResponse } from './dto/notifications'
+export interface UpdateNotificationsParams {
+  taskEmail: boolean
+  messageEmail: boolean
+  versionUpdate: boolean
+  security: boolean
+}
+
+export interface UpdateNotificationsResponse {
+  taskEmail: boolean
+  messageEmail: boolean
+  versionUpdate: boolean
+  security: boolean
+}
 
 export function updateNotifications(params: UpdateNotificationsParams) {
   return put<UpdateNotificationsResponse>('/notifications/settings', { json: params })

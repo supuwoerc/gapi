@@ -1,18 +1,41 @@
+import type { LoginUser } from '@/schema/auth/auth'
+
 import { get, post } from '@/lib/http'
 
-import type {
-  FetchPermissionsParams,
-  FetchPermissionsResponse,
-  ForgotPasswordParams,
-  LoginParams,
-  LoginResponse,
-  RefreshTokenResponse,
-  SignUpParams,
-  VerifyOtpParams,
-} from './dto/auth'
+export interface LoginParams {
+  email: string
+  password: string
+}
+
+export interface ForgotPasswordParams {
+  email: string
+}
+
+export interface SignUpParams {
+  username: string
+  email: string
+  password: string
+}
+
+export interface VerifyOtpParams {
+  otp: string
+}
+
+export interface FetchPermissionsParams {
+  module: string
+}
+
+export interface FetchPermissionsResponse {
+  permissions: string[]
+}
+
+export interface RefreshTokenResponse {
+  token: string
+  refresh_token: string
+}
 
 export function login(params: LoginParams) {
-  return post<LoginResponse>('/auth/login', { json: params })
+  return post<LoginUser>('/auth/login', { json: params })
 }
 
 export function forgotPassword(params: ForgotPasswordParams) {
@@ -38,5 +61,5 @@ export function fetchPermissions(params: FetchPermissionsParams) {
 }
 
 export function fetchUserProfile() {
-  return get<LoginResponse>('/auth/profile')
+  return get<LoginUser>('/auth/profile')
 }

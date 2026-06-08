@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import type { ThemeMode } from '@/schema/theme'
+import type { ThemeMode } from '@/types/theme'
 import { Check, Moon, Sun, SunMoon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

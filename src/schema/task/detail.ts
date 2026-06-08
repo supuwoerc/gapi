@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { taskSchema } from './tasks'
+import { taskSchema } from './task'
 
 export const taskDetailSchema = taskSchema.extend({
   description: z.string(),

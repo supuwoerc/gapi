@@ -1,8 +1,18 @@
-import { taskListSchema } from '@/schema/tasks/tasks'
+import { taskListSchema } from '@/schema/task/task'
+import type { Task } from '@/schema/task/task'
+import type { PaginatedResponse } from '@/types/shared'
 
 import { get } from '@/lib/http'
 
-import type { GetTasksParams, GetTasksResponse } from './dto/tasks'
+export interface GetTasksParams {
+  page: number
+  perPage: number
+  sort: { id: string; desc: boolean }[]
+  title?: string
+  level?: string[]
+  type?: string[]
+  filters?: string
+}
 
 export async function getTasks(params: GetTasksParams) {
   const searchParams: Record<string, string> = {
@@ -18,6 +28,6 @@ export async function getTasks(params: GetTasksParams) {
   params.level?.forEach((v) => arrayParams.append('level', v))
   params.type?.forEach((v) => arrayParams.append('type', v))
 
-  const res = await get<GetTasksResponse>('/tasks', { searchParams: arrayParams })
+  const res = await get<PaginatedResponse<Task>>('/tasks', { searchParams: arrayParams })
   return { ...res, data: taskListSchema.parse(res.data) }
 }

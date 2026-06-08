@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import type { Theme } from '@/schema/theme'
+import type { Theme } from '@/types/theme'
 import { Check, Palette } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

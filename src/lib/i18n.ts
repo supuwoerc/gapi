@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import type { Language } from '@/schema/language'
+import type { Language } from '@/types/language'
 import i18n from 'i18next'
 import backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'

@@ -6,7 +6,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
-import type { User, UserStatus } from '@/schema/admin/users'
+import type { User, UserStatus } from '@/schema/user/user'
 import { getUsers } from '@/service/users/users'
 import {
   CheckCircle,
