@@ -26,23 +26,33 @@ import { ThemeProvider } from '@/context/theme-provider'
 
 import { Toaster } from '@/components/ui/sonner'
 
-gsap.registerPlugin(TextPlugin)
+function setupGsap() {
+  gsap.registerPlugin(TextPlugin)
+}
 
-setAuthProvider({
-  getToken: () => useLoginUserStore.getState().loginUser?.token ?? null,
-  getRefreshToken: () => useLoginUserStore.getState().loginUser?.refresh_token ?? null,
-  getLanguage: () => useSystemConfigStore.getState().language,
-  onTokenRefreshed: (token, refreshToken) => {
-    const { loginUser } = useLoginUserStore.getState()
-    if (loginUser) {
-      setLoginUser({ ...loginUser, token, refresh_token: refreshToken })
-    }
-  },
-  onAuthFailed: () => clearLoginUserState(),
-})
+function setupAuth() {
+  setAuthProvider({
+    getToken: () => useLoginUserStore.getState().loginUser?.token ?? null,
+    getRefreshToken: () => useLoginUserStore.getState().loginUser?.refresh_token ?? null,
+    getLanguage: () => useSystemConfigStore.getState().language,
+    onTokenRefreshed: (token, refreshToken) => {
+      const { loginUser } = useLoginUserStore.getState()
+      if (loginUser) {
+        setLoginUser({ ...loginUser, token, refresh_token: refreshToken })
+      }
+    },
+    onAuthFailed: () => clearLoginUserState(),
+  })
+}
 
-initI18n(useSystemConfigStore.getState().language)
-onI18nLanguageChanged((lng) => setSystemLanguage(lng))
+function setupI18n() {
+  initI18n(useSystemConfigStore.getState().language)
+  onI18nLanguageChanged((lng) => setSystemLanguage(lng))
+}
+
+setupGsap()
+setupAuth()
+setupI18n()
 
 function App() {
   const isLogin = useLoginUserStore((state) => !!state.loginUser)
