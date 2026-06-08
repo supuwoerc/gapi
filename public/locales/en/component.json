@@ -171,6 +171,11 @@
     "fileTooLarge": "File must be smaller than {{maxSize}}MB",
     "invalidFileType": "Unsupported file type"
   },
+  "captchaDialog": {
+    "title": "Security Verification",
+    "loading": "Loading captcha...",
+    "error": "Verification failed, please try again"
+  },
   "tour": {
     "sidebar": {
       "title": "Sidebar Navigation",

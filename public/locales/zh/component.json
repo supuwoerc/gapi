@@ -171,6 +171,11 @@
     "fileTooLarge": "文件大小不能超过 {{maxSize}}MB",
     "invalidFileType": "不支持的文件类型"
   },
+  "captchaDialog": {
+    "title": "安全验证",
+    "loading": "加载验证码...",
+    "error": "验证失败，请重试"
+  },
   "tour": {
     "sidebar": {
       "title": "侧边栏导航",
