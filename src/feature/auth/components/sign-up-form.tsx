@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { z } from 'zod'
 
@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
+import { CaptchaDialog } from '@/components/captcha-dialog'
 import { PasswordInput } from '@/components/password-input'
 
 interface SignUpFormProps {
@@ -87,34 +88,53 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
     mutationFn: signUp,
   })
 
-  const submitHandle: SubmitHandler<SignUpForm> = async (data) => {
-    await toast
-      .promise(
-        signUpMutation.mutateAsync({
-          username: data.username,
-          email: data.email,
-          password: SHA256(data.password).toString(),
-        }),
-        {
-          loading: t('signUp.signUpLoading'),
-          success: () => {
-            navigate('/login', { replace: true })
-            return t('signUp.signUpSuccess')
-          },
-          error: (err) => {
-            if (isError(err)) {
-              return err.message
-            }
-            return t('global:error')
-          },
-        }
-      )
-      .unwrap()
+  const [captchaOpen, setCaptchaOpen] = useState(false)
+  const pendingDataRef = useRef<{ username: string; email: string; password: string } | null>(null)
+
+  const submitHandle: SubmitHandler<SignUpForm> = (data) => {
+    pendingDataRef.current = {
+      username: data.username,
+      email: data.email,
+      password: SHA256(data.password).toString(),
+    }
+    setCaptchaOpen(true)
   }
+
+  const handleCaptchaSuccess = useCallback(
+    async (token: string) => {
+      if (!pendingDataRef.current) return
+      await toast
+        .promise(
+          signUpMutation.mutateAsync({
+            ...pendingDataRef.current,
+            captcha_token: token,
+          }),
+          {
+            loading: t('signUp.signUpLoading'),
+            success: () => {
+              navigate('/login', { replace: true })
+              return t('signUp.signUpSuccess')
+            },
+            error: (err) => {
+              if (isError(err)) {
+                return err.message
+              }
+              return t('global:error')
+            },
+          }
+        )
+        .unwrap()
+      pendingDataRef.current = null
+    },
+    [signUpMutation, navigate, t]
+  )
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitHandle)} className={cn('grid gap-3', className)}>
+      <form
+        onSubmit={(e) => form.handleSubmit(submitHandle)(e)}
+        className={cn('grid gap-3', className)}
+      >
         <FormField
           control={form.control}
           name="username"
@@ -167,11 +187,17 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
             </FormItem>
           )}
         />
-        <Button className="mt-2" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <UserPlus />}
+        <Button className="mt-2" disabled={signUpMutation.isPending}>
+          {signUpMutation.isPending ? <Loader2 className="animate-spin" /> : <UserPlus />}
           {t('signUp.form.submit')}
         </Button>
       </form>
+      <CaptchaDialog
+        open={captchaOpen}
+        onOpenChange={setCaptchaOpen}
+        captchaType="slide"
+        onSuccess={handleCaptchaSuccess}
+      />
     </Form>
   )
 }

@@ -1,7 +1,7 @@
 import { delay, http } from 'msw'
 
 import { generateLoginResponse, modulePermissionsMap } from '../data/auth'
-import { jsonEnvelope } from '../utils/response'
+import { errorEnvelope, jsonEnvelope } from '../utils/response'
 
 const BASE = import.meta.env.VITE_APP_DEFAULT_SERVER
 
@@ -22,8 +22,12 @@ export const authHandlers = [
     return jsonEnvelope(null)
   }),
 
-  http.post(`${BASE}/auth/sign-up`, async () => {
+  http.post(`${BASE}/auth/sign-up`, async ({ request }) => {
     await delay(1000)
+    const body = (await request.json()) as { captcha_token?: string }
+    if (!body.captcha_token) {
+      return errorEnvelope(400001, 'captcha_token is required')
+    }
     return jsonEnvelope(null)
   }),
 

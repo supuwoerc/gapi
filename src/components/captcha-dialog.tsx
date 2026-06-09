@@ -58,6 +58,11 @@ export function CaptchaDialog({
     },
   })
 
+  const generateRef = useRef(generateMutation.mutate)
+  useEffect(() => {
+    generateRef.current = generateMutation.mutate
+  })
+
   const validateMutation = useMutation({
     mutationFn: validateCaptcha,
     onSuccess: (data) => {
@@ -70,38 +75,40 @@ export function CaptchaDialog({
     },
   })
 
+  const validateRef = useRef(validateMutation.mutate)
+  useEffect(() => {
+    validateRef.current = validateMutation.mutate
+  })
+
   useEffect(() => {
     if (open) {
-      generateMutation.mutate()
+      generateRef.current()
     }
-  }, [open, generateMutation])
+  }, [open])
 
   const handleRefresh = useCallback(() => {
-    generateMutation.mutate()
-  }, [generateMutation])
+    generateRef.current()
+  }, [])
 
   const handleClose = useCallback(() => {
     onOpenChange(false)
   }, [onOpenChange])
 
-  const handleSlideConfirm = useCallback(
-    (point: { x: number; y: number }, reset: () => void) => {
-      validateMutation.mutate(
-        {
-          captcha_type: 'slide',
-          captcha_id: captchaIdRef.current,
-          x: point.x,
-          y: point.y,
-        },
-        { onError: () => reset() }
-      )
-    },
-    [validateMutation]
-  )
+  const handleSlideConfirm = useCallback((point: { x: number; y: number }, reset: () => void) => {
+    validateRef.current(
+      {
+        captcha_type: 'slide',
+        captcha_id: captchaIdRef.current,
+        x: point.x,
+        y: point.y,
+      },
+      { onError: () => reset() }
+    )
+  }, [])
 
   const handleClickConfirm = useCallback(
     (dots: Array<{ x: number; y: number }>, reset: () => void) => {
-      validateMutation.mutate(
+      validateRef.current(
         {
           captcha_type: 'click',
           captcha_id: captchaIdRef.current,
@@ -110,22 +117,19 @@ export function CaptchaDialog({
         { onError: () => reset() }
       )
     },
-    [validateMutation]
+    []
   )
 
-  const handleRotateConfirm = useCallback(
-    (angle: number, reset: () => void) => {
-      validateMutation.mutate(
-        {
-          captcha_type: 'rotate',
-          captcha_id: captchaIdRef.current,
-          angle,
-        },
-        { onError: () => reset() }
-      )
-    },
-    [validateMutation]
-  )
+  const handleRotateConfirm = useCallback((angle: number, reset: () => void) => {
+    validateRef.current(
+      {
+        captcha_type: 'rotate',
+        captcha_id: captchaIdRef.current,
+        angle,
+      },
+      { onError: () => reset() }
+    )
+  }, [])
 
   const renderCaptcha = () => {
     if (generateMutation.isPending || !captchaData) {

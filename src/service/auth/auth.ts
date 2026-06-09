@@ -15,6 +15,7 @@ export interface SignUpParams {
   username: string
   email: string
   password: string
+  captcha_token: string
 }
 
 export interface VerifyOtpParams {
