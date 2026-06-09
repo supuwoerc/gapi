@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import type { LoginUser } from '@/schema/auth/auth'
-import { patchTour } from '@/service/users/users'
+import { patchTour } from '@/service/user/user'
 import { driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
 import { produce } from 'immer'

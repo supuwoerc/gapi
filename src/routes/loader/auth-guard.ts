@@ -1,4 +1,4 @@
-import { fetchUserProfile } from '@/service/auth/auth'
+import { fetchUserProfile } from '@/service/user/user'
 import { redirect } from 'react-router'
 
 import { setLoginUser, useLoginUserStore } from '@/store/login-user'

@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useMutation } from '@tanstack/react-query'
 
-import { updateProfile } from '@/service/profile/profile'
+import { updateProfile } from '@/service/user/user'
 import { isError } from 'lodash-es'
 import { Loader2, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'

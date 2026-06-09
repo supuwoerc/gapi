@@ -60,7 +60,3 @@ export function fetchPermissions(params: FetchPermissionsParams) {
     searchParams: { module: params.module },
   })
 }
-
-export function fetchUserProfile() {
-  return get<LoginUser>('/auth/profile')
-}

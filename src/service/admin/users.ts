@@ -2,7 +2,7 @@ import { userListSchema } from '@/schema/user/user'
 import type { User } from '@/schema/user/user'
 import type { PaginatedResponse } from '@/types/shared'
 
-import { get, patch } from '@/lib/http'
+import { get } from '@/lib/http'
 
 export interface GetUsersParams {
   page: number
@@ -12,14 +12,6 @@ export interface GetUsersParams {
   status?: string[]
   role?: string[]
   filters?: string
-}
-
-export interface PatchTourParams {
-  completed_tours: string[]
-}
-
-export interface PatchTourResponse {
-  completed_tours: string[]
 }
 
 export async function getUsers(params: GetUsersParams) {
@@ -38,8 +30,4 @@ export async function getUsers(params: GetUsersParams) {
 
   const res = await get<PaginatedResponse<User>>('/users', { searchParams: arrayParams })
   return { ...res, data: userListSchema.parse(res.data) }
-}
-
-export function patchTour(params: PatchTourParams) {
-  return patch<PatchTourResponse>('/tour', { json: params })
 }

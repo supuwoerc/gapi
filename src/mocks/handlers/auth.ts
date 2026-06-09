@@ -46,9 +46,4 @@ export const authHandlers = [
     const module = url.searchParams.get('module') ?? ''
     return jsonEnvelope({ permissions: modulePermissionsMap[module] ?? [] })
   }),
-
-  http.get(`${BASE}/auth/profile`, async () => {
-    await delay(300)
-    return jsonEnvelope(generateLoginResponse())
-  }),
 ]
