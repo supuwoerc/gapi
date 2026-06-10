@@ -4,7 +4,7 @@ import type { Table } from '@tanstack/react-table'
 
 import type { User } from '@/schema/user/user'
 import type { LucideIcon } from 'lucide-react'
-import { CheckCircle, Shield, Trash2, X } from 'lucide-react'
+import { CheckCircle, Trash2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -25,15 +25,10 @@ import {
 
 interface UsersTableActionBarProps {
   table: Table<User>
-  statusOptions: { label: string; value: string; icon: LucideIcon }[]
-  roleOptions: { label: string; value: string; icon: LucideIcon }[]
+  enabledOptions: { label: string; value: string; icon: LucideIcon }[]
 }
 
-export function UsersTableActionBar({
-  table,
-  statusOptions,
-  roleOptions,
-}: UsersTableActionBarProps) {
+export function UsersTableActionBar({ table, enabledOptions }: UsersTableActionBarProps) {
   'use no memo'
   const { t } = useTranslation('feature')
   const rows = table.getFilteredSelectedRowModel().rows
@@ -48,8 +43,8 @@ export function UsersTableActionBar({
   )
 
   const onUserUpdate = React.useCallback(
-    (field: 'status' | 'role', value: string) => {
-      toast.success(`Updated ${field} to "${value}" for ${rows.length} user(s)`)
+    (value: string) => {
+      toast.success(`Updated enabled to "${value}" for ${rows.length} user(s)`)
     },
     [rows]
   )
@@ -75,35 +70,12 @@ export function UsersTableActionBar({
           <DropdownMenuTrigger asChild>
             <ActionBarItem>
               <CheckCircle />
-              {t('users.actionBar.status')}
+              {t('users.actionBar.enabled')}
             </ActionBarItem>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {statusOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.value}
-                className="capitalize"
-                onClick={() => onUserUpdate('status', option.value)}
-              >
-                {option.label}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <ActionBarItem>
-              <Shield />
-              {t('users.actionBar.role')}
-            </ActionBarItem>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {roleOptions.map((option) => (
-              <DropdownMenuItem
-                key={option.value}
-                className="capitalize"
-                onClick={() => onUserUpdate('role', option.value)}
-              >
+            {enabledOptions.map((option) => (
+              <DropdownMenuItem key={option.value} onClick={() => onUserUpdate(option.value)}>
                 {option.label}
               </DropdownMenuItem>
             ))}

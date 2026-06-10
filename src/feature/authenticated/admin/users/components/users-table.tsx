@@ -6,18 +6,9 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
-import type { User, UserStatus } from '@/schema/user/user'
+import type { User } from '@/schema/user/user'
 import { getUsers } from '@/service/admin/users'
-import {
-  CheckCircle,
-  CreditCard,
-  MoreHorizontal,
-  Shield,
-  Text,
-  UserCheck,
-  Users,
-  XCircle,
-} from 'lucide-react'
+import { CheckCircle, MoreHorizontal, Shield, Text, XCircle } from 'lucide-react'
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 
@@ -25,6 +16,7 @@ import { getSortingStateParser } from '@/lib/parsers'
 
 import { useDataTable } from '@/hooks/use-data-table'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -46,45 +38,33 @@ import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 
 import { UsersTableActionBar } from './users-table-action-bar'
 
-const callTypes = new Map<UserStatus, string>([
-  ['active', 'bg-teal-100/30 text-teal-900 dark:text-teal-200 border-teal-200'],
-  ['inactive', 'bg-neutral-300/40 border-neutral-300'],
-  ['invited', 'bg-sky-200/40 text-sky-900 dark:text-sky-100 border-sky-300'],
-  [
-    'suspended',
-    'bg-destructive/10 dark:bg-destructive/50 text-destructive dark:text-primary border-destructive/10',
-  ],
-])
-
 const EmptyList: Array<User> = []
 
 export function UsersTable() {
   const { t } = useTranslation('feature')
 
-  const statusOptions = React.useMemo(
+  const enabledOptions = React.useMemo(
     () => [
-      { label: t('users.status.active'), value: 'active', icon: CheckCircle },
-      { label: t('users.status.inactive'), value: 'inactive', icon: XCircle },
-      { label: t('users.status.invited'), value: 'invited', icon: CheckCircle },
-      { label: t('users.status.suspended'), value: 'suspended', icon: XCircle },
+      { label: t('users.enabled.true'), value: 'true', icon: CheckCircle },
+      { label: t('users.enabled.false'), value: 'false', icon: XCircle },
     ],
     [t]
   )
 
   const roleOptions = React.useMemo(
     () => [
-      { label: t('users.role.superadmin'), value: 'superadmin', icon: Shield },
-      { label: t('users.role.admin'), value: 'admin', icon: UserCheck },
-      { label: t('users.role.manager'), value: 'manager', icon: Users },
-      { label: t('users.role.cashier'), value: 'cashier', icon: CreditCard },
+      { label: 'Super Admin', value: 'superadmin', icon: Shield },
+      { label: 'Admin', value: 'admin', icon: Shield },
+      { label: 'Manager', value: 'manager', icon: Shield },
+      { label: 'Cashier', value: 'cashier', icon: Shield },
     ],
-    [t]
+    []
   )
 
   const [enableAdvancedFilter, setEnableAdvancedFilter] = React.useState(false)
 
   const columnIds = React.useMemo(
-    () => new Set(['username', 'email', 'status', 'role', 'created_at']),
+    () => new Set(['username', 'email', 'enabled', 'roles', 'last_login_at', 'created_at']),
     []
   )
 
@@ -95,11 +75,14 @@ export function UsersTable() {
     getSortingStateParser<User>(columnIds).withDefault([{ id: 'created_at', desc: true }])
   )
   const [username, setUsername] = useQueryState('username', parseAsString.withDefault(''))
-  const [status, setStatus] = useQueryState(
-    'status',
+  const [enabled, setEnabled] = useQueryState(
+    'enabled',
     parseAsArrayOf(parseAsString, ',').withDefault([])
   )
-  const [role, setRole] = useQueryState('role', parseAsArrayOf(parseAsString, ',').withDefault([]))
+  const [roles, setRoles] = useQueryState(
+    'roles',
+    parseAsArrayOf(parseAsString, ',').withDefault([])
+  )
   const [filters, setFilters] = useQueryState('filters', parseAsString.withDefault(''))
 
   const onTabChange = React.useCallback(
@@ -109,25 +92,25 @@ export function UsersTable() {
       void setPage(1)
       if (isAdvanced) {
         void setUsername(null)
-        void setStatus(null)
-        void setRole(null)
+        void setEnabled(null)
+        void setRoles(null)
       } else {
         void setFilters(null)
       }
     },
-    [setPage, setUsername, setStatus, setRole, setFilters]
+    [setPage, setUsername, setEnabled, setRoles, setFilters]
   )
 
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['users', { page, perPage, sorting, username, status, role, filters }],
+    queryKey: ['users', { page, perPage, sorting, username, enabled, roles, filters }],
     queryFn: () =>
       getUsers({
         page,
         perPage,
         sort: sorting,
         username: username || undefined,
-        status: status.length > 0 ? status : undefined,
-        role: role.length > 0 ? role : undefined,
+        enabled: enabled.length === 1 ? enabled[0] === 'true' : undefined,
+        roles: roles.length > 0 ? roles : undefined,
         filters: filters || undefined,
       }),
     placeholderData: keepPreviousData,
@@ -165,9 +148,15 @@ export function UsersTable() {
           <DataTableColumnHeader column={column} label={t('users.columns.username')} />
         ),
         cell: ({ row }) => (
-          <div className="flex flex-col">
-            <span className="font-medium">{row.original.username}</span>
-            <span className="text-xs text-muted-foreground">{row.original.email}</span>
+          <div className="flex items-center gap-2">
+            <Avatar className="size-8">
+              <AvatarImage src={row.original.avatar} alt={row.original.username} />
+              <AvatarFallback>{row.original.username.charAt(0).toUpperCase()}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="font-medium">{row.original.username}</span>
+              <span className="text-xs text-muted-foreground">{row.original.email}</span>
+            </div>
           </div>
         ),
         meta: {
@@ -179,50 +168,71 @@ export function UsersTable() {
         enableColumnFilter: true,
       },
       {
-        id: 'status',
-        accessorKey: 'status',
+        id: 'enabled',
+        accessorKey: 'enabled',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.status')} />
+          <DataTableColumnHeader column={column} label={t('users.columns.enabled')} />
         ),
         cell: ({ cell }) => {
-          const status = cell.getValue<User['status']>()
-          const badgeClass = callTypes.get(status) ?? ''
-
+          const isEnabled = cell.getValue<boolean>()
           return (
-            <Badge variant="outline" className={`capitalize ${badgeClass}`}>
-              {status}
+            <Badge
+              variant="outline"
+              className={
+                isEnabled
+                  ? 'border-teal-200 bg-teal-100/30 text-teal-900 dark:text-teal-200'
+                  : 'border-neutral-300 bg-neutral-300/40'
+              }
+            >
+              {isEnabled ? t('users.enabled.true') : t('users.enabled.false')}
             </Badge>
           )
         },
         meta: {
-          label: t('users.columns.status'),
+          label: t('users.columns.enabled'),
           variant: 'multiSelect',
-          options: statusOptions,
+          options: enabledOptions,
         },
         enableColumnFilter: true,
       },
       {
-        id: 'role',
-        accessorKey: 'role',
+        id: 'roles',
+        accessorKey: 'roles',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.role')} />
+          <DataTableColumnHeader column={column} label={t('users.columns.roles')} />
         ),
-        cell: ({ cell }) => {
-          const role = cell.getValue<User['role']>()
-          const option = roleOptions.find((o) => o.value === role)
-          const Icon = option?.icon
-
+        cell: ({ row }) => {
+          const userRoles = row.original.roles
           return (
-            <div className="flex items-center gap-1.5 capitalize">
-              {Icon && <Icon className="size-4 text-muted-foreground" />}
-              {role}
+            <div className="flex items-center gap-1">
+              {userRoles.map((r) => (
+                <Badge key={r.code} variant="secondary" className="text-xs">
+                  {r.name}
+                </Badge>
+              ))}
             </div>
           )
         },
         meta: {
-          label: t('users.columns.role'),
+          label: t('users.columns.roles'),
           variant: 'multiSelect',
           options: roleOptions,
+        },
+        enableColumnFilter: true,
+      },
+      {
+        id: 'last_login_at',
+        accessorKey: 'last_login_at',
+        header: ({ column }: { column: Column<User, unknown> }) => (
+          <DataTableColumnHeader column={column} label={t('users.columns.lastLogin')} />
+        ),
+        cell: ({ cell }) => {
+          const date = cell.getValue<Date | null>()
+          return <div>{date ? new Date(date).toLocaleDateString() : '-'}</div>
+        },
+        meta: {
+          label: t('users.columns.lastLogin'),
+          variant: 'date',
         },
         enableColumnFilter: true,
       },
@@ -263,7 +273,7 @@ export function UsersTable() {
         size: 32,
       },
     ],
-    [t, statusOptions, roleOptions]
+    [t, enabledOptions, roleOptions]
   )
 
   const { table } = useDataTable({
@@ -275,11 +285,11 @@ export function UsersTable() {
       sorting: [{ id: 'created_at', desc: true }],
       columnPinning: { right: ['actions'] },
     },
-    getRowId: (row) => row.id,
+    getRowId: (row) => String(row.id),
   })
 
   if (isLoading) {
-    return <DataTableSkeleton columnCount={6} filterCount={3} />
+    return <DataTableSkeleton columnCount={7} filterCount={3} />
   }
 
   const filterToggle = (
@@ -302,13 +312,7 @@ export function UsersTable() {
       <DataTable
         table={table}
         isFetching={isFetching && !isLoading}
-        actionBar={
-          <UsersTableActionBar
-            table={table}
-            statusOptions={statusOptions}
-            roleOptions={roleOptions}
-          />
-        }
+        actionBar={<UsersTableActionBar table={table} enabledOptions={enabledOptions} />}
       >
         {enableAdvancedFilter ? (
           <DataTableAdvancedToolbar table={table} actions={filterToggle}>

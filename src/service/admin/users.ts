@@ -9,8 +9,8 @@ export interface GetUsersParams {
   perPage: number
   sort: { id: string; desc: boolean }[]
   username?: string
-  status?: string[]
-  role?: string[]
+  enabled?: boolean
+  roles?: string[]
   filters?: string
 }
 
@@ -23,10 +23,10 @@ export async function getUsers(params: GetUsersParams) {
   if (params.username) searchParams.username = params.username
   if (params.sort.length > 0) searchParams.sort = JSON.stringify(params.sort)
   if (params.filters) searchParams.filters = params.filters
+  if (params.enabled !== undefined) searchParams.enabled = String(params.enabled)
 
   const arrayParams = new URLSearchParams(searchParams)
-  params.status?.forEach((v) => arrayParams.append('status', v))
-  params.role?.forEach((v) => arrayParams.append('role', v))
+  params.roles?.forEach((v) => arrayParams.append('roles', v))
 
   const res = await get<PaginatedResponse<User>>('/users', { searchParams: arrayParams })
   return { ...res, data: userListSchema.parse(res.data) }

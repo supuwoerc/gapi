@@ -13,8 +13,8 @@ export const userHandlers = [
     const page = Number(url.searchParams.get('page') ?? 1)
     const perPage = Number(url.searchParams.get('perPage') ?? 10)
     const username = url.searchParams.get('username') ?? ''
-    const status = url.searchParams.getAll('status')
-    const role = url.searchParams.getAll('role')
+    const enabled = url.searchParams.get('enabled')
+    const roles = url.searchParams.getAll('roles')
     const sort = url.searchParams.get('sort')
     const filters = url.searchParams.get('filters') ?? undefined
 
@@ -23,20 +23,17 @@ export const userHandlers = [
     if (username) {
       const keyword = username.toLowerCase()
       result = result.filter(
-        (u) =>
-          u.username.toLowerCase().includes(keyword) ||
-          u.email.toLowerCase().includes(keyword) ||
-          u.first_name.toLowerCase().includes(keyword) ||
-          u.last_name.toLowerCase().includes(keyword)
+        (u) => u.username.toLowerCase().includes(keyword) || u.email.toLowerCase().includes(keyword)
       )
     }
 
-    if (status.length) {
-      result = result.filter((u) => status.includes(u.status))
+    if (enabled !== null) {
+      const enabledBool = enabled === 'true'
+      result = result.filter((u) => u.enabled === enabledBool)
     }
 
-    if (role.length) {
-      result = result.filter((u) => role.includes(u.role))
+    if (roles.length) {
+      result = result.filter((u) => u.roles.some((r) => roles.includes(r.code)))
     }
 
     result = applyAdvancedFilters(result, filters)

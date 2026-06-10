@@ -98,22 +98,15 @@
     }
   },
   "users": {
-    "status": {
-      "active": "Active",
-      "inactive": "Inactive",
-      "invited": "Invited",
-      "suspended": "Suspended"
-    },
-    "role": {
-      "superadmin": "Superadmin",
-      "admin": "Admin",
-      "manager": "Manager",
-      "cashier": "Cashier"
+    "enabled": {
+      "true": "Enabled",
+      "false": "Disabled"
     },
     "columns": {
       "username": "Username",
-      "status": "Status",
-      "role": "Role",
+      "enabled": "Status",
+      "roles": "Roles",
+      "lastLogin": "Last Login",
       "createdAt": "Created At"
     },
     "search": "Search users...",
@@ -126,8 +119,7 @@
     },
     "actionBar": {
       "selected": "selected",
-      "status": "Status",
-      "role": "Role",
+      "enabled": "Status",
       "delete": "Delete"
     },
     "title": "User List",
