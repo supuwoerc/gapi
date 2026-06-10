@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 
 faker.seed(67890)
 
-const predefinedRoles = [
+export const predefinedRoles = [
   { id: 1, code: 'superadmin', name: 'Super Admin' },
   { id: 2, code: 'admin', name: 'Admin' },
   { id: 3, code: 'manager', name: 'Manager' },

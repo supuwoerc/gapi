@@ -1,6 +1,6 @@
 import { delay, http } from 'msw'
 
-import { users } from '../data/users'
+import { predefinedRoles, users } from '../data/users'
 import { applyAdvancedFilters, applySorting, paginate } from '../utils/filter'
 import { jsonEnvelope } from '../utils/response'
 
@@ -57,5 +57,30 @@ export const userHandlers = [
       users.splice(i, 1)
     }
     return jsonEnvelope(null)
+  }),
+
+  http.patch(`${BASE}/users/:id`, async ({ params, request }) => {
+    await delay(300)
+    const id = Number(params.id)
+    const body = (await request.json()) as { enabled: boolean; roles: string[] }
+    const user = users.find((u) => u.id === id)
+    if (!user) {
+      return jsonEnvelope(null)
+    }
+    user.enabled = body.enabled
+    user.roles = predefinedRoles.filter((r) => body.roles.includes(r.code))
+    return jsonEnvelope(null)
+  }),
+
+  http.get(`${BASE}/roles`, async ({ request }) => {
+    await delay(200)
+    const url = new URL(request.url)
+    const keyword = url.searchParams.get('keyword')?.toLowerCase() ?? ''
+    const result = keyword
+      ? predefinedRoles.filter(
+          (r) => r.name.toLowerCase().includes(keyword) || r.code.toLowerCase().includes(keyword)
+        )
+      : [...predefinedRoles]
+    return jsonEnvelope(result)
   }),
 ]

@@ -37,6 +37,7 @@ import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton'
 import { DataTableSortList } from '@/components/data-table/data-table-sort-list'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 
+import { UserEditDialog } from './user-edit-dialog'
 import { UsersTableActionBar } from './users-table-action-bar'
 
 const EmptyList: Array<User> = []
@@ -45,6 +46,7 @@ export function UsersTable() {
   const { t } = useTranslation('feature')
   const queryClient = useQueryClient()
   const [deleteId, setDeleteId] = React.useState<number | null>(null)
+  const [editUser, setEditUser] = React.useState<User | null>(null)
 
   const deleteMutation = useMutation({
     mutationFn: deleteUsers,
@@ -74,10 +76,7 @@ export function UsersTable() {
 
   const [enableAdvancedFilter, setEnableAdvancedFilter] = React.useState(false)
 
-  const columnIds = React.useMemo(
-    () => new Set(['username', 'email', 'enabled', 'roles', 'last_login_at', 'created_at']),
-    []
-  )
+  const columnIds = React.useMemo(() => new Set(['last_login_at', 'created_at']), [])
 
   const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10))
@@ -177,6 +176,7 @@ export function UsersTable() {
           icon: Text,
         },
         enableColumnFilter: true,
+        enableSorting: false,
       },
       {
         id: 'enabled',
@@ -205,6 +205,7 @@ export function UsersTable() {
           options: enabledOptions,
         },
         enableColumnFilter: true,
+        enableSorting: false,
       },
       {
         id: 'roles',
@@ -230,6 +231,7 @@ export function UsersTable() {
           options: roleOptions,
         },
         enableColumnFilter: true,
+        enableSorting: false,
       },
       {
         id: 'last_login_at',
@@ -243,9 +245,7 @@ export function UsersTable() {
         },
         meta: {
           label: t('users.columns.lastLogin'),
-          variant: 'date',
         },
-        enableColumnFilter: true,
       },
       {
         id: 'created_at',
@@ -259,9 +259,7 @@ export function UsersTable() {
         },
         meta: {
           label: t('users.columns.createdAt'),
-          variant: 'date',
         },
-        enableColumnFilter: true,
       },
       {
         id: 'actions',
@@ -275,7 +273,9 @@ export function UsersTable() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>{t('users.edit')}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setEditUser(row.original)}>
+                  {t('users.edit')}
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => setDeleteId(row.original.id)}
@@ -289,7 +289,7 @@ export function UsersTable() {
         size: 32,
       },
     ],
-    [t, enabledOptions, roleOptions, setDeleteId]
+    [t, enabledOptions, roleOptions, setDeleteId, setEditUser]
   )
 
   const { table } = useDataTable({
@@ -356,6 +356,13 @@ export function UsersTable() {
         isLoading={deleteMutation.isPending}
         handleConfirm={() => {
           if (deleteId !== null) deleteMutation.mutate([deleteId])
+        }}
+      />
+      <UserEditDialog
+        user={editUser}
+        open={editUser !== null}
+        onOpenChange={(open) => {
+          if (!open) setEditUser(null)
         }}
       />
     </>

@@ -127,6 +127,16 @@
       "desc": "确定要删除 {{count}} 个用户吗？此操作无法撤销。",
       "single": "确定要删除用户「{{username}}」吗？此操作无法撤销。"
     },
+    "editDialog": {
+      "title": "编辑用户",
+      "enabled": "启用状态",
+      "roles": "角色",
+      "rolesPlaceholder": "搜索角色...",
+      "rolesEmpty": "未找到角色",
+      "save": "保存",
+      "saving": "保存中...",
+      "success": "用户更新成功"
+    },
     "title": "用户列表",
     "description": "在这里管理用户及其权限"
   },

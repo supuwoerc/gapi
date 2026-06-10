@@ -2,7 +2,7 @@ import { userListSchema } from '@/schema/user/user'
 import type { User } from '@/schema/user/user'
 import type { PaginatedResponse } from '@/types/shared'
 
-import { del, get } from '@/lib/http'
+import { del, get, patch } from '@/lib/http'
 
 export interface GetUsersParams {
   page: number
@@ -34,4 +34,14 @@ export async function getUsers(params: GetUsersParams) {
 
 export async function deleteUsers(ids: number[]) {
   return del<null>('/users', { json: { ids } })
+}
+
+export async function updateUser(id: number, data: { enabled: boolean; roles: string[] }) {
+  return patch<null>(`/users/${id}`, { json: data })
+}
+
+export async function getRoles(keyword?: string) {
+  const searchParams: Record<string, string> = {}
+  if (keyword) searchParams.keyword = keyword
+  return get<{ id: number; code: string; name: string }[]>('/roles', { searchParams })
 }
