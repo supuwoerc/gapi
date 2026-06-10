@@ -2,12 +2,12 @@
 
 import * as React from 'react'
 
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
 import type { User } from '@/schema/user/user'
-import { getUsers } from '@/service/admin/users'
+import { deleteUsers, getUsers } from '@/service/admin/users'
 import { CheckCircle, MoreHorizontal, Shield, Text, XCircle } from 'lucide-react'
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
+import ConfirmDialog from '@/components/confirm-dialog'
 import { DataTable } from '@/components/data-table/data-table'
 import { DataTableAdvancedToolbar } from '@/components/data-table/data-table-advanced-toolbar'
 import { DataTableColumnHeader } from '@/components/data-table/data-table-column-header'
@@ -42,6 +43,16 @@ const EmptyList: Array<User> = []
 
 export function UsersTable() {
   const { t } = useTranslation('feature')
+  const queryClient = useQueryClient()
+  const [deleteId, setDeleteId] = React.useState<number | null>(null)
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteUsers,
+    onSuccess: () => {
+      setDeleteId(null)
+      void queryClient.invalidateQueries({ queryKey: ['users'] })
+    },
+  })
 
   const enabledOptions = React.useMemo(
     () => [
@@ -254,7 +265,7 @@ export function UsersTable() {
       },
       {
         id: 'actions',
-        cell: function Cell() {
+        cell: function Cell({ row }) {
           return (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -265,7 +276,12 @@ export function UsersTable() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem>{t('users.edit')}</DropdownMenuItem>
-                <DropdownMenuItem variant="destructive">{t('users.delete')}</DropdownMenuItem>
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => setDeleteId(row.original.id)}
+                >
+                  {t('users.delete')}
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )
@@ -273,7 +289,7 @@ export function UsersTable() {
         size: 32,
       },
     ],
-    [t, enabledOptions, roleOptions]
+    [t, enabledOptions, roleOptions, setDeleteId]
   )
 
   const { table } = useDataTable({
@@ -308,23 +324,40 @@ export function UsersTable() {
   )
 
   return (
-    <div className="data-table-container">
-      <DataTable
-        table={table}
-        isFetching={isFetching && !isLoading}
-        actionBar={<UsersTableActionBar table={table} enabledOptions={enabledOptions} />}
-      >
-        {enableAdvancedFilter ? (
-          <DataTableAdvancedToolbar table={table} actions={filterToggle}>
-            <DataTableFilterList table={table} />
-            <DataTableSortList table={table} />
-          </DataTableAdvancedToolbar>
-        ) : (
-          <DataTableToolbar table={table} onSearch={() => refetch()}>
-            {filterToggle}
-          </DataTableToolbar>
-        )}
-      </DataTable>
-    </div>
+    <>
+      <div className="data-table-container">
+        <DataTable
+          table={table}
+          isFetching={isFetching && !isLoading}
+          actionBar={<UsersTableActionBar table={table} enabledOptions={enabledOptions} />}
+        >
+          {enableAdvancedFilter ? (
+            <DataTableAdvancedToolbar table={table} actions={filterToggle}>
+              <DataTableFilterList table={table} />
+              <DataTableSortList table={table} />
+            </DataTableAdvancedToolbar>
+          ) : (
+            <DataTableToolbar table={table} onSearch={() => refetch()}>
+              {filterToggle}
+            </DataTableToolbar>
+          )}
+        </DataTable>
+      </div>
+      <ConfirmDialog
+        open={deleteId !== null}
+        onOpenChange={(open) => {
+          if (!open) setDeleteId(null)
+        }}
+        title={t('users.deleteConfirm.title')}
+        desc={t('users.deleteConfirm.single', {
+          username: (data?.data ?? []).find((u) => u.id === deleteId)?.username ?? '',
+        })}
+        destructive
+        isLoading={deleteMutation.isPending}
+        handleConfirm={() => {
+          if (deleteId !== null) deleteMutation.mutate([deleteId])
+        }}
+      />
+    </>
   )
 }

@@ -2,7 +2,7 @@ import { userListSchema } from '@/schema/user/user'
 import type { User } from '@/schema/user/user'
 import type { PaginatedResponse } from '@/types/shared'
 
-import { get } from '@/lib/http'
+import { del, get } from '@/lib/http'
 
 export interface GetUsersParams {
   page: number
@@ -30,4 +30,8 @@ export async function getUsers(params: GetUsersParams) {
 
   const res = await get<PaginatedResponse<User>>('/users', { searchParams: arrayParams })
   return { ...res, data: userListSchema.parse(res.data) }
+}
+
+export async function deleteUsers(ids: number[]) {
+  return del<null>('/users', { json: { ids } })
 }

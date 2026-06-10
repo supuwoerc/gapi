@@ -122,6 +122,11 @@
       "enabled": "状态",
       "delete": "删除"
     },
+    "deleteConfirm": {
+      "title": "确认删除",
+      "desc": "确定要删除 {{count}} 个用户吗？此操作无法撤销。",
+      "single": "确定要删除用户「{{username}}」吗？此操作无法撤销。"
+    },
     "title": "用户列表",
     "description": "在这里管理用户及其权限"
   },

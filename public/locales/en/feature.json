@@ -122,6 +122,11 @@
       "enabled": "Status",
       "delete": "Delete"
     },
+    "deleteConfirm": {
+      "title": "Confirm Deletion",
+      "desc": "Are you sure you want to delete {{count}} user(s)? This action cannot be undone.",
+      "single": "Are you sure you want to delete user \"{{username}}\"? This action cannot be undone."
+    },
     "title": "User List",
     "description": "Manage your users and their permissions here"
   },

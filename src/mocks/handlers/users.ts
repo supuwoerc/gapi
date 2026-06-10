@@ -44,4 +44,18 @@ export const userHandlers = [
     const paged = paginate(result, page, perPage)
     return jsonEnvelope(paged)
   }),
+
+  http.delete(`${BASE}/users`, async ({ request }) => {
+    await delay(300)
+    const body = (await request.json()) as { ids: number[] }
+    const idsSet = new Set(body.ids)
+    const indicesToRemove = users
+      .map((u, i) => (idsSet.has(u.id) ? i : -1))
+      .filter((i) => i !== -1)
+      .reverse()
+    for (const i of indicesToRemove) {
+      users.splice(i, 1)
+    }
+    return jsonEnvelope(null)
+  }),
 ]
