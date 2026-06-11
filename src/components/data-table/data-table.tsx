@@ -38,6 +38,10 @@ export function DataTable<TData>({
 }: DataTableProps<TData>) {
   'use no memo'
   const { t } = useTranslation('component')
+  const hasExplicitExpanderColumn = table
+    .getAllLeafColumns()
+    .some((column) => column.columnDef.meta?.expander === true)
+
   return (
     <div className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...props}>
       {children}
@@ -74,65 +78,58 @@ export function DataTable<TData>({
                 </TableRow>
               ))
             ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell, cellIndex) => {
-                    const isExpandableColumn =
-                      cellIndex === row.getVisibleCells().findIndex((c) => c.column.id !== 'select')
-                    return (
-                      <TableCell
-                        key={cell.id}
-                        style={{
-                          ...getColumnPinningStyle({ column: cell.column }),
-                        }}
-                      >
-                        {isExpandableColumn && row.depth > 0 ? (
-                          <div
-                            className="flex items-center"
-                            style={{ paddingLeft: `${row.depth * 1.5}rem` }}
-                          >
-                            {row.getCanExpand() ? (
-                              <button
-                                type="button"
-                                className="mr-1 flex size-5 shrink-0 items-center justify-center rounded-sm hover:bg-accent"
-                                onClick={row.getToggleExpandedHandler()}
-                              >
-                                <ChevronRightIcon
-                                  className={cn(
-                                    'size-4 transition-transform',
-                                    row.getIsExpanded() && 'rotate-90'
-                                  )}
-                                />
-                              </button>
-                            ) : (
-                              <span className="mr-1 size-5 shrink-0" />
-                            )}
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </div>
-                        ) : isExpandableColumn && row.getCanExpand() ? (
-                          <div className="flex items-center">
-                            <button
-                              type="button"
-                              className="mr-1 flex size-5 shrink-0 items-center justify-center rounded-sm hover:bg-accent"
-                              onClick={row.getToggleExpandedHandler()}
+              table.getRowModel().rows.map((row) => {
+                const visibleCells = row.getVisibleCells()
+                const fallbackExpanderColumnId = visibleCells.find(
+                  (cell) => cell.column.id !== 'select'
+                )?.column.id
+
+                return (
+                  <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                    {visibleCells.map((cell) => {
+                      const isExpanderColumn = hasExplicitExpanderColumn
+                        ? cell.column.columnDef.meta?.expander === true
+                        : cell.column.id === fallbackExpanderColumnId
+                      const hasExpandableRows = table.getCanSomeRowsExpand()
+                      return (
+                        <TableCell
+                          key={cell.id}
+                          style={{
+                            ...getColumnPinningStyle({ column: cell.column }),
+                          }}
+                        >
+                          {isExpanderColumn && hasExpandableRows ? (
+                            <div
+                              className="flex items-center"
+                              style={{ paddingLeft: `${row.depth * 1.5}rem` }}
                             >
-                              <ChevronRightIcon
-                                className={cn(
-                                  'size-4 transition-transform',
-                                  row.getIsExpanded() && 'rotate-90'
-                                )}
-                              />
-                            </button>
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </div>
-                        ) : (
-                          flexRender(cell.column.columnDef.cell, cell.getContext())
-                        )}
-                      </TableCell>
-                    )
-                  })}
-                </TableRow>
-              ))
+                              {row.getCanExpand() ? (
+                                <button
+                                  type="button"
+                                  className="mr-1 flex size-5 shrink-0 items-center justify-center rounded-sm hover:bg-accent"
+                                  onClick={row.getToggleExpandedHandler()}
+                                >
+                                  <ChevronRightIcon
+                                    className={cn(
+                                      'size-4 transition-transform',
+                                      row.getIsExpanded() && 'rotate-90'
+                                    )}
+                                  />
+                                </button>
+                              ) : (
+                                <span className="mr-1 size-5 shrink-0" />
+                              )}
+                              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </div>
+                          ) : (
+                            flexRender(cell.column.columnDef.cell, cell.getContext())
+                          )}
+                        </TableCell>
+                      )
+                    })}
+                  </TableRow>
+                )
+              })
             ) : (
               <TableRow>
                 <TableCell colSpan={table.getAllColumns().length} className="h-24 text-center">

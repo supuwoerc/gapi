@@ -18,6 +18,7 @@ declare module '@tanstack/react-table' {
     range?: [number, number]
     unit?: string
     icon?: React.FC<React.SVGProps<SVGSVGElement>>
+    expander?: boolean
   }
 }
 
