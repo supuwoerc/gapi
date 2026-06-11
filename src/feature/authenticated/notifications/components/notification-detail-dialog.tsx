@@ -47,7 +47,7 @@ export function NotificationDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="px-4 sm:max-w-lg">
+      <DialogContent className="px-4 sm:max-w-lg" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>{displayData?.title}</DialogTitle>
           <DialogDescription className="space-x-1">

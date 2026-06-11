@@ -198,7 +198,11 @@ export function CaptchaDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-fit" showCloseButton={false}>
+      <DialogContent
+        className="sm:max-w-fit"
+        onInteractOutside={(e) => e.preventDefault()}
+        showCloseButton={false}
+      >
         <DialogHeader>
           <DialogTitle>{t('captchaDialog.title')}</DialogTitle>
         </DialogHeader>

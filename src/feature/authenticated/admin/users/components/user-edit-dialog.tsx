@@ -11,17 +11,20 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { User } from '@/schema/user/user'
 import { getRoles, updateUser } from '@/service/admin/users'
 import { useTranslation } from 'react-i18next'
+import { useDebounce } from 'react-use'
 import { toast } from 'sonner'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
   ComboboxContent,
-  ComboboxEmpty,
-  ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  ComboboxValue,
   useComboboxAnchor,
 } from '@/components/ui/combobox'
 import {
@@ -33,6 +36,7 @@ import {
 } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
+import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 
 const formSchema = z.object({
@@ -53,6 +57,9 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
   const queryClient = useQueryClient()
   const anchorRef = useComboboxAnchor()
   const [roleKeyword, setRoleKeyword] = React.useState('')
+  const [debouncedKeyword, setDebouncedKeyword] = React.useState('')
+
+  useDebounce(() => setDebouncedKeyword(roleKeyword), 300, [roleKeyword])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -71,9 +78,9 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
     }
   }, [user, open, form])
 
-  const { data: rolesData } = useQuery({
-    queryKey: ['roles', roleKeyword],
-    queryFn: () => getRoles(roleKeyword || undefined),
+  const { data: rolesData, isFetching: isRolesFetching } = useQuery({
+    queryKey: ['roles', debouncedKeyword],
+    queryFn: () => getRoles(debouncedKeyword || undefined),
     enabled: open,
   })
 
@@ -98,8 +105,8 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
   if (!user) return null
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
+      <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>{t('users.editDialog.title')}</DialogTitle>
         </DialogHeader>
@@ -143,17 +150,35 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                       onValueChange={(val) => field.onChange(val ?? [])}
                       onInputValueChange={(inputValue) => setRoleKeyword(inputValue)}
                     >
-                      <div ref={anchorRef}>
-                        <ComboboxInput placeholder={t('users.editDialog.rolesPlaceholder')} />
-                      </div>
+                      <ComboboxChips ref={anchorRef}>
+                        <ComboboxValue>
+                          {(values: string[]) =>
+                            values.map((code) => (
+                              <ComboboxChip key={code}>
+                                {roleOptions.find((r) => r.value === code)?.label ?? code}
+                              </ComboboxChip>
+                            ))
+                          }
+                        </ComboboxValue>
+                        <ComboboxChipsInput placeholder={t('users.editDialog.rolesPlaceholder')} />
+                      </ComboboxChips>
                       <ComboboxContent anchor={anchorRef}>
                         <ComboboxList>
-                          <ComboboxEmpty>{t('users.editDialog.rolesEmpty')}</ComboboxEmpty>
-                          {roleOptions.map((role) => (
-                            <ComboboxItem key={role.value} value={role.value}>
-                              {role.label}
-                            </ComboboxItem>
-                          ))}
+                          {isRolesFetching ? (
+                            <div className="flex w-full justify-center py-2">
+                              <Spinner />
+                            </div>
+                          ) : roleOptions.length === 0 ? (
+                            <div className="flex w-full justify-center py-2 text-center text-sm text-muted-foreground">
+                              {t('users.editDialog.rolesEmpty')}
+                            </div>
+                          ) : (
+                            roleOptions.map((role) => (
+                              <ComboboxItem key={role.value} value={role.value}>
+                                {role.label}
+                              </ComboboxItem>
+                            ))
+                          )}
                         </ComboboxList>
                       </ComboboxContent>
                     </Combobox>

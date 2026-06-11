@@ -175,7 +175,7 @@ export function ImageCropDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>{title ?? t('imageCropDialog.title')}</DialogTitle>
         </DialogHeader>
