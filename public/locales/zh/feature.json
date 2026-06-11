@@ -140,6 +140,80 @@
     "title": "用户列表",
     "description": "在这里管理用户及其权限"
   },
+  "roles": {
+    "title": "角色管理",
+    "description": "管理角色继承关系和权限分配",
+    "enabled": {
+      "true": "启用",
+      "false": "禁用"
+    },
+    "columns": {
+      "name": "角色",
+      "enabled": "状态",
+      "permissions": "权限",
+      "effectivePermissions": "生效权限",
+      "configCount": "配置数量",
+      "sortOrder": "排序",
+      "createdAt": "创建时间"
+    },
+    "search": "搜索角色...",
+    "create": "新建角色",
+    "openMenu": "打开菜单",
+    "edit": "编辑",
+    "delete": "删除",
+    "selectAll": "选择全部角色",
+    "selectRow": "选择角色",
+    "actionBar": {
+      "selected": "已选",
+      "delete": "删除"
+    },
+    "deleteConfirm": {
+      "title": "确认删除",
+      "desc": "确定要删除 {{count}} 个角色吗？子角色也会一起删除，此操作无法撤销。",
+      "single": "确定要删除角色「{{name}}」吗？子角色也会一起删除，此操作无法撤销。",
+      "success": "角色删除成功"
+    },
+    "editDialog": {
+      "createTitle": "新建角色",
+      "editTitle": "编辑角色",
+      "name": "角色名称",
+      "namePlaceholder": "请输入角色名称",
+      "code": "角色编码",
+      "codePlaceholder": "请输入唯一编码",
+      "parent": "父角色",
+      "parentPlaceholder": "选择父角色",
+      "noParent": "无父角色",
+      "sortOrder": "排序",
+      "description": "描述",
+      "descriptionPlaceholder": "请输入角色描述",
+      "enabled": "启用状态",
+      "permissions": "权限分配",
+      "save": "保存",
+      "saving": "保存中...",
+      "createSuccess": "角色创建成功",
+      "updateSuccess": "角色更新成功",
+      "inheritedPermissions": "从父角色继承的权限"
+    },
+    "permissionAction": {
+      "create": "创建",
+      "read": "读取",
+      "update": "更新",
+      "delete": "删除"
+    },
+    "resourceType": {
+      "1": "API",
+      "2": "菜单",
+      "3": "路由",
+      "4": "按钮",
+      "5": "数据"
+    },
+    "permissionEffect": {
+      "allow": "允许",
+      "deny": "拒绝",
+      "configCount": "继承 {{inherited}} / 直接 {{direct}}",
+      "effectSummary": "允许 {{allow}} / 拒绝 {{deny}}"
+    }
+  },
   "tasks": {
     "title": "任务列表",
     "description": "管理和跟踪所有任务",

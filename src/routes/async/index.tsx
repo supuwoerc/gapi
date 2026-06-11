@@ -171,7 +171,7 @@ const asyncRoutes: CustomRouteObject[] = [
               icon: 'hat-glasses',
             },
             errorElement: <RouteError />,
-            element: 'roles',
+            lazy: loadComponent(() => import('@/feature/authenticated/admin/roles')),
           },
           {
             path: '/admin/permissions',

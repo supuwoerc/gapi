@@ -1,13 +1,17 @@
 import { faker } from '@faker-js/faker'
 
+import { roles } from './roles'
+
 faker.seed(67890)
 
-export const predefinedRoles = [
-  { id: 1, code: 'superadmin', name: 'Super Admin' },
-  { id: 2, code: 'admin', name: 'Admin' },
-  { id: 3, code: 'manager', name: 'Manager' },
-  { id: 4, code: 'cashier', name: 'Cashier' },
-]
+function flattenRoles(items: typeof roles): { id: number; code: string; name: string }[] {
+  return items.flatMap((role) => [
+    { id: role.id, code: role.code, name: role.name },
+    ...flattenRoles(role.children),
+  ])
+}
+
+export const predefinedRoles = flattenRoles(roles)
 
 export const users = Array.from({ length: 500 }, () => {
   const roleCount = faker.number.int({ min: 1, max: 3 })

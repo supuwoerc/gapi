@@ -71,16 +71,4 @@ export const userHandlers = [
     user.roles = predefinedRoles.filter((r) => body.roles.includes(r.code))
     return jsonEnvelope(null)
   }),
-
-  http.get(`${BASE}/roles`, async ({ request }) => {
-    await delay(200)
-    const url = new URL(request.url)
-    const keyword = url.searchParams.get('keyword')?.toLowerCase() ?? ''
-    const result = keyword
-      ? predefinedRoles.filter(
-          (r) => r.name.toLowerCase().includes(keyword) || r.code.toLowerCase().includes(keyword)
-        )
-      : [...predefinedRoles]
-    return jsonEnvelope(result)
-  }),
 ]
