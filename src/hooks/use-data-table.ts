@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import {
   type ColumnFiltersState,
+  type ExpandedState,
   type PaginationState,
   type RowSelectionState,
   type SortingState,
@@ -10,6 +11,7 @@ import {
   type Updater,
   type VisibilityState,
   getCoreRowModel,
+  getExpandedRowModel,
   getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
@@ -64,6 +66,8 @@ interface UseDataTableProps<TData>
   throttleMs?: number
   clearOnDefault?: boolean
   enableAdvancedFilter?: boolean
+  enableExpanding?: boolean
+  getSubRows?: (row: TData, index: number) => TData[] | undefined
   scroll?: boolean
   shallow?: boolean
   startTransition?: React.TransitionStartFunction
@@ -80,6 +84,8 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     throttleMs = THROTTLE_MS,
     clearOnDefault = false,
     enableAdvancedFilter = false,
+    enableExpanding = false,
+    getSubRows,
     scroll = false,
     shallow = true,
     startTransition,
@@ -110,6 +116,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>(
     initialState?.columnVisibility ?? {}
   )
+  const [expanded, setExpanded] = React.useState<ExpandedState>(initialState?.expanded ?? {})
 
   const [page, setPage] = useQueryState(
     pageKey,
@@ -261,6 +268,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
       columnVisibility,
       rowSelection,
       columnFilters,
+      ...(enableExpanding && { expanded }),
     },
     defaultColumn: {
       ...tableProps.defaultColumn,
@@ -272,6 +280,11 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
     onSortingChange,
     onColumnFiltersChange,
     onColumnVisibilityChange: setColumnVisibility,
+    ...(enableExpanding && {
+      getSubRows,
+      onExpandedChange: setExpanded,
+      getExpandedRowModel: getExpandedRowModel(),
+    }),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

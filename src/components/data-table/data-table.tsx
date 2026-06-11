@@ -2,6 +2,7 @@ import type * as React from 'react'
 
 import { type Table as TanstackTable, flexRender } from '@tanstack/react-table'
 
+import { ChevronRightIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { getColumnPinningStyle } from '@/lib/data-table'
@@ -75,16 +76,61 @@ export function DataTable<TData>({
             ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      style={{
-                        ...getColumnPinningStyle({ column: cell.column }),
-                      }}
-                    >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
+                  {row.getVisibleCells().map((cell, cellIndex) => {
+                    const isExpandableColumn =
+                      cellIndex === row.getVisibleCells().findIndex((c) => c.column.id !== 'select')
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        style={{
+                          ...getColumnPinningStyle({ column: cell.column }),
+                        }}
+                      >
+                        {isExpandableColumn && row.depth > 0 ? (
+                          <div
+                            className="flex items-center"
+                            style={{ paddingLeft: `${row.depth * 1.5}rem` }}
+                          >
+                            {row.getCanExpand() ? (
+                              <button
+                                type="button"
+                                className="mr-1 flex size-5 shrink-0 items-center justify-center rounded-sm hover:bg-accent"
+                                onClick={row.getToggleExpandedHandler()}
+                              >
+                                <ChevronRightIcon
+                                  className={cn(
+                                    'size-4 transition-transform',
+                                    row.getIsExpanded() && 'rotate-90'
+                                  )}
+                                />
+                              </button>
+                            ) : (
+                              <span className="mr-1 size-5 shrink-0" />
+                            )}
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </div>
+                        ) : isExpandableColumn && row.getCanExpand() ? (
+                          <div className="flex items-center">
+                            <button
+                              type="button"
+                              className="mr-1 flex size-5 shrink-0 items-center justify-center rounded-sm hover:bg-accent"
+                              onClick={row.getToggleExpandedHandler()}
+                            >
+                              <ChevronRightIcon
+                                className={cn(
+                                  'size-4 transition-transform',
+                                  row.getIsExpanded() && 'rotate-90'
+                                )}
+                              />
+                            </button>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </div>
+                        ) : (
+                          flexRender(cell.column.columnDef.cell, cell.getContext())
+                        )}
+                      </TableCell>
+                    )
+                  })}
                 </TableRow>
               ))
             ) : (

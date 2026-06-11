@@ -49,6 +49,7 @@ export function generateLoginResponse(email?: string) {
       'documents',
       'admin',
       'admin:users',
+      'admin:roles',
       'admin:permissions',
     ],
     completed_tours: [],
