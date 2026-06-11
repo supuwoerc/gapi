@@ -7,8 +7,8 @@ const RouteError = () => {
   const { t } = useTranslation(['component', 'global'])
   const navigate = useNavigate()
   return (
-    <div className="h-full w-full">
-      <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-2">
         <h1 className="text-[7rem] leading-tight font-bold">💥</h1>
         <span className="font-medium">{t('routeError.title')}</span>
         <p className="text-center text-muted-foreground">{t('routeError.subtitle')}</p>
