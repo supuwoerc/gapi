@@ -1,9 +1,10 @@
-import type { RoleMutation, RoleTree } from '@/schema/admin/role'
+import type { Role, RoleMutation, RoleTree } from '@/schema/admin/role'
 import { withEffectivePermissions } from '@/service/admin/roles'
 import { delay, http } from 'msw'
 
 import { permissions } from '../data/permissions'
 import { roles } from '../data/roles'
+import { paginate } from '../utils/filter'
 import { jsonEnvelope } from '../utils/response'
 
 const BASE = import.meta.env.VITE_APP_DEFAULT_SERVER
@@ -105,6 +106,21 @@ function sortRoleTree(items: RoleTree[]): RoleTree[] {
     .map((role) => ({ ...role, children: sortRoleTree(role.children) }))
 }
 
+function toRoleDetail(role: RoleTree): Role {
+  const { children: _children, ...detail } = cloneRole(role)
+  return detail
+}
+
+function sortPermissions() {
+  return [...permissions].sort(
+    (a, b) =>
+      a.module.localeCompare(b.module) ||
+      a.resource_path.localeCompare(b.resource_path) ||
+      a.action.localeCompare(b.action) ||
+      a.id - b.id
+  )
+}
+
 export const roleHandlers = [
   http.get(`${BASE}/roles`, async ({ request }) => {
     await delay(200)
@@ -129,6 +145,13 @@ export const roleHandlers = [
     return jsonEnvelope(
       withEffectivePermissions(sortRoleTree(filterRoleTree(roles, keyword, enabled)))
     )
+  }),
+
+  http.get(`${BASE}/roles/:id`, async ({ params }) => {
+    await delay(200)
+    const id = Number(params.id)
+    const role = findRole(withEffectivePermissions(sortRoleTree(roles)), id)
+    return jsonEnvelope(role ? toRoleDetail(role) : null)
   }),
 
   http.post(`${BASE}/roles`, async ({ request }) => {
@@ -166,8 +189,52 @@ export const roleHandlers = [
     return jsonEnvelope(null)
   }),
 
-  http.get(`${BASE}/permissions`, async () => {
+  http.get(`${BASE}/permissions/modules`, async () => {
     await delay(200)
-    return jsonEnvelope(permissions)
+    return jsonEnvelope(
+      Array.from(new Set(permissions.map((permission) => permission.module))).sort()
+    )
+  }),
+
+  http.get(`${BASE}/permissions`, async ({ request }) => {
+    await delay(200)
+    const url = new URL(request.url)
+    const page = Number(url.searchParams.get('page') ?? 1)
+    const perPage = Number(url.searchParams.get('perPage') ?? 20)
+    const keyword = url.searchParams.get('keyword')?.toLowerCase() ?? ''
+    const module = url.searchParams.get('module')
+    const action = url.searchParams.get('action')
+    const resourceType = url.searchParams.get('resource_type')
+
+    let result = sortPermissions()
+
+    if (keyword) {
+      result = result.filter((permission) =>
+        [
+          permission.name,
+          permission.code,
+          permission.module,
+          permission.resource_path,
+          permission.action,
+        ]
+          .join(' ')
+          .toLowerCase()
+          .includes(keyword)
+      )
+    }
+
+    if (module) {
+      result = result.filter((permission) => permission.module === module)
+    }
+
+    if (action) {
+      result = result.filter((permission) => permission.action === action)
+    }
+
+    if (resourceType) {
+      result = result.filter((permission) => String(permission.resource_type) === resourceType)
+    }
+
+    return jsonEnvelope(paginate(result, page, perPage))
   }),
 ]

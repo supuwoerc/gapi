@@ -1,8 +1,8 @@
-import type { Permission } from '@/schema/admin/permission'
+import type { Permission, PermissionAction } from '@/schema/admin/permission'
 
 const now = '2026-06-01T08:00:00.000Z'
 
-export const permissions: Permission[] = [
+const basePermissions: Permission[] = [
   {
     id: 1,
     code: 'admin:users:read',
@@ -124,3 +124,69 @@ export const permissions: Permission[] = [
     updated_at: new Date(now),
   },
 ]
+
+const generatedModules = [
+  {
+    module: 'admin',
+    resources: ['settings', 'audit-logs', 'menus', 'system-config'],
+  },
+  {
+    module: 'tasks',
+    resources: ['comments', 'attachments', 'workflow', 'reports'],
+  },
+  {
+    module: 'projects',
+    resources: ['members', 'settings', 'milestones', 'documents'],
+  },
+  {
+    module: 'documents',
+    resources: ['folders', 'versions', 'shares', 'templates'],
+  },
+  {
+    module: 'notifications',
+    resources: ['channels', 'templates', 'subscriptions', 'delivery-logs'],
+  },
+  {
+    module: 'groups',
+    resources: ['members', 'roles', 'settings', 'invites'],
+  },
+]
+
+const generatedActions: PermissionAction[] = ['read', 'create', 'update', 'delete']
+
+function titleCase(value: string) {
+  return value
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ')
+}
+
+function actionLabel(action: PermissionAction) {
+  if (action === 'read') return 'View'
+  if (action === 'create') return 'Create'
+  if (action === 'update') return 'Update'
+  return 'Delete'
+}
+
+function buildGeneratedPermissions(): Permission[] {
+  let nextId = Math.max(...basePermissions.map((permission) => permission.id)) + 1
+
+  return generatedModules.flatMap(({ module, resources }) =>
+    resources.flatMap((resource) =>
+      generatedActions.map((action) => ({
+        id: nextId++,
+        code: `${module}:${resource}:${action}`,
+        name: `${actionLabel(action)} ${titleCase(resource)}`,
+        resource_type: action === 'read' ? 3 : 4,
+        module,
+        resource_path: `/${module}/${resource}`,
+        action,
+        description: `${actionLabel(action)} ${titleCase(resource)} in ${module}`,
+        created_at: new Date(now),
+        updated_at: new Date(now),
+      }))
+    )
+  )
+}
+
+export const permissions: Permission[] = [...basePermissions, ...buildGeneratedPermissions()]
