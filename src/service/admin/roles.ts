@@ -95,6 +95,10 @@ export async function getPermissions(
   return { data: permissionListSchema.parse(res.data), total: res.total }
 }
 
+export async function deletePermissions(ids: number[]) {
+  return del<null>('/permissions', { json: { ids } })
+}
+
 export async function getPermissionModules(): Promise<string[]> {
   const res = await get<string[]>('/permissions/modules')
   return z.array(z.string()).parse(res)

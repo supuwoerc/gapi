@@ -211,16 +211,7 @@ export const roleHandlers = [
 
     if (keyword) {
       result = result.filter((permission) =>
-        [
-          permission.name,
-          permission.code,
-          permission.module,
-          permission.resource_path,
-          permission.action,
-        ]
-          .join(' ')
-          .toLowerCase()
-          .includes(keyword)
+        [permission.name, permission.description].join(' ').toLowerCase().includes(keyword)
       )
     }
 
@@ -237,5 +228,14 @@ export const roleHandlers = [
     }
 
     return jsonEnvelope(paginate(result, page, perPage))
+  }),
+
+  http.delete(`${BASE}/permissions`, async ({ request }) => {
+    await delay(300)
+    const body = (await request.json()) as { ids: number[] }
+    const ids = new Set(body.ids)
+    const nextPermissions = permissions.filter((permission) => !ids.has(permission.id))
+    permissions.splice(0, permissions.length, ...nextPermissions)
+    return jsonEnvelope(null)
   }),
 ]

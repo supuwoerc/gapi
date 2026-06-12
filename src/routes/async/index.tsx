@@ -182,7 +182,7 @@ const asyncRoutes: CustomRouteObject[] = [
               icon: 'key-round',
             },
             errorElement: <RouteError />,
-            element: 'roles',
+            lazy: loadComponent(() => import('@/feature/authenticated/admin/permissions')),
           },
         ],
       },

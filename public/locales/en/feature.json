@@ -140,6 +140,49 @@
     "title": "User List",
     "description": "Manage your users and their permissions here"
   },
+  "permissions": {
+    "title": "Permission List",
+    "description": "View the system permission catalog, resource paths, and actions",
+    "create": "New Permission",
+    "search": "Search permission name or description...",
+    "openMenu": "Open menu",
+    "delete": "Delete",
+    "selectAll": "Select all permissions",
+    "selectRow": "Select permission",
+    "columns": {
+      "name": "Permission",
+      "description": "Description",
+      "module": "Module",
+      "resourcePath": "Resource Path",
+      "action": "Action",
+      "resourceType": "Resource Type",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "actionBar": {
+      "selected": "selected",
+      "delete": "Delete"
+    },
+    "deleteConfirm": {
+      "title": "Confirm Deletion",
+      "desc": "Are you sure you want to delete {{count}} permission(s)? This action cannot be undone.",
+      "single": "Are you sure you want to delete permission \"{{name}}\"? This action cannot be undone.",
+      "success": "Permission deleted successfully"
+    },
+    "action": {
+      "create": "Create",
+      "read": "Read",
+      "update": "Update",
+      "delete": "Delete"
+    },
+    "resourceType": {
+      "1": "API",
+      "2": "Menu",
+      "3": "Route",
+      "4": "Button",
+      "5": "Data"
+    }
+  },
   "roles": {
     "title": "Role Management",
     "description": "Manage role inheritance and permission assignments",
