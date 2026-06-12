@@ -192,7 +192,25 @@
       "saving": "保存中...",
       "createSuccess": "角色创建成功",
       "updateSuccess": "角色更新成功",
-      "inheritedPermissions": "从父角色继承的权限"
+      "inheritedPermissions": "从父角色继承的权限",
+      "tabs": {
+        "basic": "基础信息",
+        "permissions": "权限分配"
+      },
+      "permissionSearchPlaceholder": "搜索权限名称、编码或模块...",
+      "permissionModuleAll": "全部模块",
+      "permissionStateAll": "全部状态",
+      "permissionStateSelected": "已直接配置",
+      "permissionStateInherited": "继承权限",
+      "permissionStateOverridden": "覆盖继承",
+      "permissionStateUnset": "未直接配置",
+      "directPermission": "直接",
+      "inheritedPermission": "继承",
+      "directPermissionSummary": "直接配置：允许 {{allow}} / 拒绝 {{deny}}",
+      "inheritedPermissionSummary": "继承权限：允许 {{allow}} / 拒绝 {{deny}}",
+      "overridePermissionSummary": "覆盖继承：{{count}}",
+      "permissionResultCount": "显示 {{count}} / {{total}} 项",
+      "permissionEmpty": "未找到权限"
     },
     "permissionAction": {
       "create": "创建",
@@ -208,6 +226,7 @@
       "5": "数据"
     },
     "permissionEffect": {
+      "unset": "未设置",
       "allow": "允许",
       "deny": "拒绝",
       "configCount": "继承 {{inherited}} / 直接 {{direct}}",

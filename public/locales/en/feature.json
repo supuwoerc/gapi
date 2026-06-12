@@ -192,7 +192,25 @@
       "saving": "Saving...",
       "createSuccess": "Role created successfully",
       "updateSuccess": "Role updated successfully",
-      "inheritedPermissions": "Inherited permissions from parent role"
+      "inheritedPermissions": "Inherited permissions from parent role",
+      "tabs": {
+        "basic": "Basic Info",
+        "permissions": "Permissions"
+      },
+      "permissionSearchPlaceholder": "Search permission name, code, or module...",
+      "permissionModuleAll": "All modules",
+      "permissionStateAll": "All states",
+      "permissionStateSelected": "Directly configured",
+      "permissionStateInherited": "Inherited",
+      "permissionStateOverridden": "Overrides",
+      "permissionStateUnset": "Not directly configured",
+      "directPermission": "Direct",
+      "inheritedPermission": "Inherited",
+      "directPermissionSummary": "Direct: Allow {{allow}} / Deny {{deny}}",
+      "inheritedPermissionSummary": "Inherited: Allow {{allow}} / Deny {{deny}}",
+      "overridePermissionSummary": "Overrides: {{count}}",
+      "permissionResultCount": "Showing {{count}} / {{total}}",
+      "permissionEmpty": "No permissions found"
     },
     "permissionAction": {
       "create": "Create",
@@ -208,6 +226,7 @@
       "5": "Data"
     },
     "permissionEffect": {
+      "unset": "Unset",
       "allow": "Allow",
       "deny": "Deny",
       "configCount": "Inherited {{inherited}} / Direct {{direct}}",
