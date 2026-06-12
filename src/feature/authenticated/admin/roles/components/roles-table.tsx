@@ -43,9 +43,9 @@ function countRoles(roles: RoleTree[]): number {
 export function RolesTable() {
   const { t } = useTranslation('feature')
   const queryClient = useQueryClient()
-  const [editingRole, setEditingRole] = React.useState<RoleTree | null>(null)
+  const [roleDialogOpen, setRoleDialogOpen] = React.useState(false)
+  const [editingRoleId, setEditingRoleId] = React.useState<number | null>(null)
   const [deleteRole, setDeleteRole] = React.useState<RoleTree | null>(null)
-  const [createOpen, setCreateOpen] = React.useState(false)
 
   const [keyword] = useQueryState('keyword', parseAsString.withDefault(''))
   const [enabled] = useQueryState('enabled', parseAsArrayOf(parseAsString, ',').withDefault([]))
@@ -254,7 +254,12 @@ export function RolesTable() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setEditingRole(row.original)}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setEditingRoleId(row.original.id)
+                    setRoleDialogOpen(true)
+                  }}
+                >
                   <Shield />
                   {t('roles.edit')}
                 </DropdownMenuItem>
@@ -300,7 +305,13 @@ export function RolesTable() {
           actionBar={<RolesTableActionBar table={table} />}
         >
           <DataTableToolbar table={table} onSearch={() => refetch()}>
-            <Button size="sm" onClick={() => setCreateOpen(true)}>
+            <Button
+              size="sm"
+              onClick={() => {
+                setEditingRoleId(null)
+                setRoleDialogOpen(true)
+              }}
+            >
               <Plus />
               {t('roles.create')}
             </Button>
@@ -320,13 +331,12 @@ export function RolesTable() {
           if (deleteRole) deleteMutation.mutate([deleteRole.id])
         }}
       />
-      <RoleEditDialog role={null} roles={data} open={createOpen} onOpenChange={setCreateOpen} />
       <RoleEditDialog
-        role={editingRole}
-        roles={data}
-        open={editingRole !== null}
+        roleId={editingRoleId}
+        open={roleDialogOpen}
         onOpenChange={(open) => {
-          if (!open) setEditingRole(null)
+          setRoleDialogOpen(open)
+          if (!open) setEditingRoleId(null)
         }}
       />
     </>

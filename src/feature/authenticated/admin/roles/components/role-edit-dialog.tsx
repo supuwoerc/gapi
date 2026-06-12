@@ -17,6 +17,7 @@ import {
   getPermissionModules,
   getPermissions,
   getRoleDetail,
+  getRolesTree,
   updateRole,
 } from '@/service/admin/roles'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -62,6 +63,7 @@ const PERMISSION_ACTIONS: PermissionAction[] = ['create', 'read', 'update', 'del
 const RESOURCE_TYPES: ResourceType[] = [1, 2, 3, 4, 5]
 
 const EmptyPermissionPage = { data: [], total: 0 }
+const EmptyRoleTree: RoleTree[] = []
 
 interface RoleOption {
   id: number
@@ -69,8 +71,7 @@ interface RoleOption {
 }
 
 interface RoleEditDialogProps {
-  role: RoleTree | null
-  roles: RoleTree[]
+  roleId: number | null
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -98,7 +99,7 @@ function collectRoleIds(role: RoleTree): number[] {
   return [role.id, ...role.children.flatMap(collectRoleIds)]
 }
 
-function toRoleMutation(role: Role | RoleTree | null | undefined): RoleMutation {
+function toRoleMutation(role: Role | null | undefined): RoleMutation {
   return {
     name: role?.name ?? '',
     code: role?.code ?? '',
@@ -114,7 +115,7 @@ function toRoleMutation(role: Role | RoleTree | null | undefined): RoleMutation 
   }
 }
 
-function getPermissionCache(role: Role | RoleTree | null | undefined): Map<number, Permission> {
+function getPermissionCache(role: Role | null | undefined): Map<number, Permission> {
   return new Map<number, Permission>(
     role?.permissions.map((permission) => [permission.id, permission] as const) ?? []
   )
@@ -752,9 +753,10 @@ const PermissionRow = React.memo(
   })
 )
 
-export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDialogProps) {
+export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogProps) {
   const { t } = useTranslation('feature')
   const queryClient = useQueryClient()
+  const isEditing = roleId !== null
   const [cachedPermissionById, setCachedPermissionById] = React.useState<Map<number, Permission>>(
     () => new Map()
   )
@@ -777,13 +779,19 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
   React.useEffect(() => {
     if (!open) return
 
-    form.reset(toRoleMutation(role))
-  }, [form, open, role])
+    form.reset(toRoleMutation(null))
+  }, [form, open, roleId])
 
   const { data: roleDetail } = useQuery({
-    queryKey: ['role', role?.id],
-    queryFn: () => getRoleDetail(role!.id),
-    enabled: open && Boolean(role),
+    queryKey: ['role', roleId],
+    queryFn: () => getRoleDetail(roleId!),
+    enabled: open && isEditing,
+  })
+
+  const { data: roleTree = EmptyRoleTree, isFetching: isRoleTreeFetching } = useQuery({
+    queryKey: ['roles', 'tree', 'dialog-options'],
+    queryFn: () => getRolesTree(),
+    enabled: open,
   })
 
   React.useEffect(() => {
@@ -796,10 +804,7 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
     setCachedPermissionById((current) => mergePermissionCache(current, permissions))
   }, [])
 
-  const basePermissionById = React.useMemo(
-    () => getPermissionCache(roleDetail ?? role),
-    [role, roleDetail]
-  )
+  const basePermissionById = React.useMemo(() => getPermissionCache(roleDetail), [roleDetail])
 
   const permissionById = React.useMemo(() => {
     const next = new Map(basePermissionById)
@@ -811,27 +816,36 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
 
   const parentId = useWatch({ control: form.control, name: 'parent_id' })
   const inheritedPermissions = React.useMemo(
-    () => findRole(roles, parentId)?.effective_permissions ?? [],
-    [parentId, roles]
+    () => findRole(roleTree, parentId)?.effective_permissions ?? [],
+    [parentId, roleTree]
   )
   const parentOptions = React.useMemo(() => {
-    const excludeIds = role ? new Set(collectRoleIds(role)) : new Set<number>()
-    return flattenRoleOptions(roles, excludeIds)
-  }, [role, roles])
+    const currentRole = findRole(roleTree, roleId)
+    const excludeIds =
+      roleId === null
+        ? new Set<number>()
+        : new Set(currentRole ? collectRoleIds(currentRole) : [roleId])
+    return flattenRoleOptions(roleTree, excludeIds)
+  }, [roleId, roleTree])
 
   const mutation = useMutation({
-    mutationFn: (values: RoleMutation) => (role ? updateRole(role.id, values) : createRole(values)),
+    mutationFn: (values: RoleMutation) =>
+      roleId === null ? createRole(values) : updateRole(roleId, values),
     onSuccess: () => {
       toast.success(
-        role ? t('roles.editDialog.updateSuccess') : t('roles.editDialog.createSuccess')
+        isEditing ? t('roles.editDialog.updateSuccess') : t('roles.editDialog.createSuccess')
       )
       setReviewOpen(false)
       setPendingValues(null)
+      setCachedPermissionById(new Map())
       onOpenChange(false)
       void queryClient.invalidateQueries({ queryKey: ['roles'] })
-      if (role) void queryClient.invalidateQueries({ queryKey: ['role', role.id] })
+      if (roleId !== null) void queryClient.invalidateQueries({ queryKey: ['role', roleId] })
     },
   })
+
+  const isRoleDetailLoading = isEditing && !roleDetail
+  const isParentSelectLoading = isRoleTreeFetching && roleTree.length === 0
 
   const onSubmit = (values: RoleMutation) => {
     setPendingValues(values)
@@ -847,6 +861,7 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
     if (!nextOpen) {
       setReviewOpen(false)
       setPendingValues(null)
+      setCachedPermissionById(new Map())
     }
     onOpenChange(nextOpen)
   }
@@ -860,7 +875,7 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
         >
           <DialogHeader className="shrink-0 pr-8">
             <DialogTitle>
-              {role ? t('roles.editDialog.editTitle') : t('roles.editDialog.createTitle')}
+              {isEditing ? t('roles.editDialog.editTitle') : t('roles.editDialog.createTitle')}
             </DialogTitle>
             <DialogDescription className="sr-only">{t('roles.description')}</DialogDescription>
           </DialogHeader>
@@ -921,6 +936,7 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
                             <FormLabel>{t('roles.editDialog.parent')}</FormLabel>
                             <Select
                               value={field.value === null ? NO_PARENT_VALUE : String(field.value)}
+                              disabled={isParentSelectLoading}
                               onValueChange={(value) =>
                                 field.onChange(value === NO_PARENT_VALUE ? null : Number(value))
                               }
@@ -1022,7 +1038,7 @@ export function RoleEditDialog({ role, roles, open, onOpenChange }: RoleEditDial
               </Tabs>
 
               <DialogFooter className="shrink-0 pt-4">
-                <Button type="submit" disabled={mutation.isPending}>
+                <Button type="submit" disabled={mutation.isPending || isRoleDetailLoading}>
                   {mutation.isPending ? t('roles.editDialog.saving') : t('roles.editDialog.save')}
                 </Button>
               </DialogFooter>
