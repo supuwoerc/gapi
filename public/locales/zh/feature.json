@@ -158,6 +158,7 @@
     },
     "search": "搜索角色...",
     "create": "新建角色",
+    "createChild": "创建子角色",
     "openMenu": "打开菜单",
     "edit": "编辑",
     "delete": "删除",

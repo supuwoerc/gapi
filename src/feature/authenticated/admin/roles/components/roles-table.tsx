@@ -6,10 +6,11 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
+import type { RolePermission } from '@/schema/admin/permission'
 import type { RoleTree } from '@/schema/admin/role'
-import { deleteRoles, getRolesTree } from '@/service/admin/roles'
+import { deleteRoles, getRoles } from '@/service/admin/roles'
 import { CheckCircle, MoreHorizontal, Plus, Shield, Text, Trash2, XCircle } from 'lucide-react'
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs'
+import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -35,9 +36,32 @@ import { RoleEditDialog } from './role-edit-dialog'
 import { RolesTableActionBar } from './roles-table-action-bar'
 
 const EmptyList: RoleTree[] = []
+const EmptyInheritedPermissions: RolePermission[] = []
 
-function countRoles(roles: RoleTree[]): number {
-  return roles.reduce((count, role) => count + 1 + countRoles(role.children), 0)
+interface RoleDialogContext {
+  parentId: number | null
+  parentName: string | null
+  inheritedPermissions: RolePermission[]
+}
+
+const EmptyRoleDialogContext: RoleDialogContext = {
+  parentId: null,
+  parentName: null,
+  inheritedPermissions: EmptyInheritedPermissions,
+}
+
+function findRole(roles: RoleTree[], id: number | null): RoleTree | undefined {
+  if (id === null) return undefined
+
+  for (const role of roles) {
+    if (role.id === id) return role
+    const child = findRole(role.children, id)
+    if (child) return child
+  }
+}
+
+function getEffectivePermissions(role: RoleTree | undefined): RolePermission[] {
+  return role?.effective_permissions ?? role?.permissions ?? EmptyInheritedPermissions
 }
 
 export function RolesTable() {
@@ -45,25 +69,32 @@ export function RolesTable() {
   const queryClient = useQueryClient()
   const [roleDialogOpen, setRoleDialogOpen] = React.useState(false)
   const [editingRoleId, setEditingRoleId] = React.useState<number | null>(null)
+  const [roleDialogContext, setRoleDialogContext] =
+    React.useState<RoleDialogContext>(EmptyRoleDialogContext)
   const [deleteRole, setDeleteRole] = React.useState<RoleTree | null>(null)
 
   const [keyword] = useQueryState('keyword', parseAsString.withDefault(''))
   const [enabled] = useQueryState('enabled', parseAsArrayOf(parseAsString, ',').withDefault([]))
+  const [page] = useQueryState('page', parseAsInteger.withDefault(1))
+  const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(20))
 
   const {
-    data = EmptyList,
+    data: rolesPage,
     isLoading,
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ['roles', { keyword, enabled }],
+    queryKey: ['roles', { page, perPage, keyword, enabled }],
     queryFn: () =>
-      getRolesTree({
+      getRoles({
+        page,
+        perPage,
         keyword: keyword || undefined,
         enabled: enabled.length === 1 ? enabled[0] === 'true' : undefined,
       }),
     placeholderData: keepPreviousData,
   })
+  const data = rolesPage?.data ?? EmptyList
 
   const deleteMutation = useMutation({
     mutationFn: deleteRoles,
@@ -256,12 +287,32 @@ export function RolesTable() {
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
                   onClick={() => {
+                    const parentRole = findRole(data, row.original.parent_id)
                     setEditingRoleId(row.original.id)
+                    setRoleDialogContext({
+                      parentId: row.original.parent_id,
+                      parentName: parentRole?.name ?? null,
+                      inheritedPermissions: getEffectivePermissions(parentRole),
+                    })
                     setRoleDialogOpen(true)
                   }}
                 >
                   <Shield />
                   {t('roles.edit')}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    setEditingRoleId(null)
+                    setRoleDialogContext({
+                      parentId: row.original.id,
+                      parentName: row.original.name,
+                      inheritedPermissions: getEffectivePermissions(row.original),
+                    })
+                    setRoleDialogOpen(true)
+                  }}
+                >
+                  <Plus />
+                  {t('roles.createChild')}
                 </DropdownMenuItem>
                 <DropdownMenuItem variant="destructive" onClick={() => setDeleteRole(row.original)}>
                   <Trash2 />
@@ -274,13 +325,13 @@ export function RolesTable() {
         size: 32,
       },
     ],
-    [enabledOptions, t]
+    [data, enabledOptions, t]
   )
 
   const { table } = useDataTable({
     data,
     columns,
-    rowCount: countRoles(data),
+    rowCount: rolesPage?.total ?? 0,
     getRowId: (row) => String(row.id),
     enableExpanding: true,
     getSubRows: (row) => row.children,
@@ -309,6 +360,7 @@ export function RolesTable() {
               size="sm"
               onClick={() => {
                 setEditingRoleId(null)
+                setRoleDialogContext(EmptyRoleDialogContext)
                 setRoleDialogOpen(true)
               }}
             >
@@ -333,10 +385,16 @@ export function RolesTable() {
       />
       <RoleEditDialog
         roleId={editingRoleId}
+        parentId={roleDialogContext.parentId}
+        parentName={roleDialogContext.parentName}
+        inheritedPermissions={roleDialogContext.inheritedPermissions}
         open={roleDialogOpen}
         onOpenChange={(open) => {
           setRoleDialogOpen(open)
-          if (!open) setEditingRoleId(null)
+          if (!open) {
+            setEditingRoleId(null)
+            setRoleDialogContext(EmptyRoleDialogContext)
+          }
         }}
       />
     </>

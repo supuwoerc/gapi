@@ -125,6 +125,17 @@ export const roleHandlers = [
   http.get(`${BASE}/roles`, async ({ request }) => {
     await delay(200)
     const url = new URL(request.url)
+
+    if (url.searchParams.has('page') || url.searchParams.has('perPage')) {
+      const page = Number(url.searchParams.get('page') ?? 1)
+      const perPage = Number(url.searchParams.get('perPage') ?? 20)
+      const keyword = url.searchParams.get('keyword') ?? ''
+      const enabled = url.searchParams.get('enabled')
+      const result = withEffectivePermissions(sortRoleTree(filterRoleTree(roles, keyword, enabled)))
+
+      return jsonEnvelope(paginate(result, page, perPage))
+    }
+
     const keyword = url.searchParams.get('keyword')?.toLowerCase() ?? ''
     const result = flattenRoles(roles)
       .filter(
@@ -135,16 +146,6 @@ export const roleHandlers = [
       )
       .map((role) => ({ id: role.id, code: role.code, name: role.name }))
     return jsonEnvelope(result)
-  }),
-
-  http.get(`${BASE}/roles/tree`, async ({ request }) => {
-    await delay(200)
-    const url = new URL(request.url)
-    const keyword = url.searchParams.get('keyword') ?? ''
-    const enabled = url.searchParams.get('enabled')
-    return jsonEnvelope(
-      withEffectivePermissions(sortRoleTree(filterRoleTree(roles, keyword, enabled)))
-    )
   }),
 
   http.get(`${BASE}/roles/:id`, async ({ params }) => {

@@ -158,6 +158,7 @@
     },
     "search": "Search roles...",
     "create": "New Role",
+    "createChild": "New Child Role",
     "openMenu": "Open menu",
     "edit": "Edit",
     "delete": "Delete",

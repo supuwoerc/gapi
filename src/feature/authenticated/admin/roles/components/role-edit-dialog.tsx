@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -10,14 +10,13 @@ import type { Permission } from '@/schema/admin/permission'
 import type { PermissionAction, ResourceType } from '@/schema/admin/permission'
 import type { PermissionEffect } from '@/schema/admin/permission'
 import type { RolePermission } from '@/schema/admin/permission'
-import type { Role, RoleMutation, RoleTree } from '@/schema/admin/role'
+import type { Role, RoleMutation } from '@/schema/admin/role'
 import { roleMutationSchema } from '@/schema/admin/role'
 import {
   createRole,
   getPermissionModules,
   getPermissions,
   getRoleDetail,
-  getRolesTree,
   updateRole,
 } from '@/service/admin/roles'
 import { useVirtualizer } from '@tanstack/react-virtual'
@@ -63,47 +62,21 @@ const PERMISSION_ACTIONS: PermissionAction[] = ['create', 'read', 'update', 'del
 const RESOURCE_TYPES: ResourceType[] = [1, 2, 3, 4, 5]
 
 const EmptyPermissionPage = { data: [], total: 0 }
-const EmptyRoleTree: RoleTree[] = []
-
-interface RoleOption {
-  id: number
-  label: string
-}
 
 interface RoleEditDialogProps {
   roleId: number | null
+  parentId: number | null
+  parentName: string | null
+  inheritedPermissions: RolePermission[]
   open: boolean
   onOpenChange: (open: boolean) => void
 }
 
-function flattenRoleOptions(
-  roles: RoleTree[],
-  excludeIds = new Set<number>(),
-  depth = 0
-): RoleOption[] {
-  return roles.flatMap((role) => {
-    const children = flattenRoleOptions(role.children, excludeIds, depth + 1)
-    if (excludeIds.has(role.id)) return children
-
-    return [
-      {
-        id: role.id,
-        label: `${'  '.repeat(depth)}${role.name}`,
-      },
-      ...children,
-    ]
-  })
-}
-
-function collectRoleIds(role: RoleTree): number[] {
-  return [role.id, ...role.children.flatMap(collectRoleIds)]
-}
-
-function toRoleMutation(role: Role | null | undefined): RoleMutation {
+function toRoleMutation(role: Role | null | undefined, parentId: number | null): RoleMutation {
   return {
     name: role?.name ?? '',
     code: role?.code ?? '',
-    parent_id: role?.parent_id ?? null,
+    parent_id: role?.parent_id ?? parentId,
     description: role?.description ?? '',
     sort_order: role?.sort_order ?? 0,
     enabled: role?.enabled ?? true,
@@ -119,16 +92,6 @@ function getPermissionCache(role: Role | null | undefined): Map<number, Permissi
   return new Map<number, Permission>(
     role?.permissions.map((permission) => [permission.id, permission] as const) ?? []
   )
-}
-
-function findRole(roles: RoleTree[], id: number | null): RoleTree | undefined {
-  if (id === null) return undefined
-
-  for (const role of roles) {
-    if (role.id === id) return role
-    const child = findRole(role.children, id)
-    if (child) return child
-  }
 }
 
 function setPermissionEffect(
@@ -753,7 +716,14 @@ const PermissionRow = React.memo(
   })
 )
 
-export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogProps) {
+export function RoleEditDialog({
+  roleId,
+  parentId,
+  parentName,
+  inheritedPermissions,
+  open,
+  onOpenChange,
+}: RoleEditDialogProps) {
   const { t } = useTranslation('feature')
   const queryClient = useQueryClient()
   const isEditing = roleId !== null
@@ -779,8 +749,8 @@ export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogPro
   React.useEffect(() => {
     if (!open) return
 
-    form.reset(toRoleMutation(null))
-  }, [form, open, roleId])
+    form.reset(toRoleMutation(null, parentId))
+  }, [form, open, parentId, roleId])
 
   const { data: roleDetail } = useQuery({
     queryKey: ['role', roleId],
@@ -788,17 +758,11 @@ export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogPro
     enabled: open && isEditing,
   })
 
-  const { data: roleTree = EmptyRoleTree, isFetching: isRoleTreeFetching } = useQuery({
-    queryKey: ['roles', 'tree', 'dialog-options'],
-    queryFn: () => getRolesTree(),
-    enabled: open,
-  })
-
   React.useEffect(() => {
     if (!open || !roleDetail) return
 
-    form.reset(toRoleMutation(roleDetail))
-  }, [form, open, roleDetail])
+    form.reset(toRoleMutation(roleDetail, parentId))
+  }, [form, open, parentId, roleDetail])
 
   const handleCachePermissions = React.useCallback((permissions: Permission[]) => {
     setCachedPermissionById((current) => mergePermissionCache(current, permissions))
@@ -813,20 +777,6 @@ export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogPro
     })
     return next
   }, [basePermissionById, cachedPermissionById])
-
-  const parentId = useWatch({ control: form.control, name: 'parent_id' })
-  const inheritedPermissions = React.useMemo(
-    () => findRole(roleTree, parentId)?.effective_permissions ?? [],
-    [parentId, roleTree]
-  )
-  const parentOptions = React.useMemo(() => {
-    const currentRole = findRole(roleTree, roleId)
-    const excludeIds =
-      roleId === null
-        ? new Set<number>()
-        : new Set(currentRole ? collectRoleIds(currentRole) : [roleId])
-    return flattenRoleOptions(roleTree, excludeIds)
-  }, [roleId, roleTree])
 
   const mutation = useMutation({
     mutationFn: (values: RoleMutation) =>
@@ -845,7 +795,6 @@ export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogPro
   })
 
   const isRoleDetailLoading = isEditing && !roleDetail
-  const isParentSelectLoading = isRoleTreeFetching && roleTree.length === 0
 
   const onSubmit = (values: RoleMutation) => {
     setPendingValues(values)
@@ -936,10 +885,7 @@ export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogPro
                             <FormLabel>{t('roles.editDialog.parent')}</FormLabel>
                             <Select
                               value={field.value === null ? NO_PARENT_VALUE : String(field.value)}
-                              disabled={isParentSelectLoading}
-                              onValueChange={(value) =>
-                                field.onChange(value === NO_PARENT_VALUE ? null : Number(value))
-                              }
+                              disabled
                             >
                               <FormControl>
                                 <SelectTrigger className="w-full">
@@ -950,14 +896,15 @@ export function RoleEditDialog({ roleId, open, onOpenChange }: RoleEditDialogPro
                               </FormControl>
                               <SelectContent>
                                 <SelectGroup>
-                                  <SelectItem value={NO_PARENT_VALUE}>
-                                    {t('roles.editDialog.noParent')}
-                                  </SelectItem>
-                                  {parentOptions.map((option) => (
-                                    <SelectItem key={option.id} value={String(option.id)}>
-                                      {option.label}
+                                  {field.value === null ? (
+                                    <SelectItem value={NO_PARENT_VALUE}>
+                                      {t('roles.editDialog.noParent')}
                                     </SelectItem>
-                                  ))}
+                                  ) : (
+                                    <SelectItem value={String(field.value)}>
+                                      {parentName ?? `#${field.value}`}
+                                    </SelectItem>
+                                  )}
                                 </SelectGroup>
                               </SelectContent>
                             </Select>

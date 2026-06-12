@@ -9,18 +9,24 @@ import type { PaginatedResponse } from '@/types/shared'
 
 import { del, get, patch, post } from '@/lib/http'
 
-export interface GetRolesTreeParams {
+export interface GetRolesParams {
+  page: number
+  perPage: number
   keyword?: string
   enabled?: boolean
 }
 
-export async function getRolesTree(params: GetRolesTreeParams = {}): Promise<RoleTree[]> {
-  const searchParams: Record<string, string> = {}
+export async function getRoles(params: GetRolesParams): Promise<PaginatedResponse<RoleTree>> {
+  const searchParams: Record<string, string> = {
+    page: String(params.page),
+    perPage: String(params.perPage),
+  }
+
   if (params.keyword) searchParams.keyword = params.keyword
   if (params.enabled !== undefined) searchParams.enabled = String(params.enabled)
 
-  const res = await get<RoleTree[]>('/roles/tree', { searchParams })
-  return withEffectivePermissions(roleTreeListSchema.parse(res))
+  const res = await get<PaginatedResponse<RoleTree>>('/roles', { searchParams })
+  return { data: withEffectivePermissions(roleTreeListSchema.parse(res.data)), total: res.total }
 }
 
 export async function getRoleDetail(id: number): Promise<Role> {
