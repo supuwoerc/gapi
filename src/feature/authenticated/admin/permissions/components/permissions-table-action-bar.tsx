@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { Table } from '@tanstack/react-table'
 
 import type { Permission } from '@/schema/admin/permission'
-import { deletePermissions } from '@/service/admin/roles'
+import { deletePermissions } from '@/service/admin/permissions'
 import { Trash2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'

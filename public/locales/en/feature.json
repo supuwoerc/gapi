@@ -146,6 +146,7 @@
     "create": "New Permission",
     "search": "Search permission name or description...",
     "openMenu": "Open menu",
+    "edit": "Edit",
     "delete": "Delete",
     "selectAll": "Select all permissions",
     "selectRow": "Select permission",
@@ -169,6 +170,36 @@
       "single": "Are you sure you want to delete permission \"{{name}}\"? This action cannot be undone.",
       "success": "Permission deleted successfully"
     },
+    "editDialog": {
+      "createTitle": "New Permission",
+      "editTitle": "Edit Permission",
+      "tabs": {
+        "basic": "Basic Info",
+        "roles": "Role Grants"
+      },
+      "name": "Permission Name",
+      "namePlaceholder": "Enter permission name",
+      "code": "Permission Code",
+      "codePlaceholder": "Enter unique permission code",
+      "resourceType": "Resource Type",
+      "module": "Module",
+      "modulePlaceholder": "Enter module",
+      "resourcePath": "Resource Path",
+      "resourcePathPlaceholder": "Enter resource path",
+      "action": "Action",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter permission description",
+      "roles": "Role Grants",
+      "roleSearchPlaceholder": "Search roles...",
+      "rolesRefreshing": "Refreshing roles...",
+      "roleResultCount": "Showing {{count}} role(s)",
+      "rolesEmpty": "No roles found",
+      "roleUnknown": "Role #{{id}}",
+      "save": "Save",
+      "saving": "Saving...",
+      "createSuccess": "Permission created successfully",
+      "updateSuccess": "Permission updated successfully"
+    },
     "action": {
       "create": "Create",
       "read": "Read",
@@ -181,6 +212,11 @@
       "3": "Route",
       "4": "Button",
       "5": "Data"
+    },
+    "roleEffect": {
+      "unset": "Unset",
+      "allow": "Allow",
+      "deny": "Deny"
     }
   },
   "roles": {

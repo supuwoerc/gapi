@@ -1,8 +1,3 @@
-import { z } from 'zod'
-
-import { permissionListSchema } from '@/schema/admin/permission'
-import type { Permission } from '@/schema/admin/permission'
-import type { PermissionAction, ResourceType } from '@/schema/admin/permission'
 import { roleSchema, roleTreeListSchema } from '@/schema/admin/role'
 import type { Role, RoleMutation, RoleTree } from '@/schema/admin/role'
 import type { PaginatedResponse } from '@/types/shared'
@@ -67,39 +62,4 @@ export async function updateRole(id: number, data: RoleMutation) {
 
 export async function deleteRoles(ids: number[]) {
   return del<null>('/roles', { json: { ids } })
-}
-
-export interface GetPermissionsParams {
-  page: number
-  perPage: number
-  keyword?: string
-  module?: string
-  action?: PermissionAction
-  resource_type?: ResourceType
-}
-
-export async function getPermissions(
-  params: GetPermissionsParams
-): Promise<PaginatedResponse<Permission>> {
-  const searchParams: Record<string, string> = {
-    page: String(params.page),
-    perPage: String(params.perPage),
-  }
-
-  if (params.keyword) searchParams.keyword = params.keyword
-  if (params.module) searchParams.module = params.module
-  if (params.action) searchParams.action = params.action
-  if (params.resource_type) searchParams.resource_type = String(params.resource_type)
-
-  const res = await get<PaginatedResponse<Permission>>('/permissions', { searchParams })
-  return { data: permissionListSchema.parse(res.data), total: res.total }
-}
-
-export async function deletePermissions(ids: number[]) {
-  return del<null>('/permissions', { json: { ids } })
-}
-
-export async function getPermissionModules(): Promise<string[]> {
-  const res = await get<string[]>('/permissions/modules')
-  return z.array(z.string()).parse(res)
 }

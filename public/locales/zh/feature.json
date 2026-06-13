@@ -146,6 +146,7 @@
     "create": "新建权限",
     "search": "搜索权限名称或描述...",
     "openMenu": "打开菜单",
+    "edit": "编辑",
     "delete": "删除",
     "selectAll": "选择全部权限",
     "selectRow": "选择权限",
@@ -169,6 +170,36 @@
       "single": "确定要删除权限「{{name}}」吗？此操作无法撤销。",
       "success": "权限删除成功"
     },
+    "editDialog": {
+      "createTitle": "新建权限",
+      "editTitle": "编辑权限",
+      "tabs": {
+        "basic": "基础信息",
+        "roles": "角色授权"
+      },
+      "name": "权限名称",
+      "namePlaceholder": "请输入权限名称",
+      "code": "权限编码",
+      "codePlaceholder": "请输入唯一权限编码",
+      "resourceType": "资源类型",
+      "module": "模块",
+      "modulePlaceholder": "请输入所属模块",
+      "resourcePath": "资源路径",
+      "resourcePathPlaceholder": "请输入资源路径",
+      "action": "操作",
+      "description": "描述",
+      "descriptionPlaceholder": "请输入权限描述",
+      "roles": "角色授权",
+      "roleSearchPlaceholder": "搜索角色...",
+      "rolesRefreshing": "正在刷新角色列表...",
+      "roleResultCount": "显示 {{count}} 个角色",
+      "rolesEmpty": "未找到角色",
+      "roleUnknown": "角色 #{{id}}",
+      "save": "保存",
+      "saving": "保存中...",
+      "createSuccess": "权限创建成功",
+      "updateSuccess": "权限更新成功"
+    },
     "action": {
       "create": "创建",
       "read": "读取",
@@ -181,6 +212,11 @@
       "3": "路由",
       "4": "按钮",
       "5": "数据"
+    },
+    "roleEffect": {
+      "unset": "未设置",
+      "allow": "允许",
+      "deny": "拒绝"
     }
   },
   "roles": {

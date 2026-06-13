@@ -111,16 +111,6 @@ function toRoleDetail(role: RoleTree): Role {
   return detail
 }
 
-function sortPermissions() {
-  return [...permissions].sort(
-    (a, b) =>
-      a.module.localeCompare(b.module) ||
-      a.resource_path.localeCompare(b.resource_path) ||
-      a.action.localeCompare(b.action) ||
-      a.id - b.id
-  )
-}
-
 export const roleHandlers = [
   http.get(`${BASE}/roles`, async ({ request }) => {
     await delay(200)
@@ -187,55 +177,6 @@ export const roleHandlers = [
     const body = (await request.json()) as { ids: number[] }
     const nextRoles = removeRoles(roles, new Set(body.ids))
     roles.splice(0, roles.length, ...nextRoles)
-    return jsonEnvelope(null)
-  }),
-
-  http.get(`${BASE}/permissions/modules`, async () => {
-    await delay(200)
-    return jsonEnvelope(
-      Array.from(new Set(permissions.map((permission) => permission.module))).sort()
-    )
-  }),
-
-  http.get(`${BASE}/permissions`, async ({ request }) => {
-    await delay(200)
-    const url = new URL(request.url)
-    const page = Number(url.searchParams.get('page') ?? 1)
-    const perPage = Number(url.searchParams.get('perPage') ?? 20)
-    const keyword = url.searchParams.get('keyword')?.toLowerCase() ?? ''
-    const module = url.searchParams.get('module')
-    const action = url.searchParams.get('action')
-    const resourceType = url.searchParams.get('resource_type')
-
-    let result = sortPermissions()
-
-    if (keyword) {
-      result = result.filter((permission) =>
-        [permission.name, permission.description].join(' ').toLowerCase().includes(keyword)
-      )
-    }
-
-    if (module) {
-      result = result.filter((permission) => permission.module === module)
-    }
-
-    if (action) {
-      result = result.filter((permission) => permission.action === action)
-    }
-
-    if (resourceType) {
-      result = result.filter((permission) => String(permission.resource_type) === resourceType)
-    }
-
-    return jsonEnvelope(paginate(result, page, perPage))
-  }),
-
-  http.delete(`${BASE}/permissions`, async ({ request }) => {
-    await delay(300)
-    const body = (await request.json()) as { ids: number[] }
-    const ids = new Set(body.ids)
-    const nextPermissions = permissions.filter((permission) => !ids.has(permission.id))
-    permissions.splice(0, permissions.length, ...nextPermissions)
     return jsonEnvelope(null)
   }),
 ]

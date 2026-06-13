@@ -7,8 +7,8 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tansta
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
 import type { Permission } from '@/schema/admin/permission'
-import { deletePermissions, getPermissions } from '@/service/admin/roles'
-import { MoreHorizontal, Plus, Text, Trash2 } from 'lucide-react'
+import { deletePermissions, getPermissions } from '@/service/admin/permissions'
+import { MoreHorizontal, Pencil, Plus, Text, Trash2 } from 'lucide-react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -32,6 +32,7 @@ import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton'
 import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 import { LongText } from '@/components/long-text'
 
+import { PermissionEditDialog } from './permission-edit-dialog'
 import { PermissionsTableActionBar } from './permissions-table-action-bar'
 
 const EmptyList: Permission[] = []
@@ -40,6 +41,8 @@ export function PermissionsTable() {
   const { t } = useTranslation('feature')
   const queryClient = useQueryClient()
   const [deletePermission, setDeletePermission] = React.useState<Permission | null>(null)
+  const [permissionDialogOpen, setPermissionDialogOpen] = React.useState(false)
+  const [editingPermissionId, setEditingPermissionId] = React.useState<number | null>(null)
 
   const [page] = useQueryState('page', parseAsInteger.withDefault(1))
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10))
@@ -227,6 +230,15 @@ export function PermissionsTable() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem
+                  onClick={() => {
+                    setEditingPermissionId(row.original.id)
+                    setPermissionDialogOpen(true)
+                  }}
+                >
+                  <Pencil />
+                  {t('permissions.edit')}
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   variant="destructive"
                   onClick={() => setDeletePermission(row.original)}
                 >
@@ -267,7 +279,13 @@ export function PermissionsTable() {
           actionBar={<PermissionsTableActionBar table={table} />}
         >
           <DataTableToolbar table={table} onSearch={() => refetch()}>
-            <Button size="sm" disabled>
+            <Button
+              size="sm"
+              onClick={() => {
+                setEditingPermissionId(null)
+                setPermissionDialogOpen(true)
+              }}
+            >
               <Plus />
               {t('permissions.create')}
             </Button>
@@ -285,6 +303,14 @@ export function PermissionsTable() {
         isLoading={deleteMutation.isPending}
         handleConfirm={() => {
           if (deletePermission) deleteMutation.mutate([deletePermission.id])
+        }}
+      />
+      <PermissionEditDialog
+        permissionId={editingPermissionId}
+        open={permissionDialogOpen}
+        onOpenChange={(open) => {
+          setPermissionDialogOpen(open)
+          if (!open) setEditingPermissionId(null)
         }}
       />
     </>

@@ -12,13 +12,8 @@ import type { PermissionEffect } from '@/schema/admin/permission'
 import type { RolePermission } from '@/schema/admin/permission'
 import type { Role, RoleMutation } from '@/schema/admin/role'
 import { roleMutationSchema } from '@/schema/admin/role'
-import {
-  createRole,
-  getPermissionModules,
-  getPermissions,
-  getRoleDetail,
-  updateRole,
-} from '@/service/admin/roles'
+import { getPermissionModules, getPermissions } from '@/service/admin/permissions'
+import { createRole, getRoleDetail, updateRole } from '@/service/admin/roles'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
