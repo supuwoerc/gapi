@@ -44,7 +44,7 @@ export const permissionAssignedRoleSchema = z.object({
   id: z.coerce.number(),
   code: z.string().optional(),
   name: z.string().optional(),
-  effect: permissionEffectSchema.optional().default('allow'),
+  effect: permissionEffectSchema,
 })
 
 export const permissionRoleAssignmentSchema = z.object({
