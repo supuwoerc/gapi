@@ -2,6 +2,8 @@ import { useTranslation } from 'react-i18next'
 
 import { clearLoginUserState } from '@/store/login-user'
 
+import { resetUser } from '@/lib/posthog'
+
 import ConfirmDialog from './confirm-dialog'
 
 interface SignOutDialogProps {
@@ -15,6 +17,7 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
   const handleSignOut = () => {
     // 清除登录状态后 router 自动重建，layout 路由的 requireAuth loader 会拦截并 redirect 到 /login
     // After clearing login state, the router rebuilds automatically and the requireAuth loader on layout routes redirects to /login
+    resetUser()
     clearLoginUserState()
   }
 

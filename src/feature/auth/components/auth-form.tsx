@@ -19,6 +19,7 @@ import { toast } from 'sonner'
 import { setLoginUser } from '@/store/login-user'
 
 import { i18n } from '@/lib/i18n'
+import { identifyUser } from '@/lib/posthog'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -87,6 +88,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
         loading: t('login.authForm.signInLoading'),
         success: (res) => {
           setLoginUser(res)
+          identifyUser(res.user)
           /**
            * 预填缓存，避免登录跳转后 requireAuth 中 ensureQueryData 重复请求
            * Pre-populate cache to avoid redundant ensureQueryData request in requireAuth after login redirect

@@ -7,6 +7,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import asyncRoutes from '@/routes/async'
 import publicRoutes from '@/routes/public'
 import '@/style/index.css'
+import { PostHogProvider } from '@posthog/react'
 import gsap from 'gsap'
 import { TextPlugin } from 'gsap/all'
 import { createBrowserRouter } from 'react-router'
@@ -19,6 +20,7 @@ import { setSystemLanguage, useSystemConfigStore } from '@/store/system-config'
 import { enableMsw } from '@/lib/env'
 import { setAuthProvider } from '@/lib/http/auth-provider'
 import { initI18n, onI18nLanguageChanged } from '@/lib/i18n'
+import { initPostHog, posthog } from '@/lib/posthog'
 import { reactQueryClient } from '@/lib/react-query'
 import { getPermissionRoutes } from '@/lib/route'
 
@@ -53,6 +55,7 @@ function setupI18n() {
 setupGsap()
 setupAuth()
 setupI18n()
+initPostHog()
 
 function App() {
   const isLogin = useLoginUserStore((state) => !!state.loginUser)
@@ -88,10 +91,12 @@ async function bootstrap() {
     root.render(
       <StrictMode>
         <QueryClientProvider client={reactQueryClient}>
-          <ThemeProvider>
-            <Toaster duration={2200} position="top-center" />
-            <App />
-          </ThemeProvider>
+          <PostHogProvider client={posthog}>
+            <ThemeProvider>
+              <Toaster duration={2200} position="top-center" />
+              <App />
+            </ThemeProvider>
+          </PostHogProvider>
         </QueryClientProvider>
       </StrictMode>
     )

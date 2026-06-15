@@ -3,6 +3,7 @@ import { redirect } from 'react-router'
 
 import { setLoginUser, useLoginUserStore } from '@/store/login-user'
 
+import { identifyUser } from '@/lib/posthog'
 import { reactQueryClient } from '@/lib/react-query'
 
 export async function requireAuth({ request }: { request: Request }) {
@@ -22,6 +23,7 @@ export async function requireAuth({ request }: { request: Request }) {
     queryFn: fetchUserProfile,
   })
   setLoginUser(profile)
+  identifyUser(profile.user)
 
   return null
 }
