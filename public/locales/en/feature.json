@@ -445,6 +445,8 @@
     "applying": "Requesting...",
     "applicationPending": "Request pending",
     "memberCount": "{{count}} member(s)",
+    "search": "Search projects...",
+    "searchResultCount": "Showing {{count}} of {{total}} projects",
     "visibility": {
       "public": "Public",
       "private": "Private"
@@ -479,6 +481,10 @@
     "emptyMembers": {
       "title": "No members yet",
       "description": "Invite members here, then adjust their project roles."
+    },
+    "emptySearch": {
+      "title": "No projects found",
+      "description": "No projects match the current keyword."
     },
     "createDialog": {
       "title": "New project",

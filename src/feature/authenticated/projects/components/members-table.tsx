@@ -165,7 +165,7 @@ export function MembersTable({
     rowCount: membersTotal,
     initialState: {
       pagination: { pageIndex: 0, pageSize: 10 },
-      columnPinning: canManageMembers ? { right: ['actions'] } : undefined,
+      columnPinning: canManageMembers ? { right: ['actions'] } : { left: [], right: [] },
     },
     queryKeys: {
       page: 'memberPage',
@@ -177,8 +177,13 @@ export function MembersTable({
   })
 
   return (
-    <div className="data-table-container">
-      <DataTable table={table} isFetching={isFetching} />
+    <div className="data-table-container flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden">
+      <DataTable
+        table={table}
+        isFetching={isFetching}
+        className="min-h-0 w-full min-w-0 flex-1 overflow-hidden"
+        tableContentClassName="min-h-0 w-full min-w-0 flex-1 overflow-auto"
+      />
     </div>
   )
 }

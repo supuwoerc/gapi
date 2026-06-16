@@ -62,8 +62,8 @@ export function ProjectDetail({
   const isPending = currentMembership?.status === 'pending'
 
   return (
-    <div className="flex min-w-0 flex-col gap-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <div className="flex h-full min-h-0 w-full min-w-0 flex-col gap-4 overflow-hidden">
+      <div className="flex shrink-0 flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 items-start gap-3">
           <ProjectLogo logo={project.logo} name={project.name} className="size-12" />
           <div className="flex min-w-0 flex-col gap-1">
@@ -92,13 +92,16 @@ export function ProjectDetail({
         ) : null}
       </div>
 
-      <Tabs defaultValue="members" className="gap-4">
-        <TabsList>
+      <Tabs defaultValue="members" className="min-h-0 w-full min-w-0 flex-1 gap-4 overflow-hidden">
+        <TabsList className="shrink-0">
           <TabsTrigger value="members">{t('projects.tabs.members')}</TabsTrigger>
           {isOwner && <TabsTrigger value="settings">{t('projects.tabs.settings')}</TabsTrigger>}
         </TabsList>
 
-        <TabsContent value="members">
+        <TabsContent
+          value="members"
+          className="flex min-h-0 w-full min-w-0 flex-col overflow-hidden data-[state=inactive]:hidden"
+        >
           <MembersTable
             members={members}
             membersTotal={membersTotal}
@@ -113,7 +116,10 @@ export function ProjectDetail({
         </TabsContent>
 
         {isOwner && (
-          <TabsContent value="settings">
+          <TabsContent
+            value="settings"
+            className="min-h-0 w-full min-w-0 overflow-y-auto data-[state=inactive]:hidden"
+          >
             <ProjectSettingsCard
               project={project}
               roles={roles}

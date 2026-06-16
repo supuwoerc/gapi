@@ -33,9 +33,21 @@ function getProjectId(value: string | readonly string[] | undefined) {
 }
 
 export const projectHandlers = [
-  http.get(`${BASE}/projects`, async () => {
+  http.get(`${BASE}/projects`, async ({ request }) => {
     await delay(200)
-    return jsonEnvelope(projects)
+    const url = new URL(request.url)
+    const page = Number(url.searchParams.get('page') ?? 1)
+    const perPage = Number(url.searchParams.get('perPage') ?? 20)
+    const keyword = url.searchParams.get('keyword')?.toLowerCase().trim() ?? ''
+    const result = keyword
+      ? projects.filter(
+          (project) =>
+            project.name.toLowerCase().includes(keyword) ||
+            project.description.toLowerCase().includes(keyword)
+        )
+      : projects
+
+    return jsonEnvelope(paginate(result, page, perPage))
   }),
 
   http.post(`${BASE}/projects`, async ({ request }) => {

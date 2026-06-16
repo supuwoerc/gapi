@@ -25,6 +25,7 @@ interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   actionBar?: React.ReactNode
   isFetching?: boolean
   paginationVariant?: 'simple' | 'numbered'
+  tableContentClassName?: string
 }
 
 export function DataTable<TData>({
@@ -32,6 +33,7 @@ export function DataTable<TData>({
   actionBar,
   isFetching,
   paginationVariant,
+  tableContentClassName,
   children,
   className,
   ...props
@@ -45,7 +47,7 @@ export function DataTable<TData>({
   return (
     <div className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...props}>
       {children}
-      <div className="overflow-hidden rounded-md border">
+      <div className={cn('overflow-hidden rounded-md border', tableContentClassName)}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -140,7 +142,7 @@ export function DataTable<TData>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex flex-col gap-2.5">
+      <div className="flex shrink-0 flex-col gap-2.5">
         <DataTablePagination table={table} variant={paginationVariant} />
         {actionBar && table.getFilteredSelectedRowModel().rows.length > 0 && actionBar}
       </div>

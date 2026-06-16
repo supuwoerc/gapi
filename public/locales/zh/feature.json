@@ -445,6 +445,8 @@
     "applying": "申请中...",
     "applicationPending": "已申请",
     "memberCount": "{{count}} 位成员",
+    "search": "搜索项目...",
+    "searchResultCount": "已显示 {{count}} / {{total}} 个项目",
     "visibility": {
       "public": "公开",
       "private": "私有"
@@ -479,6 +481,10 @@
     "emptyMembers": {
       "title": "暂无成员",
       "description": "邀请成员后可以在这里调整项目角色。"
+    },
+    "emptySearch": {
+      "title": "未找到项目",
+      "description": "没有匹配当前关键字的项目。"
     },
     "createDialog": {
       "title": "新建项目",

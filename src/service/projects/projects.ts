@@ -21,9 +21,22 @@ import type { PaginatedResponse } from '@/types/shared'
 
 import { del, get, patch, post } from '@/lib/http'
 
-export async function getProjects() {
-  const res = await get<unknown>('/projects')
-  return projectListSchema.parse(res)
+export interface GetProjectsParams {
+  page: number
+  perPage: number
+  keyword?: string
+}
+
+export async function getProjects(params: GetProjectsParams) {
+  const searchParams: Record<string, string> = {
+    page: String(params.page),
+    perPage: String(params.perPage),
+  }
+
+  if (params.keyword) searchParams.keyword = params.keyword
+
+  const res = await get<PaginatedResponse<unknown>>('/projects', { searchParams })
+  return { data: projectListSchema.parse(res.data), total: res.total }
 }
 
 export async function createProject(data: ProjectMutation) {

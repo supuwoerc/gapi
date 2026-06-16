@@ -360,6 +360,40 @@ seedProject(
   toProjectUser(users[14]),
   [currentProjectUser, ...users.slice(15, 42).map(toProjectUser)]
 )
+
+const projectSubjects = [
+  'Gateway',
+  'Console',
+  'Billing',
+  'Analytics',
+  'Workflow',
+  'Mobile',
+  'Search',
+  'Imports',
+  'Reports',
+  'Integrations',
+  'Sandbox',
+  'Observability',
+] as const
+
+for (let index = 0; index < 72; index++) {
+  const subject = projectSubjects[index % projectSubjects.length]
+  const visibility: Project['visibility'] = index % 3 === 0 ? 'private' : 'public'
+  const owner = index % 8 === 0 ? currentProjectUser : toProjectUser(users[60 + index])
+  const memberStart = 140 + index * 4
+  const members = users.slice(memberStart, memberStart + 12).map(toProjectUser)
+
+  seedProject(
+    `${subject} ${String(index + 1).padStart(2, '0')}`,
+    `${subject} project workspace for API contracts, review flows, and release checks.`,
+    visibility,
+    owner,
+    index % 9 === 0 && owner.id !== currentProjectUser.id
+      ? [currentProjectUser, ...members]
+      : members
+  )
+}
+
 const pendingProject = seedProject(
   'Community Recipes',
   'Public examples that already have a pending join request from the current user.',

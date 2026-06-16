@@ -36,7 +36,7 @@ export function ProjectSettingsCard({
   const { t } = useTranslation('feature')
 
   return (
-    <Card>
+    <Card className="w-full min-w-0">
       <CardHeader>
         <CardTitle>{t('projects.settings.visibilityTitle')}</CardTitle>
         <CardDescription>{t('projects.settings.visibilityDescription')}</CardDescription>
