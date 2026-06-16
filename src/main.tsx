@@ -81,7 +81,12 @@ function App() {
 async function bootstrap() {
   if (enableMsw) {
     const { worker } = await import('./mocks/browser')
-    await worker.start({ onUnhandledRequest: 'bypass' })
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+      serviceWorker: {
+        url: `${import.meta.env.BASE_URL}mockServiceWorker.js`,
+      },
+    })
   }
 
   const rootElement = document.getElementById('root')!
