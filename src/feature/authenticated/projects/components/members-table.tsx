@@ -27,6 +27,7 @@ import { formatDate } from './utils'
 interface MembersTableProps {
   members: ProjectMember[]
   roles: ProjectRole[]
+  canManageMembers: boolean
   isUpdatingRole: boolean
   isRemoving: boolean
   onRoleChange: (memberId: number, roleId: number) => void
@@ -36,6 +37,7 @@ interface MembersTableProps {
 export function MembersTable({
   members,
   roles,
+  canManageMembers,
   isUpdatingRole,
   isRemoving,
   onRoleChange,
@@ -65,7 +67,9 @@ export function MembersTable({
           <TableHead>{t('projects.columns.status')}</TableHead>
           <TableHead>{t('projects.columns.role')}</TableHead>
           <TableHead>{t('projects.columns.joinedAt')}</TableHead>
-          <TableHead className="w-20 text-end">{t('projects.columns.actions')}</TableHead>
+          {canManageMembers && (
+            <TableHead className="w-20 text-end">{t('projects.columns.actions')}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -92,37 +96,43 @@ export function MembersTable({
               </Badge>
             </TableCell>
             <TableCell>
-              <Select
-                value={String(member.project_role_id)}
-                disabled={isUpdatingRole}
-                onValueChange={(value) => onRoleChange(member.id, Number(value))}
-              >
-                <SelectTrigger className="w-36">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {roles.map((role) => (
-                      <SelectItem key={role.id} value={String(role.id)}>
-                        {role.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              {canManageMembers ? (
+                <Select
+                  value={String(member.project_role_id)}
+                  disabled={isUpdatingRole}
+                  onValueChange={(value) => onRoleChange(member.id, Number(value))}
+                >
+                  <SelectTrigger className="w-36">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {roles.map((role) => (
+                        <SelectItem key={role.id} value={String(role.id)}>
+                          {role.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              ) : (
+                <Badge variant="outline">{member.project_role.name}</Badge>
+              )}
             </TableCell>
             <TableCell>{member.joined_at ? formatDate(member.joined_at) : '-'}</TableCell>
-            <TableCell className="text-end">
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                disabled={isRemoving}
-                onClick={() => onRemove(member)}
-              >
-                <Trash2 />
-                <span className="sr-only">{t('projects.removeMember')}</span>
-              </Button>
-            </TableCell>
+            {canManageMembers && (
+              <TableCell className="text-end">
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  disabled={isRemoving}
+                  onClick={() => onRemove(member)}
+                >
+                  <Trash2 />
+                  <span className="sr-only">{t('projects.removeMember')}</span>
+                </Button>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

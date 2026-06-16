@@ -3,12 +3,24 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 
+import { Badge } from '@/components/ui/badge'
+
 import { ProjectVisibilityBadge } from './project-visibility-badge'
 
 interface ProjectsSidebarProps {
   projects: Project[]
   selectedProject: Project | null
   onSelectProject: (projectId: number) => void
+}
+
+function getRelationshipKey(project: Project) {
+  const membership = project.current_user_membership
+
+  if (membership?.status === 'pending') return 'pending'
+  if (membership?.project_role.name === 'Owner') return 'owner'
+  if (membership) return 'member'
+  if (project.visibility === 'public') return 'canApply'
+  return 'private'
 }
 
 export function ProjectsSidebar({
@@ -38,6 +50,9 @@ export function ProjectsSidebar({
           <span className="text-xs text-muted-foreground">
             {t('projects.memberCount', { count: project.member_count })}
           </span>
+          <Badge variant="outline" className="w-fit">
+            {t(`projects.relationship.${getRelationshipKey(project)}`)}
+          </Badge>
         </button>
       ))}
     </aside>

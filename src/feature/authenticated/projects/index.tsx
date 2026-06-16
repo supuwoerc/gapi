@@ -8,6 +8,7 @@ import type {
   ProjectVisibility,
 } from '@/schema/project/project'
 import {
+  applyToJoinProject,
   createProject,
   getProjectMembers,
   getProjectRoles,
@@ -90,6 +91,18 @@ const Projects = () => {
     onSuccess: () => {
       toast.success(t('projects.toast.inviteSuccess'))
       setInviteOpen(false)
+      void queryClient.invalidateQueries({ queryKey: ['project-members', activeProjectId] })
+      void queryClient.invalidateQueries({ queryKey: ['projects'] })
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+    },
+  })
+
+  const applyMutation = useMutation({
+    mutationFn: () => applyToJoinProject(activeProjectId!),
+    onSuccess: () => {
+      toast.success(t('projects.toast.applySuccess'))
       void queryClient.invalidateQueries({ queryKey: ['project-members', activeProjectId] })
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
@@ -182,7 +195,9 @@ const Projects = () => {
                 isUpdatingRole={roleMutation.isPending}
                 isRemoving={removeMutation.isPending}
                 isUpdatingVisibility={visibilityMutation.isPending}
+                isApplying={applyMutation.isPending}
                 onInvite={() => setInviteOpen(true)}
+                onApply={() => applyMutation.mutate()}
                 onRoleChange={(memberId, roleId) => roleMutation.mutate({ memberId, roleId })}
                 onRemove={setMemberToRemove}
                 onVisibilityChange={(visibility) => visibilityMutation.mutate(visibility)}

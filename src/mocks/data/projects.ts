@@ -2,6 +2,7 @@ import type {
   Project,
   ProjectMember,
   ProjectMemberInvite,
+  ProjectMemberStatus,
   ProjectMemberUser,
   ProjectMutation,
   ProjectRole,
@@ -36,6 +37,8 @@ function toProjectUser(user: (typeof users)[number]): ProjectMemberUser {
     avatar: user.avatar,
   }
 }
+
+export const currentProjectUser = toProjectUser(users[0])
 
 function makeProjectRole(projectId: number, name: (typeof presetRoleNames)[number]): ProjectRole {
   const now = new Date()
@@ -93,7 +96,8 @@ function makeMember(
   projectId: number,
   user: ProjectMemberUser,
   role: ProjectRole,
-  invitedBy: ProjectMemberUser | null = null
+  invitedBy: ProjectMemberUser | null = null,
+  status: ProjectMemberStatus = 'active'
 ): ProjectMember {
   const now = new Date()
 
@@ -103,8 +107,8 @@ function makeMember(
     user,
     project_role_id: role.id,
     project_role: toMemberRole(role),
-    status: 'active',
-    joined_at: now,
+    status,
+    joined_at: status === 'active' ? now : null,
     invited_by: invitedBy
       ? { id: invitedBy.id, username: invitedBy.username, email: invitedBy.email }
       : null,
@@ -113,13 +117,27 @@ function makeMember(
   }
 }
 
-function syncProjectMemberCount(projectId: number) {
+function getCurrentUserMembership(projectId: number): Project['current_user_membership'] {
+  const member = projectMembers.find(
+    (item) => item.project_id === projectId && item.user.id === currentProjectUser.id
+  )
+
+  if (!member) return null
+
+  return {
+    status: member.status,
+    project_role: member.project_role,
+  }
+}
+
+function syncProjectState(projectId: number) {
   const project = projects.find((item) => item.id === projectId)
   if (!project) return
 
   project.member_count = projectMembers.filter(
     (member) => member.project_id === projectId && member.status === 'active'
   ).length
+  project.current_user_membership = getCurrentUserMembership(projectId)
   project.updated_at = new Date()
 }
 
@@ -138,6 +156,7 @@ function seedProject(
     visibility,
     member_count: 0,
     owner_user_id: owner.id,
+    current_user_membership: null,
     created_at: now,
     updated_at: now,
   }
@@ -156,7 +175,14 @@ function seedProject(
       makeMember(project.id, member, index % 2 === 0 ? editorRole : viewerRole, owner)
     )
   })
-  syncProjectMemberCount(project.id)
+  syncProjectState(project.id)
+
+  return {
+    project,
+    ownerRole,
+    editorRole,
+    viewerRole,
+  }
 }
 
 export function createProjectWithPresets(data: ProjectMutation) {
@@ -168,6 +194,7 @@ export function createProjectWithPresets(data: ProjectMutation) {
     visibility: data.visibility,
     member_count: 0,
     owner_user_id: owner.id,
+    current_user_membership: null,
     created_at: new Date(),
     updated_at: new Date(),
   }
@@ -178,7 +205,7 @@ export function createProjectWithPresets(data: ProjectMutation) {
   projectRoles.push(...roles)
   projectRolePermissions.push(...createPresetPermissions(roles))
   projectMembers.push(makeMember(project.id, owner, ownerRole))
-  syncProjectMemberCount(project.id)
+  syncProjectState(project.id)
 
   return project
 }
@@ -211,6 +238,19 @@ export function countActiveOwners(projectId: number) {
   ).length
 }
 
+export function isCurrentUserOwner(projectId: number) {
+  const ownerRole = getOwnerRole(projectId)
+  if (!ownerRole) return false
+
+  return projectMembers.some(
+    (member) =>
+      member.project_id === projectId &&
+      member.user.id === currentProjectUser.id &&
+      member.status === 'active' &&
+      member.project_role_id === ownerRole.id
+  )
+}
+
 export function inviteProjectMember(projectId: number, data: ProjectMemberInvite) {
   const role = getProjectRole(projectId, data.project_role_id)
   if (!role) return null
@@ -231,7 +271,20 @@ export function inviteProjectMember(projectId: number, data: ProjectMemberInvite
   )
 
   projectMembers.push(member)
-  syncProjectMemberCount(projectId)
+  syncProjectState(projectId)
+  return member
+}
+
+export function applyToJoinProject(projectId: number) {
+  const project = projects.find((item) => item.id === projectId)
+  const viewerRole = projectRoles.find(
+    (role) => role.project_id === projectId && role.name === 'Viewer'
+  )
+  if (!project || !viewerRole || project.visibility !== 'public') return null
+
+  const member = makeMember(projectId, currentProjectUser, viewerRole, null, 'pending')
+  projectMembers.push(member)
+  syncProjectState(projectId)
   return member
 }
 
@@ -244,6 +297,7 @@ export function updateProjectMemberRole(projectId: number, memberId: number, rol
   member.project_role_id = role.id
   member.project_role = toMemberRole(role)
   member.updated_at = new Date()
+  syncProjectState(projectId)
   return member
 }
 
@@ -254,7 +308,7 @@ export function removeProjectMember(projectId: number, memberId: number) {
   if (index === -1) return false
 
   projectMembers.splice(index, 1)
-  syncProjectMemberCount(projectId)
+  syncProjectState(projectId)
   return true
 }
 
@@ -268,7 +322,7 @@ seedProject(
   'Core API',
   'Main API workspace for contracts, mocks, and release checks.',
   'private',
-  toProjectUser(users[0]),
+  currentProjectUser,
   users.slice(1, 5).map(toProjectUser)
 )
 seedProject(
@@ -285,3 +339,27 @@ seedProject(
   toProjectUser(users[10]),
   users.slice(11, 14).map(toProjectUser)
 )
+seedProject(
+  'Mock Lab',
+  'Public mock server workspace where the current user is an editor.',
+  'public',
+  toProjectUser(users[14]),
+  [currentProjectUser, ...users.slice(15, 18).map(toProjectUser)]
+)
+const pendingProject = seedProject(
+  'Community Recipes',
+  'Public examples that already have a pending join request from the current user.',
+  'public',
+  toProjectUser(users[18]),
+  users.slice(19, 22).map(toProjectUser)
+)
+projectMembers.push(
+  makeMember(
+    pendingProject.project.id,
+    currentProjectUser,
+    pendingProject.viewerRole,
+    null,
+    'pending'
+  )
+)
+syncProjectState(pendingProject.project.id)

@@ -45,6 +45,11 @@ export async function inviteProjectMember(projectId: number, data: ProjectMember
   return projectMemberSchema.parse(res)
 }
 
+export async function applyToJoinProject(projectId: number) {
+  const res = await post<unknown>(`/projects/${projectId}/join-requests`)
+  return projectMemberSchema.parse(res)
+}
+
 export async function updateProjectMemberRole(
   projectId: number,
   memberId: number,

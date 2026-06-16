@@ -441,6 +441,9 @@
     "description": "管理项目成员、角色绑定和可见性",
     "create": "新建项目",
     "invite": "邀请成员",
+    "apply": "申请加入",
+    "applying": "申请中...",
+    "applicationPending": "已申请",
     "memberCount": "{{count}} 位成员",
     "visibility": {
       "public": "公开",
@@ -449,6 +452,13 @@
     "status": {
       "active": "已加入",
       "pending": "待处理"
+    },
+    "relationship": {
+      "owner": "Owner",
+      "member": "项目成员",
+      "canApply": "可申请",
+      "pending": "申请待审批",
+      "private": "非成员"
     },
     "tabs": {
       "members": "成员",
@@ -510,6 +520,7 @@
       "roleSuccess": "成员角色已更新",
       "removeSuccess": "成员已移除",
       "visibilitySuccess": "项目可见性已更新",
+      "applySuccess": "加入申请已提交",
       "failed": "操作失败"
     }
   },

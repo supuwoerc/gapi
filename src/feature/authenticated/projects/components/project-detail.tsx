@@ -4,7 +4,7 @@ import type {
   ProjectRole,
   ProjectVisibility,
 } from '@/schema/project/project'
-import { UserPlus } from 'lucide-react'
+import { Send, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -24,7 +24,9 @@ interface ProjectDetailProps {
   isUpdatingRole: boolean
   isRemoving: boolean
   isUpdatingVisibility: boolean
+  isApplying: boolean
   onInvite: () => void
+  onApply: () => void
   onRoleChange: (memberId: number, roleId: number) => void
   onRemove: (member: ProjectMember) => void
   onVisibilityChange: (visibility: ProjectVisibility) => void
@@ -39,12 +41,19 @@ export function ProjectDetail({
   isUpdatingRole,
   isRemoving,
   isUpdatingVisibility,
+  isApplying,
   onInvite,
+  onApply,
   onRoleChange,
   onRemove,
   onVisibilityChange,
 }: ProjectDetailProps) {
   const { t } = useTranslation('feature')
+  const currentMembership = project.current_user_membership
+  const isOwner =
+    currentMembership?.status === 'active' && currentMembership.project_role.name === 'Owner'
+  const canApply = project.visibility === 'public' && currentMembership === null
+  const isPending = currentMembership?.status === 'pending'
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
@@ -56,16 +65,28 @@ export function ProjectDetail({
           </div>
           <p className="text-sm text-muted-foreground">{project.description}</p>
         </div>
-        <Button variant="outline" onClick={onInvite}>
-          <UserPlus />
-          {t('projects.invite')}
-        </Button>
+        {isOwner ? (
+          <Button variant="outline" onClick={onInvite}>
+            <UserPlus />
+            {t('projects.invite')}
+          </Button>
+        ) : canApply ? (
+          <Button variant="outline" disabled={isApplying} onClick={onApply}>
+            <Send />
+            {isApplying ? t('projects.applying') : t('projects.apply')}
+          </Button>
+        ) : isPending ? (
+          <Button variant="outline" disabled>
+            <Send />
+            {t('projects.applicationPending')}
+          </Button>
+        ) : null}
       </div>
 
       <Tabs defaultValue="members" className="gap-4">
         <TabsList>
           <TabsTrigger value="members">{t('projects.tabs.members')}</TabsTrigger>
-          <TabsTrigger value="settings">{t('projects.tabs.settings')}</TabsTrigger>
+          {isOwner && <TabsTrigger value="settings">{t('projects.tabs.settings')}</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="members">
@@ -78,6 +99,7 @@ export function ProjectDetail({
               <MembersTable
                 members={members}
                 roles={roles}
+                canManageMembers={isOwner}
                 isUpdatingRole={isUpdatingRole}
                 isRemoving={isRemoving}
                 onRoleChange={onRoleChange}
@@ -87,14 +109,16 @@ export function ProjectDetail({
           </div>
         </TabsContent>
 
-        <TabsContent value="settings">
-          <ProjectSettingsCard
-            project={project}
-            roles={roles}
-            isUpdatingVisibility={isUpdatingVisibility}
-            onVisibilityChange={onVisibilityChange}
-          />
-        </TabsContent>
+        {isOwner && (
+          <TabsContent value="settings">
+            <ProjectSettingsCard
+              project={project}
+              roles={roles}
+              isUpdatingVisibility={isUpdatingVisibility}
+              onVisibilityChange={onVisibilityChange}
+            />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   )

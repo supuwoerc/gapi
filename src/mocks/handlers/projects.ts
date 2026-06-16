@@ -7,6 +7,7 @@ import type {
 import { delay, http } from 'msw'
 
 import {
+  applyToJoinProject,
   countActiveOwners,
   createProjectWithPresets,
   getOwnerRole,
@@ -15,6 +16,7 @@ import {
   getProjectRoles,
   hasProjectMember,
   inviteProjectMember,
+  isCurrentUserOwner,
   projects,
   removeProjectMember,
   updateProjectMemberRole,
@@ -57,6 +59,10 @@ export const projectHandlers = [
     const projectId = getProjectId(params.projectId)
     const body = (await request.json()) as ProjectMemberInvite
 
+    if (!isCurrentUserOwner(projectId)) {
+      return errorEnvelope(400403, 'Only project owners can invite members')
+    }
+
     if (hasProjectMember(projectId, body.email)) {
       return errorEnvelope(400409, 'This user is already a project member')
     }
@@ -69,11 +75,41 @@ export const projectHandlers = [
     return jsonEnvelope(member)
   }),
 
+  http.post(`${BASE}/projects/:projectId/join-requests`, async ({ params }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const project = projects.find((item) => item.id === projectId)
+
+    if (!project) {
+      return errorEnvelope(400404, 'Project not found')
+    }
+
+    if (project.visibility !== 'public') {
+      return errorEnvelope(400403, 'Only public projects accept join requests')
+    }
+
+    if (project.current_user_membership) {
+      return errorEnvelope(400409, 'You already have a project membership or pending request')
+    }
+
+    const member = applyToJoinProject(projectId)
+    if (!member) {
+      return errorEnvelope(400404, 'Project role not found')
+    }
+
+    return jsonEnvelope(member)
+  }),
+
   http.patch(`${BASE}/projects/:projectId/members/:memberId`, async ({ params, request }) => {
     await delay(300)
     const projectId = getProjectId(params.projectId)
     const memberId = Number(params.memberId)
     const body = (await request.json()) as ProjectMemberRoleMutation
+
+    if (!isCurrentUserOwner(projectId)) {
+      return errorEnvelope(400403, 'Only project owners can update member roles')
+    }
+
     const role = getProjectRole(projectId, body.project_role_id)
     if (!role) {
       return errorEnvelope(400404, 'Project role not found')
@@ -103,6 +139,11 @@ export const projectHandlers = [
     await delay(300)
     const projectId = getProjectId(params.projectId)
     const memberId = Number(params.memberId)
+
+    if (!isCurrentUserOwner(projectId)) {
+      return errorEnvelope(400403, 'Only project owners can remove members')
+    }
+
     const member = getProjectMembers(projectId).find((item) => item.id === memberId)
     const ownerRole = getOwnerRole(projectId)
 
@@ -126,6 +167,10 @@ export const projectHandlers = [
     const project = projects.find((item) => item.id === projectId)
     if (!project) {
       return errorEnvelope(400404, 'Project not found')
+    }
+
+    if (!isCurrentUserOwner(projectId)) {
+      return errorEnvelope(400403, 'Only project owners can update visibility')
     }
 
     project.visibility = body.visibility

@@ -6,17 +6,6 @@ export const projectPermissionEffectSchema = z.enum(['allow', 'deny'])
 
 const timestampSchema = z.coerce.date()
 
-export const projectSchema = z.object({
-  id: z.coerce.number(),
-  name: z.string(),
-  description: z.string(),
-  visibility: projectVisibilitySchema,
-  member_count: z.number(),
-  owner_user_id: z.coerce.number(),
-  created_at: timestampSchema,
-  updated_at: timestampSchema,
-})
-
 export const projectRoleSchema = z.object({
   id: z.coerce.number(),
   project_id: z.coerce.number(),
@@ -49,6 +38,23 @@ export const projectMemberRoleSchema = projectRoleSchema.pick({
   id: true,
   name: true,
   is_preset: true,
+})
+
+const currentUserProjectMembershipSchema = z.object({
+  status: projectMemberStatusSchema,
+  project_role: projectMemberRoleSchema,
+})
+
+export const projectSchema = z.object({
+  id: z.coerce.number(),
+  name: z.string(),
+  description: z.string(),
+  visibility: projectVisibilitySchema,
+  member_count: z.number(),
+  owner_user_id: z.coerce.number(),
+  current_user_membership: currentUserProjectMembershipSchema.nullable(),
+  created_at: timestampSchema,
+  updated_at: timestampSchema,
 })
 
 export const projectMemberSchema = z.object({
@@ -91,6 +97,7 @@ export const projectRolePermissionListSchema = z.array(projectRolePermissionSche
 
 export type Project = z.infer<typeof projectSchema>
 export type ProjectVisibility = z.infer<typeof projectVisibilitySchema>
+export type ProjectMemberStatus = z.infer<typeof projectMemberStatusSchema>
 export type ProjectRole = z.infer<typeof projectRoleSchema>
 export type ProjectRolePermission = z.infer<typeof projectRolePermissionSchema>
 export type ProjectMember = z.infer<typeof projectMemberSchema>

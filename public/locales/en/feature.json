@@ -441,6 +441,9 @@
     "description": "Manage project members, role assignments, and visibility",
     "create": "New project",
     "invite": "Invite member",
+    "apply": "Request to join",
+    "applying": "Requesting...",
+    "applicationPending": "Request pending",
     "memberCount": "{{count}} member(s)",
     "visibility": {
       "public": "Public",
@@ -449,6 +452,13 @@
     "status": {
       "active": "Active",
       "pending": "Pending"
+    },
+    "relationship": {
+      "owner": "Owner",
+      "member": "Project member",
+      "canApply": "Can request",
+      "pending": "Request pending",
+      "private": "Non-member"
     },
     "tabs": {
       "members": "Members",
@@ -510,6 +520,7 @@
       "roleSuccess": "Member role updated",
       "removeSuccess": "Member removed",
       "visibilitySuccess": "Project visibility updated",
+      "applySuccess": "Join request submitted",
       "failed": "Action failed"
     }
   },
