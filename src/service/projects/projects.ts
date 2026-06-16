@@ -17,6 +17,7 @@ import type {
   ProjectMutation,
   ProjectVisibilityMutation,
 } from '@/schema/project/project'
+import type { PaginatedResponse } from '@/types/shared'
 
 import { del, get, patch, post } from '@/lib/http'
 
@@ -36,9 +37,19 @@ export async function getProjectRoles(projectId: number) {
   return projectRoleListSchema.parse(res)
 }
 
-export async function getProjectMembers(projectId: number) {
-  const res = await get<unknown>(`/projects/${projectId}/members`)
-  return projectMemberListSchema.parse(res)
+export interface GetProjectMembersParams {
+  page: number
+  perPage: number
+}
+
+export async function getProjectMembers(projectId: number, params: GetProjectMembersParams) {
+  const res = await get<PaginatedResponse<unknown>>(`/projects/${projectId}/members`, {
+    searchParams: {
+      page: String(params.page),
+      perPage: String(params.perPage),
+    },
+  })
+  return { data: projectMemberListSchema.parse(res.data), total: res.total }
 }
 
 export async function inviteProjectMember(projectId: number, data: ProjectMemberInvite) {

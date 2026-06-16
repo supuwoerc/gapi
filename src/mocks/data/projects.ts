@@ -337,35 +337,35 @@ seedProject(
   'Main API workspace for contracts, mocks, and release checks.',
   'private',
   currentProjectUser,
-  users.slice(1, 5).map(toProjectUser)
+  users.slice(1, 35).map(toProjectUser)
 )
 seedProject(
   'Public SDK',
   'Shared examples and integration tests for external SDK users.',
   'public',
   toProjectUser(users[5]),
-  users.slice(6, 10).map(toProjectUser)
+  users.slice(6, 40).map(toProjectUser)
 )
 seedProject(
   'Internal Docs',
   'Documentation review space for project-specific API references.',
   'private',
   toProjectUser(users[10]),
-  users.slice(11, 14).map(toProjectUser)
+  users.slice(11, 38).map(toProjectUser)
 )
 seedProject(
   'Mock Lab',
   'Public mock server workspace where the current user is an editor.',
   'public',
   toProjectUser(users[14]),
-  [currentProjectUser, ...users.slice(15, 18).map(toProjectUser)]
+  [currentProjectUser, ...users.slice(15, 42).map(toProjectUser)]
 )
 const pendingProject = seedProject(
   'Community Recipes',
   'Public examples that already have a pending join request from the current user.',
   'public',
   toProjectUser(users[18]),
-  users.slice(19, 22).map(toProjectUser)
+  users.slice(19, 45).map(toProjectUser)
 )
 projectMembers.push(
   makeMember(

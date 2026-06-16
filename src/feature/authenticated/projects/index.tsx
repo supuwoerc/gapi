@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type {
   ProjectMember,
@@ -20,6 +20,7 @@ import {
   updateProjectVisibility,
 } from '@/service/projects/projects'
 import { Plus } from 'lucide-react'
+import { parseAsInteger, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -37,7 +38,7 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import Search from '@/components/search'
 import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
-import { EmptyMembers, EmptyProjects, EmptyRoles } from './components/constants'
+import { EmptyMembersPage, EmptyProjects, EmptyRoles } from './components/constants'
 import { CreateProjectDialog } from './components/create-project-dialog'
 import { EmptyProjectsState } from './components/empty-projects-state'
 import { InviteMemberDialog } from './components/invite-member-dialog'
@@ -51,6 +52,8 @@ const Projects = () => {
   const [createOpen, setCreateOpen] = React.useState(false)
   const [inviteOpen, setInviteOpen] = React.useState(false)
   const [memberToRemove, setMemberToRemove] = React.useState<ProjectMember | null>(null)
+  const [memberPage, setMemberPage] = useQueryState('memberPage', parseAsInteger.withDefault(1))
+  const [memberPerPage] = useQueryState('memberPerPage', parseAsInteger.withDefault(10))
 
   const { data: projects = EmptyProjects, isLoading: isProjectsLoading } = useQuery({
     queryKey: ['projects'],
@@ -63,17 +66,30 @@ const Projects = () => {
   )
   const activeProjectId = selectedProject?.id ?? null
 
+  React.useEffect(() => {
+    void setMemberPage(1)
+  }, [activeProjectId, setMemberPage])
+
   const { data: roles = EmptyRoles, isFetching: isRolesFetching } = useQuery({
     queryKey: ['project-roles', activeProjectId],
     queryFn: () => getProjectRoles(activeProjectId!),
     enabled: activeProjectId !== null,
   })
 
-  const { data: members = EmptyMembers, isFetching: isMembersFetching } = useQuery({
-    queryKey: ['project-members', activeProjectId],
-    queryFn: () => getProjectMembers(activeProjectId!),
+  const { data: membersPage = EmptyMembersPage, isFetching: isMembersFetching } = useQuery({
+    queryKey: ['project-members', activeProjectId, { page: memberPage, perPage: memberPerPage }],
+    queryFn: () =>
+      getProjectMembers(activeProjectId!, { page: memberPage, perPage: memberPerPage }),
     enabled: activeProjectId !== null,
+    placeholderData: keepPreviousData,
   })
+  const memberTotalPages = Math.max(1, Math.ceil(membersPage.total / memberPerPage))
+
+  React.useEffect(() => {
+    if (memberPage > memberTotalPages) {
+      void setMemberPage(memberTotalPages)
+    }
+  }, [memberPage, memberTotalPages, setMemberPage])
 
   const createMutation = useMutation({
     mutationFn: createProject,
@@ -202,7 +218,8 @@ const Projects = () => {
               <ProjectDetail
                 project={selectedProject}
                 roles={roles}
-                members={members}
+                members={membersPage.data}
+                membersTotal={membersPage.total}
                 isRolesFetching={isRolesFetching}
                 isMembersFetching={isMembersFetching}
                 isUpdatingRole={roleMutation.isPending}

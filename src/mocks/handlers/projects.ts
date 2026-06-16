@@ -23,6 +23,7 @@ import {
   updateProjectLogo,
   updateProjectMemberRole,
 } from '../data/projects'
+import { paginate } from '../utils/filter'
 import { errorEnvelope, jsonEnvelope } from '../utils/response'
 
 const BASE = import.meta.env.VITE_APP_DEFAULT_SERVER
@@ -50,10 +51,14 @@ export const projectHandlers = [
     return jsonEnvelope(getProjectRoles(projectId))
   }),
 
-  http.get(`${BASE}/projects/:projectId/members`, async ({ params }) => {
+  http.get(`${BASE}/projects/:projectId/members`, async ({ params, request }) => {
     await delay(200)
     const projectId = getProjectId(params.projectId)
-    return jsonEnvelope(getProjectMembers(projectId))
+    const url = new URL(request.url)
+    const page = Number(url.searchParams.get('page') ?? 1)
+    const perPage = Number(url.searchParams.get('perPage') ?? 10)
+
+    return jsonEnvelope(paginate(getProjectMembers(projectId), page, perPage))
   }),
 
   http.post(`${BASE}/projects/:projectId/members`, async ({ params, request }) => {

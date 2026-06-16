@@ -8,7 +8,6 @@ import { Send, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
-import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { MembersTable } from './members-table'
@@ -20,6 +19,7 @@ interface ProjectDetailProps {
   project: Project
   roles: ProjectRole[]
   members: ProjectMember[]
+  membersTotal: number
   isRolesFetching: boolean
   isMembersFetching: boolean
   isUpdatingRole: boolean
@@ -39,6 +39,7 @@ export function ProjectDetail({
   project,
   roles,
   members,
+  membersTotal,
   isRolesFetching,
   isMembersFetching,
   isUpdatingRole,
@@ -98,23 +99,17 @@ export function ProjectDetail({
         </TabsList>
 
         <TabsContent value="members">
-          <div className="data-table-container">
-            {isMembersFetching || isRolesFetching ? (
-              <div className="flex min-h-64 items-center justify-center">
-                <Spinner />
-              </div>
-            ) : (
-              <MembersTable
-                members={members}
-                roles={roles}
-                canManageMembers={isOwner}
-                isUpdatingRole={isUpdatingRole}
-                isRemoving={isRemoving}
-                onRoleChange={onRoleChange}
-                onRemove={onRemove}
-              />
-            )}
-          </div>
+          <MembersTable
+            members={members}
+            membersTotal={membersTotal}
+            roles={roles}
+            canManageMembers={isOwner}
+            isFetching={isMembersFetching || isRolesFetching}
+            isUpdatingRole={isUpdatingRole}
+            isRemoving={isRemoving}
+            onRoleChange={onRoleChange}
+            onRemove={onRemove}
+          />
         </TabsContent>
 
         {isOwner && (
