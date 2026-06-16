@@ -19,16 +19,16 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 
-import type { Role } from '@/components/layout/authenticated/types/role'
+import type { Project } from '@/components/layout/authenticated/types/project'
 
-interface TeamSwitcherProps {
-  roles: Array<Role>
+interface ProjectSwitcherProps {
+  projects: Array<Project>
 }
 
-const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
+const ProjectSwitcher: FC<ProjectSwitcherProps> = ({ projects }) => {
   const { isMobile } = useSidebar()
   const { t } = useTranslation('global')
-  const [activeRole, setActiveRole] = useState(roles[0])
+  const [activeProject, setActiveProject] = useState(projects[0])
 
   return (
     <SidebarMenu>
@@ -40,11 +40,11 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <DynamicIcon name={activeRole.logo} className="size-4" />
+                <DynamicIcon name={activeProject.logo} className="size-4" />
               </div>
               <div className="grid flex-1 text-start text-sm leading-tight">
-                <span className="truncate font-semibold">{activeRole.name}</span>
-                <span className="truncate text-xs">{activeRole.desc}</span>
+                <span className="truncate font-semibold">{activeProject.name}</span>
+                <span className="truncate text-xs">{activeProject.desc}</span>
               </div>
               <ChevronsUpDown className="ms-auto" />
             </SidebarMenuButton>
@@ -56,18 +56,18 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              {t('menu.roles')}
+              {t('menu.projects')}
             </DropdownMenuLabel>
-            {roles.map((role) => (
+            {projects.map((project) => (
               <DropdownMenuItem
-                key={role.name}
-                onClick={() => setActiveRole(role)}
+                key={project.name}
+                onClick={() => setActiveProject(project)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <DynamicIcon name={role.logo} className="size-4 shrink-0" />
+                  <DynamicIcon name={project.logo} className="size-4 shrink-0" />
                 </div>
-                {role.name}
+                {project.name}
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
@@ -75,7 +75,7 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
               <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">{t('menu.addRole')}</div>
+              <div className="font-medium text-muted-foreground">{t('menu.addProject')}</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -84,4 +84,4 @@ const RoleSwitcher: FC<TeamSwitcherProps> = ({ roles }) => {
   )
 }
 
-export default RoleSwitcher
+export default ProjectSwitcher

@@ -3,7 +3,7 @@ import { z } from 'zod'
 import type { IconName } from 'lucide-react/dynamic'
 import { iconNames } from 'lucide-react/dynamic'
 
-export const roleSchema = z.object({
+export const projectSchema = z.object({
   name: z.string(),
   desc: z.string(),
   logo: z.custom<IconName>((val) => {
@@ -11,4 +11,4 @@ export const roleSchema = z.object({
   }),
 })
 
-export type Role = z.infer<typeof roleSchema>
+export type Project = z.infer<typeof projectSchema>

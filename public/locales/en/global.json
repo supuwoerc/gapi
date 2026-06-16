@@ -20,9 +20,9 @@
     "account": "Account",
     "notifications": "Notifications",
     "signOut": "Sign out",
-    "role": "Role",
-    "roles": "Roles",
-    "addRole": "Add roles",
+    "project": "Project",
+    "projects": "Projects",
+    "addProject": "Add project",
     "signUp": "Sign Up",
     "accountSettings": "Account settings"
   }

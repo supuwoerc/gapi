@@ -1,16 +1,16 @@
 import type { Menu } from '@/components/layout/authenticated/types/menu'
-import type { Role } from '@/components/layout/authenticated/types/role'
+import type { Project } from '@/components/layout/authenticated/types/project'
 
-export const roles: Array<Role> = [
+export const projects: Array<Project> = [
   {
-    name: '普通用户',
-    logo: 'gallery-vertical-end',
-    desc: '普通用户权限',
+    name: 'My Project',
+    logo: 'folder',
+    desc: 'Default project',
   },
   {
-    name: '管理员',
-    logo: 'audio-waveform',
-    desc: '管理员权限',
+    name: 'Team Project',
+    logo: 'users',
+    desc: 'Shared workspace',
   },
 ]
 

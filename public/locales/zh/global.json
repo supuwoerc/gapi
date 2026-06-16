@@ -20,9 +20,9 @@
     "account": "账户",
     "notifications": "通知",
     "signOut": "退出",
-    "role": "角色",
-    "roles": "角色",
-    "addRole": "添加角色",
+    "project": "项目",
+    "projects": "项目",
+    "addProject": "创建项目",
     "signUp": "注册",
     "accountSettings": "账户设置"
   }

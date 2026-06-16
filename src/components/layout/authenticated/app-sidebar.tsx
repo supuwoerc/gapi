@@ -18,9 +18,9 @@ import {
 } from '@/components/ui/sidebar'
 
 import MenuGroup from './components/menu-group'
-import RoleSwitcher from './components/role-switcher'
+import ProjectSwitcher from './components/project-switcher'
 import SidebarUser from './components/sidebar-user'
-import { roles } from './data/constant'
+import { projects } from './data/constant'
 
 export function AppSidebar() {
   const [collapsible, variant] = useSystemConfigStore(
@@ -44,7 +44,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
       <SidebarHeader>
-        <RoleSwitcher roles={roles} />
+        <ProjectSwitcher projects={projects} />
       </SidebarHeader>
       <SidebarContent>
         {menuData.map((props) => (
