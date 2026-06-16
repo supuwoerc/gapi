@@ -79,7 +79,7 @@ function App() {
 }
 
 async function bootstrap() {
-  if (import.meta.env.DEV && enableMsw) {
+  if (enableMsw) {
     const { worker } = await import('./mocks/browser')
     await worker.start({ onUnhandledRequest: 'bypass' })
   }
