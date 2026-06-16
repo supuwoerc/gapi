@@ -6,10 +6,17 @@ export function formatDate(
   if (!date) return ''
 
   try {
+    const defaultOptions =
+      opts.dateStyle || opts.timeStyle
+        ? {}
+        : {
+            month: opts.month ?? 'long',
+            day: opts.day ?? 'numeric',
+            year: opts.year ?? 'numeric',
+          }
+
     return new Intl.DateTimeFormat(locale ?? 'en-US', {
-      month: opts.month ?? 'long',
-      day: opts.day ?? 'numeric',
-      year: opts.year ?? 'numeric',
+      ...defaultOptions,
       ...opts,
     }).format(new Date(date))
   } catch (_err) {

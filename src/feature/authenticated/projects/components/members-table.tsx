@@ -2,6 +2,8 @@ import type { ProjectMember, ProjectRole } from '@/schema/project/project'
 import { Trash2, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+import { formatDate } from '@/lib/format'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
@@ -22,8 +24,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 
-import { formatDate } from './utils'
-
 interface MembersTableProps {
   members: ProjectMember[]
   roles: ProjectRole[]
@@ -43,7 +43,7 @@ export function MembersTable({
   onRoleChange,
   onRemove,
 }: MembersTableProps) {
-  const { t } = useTranslation('feature')
+  const { t, i18n } = useTranslation('feature')
 
   if (members.length === 0) {
     return (
@@ -119,7 +119,11 @@ export function MembersTable({
                 <Badge variant="outline">{member.project_role.name}</Badge>
               )}
             </TableCell>
-            <TableCell>{member.joined_at ? formatDate(member.joined_at) : '-'}</TableCell>
+            <TableCell>
+              {member.joined_at
+                ? formatDate(member.joined_at, { dateStyle: 'medium' }, i18n.language)
+                : '-'}
+            </TableCell>
             {canManageMembers && (
               <TableCell className="text-end">
                 <Button

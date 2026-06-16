@@ -23,6 +23,8 @@ import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { getErrorMessage } from '@/lib/error'
+
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 
@@ -41,7 +43,6 @@ import { EmptyProjectsState } from './components/empty-projects-state'
 import { InviteMemberDialog } from './components/invite-member-dialog'
 import { ProjectDetail } from './components/project-detail'
 import { ProjectsSidebar } from './components/projects-sidebar'
-import { getErrorMessage } from './components/utils'
 
 const Projects = () => {
   const { t } = useTranslation('feature')
