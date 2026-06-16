@@ -436,6 +436,83 @@
       "source": "Source"
     }
   },
+  "projects": {
+    "title": "Projects",
+    "description": "Manage project members, role assignments, and visibility",
+    "create": "New project",
+    "invite": "Invite member",
+    "memberCount": "{{count}} member(s)",
+    "visibility": {
+      "public": "Public",
+      "private": "Private"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending"
+    },
+    "tabs": {
+      "members": "Members",
+      "settings": "Settings"
+    },
+    "columns": {
+      "member": "Member",
+      "status": "Status",
+      "role": "Project role",
+      "joinedAt": "Joined",
+      "actions": "Actions"
+    },
+    "removeMember": "Remove member",
+    "emptyProjects": {
+      "title": "No projects yet",
+      "description": "Creating a project automatically provisions Owner, Editor, and Viewer roles."
+    },
+    "emptyMembers": {
+      "title": "No members yet",
+      "description": "Invite members here, then adjust their project roles."
+    },
+    "createDialog": {
+      "title": "New project",
+      "description": "Preset roles and the creator's Owner membership are created with the project.",
+      "name": "Project name",
+      "namePlaceholder": "Enter project name",
+      "projectDescription": "Project description",
+      "descriptionPlaceholder": "Describe what this project is for",
+      "visibility": "Visibility",
+      "save": "Create",
+      "saving": "Creating..."
+    },
+    "inviteDialog": {
+      "title": "Invite member",
+      "description": "Choose the project-level role this member receives.",
+      "username": "Username",
+      "usernamePlaceholder": "Enter username",
+      "email": "Email",
+      "emailPlaceholder": "name@example.com",
+      "role": "Project role",
+      "save": "Invite",
+      "saving": "Inviting..."
+    },
+    "settings": {
+      "visibilityTitle": "Project visibility",
+      "visibilityDescription": "Public projects can be discovered by non-members; private projects are invite-only.",
+      "currentVisibility": "Current state"
+    },
+    "roles": {
+      "preset": "Preset"
+    },
+    "removeDialog": {
+      "title": "Remove member",
+      "description": "Remove \"{{username}}\" from this project? This will not delete the user account."
+    },
+    "toast": {
+      "createSuccess": "Project created",
+      "inviteSuccess": "Member invited",
+      "roleSuccess": "Member role updated",
+      "removeSuccess": "Member removed",
+      "visibilitySuccess": "Project visibility updated",
+      "failed": "Action failed"
+    }
+  },
   "settings": {
     "title": "Settings",
     "description": "Manage your account settings and preferences",

@@ -99,7 +99,7 @@ const asyncRoutes: CustomRouteObject[] = [
           icon: 'panels-top-left',
         },
         errorElement: <RouteError />,
-        element: 'projects',
+        lazy: loadComponent(() => import('@/feature/authenticated/projects')),
       },
       {
         path: '/documents',

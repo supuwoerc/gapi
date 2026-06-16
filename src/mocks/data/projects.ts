@@ -1,0 +1,287 @@
+import type {
+  Project,
+  ProjectMember,
+  ProjectMemberInvite,
+  ProjectMemberUser,
+  ProjectMutation,
+  ProjectRole,
+  ProjectRolePermission,
+} from '@/schema/project/project'
+import { faker } from '@faker-js/faker'
+
+import { users } from './users'
+
+faker.seed(24680)
+
+const modules = ['api', 'mock', 'test', 'doc']
+const actions = ['create', 'read', 'update', 'delete']
+const presetRoleNames = ['Owner', 'Editor', 'Viewer'] as const
+
+let nextProjectId = 1000
+let nextProjectRoleId = 5000
+let nextProjectRolePermissionId = 9000
+let nextProjectMemberId = 12000
+let nextInvitedUserId = 90000
+
+export const projects: Project[] = []
+export const projectRoles: ProjectRole[] = []
+export const projectRolePermissions: ProjectRolePermission[] = []
+export const projectMembers: ProjectMember[] = []
+
+function toProjectUser(user: (typeof users)[number]): ProjectMemberUser {
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    avatar: user.avatar,
+  }
+}
+
+function makeProjectRole(projectId: number, name: (typeof presetRoleNames)[number]): ProjectRole {
+  const now = new Date()
+
+  return {
+    id: nextProjectRoleId++,
+    project_id: projectId,
+    name,
+    description: `${name} preset role`,
+    is_preset: true,
+    parent_id: null,
+    created_at: now,
+    updated_at: now,
+  }
+}
+
+function createPresetRoles(projectId: number) {
+  return presetRoleNames.map((name) => makeProjectRole(projectId, name))
+}
+
+function createPresetPermissions(roles: ProjectRole[]) {
+  const rows: ProjectRolePermission[] = []
+  const now = new Date()
+
+  for (const role of roles) {
+    const allowedActions = role.name === 'Viewer' ? ['read'] : actions
+
+    for (const module of modules) {
+      for (const action of allowedActions) {
+        rows.push({
+          id: nextProjectRolePermissionId++,
+          project_role_id: role.id,
+          module,
+          action,
+          effect: 'allow',
+          created_at: now,
+          updated_at: now,
+        })
+      }
+    }
+  }
+
+  return rows
+}
+
+function toMemberRole(role: ProjectRole) {
+  return {
+    id: role.id,
+    name: role.name,
+    is_preset: role.is_preset,
+  }
+}
+
+function makeMember(
+  projectId: number,
+  user: ProjectMemberUser,
+  role: ProjectRole,
+  invitedBy: ProjectMemberUser | null = null
+): ProjectMember {
+  const now = new Date()
+
+  return {
+    id: nextProjectMemberId++,
+    project_id: projectId,
+    user,
+    project_role_id: role.id,
+    project_role: toMemberRole(role),
+    status: 'active',
+    joined_at: now,
+    invited_by: invitedBy
+      ? { id: invitedBy.id, username: invitedBy.username, email: invitedBy.email }
+      : null,
+    created_at: now,
+    updated_at: now,
+  }
+}
+
+function syncProjectMemberCount(projectId: number) {
+  const project = projects.find((item) => item.id === projectId)
+  if (!project) return
+
+  project.member_count = projectMembers.filter(
+    (member) => member.project_id === projectId && member.status === 'active'
+  ).length
+  project.updated_at = new Date()
+}
+
+function seedProject(
+  name: string,
+  description: string,
+  visibility: Project['visibility'],
+  owner: ProjectMemberUser,
+  members: ProjectMemberUser[]
+) {
+  const now = faker.date.recent({ days: 30 })
+  const project: Project = {
+    id: nextProjectId++,
+    name,
+    description,
+    visibility,
+    member_count: 0,
+    owner_user_id: owner.id,
+    created_at: now,
+    updated_at: now,
+  }
+  const roles = createPresetRoles(project.id)
+  const ownerRole = roles.find((role) => role.name === 'Owner')!
+  const editorRole = roles.find((role) => role.name === 'Editor')!
+  const viewerRole = roles.find((role) => role.name === 'Viewer')!
+
+  projects.push(project)
+  projectRoles.push(...roles)
+  projectRolePermissions.push(...createPresetPermissions(roles))
+  projectMembers.push(makeMember(project.id, owner, ownerRole))
+
+  members.forEach((member, index) => {
+    projectMembers.push(
+      makeMember(project.id, member, index % 2 === 0 ? editorRole : viewerRole, owner)
+    )
+  })
+  syncProjectMemberCount(project.id)
+}
+
+export function createProjectWithPresets(data: ProjectMutation) {
+  const owner = toProjectUser(users[0])
+  const project: Project = {
+    id: nextProjectId++,
+    name: data.name,
+    description: data.description,
+    visibility: data.visibility,
+    member_count: 0,
+    owner_user_id: owner.id,
+    created_at: new Date(),
+    updated_at: new Date(),
+  }
+  const roles = createPresetRoles(project.id)
+  const ownerRole = roles.find((role) => role.name === 'Owner')!
+
+  projects.unshift(project)
+  projectRoles.push(...roles)
+  projectRolePermissions.push(...createPresetPermissions(roles))
+  projectMembers.push(makeMember(project.id, owner, ownerRole))
+  syncProjectMemberCount(project.id)
+
+  return project
+}
+
+export function getProjectRoles(projectId: number) {
+  return projectRoles.filter((role) => role.project_id === projectId)
+}
+
+export function getProjectMembers(projectId: number) {
+  return projectMembers.filter((member) => member.project_id === projectId)
+}
+
+export function getProjectRole(projectId: number, roleId: number) {
+  return projectRoles.find((role) => role.project_id === projectId && role.id === roleId)
+}
+
+export function getOwnerRole(projectId: number) {
+  return projectRoles.find((role) => role.project_id === projectId && role.name === 'Owner')
+}
+
+export function countActiveOwners(projectId: number) {
+  const ownerRole = getOwnerRole(projectId)
+  if (!ownerRole) return 0
+
+  return projectMembers.filter(
+    (member) =>
+      member.project_id === projectId &&
+      member.status === 'active' &&
+      member.project_role_id === ownerRole.id
+  ).length
+}
+
+export function inviteProjectMember(projectId: number, data: ProjectMemberInvite) {
+  const role = getProjectRole(projectId, data.project_role_id)
+  if (!role) return null
+
+  const invitedBy = getProjectMembers(projectId).find(
+    (member) => member.project_role.name === 'Owner'
+  )
+  const member = makeMember(
+    projectId,
+    {
+      id: nextInvitedUserId++,
+      username: data.username,
+      email: data.email.toLowerCase(),
+      avatar: faker.image.avatar(),
+    },
+    role,
+    invitedBy?.user ?? null
+  )
+
+  projectMembers.push(member)
+  syncProjectMemberCount(projectId)
+  return member
+}
+
+export function updateProjectMemberRole(projectId: number, memberId: number, role: ProjectRole) {
+  const member = projectMembers.find(
+    (item) => item.project_id === projectId && item.id === memberId
+  )
+  if (!member) return null
+
+  member.project_role_id = role.id
+  member.project_role = toMemberRole(role)
+  member.updated_at = new Date()
+  return member
+}
+
+export function removeProjectMember(projectId: number, memberId: number) {
+  const index = projectMembers.findIndex(
+    (member) => member.project_id === projectId && member.id === memberId
+  )
+  if (index === -1) return false
+
+  projectMembers.splice(index, 1)
+  syncProjectMemberCount(projectId)
+  return true
+}
+
+export function hasProjectMember(projectId: number, email: string) {
+  return projectMembers.some(
+    (member) => member.project_id === projectId && member.user.email === email.toLowerCase()
+  )
+}
+
+seedProject(
+  'Core API',
+  'Main API workspace for contracts, mocks, and release checks.',
+  'private',
+  toProjectUser(users[0]),
+  users.slice(1, 5).map(toProjectUser)
+)
+seedProject(
+  'Public SDK',
+  'Shared examples and integration tests for external SDK users.',
+  'public',
+  toProjectUser(users[5]),
+  users.slice(6, 10).map(toProjectUser)
+)
+seedProject(
+  'Internal Docs',
+  'Documentation review space for project-specific API references.',
+  'private',
+  toProjectUser(users[10]),
+  users.slice(11, 14).map(toProjectUser)
+)

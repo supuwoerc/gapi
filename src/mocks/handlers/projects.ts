@@ -1,0 +1,135 @@
+import type {
+  ProjectMemberInvite,
+  ProjectMemberRoleMutation,
+  ProjectMutation,
+  ProjectVisibilityMutation,
+} from '@/schema/project/project'
+import { delay, http } from 'msw'
+
+import {
+  countActiveOwners,
+  createProjectWithPresets,
+  getOwnerRole,
+  getProjectMembers,
+  getProjectRole,
+  getProjectRoles,
+  hasProjectMember,
+  inviteProjectMember,
+  projects,
+  removeProjectMember,
+  updateProjectMemberRole,
+} from '../data/projects'
+import { errorEnvelope, jsonEnvelope } from '../utils/response'
+
+const BASE = import.meta.env.VITE_APP_DEFAULT_SERVER
+
+function getProjectId(value: string | readonly string[] | undefined) {
+  return Number(Array.isArray(value) ? value[0] : value)
+}
+
+export const projectHandlers = [
+  http.get(`${BASE}/projects`, async () => {
+    await delay(200)
+    return jsonEnvelope(projects)
+  }),
+
+  http.post(`${BASE}/projects`, async ({ request }) => {
+    await delay(300)
+    const body = (await request.json()) as ProjectMutation
+    const project = createProjectWithPresets(body)
+    return jsonEnvelope(project)
+  }),
+
+  http.get(`${BASE}/projects/:projectId/roles`, async ({ params }) => {
+    await delay(200)
+    const projectId = getProjectId(params.projectId)
+    return jsonEnvelope(getProjectRoles(projectId))
+  }),
+
+  http.get(`${BASE}/projects/:projectId/members`, async ({ params }) => {
+    await delay(200)
+    const projectId = getProjectId(params.projectId)
+    return jsonEnvelope(getProjectMembers(projectId))
+  }),
+
+  http.post(`${BASE}/projects/:projectId/members`, async ({ params, request }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const body = (await request.json()) as ProjectMemberInvite
+
+    if (hasProjectMember(projectId, body.email)) {
+      return errorEnvelope(400409, 'This user is already a project member')
+    }
+
+    const member = inviteProjectMember(projectId, body)
+    if (!member) {
+      return errorEnvelope(400404, 'Project role not found')
+    }
+
+    return jsonEnvelope(member)
+  }),
+
+  http.patch(`${BASE}/projects/:projectId/members/:memberId`, async ({ params, request }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const memberId = Number(params.memberId)
+    const body = (await request.json()) as ProjectMemberRoleMutation
+    const role = getProjectRole(projectId, body.project_role_id)
+    if (!role) {
+      return errorEnvelope(400404, 'Project role not found')
+    }
+
+    const current = getProjectMembers(projectId).find((member) => member.id === memberId)
+    const ownerRole = getOwnerRole(projectId)
+    if (
+      current &&
+      ownerRole &&
+      current.project_role_id === ownerRole.id &&
+      role.id !== ownerRole.id &&
+      countActiveOwners(projectId) <= 1
+    ) {
+      return errorEnvelope(400422, 'A project must keep at least one owner')
+    }
+
+    const member = updateProjectMemberRole(projectId, memberId, role)
+    if (!member) {
+      return errorEnvelope(400404, 'Project member not found')
+    }
+
+    return jsonEnvelope(member)
+  }),
+
+  http.delete(`${BASE}/projects/:projectId/members/:memberId`, async ({ params }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const memberId = Number(params.memberId)
+    const member = getProjectMembers(projectId).find((item) => item.id === memberId)
+    const ownerRole = getOwnerRole(projectId)
+
+    if (
+      member &&
+      ownerRole &&
+      member.project_role_id === ownerRole.id &&
+      countActiveOwners(projectId) <= 1
+    ) {
+      return errorEnvelope(400422, 'A project must keep at least one owner')
+    }
+
+    removeProjectMember(projectId, memberId)
+    return jsonEnvelope(null)
+  }),
+
+  http.patch(`${BASE}/projects/:projectId/visibility`, async ({ params, request }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const body = (await request.json()) as ProjectVisibilityMutation
+    const project = projects.find((item) => item.id === projectId)
+    if (!project) {
+      return errorEnvelope(400404, 'Project not found')
+    }
+
+    project.visibility = body.visibility
+    project.updated_at = new Date()
+    return jsonEnvelope(project)
+  }),
+]
