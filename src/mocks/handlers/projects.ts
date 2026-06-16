@@ -1,4 +1,5 @@
 import type {
+  ProjectLogoMutation,
   ProjectMemberInvite,
   ProjectMemberRoleMutation,
   ProjectMutation,
@@ -19,6 +20,7 @@ import {
   isCurrentUserOwner,
   projects,
   removeProjectMember,
+  updateProjectLogo,
   updateProjectMemberRole,
 } from '../data/projects'
 import { errorEnvelope, jsonEnvelope } from '../utils/response'
@@ -176,5 +178,22 @@ export const projectHandlers = [
     project.visibility = body.visibility
     project.updated_at = new Date()
     return jsonEnvelope(project)
+  }),
+
+  http.patch(`${BASE}/projects/:projectId/logo`, async ({ params, request }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const body = (await request.json()) as ProjectLogoMutation
+    const project = projects.find((item) => item.id === projectId)
+    if (!project) {
+      return errorEnvelope(400404, 'Project not found')
+    }
+
+    if (!isCurrentUserOwner(projectId)) {
+      return errorEnvelope(400403, 'Only project owners can update project logo')
+    }
+
+    const updatedProject = updateProjectLogo(projectId, body.logo)
+    return jsonEnvelope(updatedProject)
   }),
 ]

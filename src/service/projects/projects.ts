@@ -1,5 +1,6 @@
 import {
   projectListSchema,
+  projectLogoMutationSchema,
   projectMemberInviteSchema,
   projectMemberListSchema,
   projectMemberRoleMutationSchema,
@@ -10,6 +11,7 @@ import {
   projectVisibilityMutationSchema,
 } from '@/schema/project/project'
 import type {
+  ProjectLogoMutation,
   ProjectMemberInvite,
   ProjectMemberRoleMutation,
   ProjectMutation,
@@ -67,5 +69,11 @@ export async function removeProjectMember(projectId: number, memberId: number) {
 export async function updateProjectVisibility(projectId: number, data: ProjectVisibilityMutation) {
   const payload = projectVisibilityMutationSchema.parse(data)
   const res = await patch<unknown>(`/projects/${projectId}/visibility`, { json: payload })
+  return projectSchema.parse(res)
+}
+
+export async function updateProjectLogo(projectId: number, data: ProjectLogoMutation) {
+  const payload = projectLogoMutationSchema.parse(data)
+  const res = await patch<unknown>(`/projects/${projectId}/logo`, { json: payload })
   return projectSchema.parse(res)
 }

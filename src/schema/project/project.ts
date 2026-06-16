@@ -49,6 +49,7 @@ export const projectSchema = z.object({
   id: z.coerce.number(),
   name: z.string(),
   description: z.string(),
+  logo: z.string(),
   visibility: projectVisibilitySchema,
   member_count: z.number(),
   owner_user_id: z.coerce.number(),
@@ -73,6 +74,7 @@ export const projectMemberSchema = z.object({
 export const projectMutationSchema = z.object({
   name: z.string().min(1),
   description: z.string(),
+  logo: z.string(),
   visibility: projectVisibilitySchema,
 })
 
@@ -88,6 +90,10 @@ export const projectMemberRoleMutationSchema = z.object({
 
 export const projectVisibilityMutationSchema = z.object({
   visibility: projectVisibilitySchema,
+})
+
+export const projectLogoMutationSchema = z.object({
+  logo: z.string(),
 })
 
 export const projectListSchema = z.array(projectSchema)
@@ -106,3 +112,4 @@ export type ProjectMutation = z.infer<typeof projectMutationSchema>
 export type ProjectMemberInvite = z.infer<typeof projectMemberInviteSchema>
 export type ProjectMemberRoleMutation = z.infer<typeof projectMemberRoleMutationSchema>
 export type ProjectVisibilityMutation = z.infer<typeof projectVisibilityMutationSchema>
+export type ProjectLogoMutation = z.infer<typeof projectLogoMutationSchema>

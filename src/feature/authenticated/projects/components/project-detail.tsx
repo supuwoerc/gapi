@@ -12,6 +12,7 @@ import { Spinner } from '@/components/ui/spinner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { MembersTable } from './members-table'
+import { ProjectLogo } from './project-logo'
 import { ProjectSettingsCard } from './project-settings-card'
 import { ProjectVisibilityBadge } from './project-visibility-badge'
 
@@ -23,12 +24,14 @@ interface ProjectDetailProps {
   isMembersFetching: boolean
   isUpdatingRole: boolean
   isRemoving: boolean
+  isUpdatingLogo: boolean
   isUpdatingVisibility: boolean
   isApplying: boolean
   onInvite: () => void
   onApply: () => void
   onRoleChange: (memberId: number, roleId: number) => void
   onRemove: (member: ProjectMember) => void
+  onLogoChange: (logo: string) => void
   onVisibilityChange: (visibility: ProjectVisibility) => void
 }
 
@@ -40,12 +43,14 @@ export function ProjectDetail({
   isMembersFetching,
   isUpdatingRole,
   isRemoving,
+  isUpdatingLogo,
   isUpdatingVisibility,
   isApplying,
   onInvite,
   onApply,
   onRoleChange,
   onRemove,
+  onLogoChange,
   onVisibilityChange,
 }: ProjectDetailProps) {
   const { t } = useTranslation('feature')
@@ -58,12 +63,15 @@ export function ProjectDetail({
   return (
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex min-w-0 flex-col gap-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h3 className="truncate text-xl font-semibold">{project.name}</h3>
-            <ProjectVisibilityBadge visibility={project.visibility} />
+        <div className="flex min-w-0 items-start gap-3">
+          <ProjectLogo logo={project.logo} name={project.name} className="size-12" />
+          <div className="flex min-w-0 flex-col gap-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="truncate text-xl font-semibold">{project.name}</h3>
+              <ProjectVisibilityBadge visibility={project.visibility} />
+            </div>
+            <p className="text-sm text-muted-foreground">{project.description}</p>
           </div>
-          <p className="text-sm text-muted-foreground">{project.description}</p>
         </div>
         {isOwner ? (
           <Button variant="outline" onClick={onInvite}>
@@ -114,7 +122,9 @@ export function ProjectDetail({
             <ProjectSettingsCard
               project={project}
               roles={roles}
+              isUpdatingLogo={isUpdatingLogo}
               isUpdatingVisibility={isUpdatingVisibility}
+              onLogoChange={onLogoChange}
               onVisibilityChange={onVisibilityChange}
             />
           </TabsContent>

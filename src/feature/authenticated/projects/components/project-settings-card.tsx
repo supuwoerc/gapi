@@ -13,19 +13,24 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 
+import { ProjectLogoPicker } from './project-logo'
 import { ProjectVisibilityBadge } from './project-visibility-badge'
 
 interface ProjectSettingsCardProps {
   project: Project
   roles: ProjectRole[]
+  isUpdatingLogo: boolean
   isUpdatingVisibility: boolean
+  onLogoChange: (logo: string) => void
   onVisibilityChange: (visibility: ProjectVisibility) => void
 }
 
 export function ProjectSettingsCard({
   project,
   roles,
+  isUpdatingLogo,
   isUpdatingVisibility,
+  onLogoChange,
   onVisibilityChange,
 }: ProjectSettingsCardProps) {
   const { t } = useTranslation('feature')
@@ -44,6 +49,22 @@ export function ProjectSettingsCard({
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium">{t('projects.settings.logoTitle')}</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <ProjectLogoPicker
+              logo={project.logo}
+              name={project.name}
+              disabled={isUpdatingLogo}
+              dialogTitle={t('projects.settings.logoDialogTitle')}
+              onChange={onLogoChange}
+            />
+            <p className="text-sm text-muted-foreground">
+              {t('projects.settings.logoDescription')}
+            </p>
+          </div>
+        </div>
+        <Separator />
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-sm font-medium">{t('projects.settings.currentVisibility')}</span>
           <ProjectVisibilityBadge visibility={project.visibility} />

@@ -15,6 +15,7 @@ import {
   getProjects,
   inviteProjectMember,
   removeProjectMember,
+  updateProjectLogo,
   updateProjectMemberRole,
   updateProjectVisibility,
 } from '@/service/projects/projects'
@@ -148,6 +149,17 @@ const Projects = () => {
     },
   })
 
+  const logoMutation = useMutation({
+    mutationFn: (logo: string) => updateProjectLogo(activeProjectId!, { logo }),
+    onSuccess: () => {
+      toast.success(t('projects.toast.logoSuccess'))
+      void queryClient.invalidateQueries({ queryKey: ['projects'] })
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+    },
+  })
+
   return (
     <>
       <AppHeader fixed>
@@ -194,12 +206,14 @@ const Projects = () => {
                 isMembersFetching={isMembersFetching}
                 isUpdatingRole={roleMutation.isPending}
                 isRemoving={removeMutation.isPending}
+                isUpdatingLogo={logoMutation.isPending}
                 isUpdatingVisibility={visibilityMutation.isPending}
                 isApplying={applyMutation.isPending}
                 onInvite={() => setInviteOpen(true)}
                 onApply={() => applyMutation.mutate()}
                 onRoleChange={(memberId, roleId) => roleMutation.mutate({ memberId, roleId })}
                 onRemove={setMemberToRemove}
+                onLogoChange={(logo) => logoMutation.mutate(logo)}
                 onVisibilityChange={(visibility) => visibilityMutation.mutate(visibility)}
               />
             )}

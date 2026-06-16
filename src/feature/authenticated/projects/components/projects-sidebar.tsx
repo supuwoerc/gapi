@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 
 import { Badge } from '@/components/ui/badge'
 
+import { ProjectLogo } from './project-logo'
 import { ProjectVisibilityBadge } from './project-visibility-badge'
 
 interface ProjectsSidebarProps {
@@ -42,11 +43,18 @@ export function ProjectsSidebar({
           )}
           onClick={() => onSelectProject(project.id)}
         >
-          <span className="flex items-center justify-between gap-2">
-            <span className="truncate font-medium">{project.name}</span>
-            <ProjectVisibilityBadge visibility={project.visibility} />
+          <span className="flex items-start gap-3">
+            <ProjectLogo logo={project.logo} name={project.name} className="size-10" />
+            <span className="flex min-w-0 flex-1 flex-col gap-2">
+              <span className="flex min-w-0 items-center justify-between gap-2">
+                <span className="truncate font-medium">{project.name}</span>
+                <ProjectVisibilityBadge visibility={project.visibility} />
+              </span>
+              <span className="line-clamp-2 text-sm text-muted-foreground">
+                {project.description}
+              </span>
+            </span>
           </span>
-          <span className="line-clamp-2 text-sm text-muted-foreground">{project.description}</span>
           <span className="text-xs text-muted-foreground">
             {t('projects.memberCount', { count: project.member_count })}
           </span>

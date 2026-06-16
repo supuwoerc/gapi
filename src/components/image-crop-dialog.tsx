@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -104,6 +104,18 @@ export function ImageCropDialog({
   const [zoom, setZoom] = useState(1)
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CropperAreaData | null>(null)
   const [confirming, setConfirming] = useState(false)
+  const wasOpenRef = useRef(open)
+
+  useEffect(() => {
+    if (open && !wasOpenRef.current) {
+      if (imageSrcRef.current) {
+        URL.revokeObjectURL(imageSrcRef.current)
+        imageSrcRef.current = null
+      }
+      setImageSrc(initialImage ?? null)
+    }
+    wasOpenRef.current = open
+  }, [initialImage, open])
 
   const handleOpenChange = useCallback(
     (nextOpen: boolean) => {

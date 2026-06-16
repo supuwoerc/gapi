@@ -485,6 +485,10 @@
       "description": "Preset roles and the creator's Owner membership are created with the project.",
       "name": "Project name",
       "namePlaceholder": "Enter project name",
+      "logo": "Project logo",
+      "logoFallback": "Project",
+      "logoDescription": "Click the image to upload or replace the project logo",
+      "logoDialogTitle": "Crop project logo",
       "projectDescription": "Project description",
       "descriptionPlaceholder": "Describe what this project is for",
       "visibility": "Visibility",
@@ -503,6 +507,9 @@
       "saving": "Inviting..."
     },
     "settings": {
+      "logoTitle": "Project logo",
+      "logoDescription": "Click the image to upload or replace the project logo",
+      "logoDialogTitle": "Crop project logo",
       "visibilityTitle": "Project visibility",
       "visibilityDescription": "Public projects can be discovered by non-members; private projects are invite-only.",
       "currentVisibility": "Current state"
@@ -520,6 +527,7 @@
       "roleSuccess": "Member role updated",
       "removeSuccess": "Member removed",
       "visibilitySuccess": "Project visibility updated",
+      "logoSuccess": "Project logo updated",
       "applySuccess": "Join request submitted",
       "failed": "Action failed"
     }

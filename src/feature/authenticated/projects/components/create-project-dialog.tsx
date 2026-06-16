@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -20,6 +20,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,6 +36,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+
+import { ProjectLogoPicker } from './project-logo'
+
+const DefaultProjectLogo = 'https://api.dicebear.com/9.x/shapes/svg?seed=gapi-project'
 
 interface CreateProjectDialogProps {
   open: boolean
@@ -55,13 +60,15 @@ export function CreateProjectDialog({
     defaultValues: {
       name: '',
       description: '',
+      logo: DefaultProjectLogo,
       visibility: 'private',
     },
   })
+  const projectName = useWatch({ control: form.control, name: 'name' })
 
   React.useEffect(() => {
     if (!open) {
-      form.reset({ name: '', description: '', visibility: 'private' })
+      form.reset({ name: '', description: '', logo: DefaultProjectLogo, visibility: 'private' })
     }
   }, [form, open])
 
@@ -74,6 +81,26 @@ export function CreateProjectDialog({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="logo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('projects.createDialog.logo')}</FormLabel>
+                  <FormControl>
+                    <ProjectLogoPicker
+                      logo={field.value}
+                      name={projectName || t('projects.createDialog.logoFallback')}
+                      disabled={isPending}
+                      dialogTitle={t('projects.createDialog.logoDialogTitle')}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormDescription>{t('projects.createDialog.logoDescription')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"

@@ -24,6 +24,9 @@ let nextProjectRolePermissionId = 9000
 let nextProjectMemberId = 12000
 let nextInvitedUserId = 90000
 
+const projectLogoUrl = (name: string) =>
+  `https://api.dicebear.com/9.x/shapes/svg?seed=${encodeURIComponent(name)}`
+
 export const projects: Project[] = []
 export const projectRoles: ProjectRole[] = []
 export const projectRolePermissions: ProjectRolePermission[] = []
@@ -153,6 +156,7 @@ function seedProject(
     id: nextProjectId++,
     name,
     description,
+    logo: projectLogoUrl(name),
     visibility,
     member_count: 0,
     owner_user_id: owner.id,
@@ -191,6 +195,7 @@ export function createProjectWithPresets(data: ProjectMutation) {
     id: nextProjectId++,
     name: data.name,
     description: data.description,
+    logo: data.logo || projectLogoUrl(data.name),
     visibility: data.visibility,
     member_count: 0,
     owner_user_id: owner.id,
@@ -310,6 +315,15 @@ export function removeProjectMember(projectId: number, memberId: number) {
   projectMembers.splice(index, 1)
   syncProjectState(projectId)
   return true
+}
+
+export function updateProjectLogo(projectId: number, logo: string) {
+  const project = projects.find((item) => item.id === projectId)
+  if (!project) return null
+
+  project.logo = logo
+  project.updated_at = new Date()
+  return project
 }
 
 export function hasProjectMember(projectId: number, email: string) {
