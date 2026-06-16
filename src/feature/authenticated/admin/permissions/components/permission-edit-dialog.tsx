@@ -202,7 +202,7 @@ function PermissionRolePicker({ assignments, initialRoles, onChange }: Permissio
   )
 
   return (
-    <div className="flex min-h-0 flex-col gap-3">
+    <div className="flex min-h-0 flex-col gap-3 px-1">
       <Input
         value={roleKeyword}
         onChange={(event) => setRoleKeyword(event.target.value)}
@@ -382,7 +382,7 @@ export function PermissionEditDialog({
 
                 <TabsContent
                   value="basic"
-                  className="min-h-0 overflow-y-auto data-[state=inactive]:hidden"
+                  className="min-h-0 overflow-y-auto px-1 data-[state=inactive]:hidden"
                 >
                   <div className="flex flex-col gap-4 pr-1">
                     <div className="grid gap-4 sm:grid-cols-2">

@@ -836,7 +836,7 @@ export function RoleEditDialog({
 
                 <TabsContent
                   value="basic"
-                  className="min-h-0 overflow-y-auto data-[state=inactive]:hidden"
+                  className="min-h-0 overflow-y-auto px-1 data-[state=inactive]:hidden"
                 >
                   <div className="flex flex-col gap-4 pr-1">
                     <div className="grid gap-4 sm:grid-cols-2">
@@ -959,7 +959,7 @@ export function RoleEditDialog({
 
                 <TabsContent
                   value="permissions"
-                  className="min-h-0 overflow-hidden data-[state=inactive]:hidden"
+                  className="min-h-0 overflow-hidden px-1 data-[state=inactive]:hidden"
                 >
                   <FormField
                     control={form.control}
