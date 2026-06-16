@@ -4,7 +4,6 @@ export const modulePermissionsMap: Record<string, string[]> = {
   dashboard: ['dashboard:read', 'dashboard:edit'],
   tasks: ['tasks:read', 'tasks:create', 'tasks:edit', 'tasks:delete'],
   notifications: ['notifications:read', 'notifications:manage'],
-  groups: ['groups:read', 'groups:create', 'groups:edit'],
   projects: ['projects:read', 'projects:create', 'projects:edit', 'projects:delete'],
   documents: ['documents:read', 'documents:create', 'documents:edit', 'documents:delete'],
   admin: [
@@ -32,7 +31,6 @@ export function generateLoginResponse(email?: string) {
       'dashboard',
       'tasks',
       'notifications',
-      'groups',
       'projects',
       'documents',
       'admin',
@@ -44,7 +42,6 @@ export function generateLoginResponse(email?: string) {
       'dashboard',
       'tasks',
       'notifications',
-      'groups',
       'projects',
       'documents',
       'admin',

@@ -146,10 +146,6 @@ const generatedModules = [
     module: 'notifications',
     resources: ['channels', 'templates', 'subscriptions', 'delivery-logs'],
   },
-  {
-    module: 'groups',
-    resources: ['members', 'roles', 'settings', 'invites'],
-  },
 ]
 
 const generatedActions: PermissionAction[] = ['read', 'create', 'update', 'delete']

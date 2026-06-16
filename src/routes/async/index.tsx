@@ -90,18 +90,6 @@ const asyncRoutes: CustomRouteObject[] = [
     lazy: loadComponent(() => import('@/components/layout/authenticated')),
     children: [
       {
-        path: '/groups',
-        loader: withPermissions('groups'),
-        handle: {
-          title: 'route:pages.groups',
-          authMode: 'permissionRequired',
-          key: 'groups',
-          icon: 'boxes',
-        },
-        errorElement: <RouteError />,
-        element: 'groups',
-      },
-      {
         path: '/projects',
         loader: withPermissions('projects'),
         handle: {
