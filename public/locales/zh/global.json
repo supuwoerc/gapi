@@ -23,6 +23,9 @@
     "project": "项目",
     "projects": "项目",
     "addProject": "创建项目",
+    "selectProject": "选择项目",
+    "searchProject": "搜索项目...",
+    "noProjectFound": "未找到项目",
     "signUp": "注册",
     "accountSettings": "账户设置"
   }

@@ -1,18 +1,4 @@
 import type { Menu } from '@/components/layout/authenticated/types/menu'
-import type { Project } from '@/components/layout/authenticated/types/project'
-
-export const projects: Array<Project> = [
-  {
-    name: 'My Project',
-    logo: 'folder',
-    desc: 'Default project',
-  },
-  {
-    name: 'Team Project',
-    logo: 'users',
-    desc: 'Shared workspace',
-  },
-]
 
 export const sidebarData: Menu[] = [
   {

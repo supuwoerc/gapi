@@ -20,7 +20,6 @@ import {
 import MenuGroup from './components/menu-group'
 import ProjectSwitcher from './components/project-switcher'
 import SidebarUser from './components/sidebar-user'
-import { projects } from './data/constant'
 
 export function AppSidebar() {
   const [collapsible, variant] = useSystemConfigStore(
@@ -44,7 +43,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible={collapsible} variant={variant}>
       <SidebarHeader>
-        <ProjectSwitcher projects={projects} />
+        <ProjectSwitcher />
       </SidebarHeader>
       <SidebarContent>
         {menuData.map((props) => (

@@ -23,6 +23,9 @@
     "project": "Project",
     "projects": "Projects",
     "addProject": "Add project",
+    "selectProject": "Select project",
+    "searchProject": "Search projects...",
+    "noProjectFound": "No project found",
     "signUp": "Sign Up",
     "accountSettings": "Account settings"
   }
