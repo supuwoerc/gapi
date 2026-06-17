@@ -6,6 +6,7 @@ import type { Project } from '@/schema/project/project'
 import { getProjects } from '@/service/projects/projects'
 import { Check, ChevronsUpDown, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 
 import { setActiveProject, useActiveProjectStore } from '@/store/active-project'
 
@@ -106,6 +107,22 @@ function ProjectSwitcher() {
     }
   }
 
+  const navigate = useNavigate()
+
+  const runCommand = React.useCallback(
+    (command: () => unknown) => {
+      setOpen(false)
+      command()
+    },
+    [setOpen]
+  )
+
+  const handleAddProject = () => {
+    navigate(`/projects`, {
+      state: { add: true },
+    })
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -115,7 +132,7 @@ function ProjectSwitcher() {
               size="lg"
               className={cn(
                 'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
-                !activeProject && 'border-2 border-muted-foreground/40'
+                !activeProject && 'border-2 border-primary/40'
               )}
             >
               {activeProject ? (
@@ -195,7 +212,10 @@ function ProjectSwitcher() {
               </CommandList>
               <CommandSeparator />
               <CommandGroup>
-                <CommandItem className="gap-2 p-2">
+                <CommandItem
+                  className="cursor-pointer gap-2 p-2"
+                  onSelect={() => runCommand(handleAddProject)}
+                >
                   <div className="flex size-6 items-center justify-center rounded-md border bg-background">
                     <Plus className="size-4" />
                   </div>

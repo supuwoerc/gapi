@@ -28,6 +28,7 @@ import {
 import { Plus } from 'lucide-react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router'
 import { toast } from 'sonner'
 
 import { getErrorMessage } from '@/lib/error'
@@ -58,7 +59,11 @@ const Projects = () => {
   const { t } = useTranslation('feature')
   const queryClient = useQueryClient()
   const [selectedProjectId, setSelectedProjectId] = React.useState<number | null>(null)
-  const [createOpen, setCreateOpen] = React.useState(false)
+  const location = useLocation()
+  const [createOpen, setCreateOpen] = React.useState(location.state?.add ?? false)
+  const [prevLocationKey, setPrevLocationKey] = React.useState(location.key)
+  const routeAdd = location.state?.add ?? false
+
   const [detailOpen, setDetailOpen] = React.useState(false)
   const [inviteOpen, setInviteOpen] = React.useState(false)
   const [memberToRemove, setMemberToRemove] = React.useState<ProjectMember | null>(null)
@@ -234,6 +239,13 @@ const Projects = () => {
       toast.error(getErrorMessage(error, t('projects.toast.failed')))
     },
   })
+
+  if (location.key !== prevLocationKey) {
+    setPrevLocationKey(location.key)
+    if (routeAdd) {
+      setCreateOpen(true)
+    }
+  }
 
   return (
     <>
