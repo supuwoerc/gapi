@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next'
 
 import { setActiveProject, useActiveProjectStore } from '@/store/active-project'
 
+import { cn } from '@/lib/utils'
+
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 
 import {
@@ -27,6 +29,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 
 const PAGE_SIZE = 10
@@ -110,7 +113,10 @@ function ProjectSwitcher() {
           <PopoverTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className={cn(
+                'data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground',
+                !activeProject && 'border-2 border-muted-foreground/40'
+              )}
             >
               {activeProject ? (
                 <>
@@ -127,11 +133,14 @@ function ProjectSwitcher() {
                   </div>
                 </>
               ) : (
-                <div className="grid flex-1 text-start text-sm leading-tight">
-                  <span className="truncate text-muted-foreground">{t('menu.selectProject')}</span>
-                </div>
+                <>
+                  <Skeleton className="flex aspect-square size-8 shrink-0 items-center justify-center rounded-lg bg-primary/30" />
+                  <div className="grid flex-1 text-start text-sm leading-tight text-primary/40">
+                    {t('menu.selectProject')}
+                  </div>
+                </>
               )}
-              <ChevronsUpDown className="ms-auto" />
+              <ChevronsUpDown className={cn('ms-auto', !activeProject && 'text-primary/40')} />
             </SidebarMenuButton>
           </PopoverTrigger>
           <PopoverContent
