@@ -7,7 +7,7 @@ import { getProjects } from '@/service/projects/projects'
 import { Check, ChevronsUpDown, Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { useActiveProjectStore } from '@/store/active-project'
+import { setActiveProject, useActiveProjectStore } from '@/store/active-project'
 
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 
@@ -43,7 +43,7 @@ function ProjectSwitcher() {
   const [keyword, setKeyword] = React.useState('')
   const [debouncedKeyword, setDebouncedKeyword] = React.useState('')
 
-  const { activeProjectId, setActiveProjectId } = useActiveProjectStore()
+  const { activeProject } = useActiveProjectStore()
 
   const debouncedSetKeyword = useDebouncedCallback((value: string) => {
     setDebouncedKeyword(value)
@@ -77,24 +77,13 @@ function ProjectSwitcher() {
     [projectsPages?.pages]
   )
 
-  // Resolve active project from store, fallback to first loaded
-  const activeProject = React.useMemo(() => {
-    if (activeProjectId !== null) {
-      const found = projects.find((p) => p.id === activeProjectId)
-      if (found) return found
-    }
-    return projects[0] ?? null
-  }, [projects, activeProjectId])
-
-  // Set active project id on first load if not set
-  React.useEffect(() => {
-    if (activeProjectId === null && projects.length > 0) {
-      setActiveProjectId(projects[0].id)
-    }
-  }, [activeProjectId, projects, setActiveProjectId])
-
   const handleSelect = (project: Project) => {
-    setActiveProjectId(project.id)
+    setActiveProject({
+      id: project.id,
+      name: project.name,
+      logo: project.logo,
+      description: project.description,
+    })
     setOpen(false)
   }
 
