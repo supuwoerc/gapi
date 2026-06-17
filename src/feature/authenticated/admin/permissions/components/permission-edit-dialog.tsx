@@ -269,7 +269,9 @@ function PermissionRoleRow({ effect, isLast, role, onEffectChange }: PermissionR
               variant={effect === 'deny' ? 'outline' : 'secondary'}
               className={cn(
                 'text-xs',
-                effect === 'deny' && 'border-destructive/40 text-destructive'
+                effect === 'deny'
+                  ? 'border-destructive/40 text-destructive'
+                  : 'border-primary/40 text-primary'
               )}
             >
               {t(`permissions.roleEffect.${effect}`)}

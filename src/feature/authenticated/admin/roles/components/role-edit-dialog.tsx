@@ -590,7 +590,9 @@ function PermissionReviewRow({
             variant={assignment.effect === 'deny' ? 'outline' : 'secondary'}
             className={cn(
               'text-xs',
-              assignment.effect === 'deny' && 'border-destructive/40 text-destructive'
+              assignment.effect === 'deny'
+                ? 'border-destructive/40 text-destructive'
+                : 'border-primary/40 text-primary'
             )}
           >
             {t('roles.editDialog.directPermission')} ·{' '}
@@ -601,7 +603,9 @@ function PermissionReviewRow({
               variant="outline"
               className={cn(
                 'text-xs',
-                inheritedEffect === 'deny' && 'border-destructive/40 text-destructive'
+                inheritedEffect === 'deny'
+                  ? 'border-destructive/40 text-destructive'
+                  : 'border-primary/40 text-primary'
               )}
             >
               {t('roles.editDialog.inheritedPermission')} ·{' '}
@@ -657,7 +661,9 @@ const PermissionRow = React.memo(
                 variant={directEffect === 'deny' ? 'outline' : 'secondary'}
                 className={cn(
                   'text-xs',
-                  directEffect === 'deny' && 'border-destructive/40 text-destructive'
+                  directEffect === 'deny'
+                    ? 'border-destructive/40 text-destructive'
+                    : 'border-primary/40 text-primary'
                 )}
               >
                 {t('roles.editDialog.directPermission')} ·{' '}
@@ -669,7 +675,9 @@ const PermissionRow = React.memo(
                 variant="outline"
                 className={cn(
                   'text-xs',
-                  inheritedEffect === 'deny' && 'border-destructive/40 text-destructive'
+                  inheritedEffect === 'deny'
+                    ? 'border-destructive/40 text-destructive'
+                    : 'border-primary/40 text-primary'
                 )}
               >
                 {t('roles.editDialog.inheritedPermission')} ·{' '}
