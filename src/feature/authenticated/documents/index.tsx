@@ -1,0 +1,40 @@
+import { useTranslation } from 'react-i18next'
+
+import { ConfigDrawer } from '@/components/config-drawer'
+import { LanguageSwitcher } from '@/components/language-switcher'
+import AppHeader from '@/components/layout/authenticated/app-header'
+import AppMain from '@/components/layout/authenticated/app-main'
+import { ProfileDropdown } from '@/components/profile-dropdown'
+import Search from '@/components/search'
+import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
+
+import { DocumentsTable } from './components/documents-table'
+
+const Documents = () => {
+  const { t } = useTranslation('feature')
+
+  return (
+    <>
+      <AppHeader fixed>
+        <Search />
+        <div className="ms-auto flex items-center gap-4">
+          <ThemeModeSwitcher />
+          <LanguageSwitcher />
+          <ConfigDrawer />
+          <ProfileDropdown />
+        </div>
+      </AppHeader>
+      <AppMain className="flex flex-col gap-4 sm:gap-6">
+        <div className="flex flex-wrap items-end justify-between gap-2">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight">{t('documents.title')}</h2>
+            <p className="text-muted-foreground">{t('documents.description')}</p>
+          </div>
+        </div>
+        <DocumentsTable />
+      </AppMain>
+    </>
+  )
+}
+
+export default Documents
