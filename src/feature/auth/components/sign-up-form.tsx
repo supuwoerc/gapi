@@ -40,24 +40,24 @@ interface SignUpFormProps {
 const signUpFormSchema = z
   .object({
     username: z.string().min(1, {
-      error: () => i18n.t('sign-up:form.username.name'),
+      error: () => i18n.t('auth:signUp.form.username.name'),
     }),
     email: z.email(),
     password: z
       .string()
       .min(8, {
-        error: () => i18n.t('sign-up:form.password.min'),
+        error: () => i18n.t('auth:signUp.form.password.min'),
       })
       .max(20, {
-        error: () => i18n.t('sign-up:form.password.max'),
+        error: () => i18n.t('auth:signUp.form.password.max'),
       })
       .refine((value) => /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9A-Za-z~!@#$%^&*._?]{8,20}$/.test(value), {
-        error: () => i18n.t('sign-up:form.password.pattern'),
+        error: () => i18n.t('auth:signUp.form.password.pattern'),
       }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    error: () => i18n.t('sign-up:form.confirmPassword.mismatch'),
+    error: () => i18n.t('auth:signUp.form.confirmPassword.mismatch'),
     path: ['confirmPassword'],
   })
 
@@ -66,7 +66,7 @@ type SignUpForm = z.infer<typeof signUpFormSchema>
 const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
   const navigate = useNavigate()
 
-  const { t, i18n } = useTranslation(['sign-up', 'global'])
+  const { t, i18n } = useTranslation(['auth', 'global'])
 
   const form = useForm<SignUpForm>({
     resolver: zodResolver(signUpFormSchema),
@@ -110,10 +110,10 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
             captcha_token: token,
           }),
           {
-            loading: t('signUpLoading'),
+            loading: t('signUp.signUpLoading'),
             success: () => {
               navigate('/login', { replace: true })
-              return t('signUpSuccess')
+              return t('signUp.signUpSuccess')
             },
             error: (err) => {
               if (isError(err)) {
@@ -140,9 +140,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('form.username.name')}</FormLabel>
+              <FormLabel>{t('signUp.form.username.name')}</FormLabel>
               <FormControl>
-                <Input placeholder={t('form.username.placeholder')} {...field} />
+                <Input placeholder={t('signUp.form.username.placeholder')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -153,7 +153,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('form.email.name')}</FormLabel>
+              <FormLabel>{t('signUp.form.email.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -166,7 +166,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('form.password.name')}</FormLabel>
+              <FormLabel>{t('signUp.form.password.name')}</FormLabel>
               <FormControl>
                 <PasswordInput placeholder="********" {...field} />
               </FormControl>
@@ -179,7 +179,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('form.confirmPassword.name')}</FormLabel>
+              <FormLabel>{t('signUp.form.confirmPassword.name')}</FormLabel>
               <FormControl>
                 <PasswordInput placeholder="********" {...field} />
               </FormControl>
@@ -189,7 +189,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ className }) => {
         />
         <Button className="mt-2" disabled={signUpMutation.isPending}>
           {signUpMutation.isPending ? <Loader2 className="animate-spin" /> : <UserPlus />}
-          {t('form.submit')}
+          {t('signUp.form.submit')}
         </Button>
       </form>
       <CaptchaDialog

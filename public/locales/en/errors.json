@@ -1,0 +1,14 @@
+{
+  "forbidden": {
+    "title": "Access Denied",
+    "subtitle": "You do not have permission to access this page. Please request access and try again"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "subtitle": "Please verify the URL is correct"
+  },
+  "serverError": {
+    "title": "Server Error",
+    "subtitle": "We apologize for the inconvenience, please try again later"
+  }
+}
