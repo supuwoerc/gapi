@@ -67,7 +67,7 @@ const typeStyles: Record<NotificationType, string> = {
 const EmptyList: Array<Notification> = []
 
 export function NotificationsTable() {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('notifications')
   const queryClient = useQueryClient()
 
   const [selectedNotification, setSelectedNotification] = React.useState<Notification | null>(null)
@@ -75,18 +75,18 @@ export function NotificationsTable() {
 
   const typeOptions = React.useMemo(
     () => [
-      { label: t('notifications.type.system'), value: 'system', icon: Bell },
-      { label: t('notifications.type.task'), value: 'task', icon: CheckCheck },
-      { label: t('notifications.type.message'), value: 'message', icon: MessageSquare },
-      { label: t('notifications.type.alert'), value: 'alert', icon: ShieldAlert },
+      { label: t('type.system'), value: 'system', icon: Bell },
+      { label: t('type.task'), value: 'task', icon: CheckCheck },
+      { label: t('type.message'), value: 'message', icon: MessageSquare },
+      { label: t('type.alert'), value: 'alert', icon: ShieldAlert },
     ],
     [t]
   )
 
   const statusOptions = React.useMemo(
     () => [
-      { label: t('notifications.status.read'), value: 'true' },
-      { label: t('notifications.status.unread'), value: 'false' },
+      { label: t('status.read'), value: 'true' },
+      { label: t('status.unread'), value: 'false' },
     ],
     [t]
   )
@@ -143,7 +143,7 @@ export function NotificationsTable() {
   const markReadMutation = useMutation({
     mutationFn: markNotificationsRead,
     onSuccess: () => {
-      toast.success(t('notifications.toast.markAsReadSuccess'))
+      toast.success(t('toast.markAsReadSuccess'))
       void queryClient.invalidateQueries({ queryKey: ['notifications'] })
     },
   })
@@ -151,7 +151,7 @@ export function NotificationsTable() {
   const deleteMutation = useMutation({
     mutationFn: deleteNotifications,
     onSuccess: () => {
-      toast.success(t('notifications.toast.deleteSuccess'))
+      toast.success(t('toast.deleteSuccess'))
       void queryClient.invalidateQueries({ queryKey: ['notifications'] })
     },
   })
@@ -184,7 +184,7 @@ export function NotificationsTable() {
       {
         id: 'title',
         accessorKey: 'title',
-        header: t('notifications.columns.title'),
+        header: t('columns.title'),
         cell: ({ row }) => (
           <button
             type="button"
@@ -198,8 +198,8 @@ export function NotificationsTable() {
           </button>
         ),
         meta: {
-          label: t('notifications.columns.title'),
-          placeholder: t('notifications.search'),
+          label: t('columns.title'),
+          placeholder: t('search'),
           variant: 'text',
           icon: Text,
         },
@@ -209,19 +209,19 @@ export function NotificationsTable() {
       {
         id: 'type',
         accessorKey: 'type',
-        header: t('notifications.columns.type'),
+        header: t('columns.type'),
         cell: ({ cell }) => {
           const type = cell.getValue<NotificationType>()
           const Icon = typeIcons[type]
           return (
             <Badge variant="outline" className={`capitalize ${typeStyles[type]}`}>
               {Icon && <Icon className="mr-1 size-3" />}
-              {t(`notifications.type.${type}`)}
+              {t(`type.${type}`)}
             </Badge>
           )
         },
         meta: {
-          label: t('notifications.columns.type'),
+          label: t('columns.type'),
           variant: 'multiSelect',
           options: typeOptions,
         },
@@ -230,23 +230,23 @@ export function NotificationsTable() {
       {
         id: 'sender',
         accessorKey: 'sender',
-        header: t('notifications.columns.sender'),
+        header: t('columns.sender'),
         enableSorting: false,
       },
       {
         id: 'is_read',
         accessorKey: 'is_read',
-        header: t('notifications.columns.isRead'),
+        header: t('columns.isRead'),
         cell: ({ cell }) => {
           const read = cell.getValue<boolean>()
           return (
             <Badge variant={read ? 'secondary' : 'default'} className="capitalize">
-              {read ? t('notifications.status.read') : t('notifications.status.unread')}
+              {read ? t('status.read') : t('status.unread')}
             </Badge>
           )
         },
         meta: {
-          label: t('notifications.columns.isRead'),
+          label: t('columns.isRead'),
           variant: 'multiSelect',
           options: statusOptions,
         },
@@ -255,13 +255,13 @@ export function NotificationsTable() {
       {
         id: 'created_at',
         accessorKey: 'created_at',
-        header: t('notifications.columns.createdAt'),
+        header: t('columns.createdAt'),
         cell: ({ cell }) => {
           const date = cell.getValue<Date>()
           return <span>{new Date(date).toLocaleDateString()}</span>
         },
         meta: {
-          label: t('notifications.columns.createdAt'),
+          label: t('columns.createdAt'),
         },
         enableHiding: false,
       },
@@ -273,7 +273,7 @@ export function NotificationsTable() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <MoreHorizontal className="h-4 w-4" />
-                  <span className="sr-only">{t('notifications.openMenu')}</span>
+                  <span className="sr-only">{t('openMenu')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -281,14 +281,14 @@ export function NotificationsTable() {
                   onClick={() => markReadMutation.mutate({ ids: [row.original.id] })}
                 >
                   <CheckCheck className="mr-2 size-4" />
-                  {t('notifications.markAsRead')}
+                  {t('markAsRead')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => deleteMutation.mutate({ ids: [row.original.id] })}
                 >
                   <Trash2 className="mr-2 size-4" />
-                  {t('notifications.delete')}
+                  {t('delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -326,8 +326,8 @@ export function NotificationsTable() {
       variant="outline"
       size="sm"
     >
-      <ToggleGroupItem value="simple">{t('notifications.tabs.simple')}</ToggleGroupItem>
-      <ToggleGroupItem value="advanced">{t('notifications.tabs.advanced')}</ToggleGroupItem>
+      <ToggleGroupItem value="simple">{t('tabs.simple')}</ToggleGroupItem>
+      <ToggleGroupItem value="advanced">{t('tabs.advanced')}</ToggleGroupItem>
     </ToggleGroup>
   )
 

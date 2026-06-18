@@ -13,7 +13,7 @@ import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 import { TasksTable } from './components/tasks-table'
 
 const Tasks = () => {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('tasks')
   useScrollRestoration()
 
   return (
@@ -30,8 +30,8 @@ const Tasks = () => {
       <AppMain className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">{t('tasks.title')}</h2>
-            <p className="text-muted-foreground">{t('tasks.description')}</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+            <p className="text-muted-foreground">{t('description')}</p>
           </div>
         </div>
         <TasksTable />

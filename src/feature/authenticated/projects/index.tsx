@@ -56,7 +56,7 @@ import { ProjectsList } from './components/projects-list'
 const ProjectsPageSize = 20
 
 const Projects = () => {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
   const queryClient = useQueryClient()
   const [selectedProjectId, setSelectedProjectId] = React.useState<number | null>(null)
   const location = useLocation()
@@ -157,38 +157,38 @@ const Projects = () => {
   const createMutation = useMutation({
     mutationFn: createProject,
     onSuccess: (project) => {
-      toast.success(t('projects.toast.createSuccess'))
+      toast.success(t('toast.createSuccess'))
       setCreateOpen(false)
       setSelectedProjectId(project.id)
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
   const inviteMutation = useMutation({
     mutationFn: (values: ProjectMemberInvite) => inviteProjectMember(activeProjectId!, values),
     onSuccess: () => {
-      toast.success(t('projects.toast.inviteSuccess'))
+      toast.success(t('toast.inviteSuccess'))
       setInviteOpen(false)
       void queryClient.invalidateQueries({ queryKey: ['project-members', activeProjectId] })
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
   const applyMutation = useMutation({
     mutationFn: () => applyToJoinProject(activeProjectId!),
     onSuccess: () => {
-      toast.success(t('projects.toast.applySuccess'))
+      toast.success(t('toast.applySuccess'))
       void queryClient.invalidateQueries({ queryKey: ['project-members', activeProjectId] })
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
@@ -196,24 +196,24 @@ const Projects = () => {
     mutationFn: ({ memberId, roleId }: { memberId: number; roleId: number }) =>
       updateProjectMemberRole(activeProjectId!, memberId, { project_role_id: roleId }),
     onSuccess: () => {
-      toast.success(t('projects.toast.roleSuccess'))
+      toast.success(t('toast.roleSuccess'))
       void queryClient.invalidateQueries({ queryKey: ['project-members', activeProjectId] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
   const removeMutation = useMutation({
     mutationFn: (memberId: number) => removeProjectMember(activeProjectId!, memberId),
     onSuccess: () => {
-      toast.success(t('projects.toast.removeSuccess'))
+      toast.success(t('toast.removeSuccess'))
       setMemberToRemove(null)
       void queryClient.invalidateQueries({ queryKey: ['project-members', activeProjectId] })
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
@@ -221,22 +221,22 @@ const Projects = () => {
     mutationFn: (visibility: ProjectVisibility) =>
       updateProjectVisibility(activeProjectId!, { visibility }),
     onSuccess: () => {
-      toast.success(t('projects.toast.visibilitySuccess'))
+      toast.success(t('toast.visibilitySuccess'))
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
   const logoMutation = useMutation({
     mutationFn: (logo: string) => updateProjectLogo(activeProjectId!, { logo }),
     onSuccess: () => {
-      toast.success(t('projects.toast.logoSuccess'))
+      toast.success(t('toast.logoSuccess'))
       void queryClient.invalidateQueries({ queryKey: ['projects'] })
     },
     onError: (error) => {
-      toast.error(getErrorMessage(error, t('projects.toast.failed')))
+      toast.error(getErrorMessage(error, t('toast.failed')))
     },
   })
 
@@ -261,12 +261,12 @@ const Projects = () => {
       <AppMain fixed className="min-h-0 flex-1 basis-0 gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">{t('projects.title')}</h2>
-            <p className="text-muted-foreground">{t('projects.description')}</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+            <p className="text-muted-foreground">{t('description')}</p>
           </div>
           <Button onClick={() => setCreateOpen(true)}>
             <Plus />
-            {t('projects.create')}
+            {t('create')}
           </Button>
         </div>
 
@@ -295,11 +295,9 @@ const Projects = () => {
 
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
         <DialogContent className="flex h-[calc(100svh-2rem)] max-h-[52rem] flex-col overflow-hidden p-8 sm:max-w-6xl sm:p-8">
-          <DialogTitle className="sr-only">
-            {selectedProject?.name ?? t('projects.title')}
-          </DialogTitle>
+          <DialogTitle className="sr-only">{selectedProject?.name ?? t('title')}</DialogTitle>
           <DialogDescription className="sr-only">
-            {selectedProject?.description ?? t('projects.description')}
+            {selectedProject?.description ?? t('description')}
           </DialogDescription>
           {selectedProject ? (
             <div className="flex min-h-0 flex-1 overflow-hidden">
@@ -345,8 +343,8 @@ const Projects = () => {
         onOpenChange={(open) => {
           if (!open) setMemberToRemove(null)
         }}
-        title={t('projects.removeDialog.title')}
-        desc={t('projects.removeDialog.description', {
+        title={t('removeDialog.title')}
+        desc={t('removeDialog.description', {
           username: memberToRemove?.user.username ?? '',
         })}
         destructive

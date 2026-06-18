@@ -1,0 +1,31 @@
+{
+  "title": "任务列表",
+  "description": "管理和跟踪所有任务",
+  "level": {
+    "low": "低",
+    "medium": "中",
+    "high": "高",
+    "critical": "紧急"
+  },
+  "type": {
+    "bug": "缺陷",
+    "feature": "功能",
+    "improvement": "优化",
+    "task": "任务"
+  },
+  "columns": {
+    "id": "ID",
+    "level": "级别",
+    "type": "类型",
+    "title": "标题",
+    "creator": "创建人",
+    "assignee": "指派人",
+    "resolver": "解决人",
+    "updatedAt": "更新时间"
+  },
+  "search": "搜索任务...",
+  "tabs": {
+    "simple": "简单",
+    "advanced": "高级"
+  }
+}

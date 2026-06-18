@@ -13,23 +13,23 @@ import {
 import SignUpForm from './components/sign-up-form'
 
 const SignUp: React.FC = () => {
-  const { t } = useTranslation(['feature', 'global'])
+  const { t } = useTranslation(['sign-up', 'login', 'global'])
 
   return (
     <div className="relative flex h-svh w-full items-center justify-center lg:p-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg tracking-tight">{t('signUp.name')}</CardTitle>
-          <CardDescription>{t('signUp.tips')}</CardDescription>
+          <CardTitle className="text-lg tracking-tight">{t('name')}</CardTitle>
+          <CardDescription>{t('tips')}</CardDescription>
         </CardHeader>
         <CardContent className="sm:w-110">
           <SignUpForm className="space-y-2" />
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            {t('signUp.alreadyHaveAccount')}{' '}
+            {t('alreadyHaveAccount')}{' '}
             <Link className="underline underline-offset-4 hover:text-primary" to={'/login'}>
-              {t('login.button.login')}
+              {t('login:button.login')}
             </Link>
           </p>
         </CardFooter>

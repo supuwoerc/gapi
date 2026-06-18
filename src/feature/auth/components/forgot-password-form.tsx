@@ -41,7 +41,7 @@ type forgotPasswordForm = z.infer<typeof forgotPasswordFormSchema>
 const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) => {
   const navigate = useNavigate()
 
-  const { t, i18n } = useTranslation(['feature', 'global'])
+  const { t, i18n } = useTranslation(['forgot-password', 'global'])
 
   const form = useForm<forgotPasswordForm>({
     resolver: zodResolver(forgotPasswordFormSchema),
@@ -66,7 +66,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
         loading: t('global:loading'),
         success: () => {
           navigate('/otp')
-          return t('forgotPassword.sendMail', { email: data.email })
+          return t('sendMail', { email: data.email })
         },
         error: (err) => {
           if (isError(err)) {
@@ -86,7 +86,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('forgotPassword.form.email.name')}</FormLabel>
+              <FormLabel>{t('form.email.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>

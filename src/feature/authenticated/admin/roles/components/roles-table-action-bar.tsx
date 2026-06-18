@@ -28,7 +28,7 @@ interface RolesTableActionBarProps {
 
 export function RolesTableActionBar({ table }: RolesTableActionBarProps) {
   'use no memo'
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('roles')
   const queryClient = useQueryClient()
   const rows = table.getFilteredSelectedRowModel().rows
   const [confirmOpen, setConfirmOpen] = React.useState(false)
@@ -36,7 +36,7 @@ export function RolesTableActionBar({ table }: RolesTableActionBarProps) {
   const deleteMutation = useMutation({
     mutationFn: deleteRoles,
     onSuccess: () => {
-      toast.success(t('roles.deleteConfirm.success'))
+      toast.success(t('deleteConfirm.success'))
       table.toggleAllRowsSelected(false)
       setConfirmOpen(false)
       void queryClient.invalidateQueries({ queryKey: ['roles'] })
@@ -59,7 +59,7 @@ export function RolesTableActionBar({ table }: RolesTableActionBarProps) {
       <ActionBar open={rows.length > 0} onOpenChange={onOpenChange}>
         <ActionBarSelection>
           <span className="font-medium">{rows.length}</span>
-          <span>{t('roles.actionBar.selected')}</span>
+          <span>{t('actionBar.selected')}</span>
           <ActionBarSeparator />
           <ActionBarClose>
             <X />
@@ -73,15 +73,15 @@ export function RolesTableActionBar({ table }: RolesTableActionBarProps) {
             onClick={() => setConfirmOpen(true)}
           >
             <Trash2 />
-            {t('roles.actionBar.delete')}
+            {t('actionBar.delete')}
           </ActionBarItem>
         </ActionBarGroup>
       </ActionBar>
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title={t('roles.deleteConfirm.title')}
-        desc={t('roles.deleteConfirm.desc', { count: rows.length })}
+        title={t('deleteConfirm.title')}
+        desc={t('deleteConfirm.desc', { count: rows.length })}
         destructive
         isLoading={deleteMutation.isPending}
         handleConfirm={onConfirmDelete}

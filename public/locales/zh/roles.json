@@ -1,0 +1,109 @@
+{
+  "title": "角色管理",
+  "description": "管理角色继承关系和权限分配",
+  "enabled": {
+    "true": "启用",
+    "false": "禁用"
+  },
+  "columns": {
+    "name": "角色",
+    "enabled": "状态",
+    "permissions": "权限",
+    "effectivePermissions": "生效权限",
+    "configCount": "配置数量",
+    "sortOrder": "排序",
+    "createdAt": "创建时间"
+  },
+  "search": "搜索角色...",
+  "create": "新建角色",
+  "createChild": "创建子角色",
+  "openMenu": "打开菜单",
+  "edit": "编辑",
+  "delete": "删除",
+  "selectAll": "选择全部角色",
+  "selectRow": "选择角色",
+  "actionBar": {
+    "selected": "已选",
+    "delete": "删除"
+  },
+  "deleteConfirm": {
+    "title": "确认删除",
+    "desc": "确定要删除 {{count}} 个角色吗？子角色也会一起删除，此操作无法撤销。",
+    "single": "确定要删除角色「{{name}}」吗？子角色也会一起删除，此操作无法撤销。",
+    "success": "角色删除成功"
+  },
+  "editDialog": {
+    "createTitle": "新建角色",
+    "editTitle": "编辑角色",
+    "name": "角色名称",
+    "namePlaceholder": "请输入角色名称",
+    "code": "角色编码",
+    "codePlaceholder": "请输入唯一编码",
+    "parent": "父角色",
+    "parentPlaceholder": "选择父角色",
+    "noParent": "无父角色",
+    "sortOrder": "排序",
+    "description": "描述",
+    "descriptionPlaceholder": "请输入角色描述",
+    "enabled": "启用状态",
+    "permissions": "权限分配",
+    "save": "保存",
+    "saving": "保存中...",
+    "createSuccess": "角色创建成功",
+    "updateSuccess": "角色更新成功",
+    "inheritedPermissions": "从父角色继承的权限",
+    "tabs": {
+      "basic": "基础信息",
+      "permissions": "权限分配"
+    },
+    "permissionSearchPlaceholder": "搜索权限名称、编码或模块...",
+    "permissionModuleAll": "全部模块",
+    "permissionActionAll": "全部动作",
+    "permissionResourceTypeAll": "全部资源",
+    "permissionStateAll": "全部状态",
+    "permissionStateSelected": "已直接配置",
+    "permissionStateInherited": "继承权限",
+    "permissionStateOverridden": "覆盖继承",
+    "permissionStateUnset": "未直接配置",
+    "directPermission": "直接",
+    "inheritedPermission": "继承",
+    "selectedPermissions": "已配置权限",
+    "selectedPermissionCount": "{{count}} 项",
+    "selectedPermissionEmpty": "尚未配置直接权限",
+    "permissionUnknown": "权限 #{{id}}",
+    "permissionReviewTitle": "确认权限配置",
+    "permissionReviewDescription": "保存前请确认本角色将直接配置的权限。",
+    "permissionReviewBack": "返回修改",
+    "permissionReviewConfirm": "确认保存",
+    "directPermissionSummary": "直接配置：允许 {{allow}} / 拒绝 {{deny}}",
+    "inheritedPermissionSummary": "继承权限：允许 {{allow}} / 拒绝 {{deny}}",
+    "overridePermissionSummary": "覆盖继承：{{count}}",
+    "permissionResultCount": "显示 {{count}} / {{total}} 项",
+    "permissionRefreshing": "正在刷新权限列表...",
+    "permissionEmpty": "未找到权限",
+    "permissionRowsPerPage": "每页",
+    "permissionPageOf": "第 {{current}} / {{total}} 页",
+    "permissionPreviousPage": "上一页",
+    "permissionNextPage": "下一页"
+  },
+  "permissionAction": {
+    "create": "创建",
+    "read": "读取",
+    "update": "更新",
+    "delete": "删除"
+  },
+  "resourceType": {
+    "1": "API",
+    "2": "菜单",
+    "3": "路由",
+    "4": "按钮",
+    "5": "数据"
+  },
+  "permissionEffect": {
+    "unset": "未设置",
+    "allow": "允许",
+    "deny": "拒绝",
+    "configCount": "继承 {{inherited}} / 直接 {{direct}}",
+    "effectSummary": "允许 {{allow}} / 拒绝 {{deny}}"
+  }
+}

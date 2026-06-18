@@ -49,14 +49,14 @@ export function MembersTable({
   onRoleChange,
   onRemove,
 }: MembersTableProps) {
-  const { t, i18n } = useTranslation('feature')
+  const { t, i18n } = useTranslation('projects')
 
   const columns = React.useMemo<ColumnDef<ProjectMember>[]>(() => {
     const baseColumns: ColumnDef<ProjectMember>[] = [
       {
         id: 'member',
         accessorFn: (member) => member.user.username,
-        header: t('projects.columns.member'),
+        header: t('columns.member'),
         cell: ({ row }) => (
           <div className="flex min-w-60 items-center gap-3">
             <Avatar className="size-8">
@@ -76,10 +76,10 @@ export function MembersTable({
       {
         id: 'status',
         accessorKey: 'status',
-        header: t('projects.columns.status'),
+        header: t('columns.status'),
         cell: ({ row }) => (
           <Badge variant={row.original.status === 'active' ? 'secondary' : 'outline'}>
-            {t(`projects.status.${row.original.status}`)}
+            {t(`status.${row.original.status}`)}
           </Badge>
         ),
         enableSorting: false,
@@ -87,7 +87,7 @@ export function MembersTable({
       {
         id: 'role',
         accessorFn: (member) => member.project_role.name,
-        header: t('projects.columns.role'),
+        header: t('columns.role'),
         cell: ({ row }) =>
           canManageMembers ? (
             <Select
@@ -116,7 +116,7 @@ export function MembersTable({
       {
         id: 'joined_at',
         accessorKey: 'joined_at',
-        header: t('projects.columns.joinedAt'),
+        header: t('columns.joinedAt'),
         cell: ({ row }) =>
           row.original.joined_at
             ? formatDate(row.original.joined_at, { dateStyle: 'medium' }, i18n.language)
@@ -128,7 +128,7 @@ export function MembersTable({
     if (canManageMembers) {
       baseColumns.push({
         id: 'actions',
-        header: () => <span className="sr-only">{t('projects.columns.actions')}</span>,
+        header: () => <span className="sr-only">{t('columns.actions')}</span>,
         cell: ({ row }) => (
           <div className="flex justify-end">
             <Button
@@ -138,7 +138,7 @@ export function MembersTable({
               onClick={() => onRemove(row.original)}
             >
               <Trash2 />
-              <span className="sr-only">{t('projects.removeMember')}</span>
+              <span className="sr-only">{t('removeMember')}</span>
             </Button>
           </div>
         ),

@@ -29,8 +29,8 @@ interface OTPFormProps {
 const otpFormSchema = z.object({
   otp: z
     .string()
-    .min(6, { error: () => i18n.t('feature:otp.otpForm.opt.tip') })
-    .max(6, { error: () => i18n.t('feature:otp.otpForm.opt.tip') }),
+    .min(6, { error: () => i18n.t('otp:otpForm.opt.tip') })
+    .max(6, { error: () => i18n.t('otp:otpForm.opt.tip') }),
 })
 
 type otpForm = z.infer<typeof otpFormSchema>
@@ -38,7 +38,7 @@ type otpForm = z.infer<typeof otpFormSchema>
 const OTPForm: React.FC<OTPFormProps> = ({ className }) => {
   const navigate = useNavigate()
 
-  const { t, i18n } = useTranslation(['feature', 'global'])
+  const { t, i18n } = useTranslation(['otp', 'global'])
 
   const form = useForm<otpForm>({
     resolver: zodResolver(otpFormSchema),
@@ -63,7 +63,7 @@ const OTPForm: React.FC<OTPFormProps> = ({ className }) => {
         loading: t('global:loading'),
         success: () => {
           navigate('/login')
-          return t('otp.verifySuccess')
+          return t('verifySuccess')
         },
         error: (err) => {
           if (isError(err)) {
@@ -111,7 +111,7 @@ const OTPForm: React.FC<OTPFormProps> = ({ className }) => {
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <ShieldEllipsis />}
-          {t('otp.verify')}
+          {t('verify')}
         </Button>
       </form>
     </Form>

@@ -1,0 +1,7 @@
+{
+  "name": "仪表盘",
+  "tabs": {
+    "overview": "概览",
+    "analytics": "分析"
+  }
+}

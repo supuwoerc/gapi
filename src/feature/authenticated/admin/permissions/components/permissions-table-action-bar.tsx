@@ -28,7 +28,7 @@ interface PermissionsTableActionBarProps {
 
 export function PermissionsTableActionBar({ table }: PermissionsTableActionBarProps) {
   'use no memo'
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('permissions')
   const queryClient = useQueryClient()
   const rows = table.getFilteredSelectedRowModel().rows
   const [confirmOpen, setConfirmOpen] = React.useState(false)
@@ -36,7 +36,7 @@ export function PermissionsTableActionBar({ table }: PermissionsTableActionBarPr
   const deleteMutation = useMutation({
     mutationFn: deletePermissions,
     onSuccess: () => {
-      toast.success(t('permissions.deleteConfirm.success'))
+      toast.success(t('deleteConfirm.success'))
       table.toggleAllRowsSelected(false)
       setConfirmOpen(false)
       void queryClient.invalidateQueries({ queryKey: ['permissions'] })
@@ -59,7 +59,7 @@ export function PermissionsTableActionBar({ table }: PermissionsTableActionBarPr
       <ActionBar open={rows.length > 0} onOpenChange={onOpenChange}>
         <ActionBarSelection>
           <span className="font-medium">{rows.length}</span>
-          <span>{t('permissions.actionBar.selected')}</span>
+          <span>{t('actionBar.selected')}</span>
           <ActionBarSeparator />
           <ActionBarClose>
             <X />
@@ -73,15 +73,15 @@ export function PermissionsTableActionBar({ table }: PermissionsTableActionBarPr
             onClick={() => setConfirmOpen(true)}
           >
             <Trash2 />
-            {t('permissions.actionBar.delete')}
+            {t('actionBar.delete')}
           </ActionBarItem>
         </ActionBarGroup>
       </ActionBar>
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title={t('permissions.deleteConfirm.title')}
-        desc={t('permissions.deleteConfirm.desc', { count: rows.length })}
+        title={t('deleteConfirm.title')}
+        desc={t('deleteConfirm.desc', { count: rows.length })}
         destructive
         isLoading={deleteMutation.isPending}
         handleConfirm={onConfirmDelete}

@@ -1,0 +1,12 @@
+{
+  "tfa": "Two-factor Authentication",
+  "tips": "Please enter the 2FA code",
+  "dontHaveRecived": "Haven't received it?",
+  "verify": "Verify",
+  "verifySuccess": "Verification successful",
+  "otpForm": {
+    "opt": {
+      "tip": "Please enter the 6-digit code"
+    }
+  }
+}

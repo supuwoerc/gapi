@@ -38,7 +38,7 @@ import { PermissionsTableActionBar } from './permissions-table-action-bar'
 const EmptyList: Permission[] = []
 
 export function PermissionsTable() {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('permissions')
   const queryClient = useQueryClient()
   const [deletePermission, setDeletePermission] = React.useState<Permission | null>(null)
   const [permissionDialogOpen, setPermissionDialogOpen] = React.useState(false)
@@ -67,7 +67,7 @@ export function PermissionsTable() {
   const deleteMutation = useMutation({
     mutationFn: deletePermissions,
     onSuccess: () => {
-      toast.success(t('permissions.deleteConfirm.success'))
+      toast.success(t('deleteConfirm.success'))
       setDeletePermission(null)
       void queryClient.invalidateQueries({ queryKey: ['permissions'] })
     },
@@ -84,14 +84,14 @@ export function PermissionsTable() {
               (table.getIsSomePageRowsSelected() && 'indeterminate')
             }
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label={t('permissions.selectAll')}
+            aria-label={t('selectAll')}
           />
         ),
         cell: ({ row }) => (
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label={t('permissions.selectRow')}
+            aria-label={t('selectRow')}
           />
         ),
         size: 32,
@@ -102,7 +102,7 @@ export function PermissionsTable() {
         id: 'keyword',
         accessorFn: (row) => row.name,
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.name')} />
+          <DataTableColumnHeader column={column} label={t('columns.name')} />
         ),
         cell: ({ row }) => (
           <div className="flex min-w-56 flex-col gap-1">
@@ -111,8 +111,8 @@ export function PermissionsTable() {
           </div>
         ),
         meta: {
-          label: t('permissions.columns.name'),
-          placeholder: t('permissions.search'),
+          label: t('columns.name'),
+          placeholder: t('search'),
           variant: 'text',
           icon: Text,
         },
@@ -123,7 +123,7 @@ export function PermissionsTable() {
         id: 'description',
         accessorKey: 'description',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.description')} />
+          <DataTableColumnHeader column={column} label={t('columns.description')} />
         ),
         cell: ({ cell }) => (
           <LongText className="max-w-80" contentClassName="max-w-sm">
@@ -131,7 +131,7 @@ export function PermissionsTable() {
           </LongText>
         ),
         meta: {
-          label: t('permissions.columns.description'),
+          label: t('columns.description'),
         },
         enableSorting: false,
       },
@@ -139,11 +139,11 @@ export function PermissionsTable() {
         id: 'module',
         accessorKey: 'module',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.module')} />
+          <DataTableColumnHeader column={column} label={t('columns.module')} />
         ),
         cell: ({ cell }) => <Badge variant="secondary">{cell.getValue<string>()}</Badge>,
         meta: {
-          label: t('permissions.columns.module'),
+          label: t('columns.module'),
         },
         enableSorting: false,
       },
@@ -151,7 +151,7 @@ export function PermissionsTable() {
         id: 'resource_path',
         accessorKey: 'resource_path',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.resourcePath')} />
+          <DataTableColumnHeader column={column} label={t('columns.resourcePath')} />
         ),
         cell: ({ cell }) => (
           <LongText className="max-w-64 font-mono text-xs" contentClassName="max-w-sm break-all">
@@ -159,7 +159,7 @@ export function PermissionsTable() {
           </LongText>
         ),
         meta: {
-          label: t('permissions.columns.resourcePath'),
+          label: t('columns.resourcePath'),
         },
         enableSorting: false,
       },
@@ -167,14 +167,14 @@ export function PermissionsTable() {
         id: 'action',
         accessorKey: 'action',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.action')} />
+          <DataTableColumnHeader column={column} label={t('columns.action')} />
         ),
         cell: ({ cell }) => {
           const action = cell.getValue<Permission['action']>()
-          return <Badge variant="outline">{t(`permissions.action.${action}`)}</Badge>
+          return <Badge variant="outline">{t(`action.${action}`)}</Badge>
         },
         meta: {
-          label: t('permissions.columns.action'),
+          label: t('columns.action'),
         },
         enableSorting: false,
       },
@@ -182,14 +182,14 @@ export function PermissionsTable() {
         id: 'resource_type',
         accessorKey: 'resource_type',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.resourceType')} />
+          <DataTableColumnHeader column={column} label={t('columns.resourceType')} />
         ),
         cell: ({ cell }) => {
           const resourceType = cell.getValue<Permission['resource_type']>()
-          return <Badge variant="secondary">{t(`permissions.resourceType.${resourceType}`)}</Badge>
+          return <Badge variant="secondary">{t(`resourceType.${resourceType}`)}</Badge>
         },
         meta: {
-          label: t('permissions.columns.resourceType'),
+          label: t('columns.resourceType'),
         },
         enableSorting: false,
       },
@@ -197,11 +197,11 @@ export function PermissionsTable() {
         id: 'created_at',
         accessorKey: 'created_at',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.createdAt')} />
+          <DataTableColumnHeader column={column} label={t('columns.createdAt')} />
         ),
         cell: ({ cell }) => <div>{new Date(cell.getValue<Date>()).toLocaleDateString()}</div>,
         meta: {
-          label: t('permissions.columns.createdAt'),
+          label: t('columns.createdAt'),
         },
         enableSorting: false,
       },
@@ -209,11 +209,11 @@ export function PermissionsTable() {
         id: 'updated_at',
         accessorKey: 'updated_at',
         header: ({ column }: { column: Column<Permission, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('permissions.columns.updatedAt')} />
+          <DataTableColumnHeader column={column} label={t('columns.updatedAt')} />
         ),
         cell: ({ cell }) => <div>{new Date(cell.getValue<Date>()).toLocaleDateString()}</div>,
         meta: {
-          label: t('permissions.columns.updatedAt'),
+          label: t('columns.updatedAt'),
         },
         enableSorting: false,
       },
@@ -225,7 +225,7 @@ export function PermissionsTable() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <MoreHorizontal />
-                  <span className="sr-only">{t('permissions.openMenu')}</span>
+                  <span className="sr-only">{t('openMenu')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -236,14 +236,14 @@ export function PermissionsTable() {
                   }}
                 >
                   <Pencil />
-                  {t('permissions.edit')}
+                  {t('edit')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => setDeletePermission(row.original)}
                 >
                   <Trash2 />
-                  {t('permissions.delete')}
+                  {t('delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -287,7 +287,7 @@ export function PermissionsTable() {
               }}
             >
               <Plus />
-              {t('permissions.create')}
+              {t('create')}
             </Button>
           </DataTableToolbar>
         </DataTable>
@@ -297,8 +297,8 @@ export function PermissionsTable() {
         onOpenChange={(open) => {
           if (!open) setDeletePermission(null)
         }}
-        title={t('permissions.deleteConfirm.title')}
-        desc={t('permissions.deleteConfirm.single', { name: deletePermission?.name ?? '' })}
+        title={t('deleteConfirm.title')}
+        desc={t('deleteConfirm.single', { name: deletePermission?.name ?? '' })}
         destructive
         isLoading={deleteMutation.isPending}
         handleConfirm={() => {

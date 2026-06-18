@@ -36,7 +36,7 @@ const Login: React.FC = () => {
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const splitRef = useRef<{ title?: SplitText; sub?: SplitText }>({})
 
-  const { t, i18n } = useTranslation(['feature', 'global'])
+  const { t, i18n } = useTranslation(['login', 'forgot-password', 'global'])
 
   useEffect(() => {
     let ins: HighlighterCore
@@ -255,15 +255,15 @@ const Login: React.FC = () => {
       <div className="flex h-full w-full items-center justify-center lg:p-8">
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg tracking-tight">{t('login.button.login')}</CardTitle>
-            <CardDescription>{t('login.tips')}</CardDescription>
+            <CardTitle className="text-lg tracking-tight">{t('button.login')}</CardTitle>
+            <CardDescription>{t('tips')}</CardDescription>
           </CardHeader>
           <CardContent>
             <AuthForm className="space-y-2 sm:w-102" redirectTo={redirect} />
           </CardContent>
           <CardFooter>
             <p className="w-full text-center text-sm text-muted-foreground">
-              {t('forgotPassword.dontHaveAccount')}{' '}
+              {t('forgot-password:dontHaveAccount')}{' '}
               <Link className="underline underline-offset-4 hover:text-primary" to={'/sign-up'}>
                 {t('global:menu.signUp')}
               </Link>

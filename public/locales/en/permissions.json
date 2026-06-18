@@ -1,0 +1,79 @@
+{
+  "title": "Permission List",
+  "description": "View the system permission catalog, resource paths, and actions",
+  "create": "New Permission",
+  "search": "Search permission name or description...",
+  "openMenu": "Open menu",
+  "edit": "Edit",
+  "delete": "Delete",
+  "selectAll": "Select all permissions",
+  "selectRow": "Select permission",
+  "columns": {
+    "name": "Permission",
+    "description": "Description",
+    "module": "Module",
+    "resourcePath": "Resource Path",
+    "action": "Action",
+    "resourceType": "Resource Type",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At"
+  },
+  "actionBar": {
+    "selected": "selected",
+    "delete": "Delete"
+  },
+  "deleteConfirm": {
+    "title": "Confirm Deletion",
+    "desc": "Are you sure you want to delete {{count}} permission(s)? This action cannot be undone.",
+    "single": "Are you sure you want to delete permission \"{{name}}\"? This action cannot be undone.",
+    "success": "Permission deleted successfully"
+  },
+  "editDialog": {
+    "createTitle": "New Permission",
+    "editTitle": "Edit Permission",
+    "tabs": {
+      "basic": "Basic Info",
+      "roles": "Role Grants"
+    },
+    "name": "Permission Name",
+    "namePlaceholder": "Enter permission name",
+    "code": "Permission Code",
+    "codePlaceholder": "Enter unique permission code",
+    "resourceType": "Resource Type",
+    "module": "Module",
+    "modulePlaceholder": "Enter module",
+    "resourcePath": "Resource Path",
+    "resourcePathPlaceholder": "Enter resource path",
+    "action": "Action",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter permission description",
+    "roles": "Role Grants",
+    "roleSearchPlaceholder": "Search roles...",
+    "rolesRefreshing": "Refreshing roles...",
+    "roleResultCount": "Showing {{count}} role(s)",
+    "rolesEmpty": "No roles found",
+    "roleUnknown": "Role #{{id}}",
+    "save": "Save",
+    "saving": "Saving...",
+    "createSuccess": "Permission created successfully",
+    "updateSuccess": "Permission updated successfully"
+  },
+  "action": {
+    "create": "Create",
+    "read": "Read",
+    "update": "Update",
+    "delete": "Delete"
+  },
+  "resourceType": {
+    "1": "API",
+    "2": "Menu",
+    "3": "Route",
+    "4": "Button",
+    "5": "Data"
+  },
+  "roleEffect": {
+    "unset": "Unset",
+    "allow": "Allow",
+    "deny": "Deny"
+  }
+}

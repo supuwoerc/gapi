@@ -1,0 +1,43 @@
+{
+  "enabled": {
+    "true": "Enabled",
+    "false": "Disabled"
+  },
+  "columns": {
+    "username": "Username",
+    "enabled": "Status",
+    "roles": "Roles",
+    "lastLogin": "Last Login",
+    "createdAt": "Created At"
+  },
+  "search": "Search users...",
+  "openMenu": "Open menu",
+  "edit": "Edit",
+  "delete": "Delete",
+  "tabs": {
+    "simple": "Simple",
+    "advanced": "Advanced"
+  },
+  "actionBar": {
+    "selected": "selected",
+    "enabled": "Status",
+    "delete": "Delete"
+  },
+  "deleteConfirm": {
+    "title": "Confirm Deletion",
+    "desc": "Are you sure you want to delete {{count}} user(s)? This action cannot be undone.",
+    "single": "Are you sure you want to delete user \"{{username}}\"? This action cannot be undone."
+  },
+  "editDialog": {
+    "title": "Edit User",
+    "enabled": "Status",
+    "roles": "Roles",
+    "rolesPlaceholder": "Search roles...",
+    "rolesEmpty": "No roles found",
+    "save": "Save",
+    "saving": "Saving...",
+    "success": "User updated successfully"
+  },
+  "title": "User List",
+  "description": "Manage your users and their permissions here"
+}

@@ -37,7 +37,7 @@ const notificationsFormSchema = z.object({
 type NotificationsFormValues = z.infer<typeof notificationsFormSchema>
 
 const NotificationsPage = () => {
-  const { t } = useTranslation(['feature', 'global'])
+  const { t } = useTranslation(['settings', 'global'])
 
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(notificationsFormSchema),
@@ -54,8 +54,8 @@ const NotificationsPage = () => {
   const onSubmit: SubmitHandler<NotificationsFormValues> = async (data) => {
     await toast
       .promise(mutation.mutateAsync(data), {
-        loading: t('settings.notifications.form.saving'),
-        success: () => t('settings.notifications.form.saveSuccess'),
+        loading: t('notifications.form.saving'),
+        success: () => t('notifications.form.saveSuccess'),
         error: (err) => {
           if (isError(err)) {
             return err.message
@@ -69,8 +69,8 @@ const NotificationsPage = () => {
   return (
     <div className="w-full space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{t('settings.notifications.title')}</h3>
-        <p className="text-sm text-muted-foreground">{t('settings.notifications.description')}</p>
+        <h3 className="text-lg font-medium">{t('notifications.title')}</h3>
+        <p className="text-sm text-muted-foreground">{t('notifications.description')}</p>
       </div>
       <Separator />
       <Form {...form}>
@@ -85,10 +85,8 @@ const NotificationsPage = () => {
                     render={({ field }) => (
                       <Item variant="outline">
                         <ItemContent>
-                          <ItemTitle>{t(`settings.notifications.${key}.title`)}</ItemTitle>
-                          <ItemDescription>
-                            {t(`settings.notifications.${key}.description`)}
-                          </ItemDescription>
+                          <ItemTitle>{t(`notifications.${key}.title`)}</ItemTitle>
+                          <ItemDescription>{t(`notifications.${key}.description`)}</ItemDescription>
                         </ItemContent>
                         <ItemActions>
                           <FormControl>
@@ -104,7 +102,7 @@ const NotificationsPage = () => {
           </ItemGroup>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <Save />}
-            {t('settings.notifications.form.submit')}
+            {t('notifications.form.submit')}
           </Button>
         </form>
       </Form>

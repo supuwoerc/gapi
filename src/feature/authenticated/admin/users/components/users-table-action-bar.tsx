@@ -37,7 +37,7 @@ interface UsersTableActionBarProps {
 
 export function UsersTableActionBar({ table, enabledOptions }: UsersTableActionBarProps) {
   'use no memo'
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('users')
   const queryClient = useQueryClient()
   const rows = table.getFilteredSelectedRowModel().rows
   const [confirmOpen, setConfirmOpen] = React.useState(false)
@@ -78,7 +78,7 @@ export function UsersTableActionBar({ table, enabledOptions }: UsersTableActionB
       <ActionBar open={rows.length > 0} onOpenChange={onOpenChange}>
         <ActionBarSelection>
           <span className="font-medium">{rows.length}</span>
-          <span>{t('users.actionBar.selected')}</span>
+          <span>{t('actionBar.selected')}</span>
           <ActionBarSeparator />
           <ActionBarClose>
             <X />
@@ -90,7 +90,7 @@ export function UsersTableActionBar({ table, enabledOptions }: UsersTableActionB
             <DropdownMenuTrigger asChild>
               <ActionBarItem>
                 <CheckCircle />
-                {t('users.actionBar.enabled')}
+                {t('actionBar.enabled')}
               </ActionBarItem>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -107,15 +107,15 @@ export function UsersTableActionBar({ table, enabledOptions }: UsersTableActionB
             onClick={() => setConfirmOpen(true)}
           >
             <Trash2 />
-            {t('users.actionBar.delete')}
+            {t('actionBar.delete')}
           </ActionBarItem>
         </ActionBarGroup>
       </ActionBar>
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title={t('users.deleteConfirm.title')}
-        desc={t('users.deleteConfirm.desc', { count: rows.length })}
+        title={t('deleteConfirm.title')}
+        desc={t('deleteConfirm.desc', { count: rows.length })}
         destructive
         isLoading={deleteMutation.isPending}
         handleConfirm={onConfirmDelete}

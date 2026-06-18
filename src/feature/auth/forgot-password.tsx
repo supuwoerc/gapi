@@ -13,21 +13,21 @@ import {
 import ForgotPasswordForm from './components/forgot-password-form'
 
 const ForgotPassword: React.FC = () => {
-  const { t } = useTranslation(['feature', 'global'])
+  const { t } = useTranslation(['forgot-password', 'global'])
 
   return (
     <div className="relative flex h-svh w-full items-center justify-center lg:p-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg tracking-tight">{t('forgotPassword.name')}</CardTitle>
-          <CardDescription>{t('forgotPassword.tips')}</CardDescription>
+          <CardTitle className="text-lg tracking-tight">{t('name')}</CardTitle>
+          <CardDescription>{t('tips')}</CardDescription>
         </CardHeader>
         <CardContent className="sm:w-110">
           <ForgotPasswordForm className="space-y-2" />
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            {t('forgotPassword.dontHaveAccount')}{' '}
+            {t('dontHaveAccount')}{' '}
             <Link className="underline underline-offset-4 hover:text-primary" to={'/sign-up'}>
               {t('global:menu.signUp')}
             </Link>

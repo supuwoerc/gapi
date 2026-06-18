@@ -1,0 +1,12 @@
+{
+  "tfa": "双因素认证",
+  "tips": "请输入验证码",
+  "dontHaveRecived": "没收到验证码？",
+  "verify": "验证",
+  "verifySuccess": "验证成功",
+  "otpForm": {
+    "opt": {
+      "tip": "请输入6位验证码"
+    }
+  }
+}

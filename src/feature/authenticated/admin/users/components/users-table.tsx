@@ -43,7 +43,7 @@ import { UsersTableActionBar } from './users-table-action-bar'
 const EmptyList: Array<User> = []
 
 export function UsersTable() {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('users')
   const queryClient = useQueryClient()
   const [deleteId, setDeleteId] = React.useState<number | null>(null)
   const [editUser, setEditUser] = React.useState<User | null>(null)
@@ -58,8 +58,8 @@ export function UsersTable() {
 
   const enabledOptions = React.useMemo(
     () => [
-      { label: t('users.enabled.true'), value: 'true', icon: CheckCircle },
-      { label: t('users.enabled.false'), value: 'false', icon: XCircle },
+      { label: t('enabled.true'), value: 'true', icon: CheckCircle },
+      { label: t('enabled.false'), value: 'false', icon: XCircle },
     ],
     [t]
   )
@@ -155,7 +155,7 @@ export function UsersTable() {
         id: 'username',
         accessorKey: 'username',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.username')} />
+          <DataTableColumnHeader column={column} label={t('columns.username')} />
         ),
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
@@ -170,8 +170,8 @@ export function UsersTable() {
           </div>
         ),
         meta: {
-          label: t('users.columns.username'),
-          placeholder: t('users.search'),
+          label: t('columns.username'),
+          placeholder: t('search'),
           variant: 'text',
           icon: Text,
         },
@@ -182,7 +182,7 @@ export function UsersTable() {
         id: 'enabled',
         accessorKey: 'enabled',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.enabled')} />
+          <DataTableColumnHeader column={column} label={t('columns.enabled')} />
         ),
         cell: ({ cell }) => {
           const isEnabled = cell.getValue<boolean>()
@@ -195,12 +195,12 @@ export function UsersTable() {
                   : 'border-neutral-300 bg-neutral-300/40'
               }
             >
-              {isEnabled ? t('users.enabled.true') : t('users.enabled.false')}
+              {isEnabled ? t('enabled.true') : t('enabled.false')}
             </Badge>
           )
         },
         meta: {
-          label: t('users.columns.enabled'),
+          label: t('columns.enabled'),
           variant: 'multiSelect',
           options: enabledOptions,
         },
@@ -211,7 +211,7 @@ export function UsersTable() {
         id: 'roles',
         accessorKey: 'roles',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.roles')} />
+          <DataTableColumnHeader column={column} label={t('columns.roles')} />
         ),
         cell: ({ row }) => {
           const userRoles = row.original.roles
@@ -226,7 +226,7 @@ export function UsersTable() {
           )
         },
         meta: {
-          label: t('users.columns.roles'),
+          label: t('columns.roles'),
           variant: 'multiSelect',
           options: roleOptions,
         },
@@ -237,28 +237,28 @@ export function UsersTable() {
         id: 'last_login_at',
         accessorKey: 'last_login_at',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.lastLogin')} />
+          <DataTableColumnHeader column={column} label={t('columns.lastLogin')} />
         ),
         cell: ({ cell }) => {
           const date = cell.getValue<Date | null>()
           return <div>{date ? new Date(date).toLocaleDateString() : '-'}</div>
         },
         meta: {
-          label: t('users.columns.lastLogin'),
+          label: t('columns.lastLogin'),
         },
       },
       {
         id: 'created_at',
         accessorKey: 'created_at',
         header: ({ column }: { column: Column<User, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('users.columns.createdAt')} />
+          <DataTableColumnHeader column={column} label={t('columns.createdAt')} />
         ),
         cell: ({ cell }) => {
           const date = cell.getValue<Date>()
           return <div>{new Date(date).toLocaleDateString()}</div>
         },
         meta: {
-          label: t('users.columns.createdAt'),
+          label: t('columns.createdAt'),
         },
       },
       {
@@ -269,18 +269,18 @@ export function UsersTable() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <MoreHorizontal className="h-4 w-4" />
-                  <span className="sr-only">{t('users.openMenu')}</span>
+                  <span className="sr-only">{t('openMenu')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setEditUser(row.original)}>
-                  {t('users.edit')}
+                  {t('edit')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => setDeleteId(row.original.id)}
                 >
-                  {t('users.delete')}
+                  {t('delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -318,8 +318,8 @@ export function UsersTable() {
       variant="outline"
       size="sm"
     >
-      <ToggleGroupItem value="simple">{t('users.tabs.simple')}</ToggleGroupItem>
-      <ToggleGroupItem value="advanced">{t('users.tabs.advanced')}</ToggleGroupItem>
+      <ToggleGroupItem value="simple">{t('tabs.simple')}</ToggleGroupItem>
+      <ToggleGroupItem value="advanced">{t('tabs.advanced')}</ToggleGroupItem>
     </ToggleGroup>
   )
 
@@ -348,8 +348,8 @@ export function UsersTable() {
         onOpenChange={(open) => {
           if (!open) setDeleteId(null)
         }}
-        title={t('users.deleteConfirm.title')}
-        desc={t('users.deleteConfirm.single', {
+        title={t('deleteConfirm.title')}
+        desc={t('deleteConfirm.single', {
           username: (data?.data ?? []).find((u) => u.id === deleteId)?.username ?? '',
         })}
         destructive

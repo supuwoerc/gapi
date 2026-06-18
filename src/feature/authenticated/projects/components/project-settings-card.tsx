@@ -33,13 +33,13 @@ export function ProjectSettingsCard({
   onLogoChange,
   onVisibilityChange,
 }: ProjectSettingsCardProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
 
   return (
     <Card className="w-full min-w-0">
       <CardHeader>
-        <CardTitle>{t('projects.settings.visibilityTitle')}</CardTitle>
-        <CardDescription>{t('projects.settings.visibilityDescription')}</CardDescription>
+        <CardTitle>{t('settings.visibilityTitle')}</CardTitle>
+        <CardDescription>{t('settings.visibilityDescription')}</CardDescription>
         <CardAction>
           <Switch
             checked={project.visibility === 'public'}
@@ -50,23 +50,21 @@ export function ProjectSettingsCard({
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-medium">{t('projects.settings.logoTitle')}</span>
+          <span className="text-sm font-medium">{t('settings.logoTitle')}</span>
           <div className="flex flex-wrap items-center gap-3">
             <ProjectLogoPicker
               logo={project.logo}
               name={project.name}
               disabled={isUpdatingLogo}
-              dialogTitle={t('projects.settings.logoDialogTitle')}
+              dialogTitle={t('settings.logoDialogTitle')}
               onChange={onLogoChange}
             />
-            <p className="text-sm text-muted-foreground">
-              {t('projects.settings.logoDescription')}
-            </p>
+            <p className="text-sm text-muted-foreground">{t('settings.logoDescription')}</p>
           </div>
         </div>
         <Separator />
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-medium">{t('projects.settings.currentVisibility')}</span>
+          <span className="text-sm font-medium">{t('settings.currentVisibility')}</span>
           <ProjectVisibilityBadge visibility={project.visibility} />
         </div>
         <Separator />
@@ -80,7 +78,7 @@ export function ProjectSettingsCard({
                 <span className="font-medium">{role.name}</span>
                 <p className="text-sm text-muted-foreground">{role.description}</p>
               </div>
-              {role.is_preset && <Badge variant="outline">{t('projects.roles.preset')}</Badge>}
+              {role.is_preset && <Badge variant="outline">{t('roles.preset')}</Badge>}
             </div>
           ))}
         </div>

@@ -1,0 +1,31 @@
+{
+  "title": "Task List",
+  "description": "Manage and track all tasks",
+  "level": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High",
+    "critical": "Critical"
+  },
+  "type": {
+    "bug": "Bug",
+    "feature": "Feature",
+    "improvement": "Improvement",
+    "task": "Task"
+  },
+  "columns": {
+    "id": "ID",
+    "level": "Level",
+    "type": "Type",
+    "title": "Title",
+    "creator": "Creator",
+    "assignee": "Assignee",
+    "resolver": "Resolver",
+    "updatedAt": "Updated At"
+  },
+  "search": "Search tasks...",
+  "tabs": {
+    "simple": "Simple",
+    "advanced": "Advanced"
+  }
+}

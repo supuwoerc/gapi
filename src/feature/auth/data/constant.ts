@@ -35,17 +35,17 @@ export const langs = ['go', 'typescript']
 
 export const carouselItems = [
   {
-    title: 'feature:login.carousel.t1',
-    subtitle: 'feature:login.carousel.st1',
+    title: 'login:carousel.t1',
+    subtitle: 'login:carousel.st1',
   },
   {
-    title: 'feature:login.carousel.t2',
-    subtitle: 'feature:login.carousel.st2',
+    title: 'login:carousel.t2',
+    subtitle: 'login:carousel.st2',
     image: write,
   },
   {
-    title: 'feature:login.carousel.t3',
-    subtitle: 'feature:login.carousel.st3',
+    title: 'login:carousel.t3',
+    subtitle: 'login:carousel.st3',
     image: ufo,
   },
 ]

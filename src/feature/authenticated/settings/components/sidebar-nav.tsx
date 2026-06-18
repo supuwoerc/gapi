@@ -28,7 +28,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('settings')
   const [val, setVal] = useState(pathname ?? '/settings')
 
   const handleSelect = (e: string) => {
@@ -41,7 +41,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       <div className="p-1 md:hidden">
         <Select value={val} onValueChange={handleSelect}>
           <SelectTrigger className="h-12 sm:w-48">
-            <SelectValue placeholder={t('settings.nav.title')} />
+            <SelectValue placeholder={t('nav.title')} />
           </SelectTrigger>
           <SelectContent>
             {items.map((item) => (

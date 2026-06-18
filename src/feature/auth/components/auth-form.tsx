@@ -45,13 +45,13 @@ const authFormSchema = z.object({
   password: z
     .string()
     .min(8, {
-      error: () => i18n.t('feature:login.authForm.password.min'),
+      error: () => i18n.t('login:authForm.password.min'),
     })
     .max(20, {
-      error: () => i18n.t('feature:login.authForm.password.max'),
+      error: () => i18n.t('login:authForm.password.max'),
     })
     .refine((value) => /^(?=.*[0-9])(?=.*[a-zA-Z])[0-9A-Za-z~!@#$%^&*._?]{8,20}$/.test(value), {
-      error: () => i18n.t('feature:login.authForm.password.pattern'),
+      error: () => i18n.t('login:authForm.password.pattern'),
     }),
 })
 
@@ -61,7 +61,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
-  const { t, i18n } = useTranslation(['feature', 'global'])
+  const { t, i18n } = useTranslation(['login', 'global'])
 
   const form = useForm<authForm>({
     resolver: zodResolver(authFormSchema),
@@ -85,7 +85,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
     const hashedData = { ...data, password: SHA256(data.password).toString() }
     await toast
       .promise(loginMutation.mutateAsync(hashedData), {
-        loading: t('login.authForm.signInLoading'),
+        loading: t('authForm.signInLoading'),
         success: (res) => {
           setLoginUser(res)
           identifyUser(res.user)
@@ -95,7 +95,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
            */
           queryClient.setQueryData(['userProfile'], res)
           navigate(redirectTo || '/', { replace: true })
-          return t('login.authForm.welcomeMessage', { email: data.email })
+          return t('authForm.welcomeMessage', { email: data.email })
         },
         error: (err) => {
           if (isError(err)) {
@@ -115,7 +115,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t('login.authForm.email.name')}</FormLabel>
+              <FormLabel>{t('authForm.email.name')}</FormLabel>
               <FormControl>
                 <Input placeholder="name@example.com" {...field} />
               </FormControl>
@@ -128,7 +128,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
           name="password"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel> {t('login.authForm.password.name')}</FormLabel>
+              <FormLabel> {t('authForm.password.name')}</FormLabel>
               <FormControl>
                 <PasswordInput placeholder="********" {...field} />
               </FormControl>
@@ -137,14 +137,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ className, redirectTo }) => {
                 to="/forgot-password"
                 className="absolute inset-e-0 -top-0.5 text-sm font-medium text-muted-foreground hover:opacity-75"
               >
-                {t('login.authForm.forgotPassword')}
+                {t('authForm.forgotPassword')}
               </Link>
             </FormItem>
           )}
         />
         <Button className="mt-2" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <LogIn />}
-          {t('login.authForm.signIn')}
+          {t('authForm.signIn')}
         </Button>
         <div className="relative my-2">
           <div className="absolute inset-0 flex items-center">

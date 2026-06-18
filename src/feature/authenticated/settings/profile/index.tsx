@@ -40,13 +40,13 @@ const profileFormSchema = z.object({
   name: z
     .string()
     .min(1, {
-      error: () => i18n.t('feature:settings.profile.form.name.required'),
+      error: () => i18n.t('settings:profile.form.name.required'),
     })
     .max(20, {
-      error: () => i18n.t('feature:settings.profile.form.name.max'),
+      error: () => i18n.t('settings:profile.form.name.max'),
     }),
   bio: z.string().max(100, {
-    error: () => i18n.t('feature:settings.profile.form.bio.max'),
+    error: () => i18n.t('settings:profile.form.bio.max'),
   }),
   avatar: z.string(),
 })
@@ -54,7 +54,7 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 const ProfilePage = () => {
-  const { t, i18n } = useTranslation(['feature', 'global'])
+  const { t, i18n } = useTranslation(['settings', 'global'])
   const loginUser = useLoginUserStore((s) => s.loginUser)
   const [cropperOpen, setCropperOpen] = useState(false)
 
@@ -85,7 +85,7 @@ const ProfilePage = () => {
           avatar: data.avatar,
         }),
         {
-          loading: t('settings.profile.form.saving'),
+          loading: t('profile.form.saving'),
           success: (res) => {
             if (loginUser) {
               setLoginUser({
@@ -98,7 +98,7 @@ const ProfilePage = () => {
                 },
               })
             }
-            return t('settings.profile.form.saveSuccess')
+            return t('profile.form.saveSuccess')
           },
           error: (err) => {
             if (isError(err)) {
@@ -123,8 +123,8 @@ const ProfilePage = () => {
   return (
     <div className="w-full space-y-6">
       <div>
-        <h3 className="text-lg font-medium">{t('settings.profile.title')}</h3>
-        <p className="text-sm text-muted-foreground">{t('settings.profile.description')}</p>
+        <h3 className="text-lg font-medium">{t('profile.title')}</h3>
+        <p className="text-sm text-muted-foreground">{t('profile.description')}</p>
       </div>
       <Separator />
       <Form {...form}>
@@ -134,7 +134,7 @@ const ProfilePage = () => {
             name="avatar"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('settings.profile.form.avatar.label')}</FormLabel>
+                <FormLabel>{t('profile.form.avatar.label')}</FormLabel>
                 <FormControl>
                   <div className="flex items-center">
                     <Avatar className="size-16 cursor-pointer" onClick={() => setCropperOpen(true)}>
@@ -143,7 +143,7 @@ const ProfilePage = () => {
                     </Avatar>
                   </div>
                 </FormControl>
-                <FormDescription>{t('settings.profile.form.avatar.description')}</FormDescription>
+                <FormDescription>{t('profile.form.avatar.description')}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -153,11 +153,11 @@ const ProfilePage = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('settings.profile.form.email.label')}</FormLabel>
+                <FormLabel>{t('profile.form.email.label')}</FormLabel>
                 <FormControl>
                   <Input {...field} readOnly className="bg-muted" />
                 </FormControl>
-                <FormDescription>{t('settings.profile.form.email.description')}</FormDescription>
+                <FormDescription>{t('profile.form.email.description')}</FormDescription>
               </FormItem>
             )}
           />
@@ -166,15 +166,15 @@ const ProfilePage = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('settings.profile.form.name.label')}</FormLabel>
+                <FormLabel>{t('profile.form.name.label')}</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     maxLength={20}
-                    placeholder={t('settings.profile.form.name.placeholder')}
+                    placeholder={t('profile.form.name.placeholder')}
                   />
                 </FormControl>
-                <FormDescription>{t('settings.profile.form.name.description')}</FormDescription>
+                <FormDescription>{t('profile.form.name.description')}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -184,22 +184,22 @@ const ProfilePage = () => {
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t('settings.profile.form.bio.label')}</FormLabel>
+                <FormLabel>{t('profile.form.bio.label')}</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
                     maxLength={100}
-                    placeholder={t('settings.profile.form.bio.placeholder')}
+                    placeholder={t('profile.form.bio.placeholder')}
                   />
                 </FormControl>
-                <FormDescription>{t('settings.profile.form.bio.description')}</FormDescription>
+                <FormDescription>{t('profile.form.bio.description')}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <Save />}
-            {t('settings.profile.form.submit')}
+            {t('profile.form.submit')}
           </Button>
         </form>
       </Form>
@@ -209,7 +209,7 @@ const ProfilePage = () => {
         onOpenChange={setCropperOpen}
         onCropComplete={handleCropComplete}
         initialImage={form.getValues('avatar') || undefined}
-        title={t('settings.profile.form.avatar.dialogTitle')}
+        title={t('profile.form.avatar.dialogTitle')}
         shape="circle"
         maxOutputSize={256}
       />

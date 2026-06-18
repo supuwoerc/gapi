@@ -25,7 +25,7 @@ import { DataTableToolbar } from '@/components/data-table/data-table-toolbar'
 const EmptyList: Document[] = []
 
 export function DocumentsTable() {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('documents')
 
   const [page] = useQueryState('page', parseAsInteger.withDefault(1))
   const [perPage] = useQueryState('perPage', parseAsInteger.withDefault(10))
@@ -53,7 +53,7 @@ export function DocumentsTable() {
         id: 'keyword',
         accessorFn: (row) => row.title,
         header: ({ column }: { column: Column<Document, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('documents.columns.title')} />
+          <DataTableColumnHeader column={column} label={t('columns.title')} />
         ),
         cell: ({ row }) => (
           <div className="flex min-w-56 flex-col gap-1">
@@ -64,8 +64,8 @@ export function DocumentsTable() {
           </div>
         ),
         meta: {
-          label: t('documents.columns.title'),
-          placeholder: t('documents.search'),
+          label: t('columns.title'),
+          placeholder: t('search'),
           variant: 'text',
           icon: Text,
         },
@@ -76,7 +76,7 @@ export function DocumentsTable() {
         id: 'visibility',
         accessorKey: 'visibility',
         header: ({ column }: { column: Column<Document, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('documents.columns.visibility')} />
+          <DataTableColumnHeader column={column} label={t('columns.visibility')} />
         ),
         cell: ({ cell }) => {
           const visibility = cell.getValue<Document['visibility']>()
@@ -85,14 +85,10 @@ export function DocumentsTable() {
             private: 'secondary',
             project: 'outline',
           } as const
-          return (
-            <Badge variant={variantMap[visibility]}>
-              {t(`documents.visibility.${visibility}`)}
-            </Badge>
-          )
+          return <Badge variant={variantMap[visibility]}>{t(`visibility.${visibility}`)}</Badge>
         },
         meta: {
-          label: t('documents.columns.visibility'),
+          label: t('columns.visibility'),
         },
         enableSorting: false,
       },
@@ -100,7 +96,7 @@ export function DocumentsTable() {
         id: 'project',
         accessorFn: (row) => row.project.name,
         header: ({ column }: { column: Column<Document, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('documents.columns.project')} />
+          <DataTableColumnHeader column={column} label={t('columns.project')} />
         ),
         cell: ({ row }) => {
           const project = row.original.project
@@ -115,7 +111,7 @@ export function DocumentsTable() {
           )
         },
         meta: {
-          label: t('documents.columns.project'),
+          label: t('columns.project'),
         },
         enableSorting: false,
       },
@@ -123,7 +119,7 @@ export function DocumentsTable() {
         id: 'owner',
         accessorFn: (row) => row.owner.username,
         header: ({ column }: { column: Column<Document, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('documents.columns.owner')} />
+          <DataTableColumnHeader column={column} label={t('columns.owner')} />
         ),
         cell: ({ row }) => {
           const owner = row.original.owner
@@ -140,7 +136,7 @@ export function DocumentsTable() {
           )
         },
         meta: {
-          label: t('documents.columns.owner'),
+          label: t('columns.owner'),
         },
         enableSorting: false,
       },
@@ -148,11 +144,11 @@ export function DocumentsTable() {
         id: 'created_at',
         accessorKey: 'created_at',
         header: ({ column }: { column: Column<Document, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('documents.columns.createdAt')} />
+          <DataTableColumnHeader column={column} label={t('columns.createdAt')} />
         ),
         cell: ({ cell }) => <div>{new Date(cell.getValue<Date>()).toLocaleDateString()}</div>,
         meta: {
-          label: t('documents.columns.createdAt'),
+          label: t('columns.createdAt'),
         },
         enableSorting: false,
       },
@@ -160,11 +156,11 @@ export function DocumentsTable() {
         id: 'updated_at',
         accessorKey: 'updated_at',
         header: ({ column }: { column: Column<Document, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('documents.columns.updatedAt')} />
+          <DataTableColumnHeader column={column} label={t('columns.updatedAt')} />
         ),
         cell: ({ cell }) => <div>{new Date(cell.getValue<Date>()).toLocaleDateString()}</div>,
         meta: {
-          label: t('documents.columns.updatedAt'),
+          label: t('columns.updatedAt'),
         },
         enableSorting: false,
       },

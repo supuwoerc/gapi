@@ -8,11 +8,11 @@ interface ProjectVisibilityBadgeProps {
 }
 
 export function ProjectVisibilityBadge({ visibility }: ProjectVisibilityBadgeProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
 
   return (
     <Badge variant={visibility === 'public' ? 'secondary' : 'outline'}>
-      {t(`projects.visibility.${visibility}`)}
+      {t(`visibility.${visibility}`)}
     </Badge>
   )
 }

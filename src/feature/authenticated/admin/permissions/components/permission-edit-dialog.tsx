@@ -127,7 +127,7 @@ interface PermissionRolePickerProps {
 }
 
 function PermissionRolePicker({ assignments, initialRoles, onChange }: PermissionRolePickerProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('permissions')
   const [roleKeyword, setRoleKeyword] = React.useState('')
   const [debouncedKeyword, setDebouncedKeyword] = React.useState('')
   const [cachedRoles, setCachedRoles] = React.useState<Map<number, PermissionRoleOption>>(
@@ -141,7 +141,7 @@ function PermissionRolePicker({ assignments, initialRoles, onChange }: Permissio
       initialRoles.map((role) => ({
         id: role.id,
         code: role.code ?? `#${role.id}`,
-        name: role.name ?? t('permissions.editDialog.roleUnknown', { id: role.id }),
+        name: role.name ?? t('editDialog.roleUnknown', { id: role.id }),
       })),
     [initialRoles, t]
   )
@@ -171,7 +171,7 @@ function PermissionRolePicker({ assignments, initialRoles, onChange }: Permissio
         cached ?? {
           id: assignment.role_id,
           code: `#${assignment.role_id}`,
-          name: t('permissions.editDialog.roleUnknown', { id: assignment.role_id }),
+          name: t('editDialog.roleUnknown', { id: assignment.role_id }),
         }
       )
     })
@@ -206,13 +206,13 @@ function PermissionRolePicker({ assignments, initialRoles, onChange }: Permissio
       <Input
         value={roleKeyword}
         onChange={(event) => setRoleKeyword(event.target.value)}
-        placeholder={t('permissions.editDialog.roleSearchPlaceholder')}
+        placeholder={t('editDialog.roleSearchPlaceholder')}
       />
 
       <div className="text-xs text-muted-foreground">
         {isFetching
-          ? t('permissions.editDialog.rolesRefreshing')
-          : t('permissions.editDialog.roleResultCount', { count: displayedRoles.length })}
+          ? t('editDialog.rolesRefreshing')
+          : t('editDialog.roleResultCount', { count: displayedRoles.length })}
       </div>
 
       <div className="h-[420px] max-h-[calc(100dvh-22rem)] min-h-64 overflow-hidden rounded-md border">
@@ -222,7 +222,7 @@ function PermissionRolePicker({ assignments, initialRoles, onChange }: Permissio
           </div>
         ) : displayedRoles.length === 0 ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            {t('permissions.editDialog.rolesEmpty')}
+            {t('editDialog.rolesEmpty')}
           </div>
         ) : (
           <div className="h-full overflow-y-auto">
@@ -250,7 +250,7 @@ interface PermissionRoleRowProps {
 }
 
 function PermissionRoleRow({ effect, isLast, role, onEffectChange }: PermissionRoleRowProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('permissions')
 
   return (
     <div
@@ -274,7 +274,7 @@ function PermissionRoleRow({ effect, isLast, role, onEffectChange }: PermissionR
                   : 'border-primary/40 text-primary'
               )}
             >
-              {t(`permissions.roleEffect.${effect}`)}
+              {t(`roleEffect.${effect}`)}
             </Badge>
           ) : null}
         </div>
@@ -289,9 +289,9 @@ function PermissionRoleRow({ effect, isLast, role, onEffectChange }: PermissionR
         size="sm"
         className="shrink-0 flex-wrap justify-end self-end sm:self-start"
       >
-        <ToggleGroupItem value="unset">{t('permissions.roleEffect.unset')}</ToggleGroupItem>
-        <ToggleGroupItem value="allow">{t('permissions.roleEffect.allow')}</ToggleGroupItem>
-        <ToggleGroupItem value="deny">{t('permissions.roleEffect.deny')}</ToggleGroupItem>
+        <ToggleGroupItem value="unset">{t('roleEffect.unset')}</ToggleGroupItem>
+        <ToggleGroupItem value="allow">{t('roleEffect.allow')}</ToggleGroupItem>
+        <ToggleGroupItem value="deny">{t('roleEffect.deny')}</ToggleGroupItem>
       </ToggleGroup>
     </div>
   )
@@ -302,7 +302,7 @@ export function PermissionEditDialog({
   open,
   onOpenChange,
 }: PermissionEditDialogProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('permissions')
   const queryClient = useQueryClient()
   const isEditing = permissionId !== null
 
@@ -331,11 +331,7 @@ export function PermissionEditDialog({
     mutationFn: (values: PermissionMutation) =>
       permissionId === null ? createPermission(values) : updatePermission(permissionId, values),
     onSuccess: () => {
-      toast.success(
-        isEditing
-          ? t('permissions.editDialog.updateSuccess')
-          : t('permissions.editDialog.createSuccess')
-      )
+      toast.success(isEditing ? t('editDialog.updateSuccess') : t('editDialog.createSuccess'))
       onOpenChange(false)
       void queryClient.invalidateQueries({ queryKey: ['permissions'] })
       if (permissionId !== null) {
@@ -362,11 +358,9 @@ export function PermissionEditDialog({
       >
         <DialogHeader className="shrink-0 pr-8">
           <DialogTitle>
-            {isEditing
-              ? t('permissions.editDialog.editTitle')
-              : t('permissions.editDialog.createTitle')}
+            {isEditing ? t('editDialog.editTitle') : t('editDialog.createTitle')}
           </DialogTitle>
-          <DialogDescription className="sr-only">{t('permissions.description')}</DialogDescription>
+          <DialogDescription className="sr-only">{t('description')}</DialogDescription>
         </DialogHeader>
 
         {isPermissionDetailLoading ? (
@@ -378,8 +372,8 @@ export function PermissionEditDialog({
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col">
               <Tabs defaultValue="basic" className="min-h-0 flex-1">
                 <TabsList className="grid w-full shrink-0 grid-cols-2">
-                  <TabsTrigger value="basic">{t('permissions.editDialog.tabs.basic')}</TabsTrigger>
-                  <TabsTrigger value="roles">{t('permissions.editDialog.tabs.roles')}</TabsTrigger>
+                  <TabsTrigger value="basic">{t('editDialog.tabs.basic')}</TabsTrigger>
+                  <TabsTrigger value="roles">{t('editDialog.tabs.roles')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent
@@ -393,12 +387,9 @@ export function PermissionEditDialog({
                         name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('permissions.editDialog.name')}</FormLabel>
+                            <FormLabel>{t('editDialog.name')}</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('permissions.editDialog.namePlaceholder')}
-                              />
+                              <Input {...field} placeholder={t('editDialog.namePlaceholder')} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -410,12 +401,9 @@ export function PermissionEditDialog({
                         name="code"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('permissions.editDialog.code')}</FormLabel>
+                            <FormLabel>{t('editDialog.code')}</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('permissions.editDialog.codePlaceholder')}
-                              />
+                              <Input {...field} placeholder={t('editDialog.codePlaceholder')} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -427,7 +415,7 @@ export function PermissionEditDialog({
                         name="resource_type"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('permissions.editDialog.resourceType')}</FormLabel>
+                            <FormLabel>{t('editDialog.resourceType')}</FormLabel>
                             <Select
                               key={field.value}
                               value={String(field.value)}
@@ -442,7 +430,7 @@ export function PermissionEditDialog({
                                 <SelectGroup>
                                   {RESOURCE_TYPES.map((resourceType) => (
                                     <SelectItem key={resourceType} value={String(resourceType)}>
-                                      {t(`permissions.resourceType.${resourceType}`)}
+                                      {t(`resourceType.${resourceType}`)}
                                     </SelectItem>
                                   ))}
                                 </SelectGroup>
@@ -458,7 +446,7 @@ export function PermissionEditDialog({
                         name="action"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('permissions.editDialog.action')}</FormLabel>
+                            <FormLabel>{t('editDialog.action')}</FormLabel>
                             <Select
                               key={field.value}
                               value={field.value}
@@ -473,7 +461,7 @@ export function PermissionEditDialog({
                                 <SelectGroup>
                                   {PERMISSION_ACTIONS.map((action) => (
                                     <SelectItem key={action} value={action}>
-                                      {t(`permissions.action.${action}`)}
+                                      {t(`action.${action}`)}
                                     </SelectItem>
                                   ))}
                                 </SelectGroup>
@@ -489,12 +477,9 @@ export function PermissionEditDialog({
                         name="module"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('permissions.editDialog.module')}</FormLabel>
+                            <FormLabel>{t('editDialog.module')}</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('permissions.editDialog.modulePlaceholder')}
-                              />
+                              <Input {...field} placeholder={t('editDialog.modulePlaceholder')} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -506,11 +491,11 @@ export function PermissionEditDialog({
                         name="resource_path"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('permissions.editDialog.resourcePath')}</FormLabel>
+                            <FormLabel>{t('editDialog.resourcePath')}</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
-                                placeholder={t('permissions.editDialog.resourcePathPlaceholder')}
+                                placeholder={t('editDialog.resourcePathPlaceholder')}
                               />
                             </FormControl>
                             <FormMessage />
@@ -524,11 +509,11 @@ export function PermissionEditDialog({
                       name="description"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('permissions.editDialog.description')}</FormLabel>
+                          <FormLabel>{t('editDialog.description')}</FormLabel>
                           <FormControl>
                             <Textarea
                               {...field}
-                              placeholder={t('permissions.editDialog.descriptionPlaceholder')}
+                              placeholder={t('editDialog.descriptionPlaceholder')}
                             />
                           </FormControl>
                           <FormMessage />
@@ -547,7 +532,7 @@ export function PermissionEditDialog({
                     name="roles"
                     render={({ field }) => (
                       <FormItem className="min-h-0">
-                        <FormLabel>{t('permissions.editDialog.roles')}</FormLabel>
+                        <FormLabel>{t('editDialog.roles')}</FormLabel>
                         <PermissionRolePicker
                           assignments={field.value}
                           initialRoles={permissionDetail?.roles ?? EmptyAssignedRoles}
@@ -562,9 +547,7 @@ export function PermissionEditDialog({
 
               <DialogFooter className="shrink-0 pt-4">
                 <Button type="submit" disabled={mutation.isPending}>
-                  {mutation.isPending
-                    ? t('permissions.editDialog.saving')
-                    : t('permissions.editDialog.save')}
+                  {mutation.isPending ? t('editDialog.saving') : t('editDialog.save')}
                 </Button>
               </DialogFooter>
             </form>

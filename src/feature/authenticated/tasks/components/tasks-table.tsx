@@ -49,24 +49,24 @@ const typeIcons: Record<TaskType, React.ComponentType<{ className?: string }>> =
 const EmptyList: Array<Task> = []
 
 export function TasksTable() {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('tasks')
 
   const levelOptions = React.useMemo(
     () => [
-      { label: t('tasks.level.low'), value: 'low' },
-      { label: t('tasks.level.medium'), value: 'medium' },
-      { label: t('tasks.level.high'), value: 'high' },
-      { label: t('tasks.level.critical'), value: 'critical' },
+      { label: t('level.low'), value: 'low' },
+      { label: t('level.medium'), value: 'medium' },
+      { label: t('level.high'), value: 'high' },
+      { label: t('level.critical'), value: 'critical' },
     ],
     [t]
   )
 
   const typeOptions = React.useMemo(
     () => [
-      { label: t('tasks.type.bug'), value: 'bug', icon: Bug },
-      { label: t('tasks.type.feature'), value: 'feature', icon: Sparkles },
-      { label: t('tasks.type.improvement'), value: 'improvement', icon: Zap },
-      { label: t('tasks.type.task'), value: 'task', icon: ListTodo },
+      { label: t('type.bug'), value: 'bug', icon: Bug },
+      { label: t('type.feature'), value: 'feature', icon: Sparkles },
+      { label: t('type.improvement'), value: 'improvement', icon: Zap },
+      { label: t('type.task'), value: 'task', icon: ListTodo },
     ],
     [t]
   )
@@ -125,7 +125,7 @@ export function TasksTable() {
       {
         id: 'id',
         accessorKey: 'id',
-        header: t('tasks.columns.id'),
+        header: t('columns.id'),
         cell: ({ cell }) => (
           <span className="font-mono text-xs text-muted-foreground">{cell.getValue<number>()}</span>
         ),
@@ -134,7 +134,7 @@ export function TasksTable() {
       {
         id: 'title',
         accessorKey: 'title',
-        header: t('tasks.columns.title'),
+        header: t('columns.title'),
         cell: ({ row }) => (
           <HoverCard openDelay={500} closeDelay={100}>
             <HoverCardTrigger asChild>
@@ -155,8 +155,8 @@ export function TasksTable() {
           </HoverCard>
         ),
         meta: {
-          label: t('tasks.columns.title'),
-          placeholder: t('tasks.search'),
+          label: t('columns.title'),
+          placeholder: t('search'),
           variant: 'text',
           icon: Text,
         },
@@ -167,19 +167,19 @@ export function TasksTable() {
         id: 'level',
         accessorKey: 'level',
         header: ({ column }: { column: Column<Task, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('tasks.columns.level')} />
+          <DataTableColumnHeader column={column} label={t('columns.level')} />
         ),
         cell: ({ cell }) => {
           const level = cell.getValue<TaskLevel>()
           const badgeClass = levelStyles.get(level) ?? ''
           return (
             <Badge variant="outline" className={`capitalize ${badgeClass}`}>
-              {t(`tasks.level.${level}`)}
+              {t(`level.${level}`)}
             </Badge>
           )
         },
         meta: {
-          label: t('tasks.columns.level'),
+          label: t('columns.level'),
           variant: 'multiSelect',
           options: levelOptions,
         },
@@ -189,7 +189,7 @@ export function TasksTable() {
         id: 'type',
         accessorKey: 'type',
         header: ({ column }: { column: Column<Task, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('tasks.columns.type')} />
+          <DataTableColumnHeader column={column} label={t('columns.type')} />
         ),
         cell: ({ cell }) => {
           const type = cell.getValue<TaskType>()
@@ -197,12 +197,12 @@ export function TasksTable() {
           return (
             <div className="flex items-center gap-1.5 capitalize">
               {Icon && <Icon className="size-4 text-muted-foreground" />}
-              {t(`tasks.type.${type}`)}
+              {t(`type.${type}`)}
             </div>
           )
         },
         meta: {
-          label: t('tasks.columns.type'),
+          label: t('columns.type'),
           variant: 'multiSelect',
           options: typeOptions,
         },
@@ -211,40 +211,40 @@ export function TasksTable() {
       {
         id: 'creator',
         accessorKey: 'creator',
-        header: t('tasks.columns.creator'),
+        header: t('columns.creator'),
         meta: {
-          label: t('tasks.columns.creator'),
+          label: t('columns.creator'),
         },
         enableSorting: false,
       },
       {
         id: 'assignee',
         accessorKey: 'assignee',
-        header: t('tasks.columns.assignee'),
+        header: t('columns.assignee'),
         meta: {
-          label: t('tasks.columns.assignee'),
+          label: t('columns.assignee'),
         },
         enableSorting: false,
       },
       {
         id: 'resolver',
         accessorKey: 'resolver',
-        header: t('tasks.columns.resolver'),
+        header: t('columns.resolver'),
         cell: ({ cell }) => {
           const value = cell.getValue<string>()
           return value || <span className="text-muted-foreground">-</span>
         },
         meta: {
-          label: t('tasks.columns.resolver'),
+          label: t('columns.resolver'),
         },
         enableSorting: false,
       },
       {
         id: 'updated_at',
         accessorKey: 'updated_at',
-        header: t('tasks.columns.updatedAt'),
+        header: t('columns.updatedAt'),
         meta: {
-          label: t('tasks.columns.updatedAt'),
+          label: t('columns.updatedAt'),
         },
         enableHiding: false,
       },
@@ -278,8 +278,8 @@ export function TasksTable() {
       variant="outline"
       size="sm"
     >
-      <ToggleGroupItem value="simple">{t('tasks.tabs.simple')}</ToggleGroupItem>
-      <ToggleGroupItem value="advanced">{t('tasks.tabs.advanced')}</ToggleGroupItem>
+      <ToggleGroupItem value="simple">{t('tabs.simple')}</ToggleGroupItem>
+      <ToggleGroupItem value="advanced">{t('tabs.advanced')}</ToggleGroupItem>
     </ToggleGroup>
   )
 

@@ -54,7 +54,7 @@ export function CreateProjectDialog({
   onOpenChange,
   onSubmit,
 }: CreateProjectDialogProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
   const form = useForm<ProjectMutation>({
     resolver: zodResolver(projectMutationSchema),
     defaultValues: {
@@ -76,8 +76,8 @@ export function CreateProjectDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t('projects.createDialog.title')}</DialogTitle>
-          <DialogDescription>{t('projects.createDialog.description')}</DialogDescription>
+          <DialogTitle>{t('createDialog.title')}</DialogTitle>
+          <DialogDescription>{t('createDialog.description')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -86,17 +86,17 @@ export function CreateProjectDialog({
               name="logo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.createDialog.logo')}</FormLabel>
+                  <FormLabel>{t('createDialog.logo')}</FormLabel>
                   <FormControl>
                     <ProjectLogoPicker
                       logo={field.value}
-                      name={projectName || t('projects.createDialog.logoFallback')}
+                      name={projectName || t('createDialog.logoFallback')}
                       disabled={isPending}
-                      dialogTitle={t('projects.createDialog.logoDialogTitle')}
+                      dialogTitle={t('createDialog.logoDialogTitle')}
                       onChange={field.onChange}
                     />
                   </FormControl>
-                  <FormDescription>{t('projects.createDialog.logoDescription')}</FormDescription>
+                  <FormDescription>{t('createDialog.logoDescription')}</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -106,9 +106,9 @@ export function CreateProjectDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.createDialog.name')}</FormLabel>
+                  <FormLabel>{t('createDialog.name')}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t('projects.createDialog.namePlaceholder')} {...field} />
+                    <Input placeholder={t('createDialog.namePlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -119,12 +119,9 @@ export function CreateProjectDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.createDialog.projectDescription')}</FormLabel>
+                  <FormLabel>{t('createDialog.projectDescription')}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder={t('projects.createDialog.descriptionPlaceholder')}
-                      {...field}
-                    />
+                    <Textarea placeholder={t('createDialog.descriptionPlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -135,7 +132,7 @@ export function CreateProjectDialog({
               name="visibility"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.createDialog.visibility')}</FormLabel>
+                  <FormLabel>{t('createDialog.visibility')}</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -144,8 +141,8 @@ export function CreateProjectDialog({
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value="private">{t('projects.visibility.private')}</SelectItem>
-                        <SelectItem value="public">{t('projects.visibility.public')}</SelectItem>
+                        <SelectItem value="private">{t('visibility.private')}</SelectItem>
+                        <SelectItem value="public">{t('visibility.public')}</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -155,7 +152,7 @@ export function CreateProjectDialog({
             />
             <DialogFooter>
               <Button type="submit" disabled={isPending}>
-                {isPending ? t('projects.createDialog.saving') : t('projects.createDialog.save')}
+                {isPending ? t('createDialog.saving') : t('createDialog.save')}
               </Button>
             </DialogFooter>
           </form>

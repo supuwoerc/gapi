@@ -15,16 +15,16 @@ import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 import { SidebarNav } from './components/sidebar-nav'
 
 const sidebarNavItems = [
-  { title: 'settings.nav.profile', href: '/settings', icon: <User size={18} /> },
+  { title: 'nav.profile', href: '/settings', icon: <User size={18} /> },
   {
-    title: 'settings.nav.notifications',
+    title: 'nav.notifications',
     href: '/settings/notifications',
     icon: <Bell size={18} />,
   },
 ]
 
 const SettingsLayout = () => {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('settings')
 
   return (
     <>
@@ -39,8 +39,8 @@ const SettingsLayout = () => {
       </AppHeader>
       <AppMain>
         <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">{t('settings.title')}</h2>
-          <p className="text-muted-foreground">{t('settings.description')}</p>
+          <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+          <p className="text-muted-foreground">{t('description')}</p>
         </div>
         <Separator className="my-4 lg:my-6" />
         <div className="flex flex-1 flex-col space-y-2 overflow-hidden md:space-y-2 lg:flex-row lg:space-y-0 lg:space-x-12">

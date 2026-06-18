@@ -1,0 +1,35 @@
+{
+  "back": "返回任务列表",
+  "info": "基本信息",
+  "description": "描述",
+  "noDescription": "暂无描述",
+  "fields": {
+    "type": "类型",
+    "creator": "创建人",
+    "assignee": "指派人",
+    "resolver": "解决人",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间"
+  },
+  "timeline": {
+    "title": "时间线",
+    "created": "创建了此任务",
+    "assigned": "指派给 {{target}}",
+    "levelChanged": "将级别更改为 {{level}}",
+    "resolved": "解决了此任务",
+    "commented": "发表了评论",
+    "loading": "加载中..."
+  },
+  "comments": {
+    "title": "评论",
+    "empty": "暂无评论",
+    "loading": "加载中...",
+    "create": "评论",
+    "reply": "回复",
+    "replyTo": "回复 {{user}}",
+    "placeholder": "输入评论内容，@ 提及用户...",
+    "send": "发送",
+    "upload": "上传附件",
+    "download": "下载"
+  }
+}

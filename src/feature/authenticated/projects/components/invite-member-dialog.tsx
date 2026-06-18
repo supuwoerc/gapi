@@ -50,7 +50,7 @@ export function InviteMemberDialog({
   onOpenChange,
   onSubmit,
 }: InviteMemberDialogProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
   const defaultRoleId = roles.find((role) => role.name === 'Editor')?.id ?? roles[0]?.id ?? 0
   const form = useForm<ProjectMemberInvite>({
     resolver: zodResolver(projectMemberInviteSchema),
@@ -71,8 +71,8 @@ export function InviteMemberDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{t('projects.inviteDialog.title')}</DialogTitle>
-          <DialogDescription>{t('projects.inviteDialog.description')}</DialogDescription>
+          <DialogTitle>{t('inviteDialog.title')}</DialogTitle>
+          <DialogDescription>{t('inviteDialog.description')}</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -81,12 +81,9 @@ export function InviteMemberDialog({
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.inviteDialog.username')}</FormLabel>
+                  <FormLabel>{t('inviteDialog.username')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('projects.inviteDialog.usernamePlaceholder')}
-                      {...field}
-                    />
+                    <Input placeholder={t('inviteDialog.usernamePlaceholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -97,11 +94,11 @@ export function InviteMemberDialog({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.inviteDialog.email')}</FormLabel>
+                  <FormLabel>{t('inviteDialog.email')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder={t('projects.inviteDialog.emailPlaceholder')}
+                      placeholder={t('inviteDialog.emailPlaceholder')}
                       {...field}
                     />
                   </FormControl>
@@ -114,7 +111,7 @@ export function InviteMemberDialog({
               name="project_role_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('projects.inviteDialog.role')}</FormLabel>
+                  <FormLabel>{t('inviteDialog.role')}</FormLabel>
                   <Select
                     value={String(field.value)}
                     onValueChange={(value) => field.onChange(Number(value))}
@@ -140,7 +137,7 @@ export function InviteMemberDialog({
             />
             <DialogFooter>
               <Button type="submit" disabled={isPending || roles.length === 0}>
-                {isPending ? t('projects.inviteDialog.saving') : t('projects.inviteDialog.save')}
+                {isPending ? t('inviteDialog.saving') : t('inviteDialog.save')}
               </Button>
             </DialogFooter>
           </form>

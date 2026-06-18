@@ -52,7 +52,7 @@ export function ProjectsList({
   onLoadMore,
   onSelectProject,
 }: ProjectsListProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
   const scrollRef = React.useRef<HTMLDivElement>(null)
   const [columnCount, setColumnCount] = React.useState(1)
   const [searchValue, setSearchValue] = React.useState(keyword)
@@ -118,9 +118,9 @@ export function ProjectsList({
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={searchValue}
-            aria-label={t('projects.search')}
+            aria-label={t('search')}
             className="pl-9"
-            placeholder={t('projects.search')}
+            placeholder={t('search')}
             onChange={(event) => {
               const value = event.target.value
               setSearchValue(value)
@@ -129,7 +129,7 @@ export function ProjectsList({
           />
         </div>
         <span className="text-xs text-muted-foreground">
-          {t('projects.searchResultCount', {
+          {t('searchResultCount', {
             count: projects.length,
             total: projectsTotal,
           })}
@@ -145,7 +145,7 @@ export function ProjectsList({
           </div>
         ) : projects.length === 0 ? (
           <div className="rounded-lg border border-dashed p-4 text-sm text-muted-foreground">
-            {t('projects.emptySearch.description')}
+            {t('emptySearch.description')}
           </div>
         ) : (
           <div className="relative w-full" style={{ height: `${virtualizer.getTotalSize()}px` }}>
@@ -202,10 +202,10 @@ export function ProjectsList({
                           </span>
                           <span className="flex flex-wrap items-center gap-2">
                             <span className="text-xs text-muted-foreground">
-                              {t('projects.memberCount', { count: project.member_count })}
+                              {t('memberCount', { count: project.member_count })}
                             </span>
                             <Badge variant="outline">
-                              {t(`projects.relationship.${getRelationshipKey(project)}`)}
+                              {t(`relationship.${getRelationshipKey(project)}`)}
                             </Badge>
                           </span>
                         </button>

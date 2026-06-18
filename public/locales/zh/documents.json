@@ -1,0 +1,18 @@
+{
+  "title": "文档列表",
+  "description": "浏览和管理项目文档",
+  "search": "搜索文档标题或描述...",
+  "columns": {
+    "title": "标题",
+    "visibility": "可见性",
+    "project": "所属项目",
+    "owner": "创建者",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间"
+  },
+  "visibility": {
+    "public": "公开",
+    "private": "指定人员可见",
+    "project": "项目成员可见"
+  }
+}

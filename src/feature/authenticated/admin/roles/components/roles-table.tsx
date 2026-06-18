@@ -65,7 +65,7 @@ function getEffectivePermissions(role: RoleTree | undefined): RolePermission[] {
 }
 
 export function RolesTable() {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('roles')
   const queryClient = useQueryClient()
   const [roleDialogOpen, setRoleDialogOpen] = React.useState(false)
   const [editingRoleId, setEditingRoleId] = React.useState<number | null>(null)
@@ -99,7 +99,7 @@ export function RolesTable() {
   const deleteMutation = useMutation({
     mutationFn: deleteRoles,
     onSuccess: () => {
-      toast.success(t('roles.deleteConfirm.success'))
+      toast.success(t('deleteConfirm.success'))
       setDeleteRole(null)
       void queryClient.invalidateQueries({ queryKey: ['roles'] })
     },
@@ -107,8 +107,8 @@ export function RolesTable() {
 
   const enabledOptions = React.useMemo(
     () => [
-      { label: t('roles.enabled.true'), value: 'true', icon: CheckCircle },
-      { label: t('roles.enabled.false'), value: 'false', icon: XCircle },
+      { label: t('enabled.true'), value: 'true', icon: CheckCircle },
+      { label: t('enabled.false'), value: 'false', icon: XCircle },
     ],
     [t]
   )
@@ -124,14 +124,14 @@ export function RolesTable() {
               (table.getIsSomePageRowsSelected() && 'indeterminate')
             }
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label={t('roles.selectAll')}
+            aria-label={t('selectAll')}
           />
         ),
         cell: ({ row }) => (
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label={t('roles.selectRow')}
+            aria-label={t('selectRow')}
           />
         ),
         size: 32,
@@ -142,7 +142,7 @@ export function RolesTable() {
         id: 'keyword',
         accessorFn: (row) => row.name,
         header: ({ column }: { column: Column<RoleTree, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('roles.columns.name')} />
+          <DataTableColumnHeader column={column} label={t('columns.name')} />
         ),
         cell: ({ row }) => (
           <div className="min-w-56 space-x-1">
@@ -151,8 +151,8 @@ export function RolesTable() {
           </div>
         ),
         meta: {
-          label: t('roles.columns.name'),
-          placeholder: t('roles.search'),
+          label: t('columns.name'),
+          placeholder: t('search'),
           variant: 'text',
           icon: Text,
           expander: true,
@@ -164,7 +164,7 @@ export function RolesTable() {
         id: 'enabled',
         accessorKey: 'enabled',
         header: ({ column }: { column: Column<RoleTree, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('roles.columns.enabled')} />
+          <DataTableColumnHeader column={column} label={t('columns.enabled')} />
         ),
         cell: ({ cell }) => {
           const isEnabled = cell.getValue<boolean>()
@@ -177,12 +177,12 @@ export function RolesTable() {
                   : 'border-neutral-300 bg-neutral-300/40'
               }
             >
-              {isEnabled ? t('roles.enabled.true') : t('roles.enabled.false')}
+              {isEnabled ? t('enabled.true') : t('enabled.false')}
             </Badge>
           )
         },
         meta: {
-          label: t('roles.columns.enabled'),
+          label: t('columns.enabled'),
           variant: 'multiSelect',
           options: enabledOptions,
         },
@@ -192,7 +192,7 @@ export function RolesTable() {
       {
         id: 'permissions',
         header: ({ column }: { column: Column<RoleTree, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('roles.columns.configCount')} />
+          <DataTableColumnHeader column={column} label={t('columns.configCount')} />
         ),
         cell: ({ row }) => {
           const effectivePermissions =
@@ -208,7 +208,7 @@ export function RolesTable() {
               variant="outline"
               className="bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
             >
-              {t('roles.permissionEffect.configCount', {
+              {t('permissionEffect.configCount', {
                 inherited: inheritedCount,
                 direct: directCount,
               })}
@@ -216,14 +216,14 @@ export function RolesTable() {
           )
         },
         meta: {
-          label: t('roles.columns.configCount'),
+          label: t('columns.configCount'),
         },
         enableSorting: false,
       },
       {
         id: 'effective_permissions',
         header: ({ column }: { column: Column<RoleTree, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('roles.columns.effectivePermissions')} />
+          <DataTableColumnHeader column={column} label={t('columns.effectivePermissions')} />
         ),
         cell: ({ row }) => {
           const effectivePermissions =
@@ -240,7 +240,7 @@ export function RolesTable() {
               variant="secondary"
               className="bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300"
             >
-              {t('roles.permissionEffect.effectSummary', {
+              {t('permissionEffect.effectSummary', {
                 allow: allowCount,
                 deny: denyCount,
               })}
@@ -248,7 +248,7 @@ export function RolesTable() {
           )
         },
         meta: {
-          label: t('roles.columns.effectivePermissions'),
+          label: t('columns.effectivePermissions'),
         },
         enableSorting: false,
       },
@@ -256,21 +256,21 @@ export function RolesTable() {
         id: 'sort_order',
         accessorKey: 'sort_order',
         header: ({ column }: { column: Column<RoleTree, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('roles.columns.sortOrder')} />
+          <DataTableColumnHeader column={column} label={t('columns.sortOrder')} />
         ),
         meta: {
-          label: t('roles.columns.sortOrder'),
+          label: t('columns.sortOrder'),
         },
       },
       {
         id: 'created_at',
         accessorKey: 'created_at',
         header: ({ column }: { column: Column<RoleTree, unknown> }) => (
-          <DataTableColumnHeader column={column} label={t('roles.columns.createdAt')} />
+          <DataTableColumnHeader column={column} label={t('columns.createdAt')} />
         ),
         cell: ({ cell }) => <div>{new Date(cell.getValue<Date>()).toLocaleDateString()}</div>,
         meta: {
-          label: t('roles.columns.createdAt'),
+          label: t('columns.createdAt'),
         },
       },
       {
@@ -281,7 +281,7 @@ export function RolesTable() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon">
                   <MoreHorizontal className="size-4" />
-                  <span className="sr-only">{t('roles.openMenu')}</span>
+                  <span className="sr-only">{t('openMenu')}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -298,7 +298,7 @@ export function RolesTable() {
                   }}
                 >
                   <Shield />
-                  {t('roles.edit')}
+                  {t('edit')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
@@ -312,11 +312,11 @@ export function RolesTable() {
                   }}
                 >
                   <Plus />
-                  {t('roles.createChild')}
+                  {t('createChild')}
                 </DropdownMenuItem>
                 <DropdownMenuItem variant="destructive" onClick={() => setDeleteRole(row.original)}>
                   <Trash2 />
-                  {t('roles.delete')}
+                  {t('delete')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -365,7 +365,7 @@ export function RolesTable() {
               }}
             >
               <Plus />
-              {t('roles.create')}
+              {t('create')}
             </Button>
           </DataTableToolbar>
         </DataTable>
@@ -375,8 +375,8 @@ export function RolesTable() {
         onOpenChange={(open) => {
           if (!open) setDeleteRole(null)
         }}
-        title={t('roles.deleteConfirm.title')}
-        desc={t('roles.deleteConfirm.single', { name: deleteRole?.name ?? '' })}
+        title={t('deleteConfirm.title')}
+        desc={t('deleteConfirm.single', { name: deleteRole?.name ?? '' })}
         destructive
         isLoading={deleteMutation.isPending}
         handleConfirm={() => {

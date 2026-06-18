@@ -54,7 +54,7 @@ export function ProjectDetail({
   onLogoChange,
   onVisibilityChange,
 }: ProjectDetailProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('projects')
   const currentMembership = project.current_user_membership
   const isOwner =
     currentMembership?.status === 'active' && currentMembership.project_role.name === 'Owner'
@@ -77,25 +77,25 @@ export function ProjectDetail({
         {isOwner ? (
           <Button variant="outline" onClick={onInvite}>
             <UserPlus />
-            {t('projects.invite')}
+            {t('invite')}
           </Button>
         ) : canApply ? (
           <Button variant="outline" disabled={isApplying} onClick={onApply}>
             <Send />
-            {isApplying ? t('projects.applying') : t('projects.apply')}
+            {isApplying ? t('applying') : t('apply')}
           </Button>
         ) : isPending ? (
           <Button variant="outline" disabled>
             <Send />
-            {t('projects.applicationPending')}
+            {t('applicationPending')}
           </Button>
         ) : null}
       </div>
 
       <Tabs defaultValue="members" className="min-h-0 w-full min-w-0 flex-1 gap-4 overflow-hidden">
         <TabsList className="shrink-0">
-          <TabsTrigger value="members">{t('projects.tabs.members')}</TabsTrigger>
-          {isOwner && <TabsTrigger value="settings">{t('projects.tabs.settings')}</TabsTrigger>}
+          <TabsTrigger value="members">{t('tabs.members')}</TabsTrigger>
+          {isOwner && <TabsTrigger value="settings">{t('tabs.settings')}</TabsTrigger>}
         </TabsList>
 
         <TabsContent

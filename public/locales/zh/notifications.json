@@ -1,0 +1,42 @@
+{
+  "title": "通知",
+  "description": "查看和管理您的通知",
+  "type": {
+    "system": "系统",
+    "task": "任务",
+    "message": "消息",
+    "alert": "警报"
+  },
+  "status": {
+    "read": "已读",
+    "unread": "未读"
+  },
+  "columns": {
+    "title": "标题",
+    "type": "类型",
+    "sender": "发送者",
+    "isRead": "状态",
+    "createdAt": "日期"
+  },
+  "search": "搜索通知...",
+  "openMenu": "打开菜单",
+  "markAsRead": "标记为已读",
+  "delete": "删除",
+  "tabs": {
+    "simple": "简单",
+    "advanced": "高级"
+  },
+  "actionBar": {
+    "selected": "已选",
+    "markAsRead": "标记为已读",
+    "delete": "删除"
+  },
+  "toast": {
+    "markAsReadSuccess": "标记已读成功",
+    "deleteSuccess": "删除成功"
+  },
+  "dialog": {
+    "from": "来自",
+    "source": "来源"
+  }
+}

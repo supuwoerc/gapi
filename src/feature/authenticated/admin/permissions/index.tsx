@@ -11,7 +11,7 @@ import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 import { PermissionsTable } from './components/permissions-table'
 
 const Permissions = () => {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('permissions')
 
   return (
     <>
@@ -27,8 +27,8 @@ const Permissions = () => {
       <AppMain className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">{t('permissions.title')}</h2>
-            <p className="text-muted-foreground">{t('permissions.description')}</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
+            <p className="text-muted-foreground">{t('description')}</p>
           </div>
         </div>
         <PermissionsTable />

@@ -1,0 +1,109 @@
+{
+  "title": "Role Management",
+  "description": "Manage role inheritance and permission assignments",
+  "enabled": {
+    "true": "Enabled",
+    "false": "Disabled"
+  },
+  "columns": {
+    "name": "Role",
+    "enabled": "Status",
+    "permissions": "Permissions",
+    "effectivePermissions": "Effective Permissions",
+    "configCount": "Config Count",
+    "sortOrder": "Sort",
+    "createdAt": "Created At"
+  },
+  "search": "Search roles...",
+  "create": "New Role",
+  "createChild": "New Child Role",
+  "openMenu": "Open menu",
+  "edit": "Edit",
+  "delete": "Delete",
+  "selectAll": "Select all roles",
+  "selectRow": "Select role",
+  "actionBar": {
+    "selected": "selected",
+    "delete": "Delete"
+  },
+  "deleteConfirm": {
+    "title": "Confirm Deletion",
+    "desc": "Are you sure you want to delete {{count}} role(s)? Child roles will also be deleted. This action cannot be undone.",
+    "single": "Are you sure you want to delete role \"{{name}}\"? Child roles will also be deleted. This action cannot be undone.",
+    "success": "Role deleted successfully"
+  },
+  "editDialog": {
+    "createTitle": "New Role",
+    "editTitle": "Edit Role",
+    "name": "Role Name",
+    "namePlaceholder": "Enter role name",
+    "code": "Role Code",
+    "codePlaceholder": "Enter unique code",
+    "parent": "Parent Role",
+    "parentPlaceholder": "Select parent role",
+    "noParent": "No parent role",
+    "sortOrder": "Sort",
+    "description": "Description",
+    "descriptionPlaceholder": "Enter role description",
+    "enabled": "Status",
+    "permissions": "Permissions",
+    "save": "Save",
+    "saving": "Saving...",
+    "createSuccess": "Role created successfully",
+    "updateSuccess": "Role updated successfully",
+    "inheritedPermissions": "Inherited permissions from parent role",
+    "tabs": {
+      "basic": "Basic Info",
+      "permissions": "Permissions"
+    },
+    "permissionSearchPlaceholder": "Search permission name, code, or module...",
+    "permissionModuleAll": "All modules",
+    "permissionActionAll": "All actions",
+    "permissionResourceTypeAll": "All resources",
+    "permissionStateAll": "All states",
+    "permissionStateSelected": "Directly configured",
+    "permissionStateInherited": "Inherited",
+    "permissionStateOverridden": "Overrides",
+    "permissionStateUnset": "Not directly configured",
+    "directPermission": "Direct",
+    "inheritedPermission": "Inherited",
+    "selectedPermissions": "Configured permissions",
+    "selectedPermissionCount": "{{count}} item(s)",
+    "selectedPermissionEmpty": "No direct permissions configured",
+    "permissionUnknown": "Permission #{{id}}",
+    "permissionReviewTitle": "Confirm permissions",
+    "permissionReviewDescription": "Review the permissions directly assigned to this role before saving.",
+    "permissionReviewBack": "Back to edit",
+    "permissionReviewConfirm": "Confirm save",
+    "directPermissionSummary": "Direct: Allow {{allow}} / Deny {{deny}}",
+    "inheritedPermissionSummary": "Inherited: Allow {{allow}} / Deny {{deny}}",
+    "overridePermissionSummary": "Overrides: {{count}}",
+    "permissionResultCount": "Showing {{count}} / {{total}}",
+    "permissionRefreshing": "Refreshing permissions...",
+    "permissionEmpty": "No permissions found",
+    "permissionRowsPerPage": "Per page",
+    "permissionPageOf": "Page {{current}} / {{total}}",
+    "permissionPreviousPage": "Previous page",
+    "permissionNextPage": "Next page"
+  },
+  "permissionAction": {
+    "create": "Create",
+    "read": "Read",
+    "update": "Update",
+    "delete": "Delete"
+  },
+  "resourceType": {
+    "1": "API",
+    "2": "Menu",
+    "3": "Route",
+    "4": "Button",
+    "5": "Data"
+  },
+  "permissionEffect": {
+    "unset": "Unset",
+    "allow": "Allow",
+    "deny": "Deny",
+    "configCount": "Inherited {{inherited}} / Direct {{direct}}",
+    "effectSummary": "Allow {{allow}} / Deny {{deny}}"
+  }
+}

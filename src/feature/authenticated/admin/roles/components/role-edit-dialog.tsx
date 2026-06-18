@@ -136,7 +136,7 @@ function RolePermissionPicker({
   onCachePermissions,
   onChange,
 }: RolePermissionPickerProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('roles')
   const scrollParentRef = React.useRef<HTMLDivElement>(null)
   const [page, setPage] = React.useState(1)
   const [perPage, setPerPage] = React.useState(20)
@@ -278,12 +278,12 @@ function RolePermissionPicker({
 
   const isInitialPermissionsLoading = isPermissionsFetching && permissionsPage.data.length === 0
 
-  const paginationLabel = t('roles.editDialog.permissionPageOf', {
+  const paginationLabel = t('editDialog.permissionPageOf', {
     current: page,
     total: totalPages,
   })
 
-  const resultCountLabel = t('roles.editDialog.permissionResultCount', {
+  const resultCountLabel = t('editDialog.permissionResultCount', {
     count: permissionsPage.data.length,
     total: permissionsPage.total,
   })
@@ -294,7 +294,7 @@ function RolePermissionPicker({
         <Input
           value={searchValue}
           onChange={(event) => setSearchValue(event.target.value)}
-          placeholder={t('roles.editDialog.permissionSearchPlaceholder')}
+          placeholder={t('editDialog.permissionSearchPlaceholder')}
         />
         <Select value={moduleFilter} onValueChange={handleModuleChange}>
           <SelectTrigger className="w-full">
@@ -303,7 +303,7 @@ function RolePermissionPicker({
           <SelectContent>
             <SelectGroup>
               <SelectItem value={ALL_MODULES_VALUE}>
-                {t('roles.editDialog.permissionModuleAll')}
+                {t('editDialog.permissionModuleAll')}
               </SelectItem>
               {modules.map((module) => (
                 <SelectItem key={module} value={module}>
@@ -320,11 +320,11 @@ function RolePermissionPicker({
           <SelectContent>
             <SelectGroup>
               <SelectItem value={ALL_ACTIONS_VALUE}>
-                {t('roles.editDialog.permissionActionAll')}
+                {t('editDialog.permissionActionAll')}
               </SelectItem>
               {PERMISSION_ACTIONS.map((action) => (
                 <SelectItem key={action} value={action}>
-                  {t(`roles.permissionAction.${action}`)}
+                  {t(`permissionAction.${action}`)}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -337,11 +337,11 @@ function RolePermissionPicker({
           <SelectContent>
             <SelectGroup>
               <SelectItem value={ALL_RESOURCE_TYPES_VALUE}>
-                {t('roles.editDialog.permissionResourceTypeAll')}
+                {t('editDialog.permissionResourceTypeAll')}
               </SelectItem>
               {RESOURCE_TYPES.map((resourceType) => (
                 <SelectItem key={resourceType} value={String(resourceType)}>
-                  {t(`roles.resourceType.${resourceType}`)}
+                  {t(`resourceType.${resourceType}`)}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -350,20 +350,18 @@ function RolePermissionPicker({
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <Badge variant="secondary">
-          {t('roles.editDialog.directPermissionSummary', directSummary)}
-        </Badge>
+        <Badge variant="secondary">{t('editDialog.directPermissionSummary', directSummary)}</Badge>
         <Badge variant="outline">
-          {t('roles.editDialog.inheritedPermissionSummary', inheritedSummary)}
+          {t('editDialog.inheritedPermissionSummary', inheritedSummary)}
         </Badge>
         <Badge variant={overrideCount > 0 ? 'secondary' : 'outline'}>
-          {t('roles.editDialog.overridePermissionSummary', { count: overrideCount })}
+          {t('editDialog.overridePermissionSummary', { count: overrideCount })}
         </Badge>
       </div>
 
       <div className="text-xs text-muted-foreground">
         {isPermissionsFetching && permissionsPage.data.length > 0
-          ? t('roles.editDialog.permissionRefreshing')
+          ? t('editDialog.permissionRefreshing')
           : resultCountLabel}
       </div>
 
@@ -374,7 +372,7 @@ function RolePermissionPicker({
           </div>
         ) : permissionsPage.data.length === 0 ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            {t('roles.editDialog.permissionEmpty')}
+            {t('editDialog.permissionEmpty')}
           </div>
         ) : (
           <div ref={scrollParentRef} className="h-full overflow-y-auto">
@@ -405,7 +403,7 @@ function RolePermissionPicker({
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">
-            {t('roles.editDialog.permissionRowsPerPage')}
+            {t('editDialog.permissionRowsPerPage')}
           </span>
           <Select value={String(perPage)} onValueChange={handlePerPageChange}>
             <SelectTrigger className="h-8 w-20">
@@ -427,7 +425,7 @@ function RolePermissionPicker({
           <span className="text-sm text-muted-foreground">{paginationLabel}</span>
           <Button
             type="button"
-            aria-label={t('roles.editDialog.permissionPreviousPage')}
+            aria-label={t('editDialog.permissionPreviousPage')}
             variant="outline"
             size="icon-sm"
             disabled={!canPreviousPage}
@@ -437,7 +435,7 @@ function RolePermissionPicker({
           </Button>
           <Button
             type="button"
-            aria-label={t('roles.editDialog.permissionNextPage')}
+            aria-label={t('editDialog.permissionNextPage')}
             variant="outline"
             size="icon-sm"
             disabled={!canNextPage}
@@ -480,7 +478,7 @@ function PermissionReviewDialog({
   onConfirm,
   onOpenChange,
 }: PermissionReviewDialogProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('roles')
 
   const inheritedEffectById = React.useMemo(
     () =>
@@ -503,23 +501,21 @@ function PermissionReviewDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden sm:max-w-2xl">
         <DialogHeader className="shrink-0 pr-8">
-          <DialogTitle>{t('roles.editDialog.permissionReviewTitle')}</DialogTitle>
-          <DialogDescription>{t('roles.editDialog.permissionReviewDescription')}</DialogDescription>
+          <DialogTitle>{t('editDialog.permissionReviewTitle')}</DialogTitle>
+          <DialogDescription>{t('editDialog.permissionReviewDescription')}</DialogDescription>
         </DialogHeader>
 
         <div className="flex shrink-0 flex-wrap gap-2">
           <Badge variant="secondary">
-            {t('roles.editDialog.selectedPermissionCount', { count: assignments.length })}
+            {t('editDialog.selectedPermissionCount', { count: assignments.length })}
           </Badge>
-          <Badge variant="outline">
-            {t('roles.editDialog.directPermissionSummary', directSummary)}
-          </Badge>
+          <Badge variant="outline">{t('editDialog.directPermissionSummary', directSummary)}</Badge>
         </div>
 
         <div className="min-h-0 overflow-hidden rounded-md border">
           {selectedPermissions.length === 0 ? (
             <div className="px-3 py-6 text-sm text-muted-foreground">
-              {t('roles.editDialog.selectedPermissionEmpty')}
+              {t('editDialog.selectedPermissionEmpty')}
             </div>
           ) : (
             <div className="max-h-[420px] overflow-y-auto">
@@ -543,12 +539,10 @@ function PermissionReviewDialog({
             disabled={isPending}
             onClick={() => onOpenChange(false)}
           >
-            {t('roles.editDialog.permissionReviewBack')}
+            {t('editDialog.permissionReviewBack')}
           </Button>
           <Button type="button" disabled={isPending} onClick={onConfirm}>
-            {isPending
-              ? t('roles.editDialog.saving')
-              : t('roles.editDialog.permissionReviewConfirm')}
+            {isPending ? t('editDialog.saving') : t('editDialog.permissionReviewConfirm')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -569,7 +563,7 @@ function PermissionReviewRow({
   isLast,
   permission,
 }: PermissionReviewRowProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('roles')
 
   return (
     <div
@@ -584,7 +578,7 @@ function PermissionReviewRow({
         <div className="flex min-w-0 flex-wrap items-center gap-1.5">
           <span className="truncate font-medium">
             {permission?.name ??
-              t('roles.editDialog.permissionUnknown', { id: assignment.permission_id })}
+              t('editDialog.permissionUnknown', { id: assignment.permission_id })}
           </span>
           <Badge
             variant={assignment.effect === 'deny' ? 'outline' : 'secondary'}
@@ -595,8 +589,7 @@ function PermissionReviewRow({
                 : 'border-primary/40 text-primary'
             )}
           >
-            {t('roles.editDialog.directPermission')} ·{' '}
-            {t(`roles.permissionEffect.${assignment.effect}`)}
+            {t('editDialog.directPermission')} · {t(`permissionEffect.${assignment.effect}`)}
           </Badge>
           {inheritedEffect ? (
             <Badge
@@ -608,8 +601,7 @@ function PermissionReviewRow({
                   : 'border-primary/40 text-primary'
               )}
             >
-              {t('roles.editDialog.inheritedPermission')} ·{' '}
-              {t(`roles.permissionEffect.${inheritedEffect}`)}
+              {t('editDialog.inheritedPermission')} · {t(`permissionEffect.${inheritedEffect}`)}
             </Badge>
           ) : null}
         </div>
@@ -622,10 +614,10 @@ function PermissionReviewRow({
               {permission.module}
             </Badge>
             <Badge variant="outline" className="text-xs">
-              {t(`roles.permissionAction.${permission.action}`)}
+              {t(`permissionAction.${permission.action}`)}
             </Badge>
             <Badge variant="outline" className="text-xs">
-              {t(`roles.resourceType.${permission.resource_type}`)}
+              {t(`resourceType.${permission.resource_type}`)}
             </Badge>
           </div>
         ) : null}
@@ -639,7 +631,7 @@ const PermissionRow = React.memo(
     { permission, directEffect, inheritedEffect, isLast, onEffectChange, style, virtualIndex },
     ref
   ) {
-    const { t } = useTranslation('feature')
+    const { t } = useTranslation('roles')
 
     return (
       <div
@@ -666,8 +658,7 @@ const PermissionRow = React.memo(
                     : 'border-primary/40 text-primary'
                 )}
               >
-                {t('roles.editDialog.directPermission')} ·{' '}
-                {t(`roles.permissionEffect.${directEffect}`)}
+                {t('editDialog.directPermission')} · {t(`permissionEffect.${directEffect}`)}
               </Badge>
             ) : null}
             {inheritedEffect ? (
@@ -680,8 +671,7 @@ const PermissionRow = React.memo(
                     : 'border-primary/40 text-primary'
                 )}
               >
-                {t('roles.editDialog.inheritedPermission')} ·{' '}
-                {t(`roles.permissionEffect.${inheritedEffect}`)}
+                {t('editDialog.inheritedPermission')} · {t(`permissionEffect.${inheritedEffect}`)}
               </Badge>
             ) : null}
           </div>
@@ -691,10 +681,10 @@ const PermissionRow = React.memo(
               {permission.module}
             </Badge>
             <Badge variant="outline" className="text-xs">
-              {t(`roles.permissionAction.${permission.action}`)}
+              {t(`permissionAction.${permission.action}`)}
             </Badge>
             <Badge variant="outline" className="text-xs">
-              {t(`roles.resourceType.${permission.resource_type}`)}
+              {t(`resourceType.${permission.resource_type}`)}
             </Badge>
           </div>
         </div>
@@ -710,9 +700,9 @@ const PermissionRow = React.memo(
           size="sm"
           className="shrink-0 flex-wrap justify-end self-end sm:self-start"
         >
-          <ToggleGroupItem value="unset">{t('roles.permissionEffect.unset')}</ToggleGroupItem>
-          <ToggleGroupItem value="allow">{t('roles.permissionEffect.allow')}</ToggleGroupItem>
-          <ToggleGroupItem value="deny">{t('roles.permissionEffect.deny')}</ToggleGroupItem>
+          <ToggleGroupItem value="unset">{t('permissionEffect.unset')}</ToggleGroupItem>
+          <ToggleGroupItem value="allow">{t('permissionEffect.allow')}</ToggleGroupItem>
+          <ToggleGroupItem value="deny">{t('permissionEffect.deny')}</ToggleGroupItem>
         </ToggleGroup>
       </div>
     )
@@ -727,7 +717,7 @@ export function RoleEditDialog({
   open,
   onOpenChange,
 }: RoleEditDialogProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('roles')
   const queryClient = useQueryClient()
   const isEditing = roleId !== null
   const [cachedPermissionById, setCachedPermissionById] = React.useState<Map<number, Permission>>(
@@ -785,9 +775,7 @@ export function RoleEditDialog({
     mutationFn: (values: RoleMutation) =>
       roleId === null ? createRole(values) : updateRole(roleId, values),
     onSuccess: () => {
-      toast.success(
-        isEditing ? t('roles.editDialog.updateSuccess') : t('roles.editDialog.createSuccess')
-      )
+      toast.success(isEditing ? t('editDialog.updateSuccess') : t('editDialog.createSuccess'))
       setReviewOpen(false)
       setPendingValues(null)
       setCachedPermissionById(new Map())
@@ -827,19 +815,17 @@ export function RoleEditDialog({
         >
           <DialogHeader className="shrink-0 pr-8">
             <DialogTitle>
-              {isEditing ? t('roles.editDialog.editTitle') : t('roles.editDialog.createTitle')}
+              {isEditing ? t('editDialog.editTitle') : t('editDialog.createTitle')}
             </DialogTitle>
-            <DialogDescription className="sr-only">{t('roles.description')}</DialogDescription>
+            <DialogDescription className="sr-only">{t('description')}</DialogDescription>
           </DialogHeader>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex min-h-0 flex-1 flex-col">
               <Tabs defaultValue="basic" className="min-h-0 flex-1">
                 <TabsList className="grid w-full shrink-0 grid-cols-2">
-                  <TabsTrigger value="basic">{t('roles.editDialog.tabs.basic')}</TabsTrigger>
-                  <TabsTrigger value="permissions">
-                    {t('roles.editDialog.tabs.permissions')}
-                  </TabsTrigger>
+                  <TabsTrigger value="basic">{t('editDialog.tabs.basic')}</TabsTrigger>
+                  <TabsTrigger value="permissions">{t('editDialog.tabs.permissions')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent
@@ -853,12 +839,9 @@ export function RoleEditDialog({
                         name="name"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('roles.editDialog.name')}</FormLabel>
+                            <FormLabel>{t('editDialog.name')}</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('roles.editDialog.namePlaceholder')}
-                              />
+                              <Input {...field} placeholder={t('editDialog.namePlaceholder')} />
                             </FormControl>
                           </FormItem>
                         )}
@@ -869,12 +852,9 @@ export function RoleEditDialog({
                         name="code"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('roles.editDialog.code')}</FormLabel>
+                            <FormLabel>{t('editDialog.code')}</FormLabel>
                             <FormControl>
-                              <Input
-                                {...field}
-                                placeholder={t('roles.editDialog.codePlaceholder')}
-                              />
+                              <Input {...field} placeholder={t('editDialog.codePlaceholder')} />
                             </FormControl>
                           </FormItem>
                         )}
@@ -885,23 +865,21 @@ export function RoleEditDialog({
                         name="parent_id"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('roles.editDialog.parent')}</FormLabel>
+                            <FormLabel>{t('editDialog.parent')}</FormLabel>
                             <Select
                               value={field.value === null ? NO_PARENT_VALUE : String(field.value)}
                               disabled
                             >
                               <FormControl>
                                 <SelectTrigger className="w-full">
-                                  <SelectValue
-                                    placeholder={t('roles.editDialog.parentPlaceholder')}
-                                  />
+                                  <SelectValue placeholder={t('editDialog.parentPlaceholder')} />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
                                 <SelectGroup>
                                   {field.value === null ? (
                                     <SelectItem value={NO_PARENT_VALUE}>
-                                      {t('roles.editDialog.noParent')}
+                                      {t('editDialog.noParent')}
                                     </SelectItem>
                                   ) : (
                                     <SelectItem value={String(field.value)}>
@@ -920,7 +898,7 @@ export function RoleEditDialog({
                         name="sort_order"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t('roles.editDialog.sortOrder')}</FormLabel>
+                            <FormLabel>{t('editDialog.sortOrder')}</FormLabel>
                             <FormControl>
                               <Input
                                 type="number"
@@ -939,11 +917,11 @@ export function RoleEditDialog({
                       name="description"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t('roles.editDialog.description')}</FormLabel>
+                          <FormLabel>{t('editDialog.description')}</FormLabel>
                           <FormControl>
                             <Textarea
                               {...field}
-                              placeholder={t('roles.editDialog.descriptionPlaceholder')}
+                              placeholder={t('editDialog.descriptionPlaceholder')}
                             />
                           </FormControl>
                         </FormItem>
@@ -955,7 +933,7 @@ export function RoleEditDialog({
                       name="enabled"
                       render={({ field }) => (
                         <FormItem className="flex items-center justify-between rounded-md border px-3 py-2">
-                          <FormLabel>{t('roles.editDialog.enabled')}</FormLabel>
+                          <FormLabel>{t('editDialog.enabled')}</FormLabel>
                           <FormControl>
                             <Switch checked={field.value} onCheckedChange={field.onChange} />
                           </FormControl>
@@ -974,7 +952,7 @@ export function RoleEditDialog({
                     name="permissions"
                     render={({ field }) => (
                       <FormItem className="min-h-0">
-                        <FormLabel>{t('roles.editDialog.permissions')}</FormLabel>
+                        <FormLabel>{t('editDialog.permissions')}</FormLabel>
                         <RolePermissionPicker
                           assignments={field.value}
                           inheritedPermissions={inheritedPermissions}
@@ -989,7 +967,7 @@ export function RoleEditDialog({
 
               <DialogFooter className="shrink-0 pt-4">
                 <Button type="submit" disabled={mutation.isPending || isRoleDetailLoading}>
-                  {mutation.isPending ? t('roles.editDialog.saving') : t('roles.editDialog.save')}
+                  {mutation.isPending ? t('editDialog.saving') : t('editDialog.save')}
                 </Button>
               </DialogFooter>
             </form>

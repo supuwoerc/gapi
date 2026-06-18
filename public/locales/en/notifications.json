@@ -1,0 +1,42 @@
+{
+  "title": "Notifications",
+  "description": "View and manage your notifications",
+  "type": {
+    "system": "System",
+    "task": "Task",
+    "message": "Message",
+    "alert": "Alert"
+  },
+  "status": {
+    "read": "Read",
+    "unread": "Unread"
+  },
+  "columns": {
+    "title": "Title",
+    "type": "Type",
+    "sender": "Sender",
+    "isRead": "Status",
+    "createdAt": "Date"
+  },
+  "search": "Search notifications...",
+  "openMenu": "Open menu",
+  "markAsRead": "Mark as read",
+  "delete": "Delete",
+  "tabs": {
+    "simple": "Simple",
+    "advanced": "Advanced"
+  },
+  "actionBar": {
+    "selected": "selected",
+    "markAsRead": "Mark as read",
+    "delete": "Delete"
+  },
+  "toast": {
+    "markAsReadSuccess": "Marked as read",
+    "deleteSuccess": "Deleted successfully"
+  },
+  "dialog": {
+    "from": "From",
+    "source": "Source"
+  }
+}

@@ -26,7 +26,7 @@ interface NotificationsTableActionBarProps {
 }
 
 export function NotificationsTableActionBar({ table }: NotificationsTableActionBarProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('notifications')
   const queryClient = useQueryClient()
   const rows = table.getFilteredSelectedRowModel().rows
 
@@ -42,7 +42,7 @@ export function NotificationsTableActionBar({ table }: NotificationsTableActionB
   const markReadMutation = useMutation({
     mutationFn: markNotificationsRead,
     onSuccess: () => {
-      toast.success(t('notifications.toast.markAsReadSuccess'))
+      toast.success(t('toast.markAsReadSuccess'))
       table.toggleAllRowsSelected(false)
       void queryClient.invalidateQueries({ queryKey: ['notifications'] })
     },
@@ -51,7 +51,7 @@ export function NotificationsTableActionBar({ table }: NotificationsTableActionB
   const deleteMutation = useMutation({
     mutationFn: deleteNotifications,
     onSuccess: () => {
-      toast.success(t('notifications.toast.deleteSuccess'))
+      toast.success(t('toast.deleteSuccess'))
       table.toggleAllRowsSelected(false)
       void queryClient.invalidateQueries({ queryKey: ['notifications'] })
     },
@@ -71,7 +71,7 @@ export function NotificationsTableActionBar({ table }: NotificationsTableActionB
     <ActionBar open={rows.length > 0} onOpenChange={onOpenChange}>
       <ActionBarSelection>
         <span className="font-medium">{rows.length}</span>
-        <span>{t('notifications.actionBar.selected')}</span>
+        <span>{t('actionBar.selected')}</span>
         <ActionBarSeparator />
         <ActionBarClose>
           <X />
@@ -81,11 +81,11 @@ export function NotificationsTableActionBar({ table }: NotificationsTableActionB
       <ActionBarGroup>
         <ActionBarItem onClick={onMarkRead} disabled={markReadMutation.isPending}>
           <CheckCheck />
-          {t('notifications.actionBar.markAsRead')}
+          {t('actionBar.markAsRead')}
         </ActionBarItem>
         <ActionBarItem variant="destructive" onClick={onDelete} disabled={deleteMutation.isPending}>
           <Trash2 />
-          {t('notifications.actionBar.delete')}
+          {t('actionBar.delete')}
         </ActionBarItem>
       </ActionBarGroup>
     </ActionBar>

@@ -1,0 +1,18 @@
+{
+  "title": "Documents",
+  "description": "Browse and manage project documents",
+  "search": "Search document title or description...",
+  "columns": {
+    "title": "Title",
+    "visibility": "Visibility",
+    "project": "Project",
+    "owner": "Owner",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At"
+  },
+  "visibility": {
+    "public": "Public",
+    "private": "Private",
+    "project": "Project Members"
+  }
+}

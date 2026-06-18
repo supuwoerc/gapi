@@ -53,7 +53,7 @@ interface UserEditDialogProps {
 }
 
 export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps) {
-  const { t } = useTranslation('feature')
+  const { t } = useTranslation('users')
   const queryClient = useQueryClient()
   const anchorRef = useComboboxAnchor()
   const [roleKeyword, setRoleKeyword] = React.useState('')
@@ -92,7 +92,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
   const mutation = useMutation({
     mutationFn: (values: FormValues) => updateUser(user!.id, values),
     onSuccess: () => {
-      toast.success(t('users.editDialog.success'))
+      toast.success(t('editDialog.success'))
       onOpenChange(false)
       void queryClient.invalidateQueries({ queryKey: ['users'] })
     },
@@ -108,7 +108,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
     <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
       <DialogContent className="sm:max-w-md" onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>{t('users.editDialog.title')}</DialogTitle>
+          <DialogTitle>{t('editDialog.title')}</DialogTitle>
         </DialogHeader>
 
         <div className="flex items-center gap-3 py-2">
@@ -129,7 +129,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
               name="enabled"
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel>{t('users.editDialog.enabled')}</FormLabel>
+                  <FormLabel>{t('editDialog.enabled')}</FormLabel>
                   <FormControl>
                     <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -142,7 +142,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
               name="roles"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('users.editDialog.roles')}</FormLabel>
+                  <FormLabel>{t('editDialog.roles')}</FormLabel>
                   <FormControl>
                     <Combobox
                       multiple
@@ -160,7 +160,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                             ))
                           }
                         </ComboboxValue>
-                        <ComboboxChipsInput placeholder={t('users.editDialog.rolesPlaceholder')} />
+                        <ComboboxChipsInput placeholder={t('editDialog.rolesPlaceholder')} />
                       </ComboboxChips>
                       <ComboboxContent anchor={anchorRef}>
                         <ComboboxList>
@@ -170,7 +170,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                             </div>
                           ) : roleOptions.length === 0 ? (
                             <div className="flex w-full justify-center py-2 text-center text-sm text-muted-foreground">
-                              {t('users.editDialog.rolesEmpty')}
+                              {t('editDialog.rolesEmpty')}
                             </div>
                           ) : (
                             roleOptions.map((role) => (
@@ -189,7 +189,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
 
             <DialogFooter>
               <Button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? t('users.editDialog.saving') : t('users.editDialog.save')}
+                {mutation.isPending ? t('editDialog.saving') : t('editDialog.save')}
               </Button>
             </DialogFooter>
           </form>
