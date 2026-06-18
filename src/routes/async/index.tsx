@@ -113,6 +113,18 @@ const asyncRoutes: CustomRouteObject[] = [
         errorElement: <RouteError />,
         element: 'documents',
       },
+      {
+        path: '/workflow',
+        loader: withPermissions('workflow'),
+        handle: {
+          title: 'route:pages.workflow',
+          authMode: 'permissionRequired',
+          key: 'workflow',
+          icon: 'workflow',
+        },
+        errorElement: <RouteError />,
+        element: 'workflow',
+      },
     ],
   },
   {
