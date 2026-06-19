@@ -1,6 +1,7 @@
 import type auth from '../../public/locales/zh/auth.json'
 import type component from '../../public/locales/zh/component.json'
 import type dashboard from '../../public/locales/zh/dashboard.json'
+import type documentDetail from '../../public/locales/zh/document-detail.json'
 import type documents from '../../public/locales/zh/documents.json'
 import type errors from '../../public/locales/zh/errors.json'
 import type global from '../../public/locales/zh/global.json'
@@ -18,6 +19,7 @@ export interface Resources {
   auth: typeof auth
   component: typeof component
   dashboard: typeof dashboard
+  'document-detail': typeof documentDetail
   documents: typeof documents
   errors: typeof errors
   global: typeof global

@@ -11,6 +11,7 @@ import { getDocuments } from '@/service/documents'
 import { Text } from 'lucide-react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
 
 import { useDataTable } from '@/hooks/use-data-table'
 
@@ -57,7 +58,12 @@ export function DocumentsTable() {
         ),
         cell: ({ row }) => (
           <div className="flex min-w-56 flex-col gap-1">
-            <span className="font-medium">{row.original.title}</span>
+            <Link
+              to={`/document/${row.original.id}`}
+              className="font-medium text-primary hover:underline"
+            >
+              {row.original.title}
+            </Link>
             <span className="line-clamp-1 text-xs text-muted-foreground">
               {row.original.description}
             </span>

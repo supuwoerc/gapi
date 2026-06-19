@@ -27,7 +27,12 @@ export const documentSchema = z.object({
 
 export const documentListSchema = z.array(documentSchema)
 
+export const documentDetailSchema = documentSchema.extend({
+  content: z.string(),
+})
+
 export type DocumentVisibility = z.infer<typeof documentVisibilitySchema>
 export type DocumentOwner = z.infer<typeof documentOwnerSchema>
 export type DocumentProject = z.infer<typeof documentProjectSchema>
 export type Document = z.infer<typeof documentSchema>
+export type DocumentDetail = z.infer<typeof documentDetailSchema>

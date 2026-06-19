@@ -114,6 +114,18 @@ const asyncRoutes: CustomRouteObject[] = [
         lazy: loadComponent(() => import('@/feature/authenticated/documents')),
       },
       {
+        path: '/document/:id',
+        loader: withPermissions('documents'),
+        handle: {
+          title: 'route:pages.documentDetail',
+          authMode: 'permissionRequired',
+          key: 'documents',
+          hidden: true,
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/authenticated/documents/detail')),
+      },
+      {
         path: '/workflow',
         loader: withPermissions('workflow'),
         handle: {

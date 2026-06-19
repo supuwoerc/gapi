@@ -16,6 +16,7 @@
     "name": "Pages",
     "projects": "Projects",
     "documents": "Documents",
+    "documentDetail": "Document Detail",
     "workflow": "Workflow"
   },
   "other": {

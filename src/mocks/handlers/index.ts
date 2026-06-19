@@ -1,6 +1,7 @@
 import { authHandlers } from './auth'
 import { captchaHandlers } from './captcha'
 import { documentHandlers } from './documents'
+import { documentDetailHandlers } from './documents-detail'
 import { menuHandlers } from './menu'
 import { notificationsHandlers } from './notifications'
 import { permissionHandlers } from './permissions'
@@ -14,6 +15,7 @@ import { userHandlers } from './users'
 export const handlers = [
   ...authHandlers,
   ...captchaHandlers,
+  ...documentDetailHandlers,
   ...documentHandlers,
   ...menuHandlers,
   ...notificationsHandlers,
