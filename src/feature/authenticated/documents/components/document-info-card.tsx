@@ -23,7 +23,7 @@ interface DocumentInfoCardProps {
 }
 
 export function DocumentInfoCard({ document, loading }: DocumentInfoCardProps) {
-  const { t } = useTranslation(['document-detail', 'documents'])
+  const { t } = useTranslation('documents')
 
   if (loading) {
     return (
@@ -59,22 +59,22 @@ export function DocumentInfoCard({ document, loading }: DocumentInfoCardProps) {
     <div className="space-y-3">
       <Card className="gap-1 py-4">
         <CardHeader>
-          <CardTitle>{t('info')}</CardTitle>
+          <CardTitle>{t('detail.info')}</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           <InfoItem
-            label={t('fields.visibility')}
+            label={t('detail.fields.visibility')}
             value={
               <div className="flex items-center gap-1">
                 <Eye className="size-4 text-muted-foreground" />
                 <Badge variant={visibilityVariantMap[document.visibility]}>
-                  {t(`documents:visibility.${document.visibility}`)}
+                  {t(`visibility.${document.visibility}`)}
                 </Badge>
               </div>
             }
           />
           <InfoItem
-            label={t('fields.project')}
+            label={t('detail.fields.project')}
             value={
               <div className="flex items-center gap-2">
                 <Avatar className="size-5">
@@ -88,7 +88,7 @@ export function DocumentInfoCard({ document, loading }: DocumentInfoCardProps) {
             }
           />
           <InfoItem
-            label={t('fields.owner')}
+            label={t('detail.fields.owner')}
             value={
               <div className="flex items-center gap-2">
                 <Avatar className="size-5">
@@ -102,7 +102,7 @@ export function DocumentInfoCard({ document, loading }: DocumentInfoCardProps) {
             }
           />
           <InfoItem
-            label={t('fields.createdAt')}
+            label={t('detail.fields.createdAt')}
             value={
               <span className="flex items-center gap-1">
                 <Calendar className="size-4 text-muted-foreground" />
@@ -115,13 +115,13 @@ export function DocumentInfoCard({ document, loading }: DocumentInfoCardProps) {
 
       <Card className="gap-1 py-4">
         <CardHeader>
-          <CardTitle>{t('content')}</CardTitle>
+          <CardTitle>{t('detail.content')}</CardTitle>
         </CardHeader>
         <CardContent>
           {document.content ? (
             <ReadOnlyEditor content={document.content} />
           ) : (
-            <p className="text-muted-foreground">{t('noContent')}</p>
+            <p className="text-muted-foreground">{t('detail.noContent')}</p>
           )}
         </CardContent>
       </Card>

@@ -27,5 +27,40 @@
   "tabs": {
     "simple": "Simple",
     "advanced": "Advanced"
+  },
+  "detail": {
+    "back": "Back to Tasks",
+    "info": "Basic Info",
+    "description": "Description",
+    "noDescription": "No description",
+    "fields": {
+      "type": "Type",
+      "creator": "Creator",
+      "assignee": "Assignee",
+      "resolver": "Resolver",
+      "createdAt": "Created",
+      "updatedAt": "Updated"
+    },
+    "timeline": {
+      "title": "Timeline",
+      "created": "created this task",
+      "assigned": "assigned to {{target}}",
+      "levelChanged": "changed level to {{level}}",
+      "resolved": "resolved this task",
+      "commented": "commented",
+      "loading": "Loading..."
+    },
+    "comments": {
+      "title": "Comments",
+      "empty": "No comments yet",
+      "loading": "Loading...",
+      "create": "Comment",
+      "reply": "Reply",
+      "replyTo": "Reply to {{user}}",
+      "placeholder": "Type a comment, @ to mention...",
+      "send": "Send",
+      "upload": "Upload",
+      "download": "Download"
+    }
   }
 }

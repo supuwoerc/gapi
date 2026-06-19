@@ -14,5 +14,16 @@
     "public": "公开",
     "private": "指定人员可见",
     "project": "项目成员可见"
+  },
+  "detail": {
+    "info": "文档信息",
+    "content": "文档内容",
+    "noContent": "暂无内容",
+    "fields": {
+      "visibility": "可见性",
+      "project": "所属项目",
+      "owner": "创建者",
+      "createdAt": "创建时间"
+    }
   }
 }

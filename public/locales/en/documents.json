@@ -14,5 +14,16 @@
     "public": "Public",
     "private": "Private",
     "project": "Project Members"
+  },
+  "detail": {
+    "info": "Document Info",
+    "content": "Content",
+    "noContent": "No content",
+    "fields": {
+      "visibility": "Visibility",
+      "project": "Project",
+      "owner": "Owner",
+      "createdAt": "Created"
+    }
   }
 }

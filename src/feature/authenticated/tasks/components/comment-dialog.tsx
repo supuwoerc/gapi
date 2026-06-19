@@ -34,7 +34,7 @@ interface CommentDialogProps {
 }
 
 export function CommentDialog({ open, onOpenChange, taskId, parentComment }: CommentDialogProps) {
-  const { t } = useTranslation('task-detail')
+  const { t } = useTranslation('tasks')
   const queryClient = useQueryClient()
   const fileInputRef = React.useRef<HTMLInputElement>(null)
 
@@ -105,8 +105,8 @@ export function CommentDialog({ open, onOpenChange, taskId, parentComment }: Com
   }
 
   const title = parentComment
-    ? t('comments.replyTo', { user: parentComment.author })
-    : t('comments.create')
+    ? t('detail.comments.replyTo', { user: parentComment.author })
+    : t('detail.comments.create')
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -124,7 +124,7 @@ export function CommentDialog({ open, onOpenChange, taskId, parentComment }: Com
           >
             <MentionPrimitive.Input
               ref={textareaRef as unknown as React.Ref<HTMLInputElement>}
-              placeholder={t('comments.placeholder')}
+              placeholder={t('detail.comments.placeholder')}
               className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
               asChild
             >
@@ -181,7 +181,7 @@ export function CommentDialog({ open, onOpenChange, taskId, parentComment }: Com
             </Button>
             <Button size="sm" onClick={handleSubmit} disabled={mutation.isPending}>
               <Send className="size-4" />
-              {t('comments.send')}
+              {t('detail.comments.send')}
             </Button>
           </div>
           <input

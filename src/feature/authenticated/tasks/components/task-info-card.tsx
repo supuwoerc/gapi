@@ -34,7 +34,7 @@ interface TaskInfoCardProps {
 }
 
 export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
-  const { t } = useTranslation(['task-detail', 'tasks'])
+  const { t } = useTranslation('tasks')
 
   if (loading) {
     return (
@@ -72,20 +72,20 @@ export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
     <div className="space-y-3">
       <Card className="gap-1 py-4">
         <CardHeader>
-          <CardTitle>{t('info')}</CardTitle>
+          <CardTitle>{t('detail.info')}</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-1 sm:grid-cols-2">
           <InfoItem
-            label={t('fields.type')}
+            label={t('detail.fields.type')}
             value={
               <div className="flex items-center gap-1 capitalize">
                 <TypeIcon className="size-4 text-muted-foreground" />
-                {t(`tasks:type.${task.type}`)}
+                {t(`type.${task.type}`)}
               </div>
             }
           />
           <InfoItem
-            label={t('fields.creator')}
+            label={t('detail.fields.creator')}
             value={
               <span className="flex items-center gap-1">
                 <User className="size-4 text-muted-foreground" />
@@ -94,7 +94,7 @@ export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
             }
           />
           <InfoItem
-            label={t('fields.assignee')}
+            label={t('detail.fields.assignee')}
             value={
               <span className="flex items-center gap-1">
                 <User className="size-4 text-muted-foreground" />
@@ -103,7 +103,7 @@ export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
             }
           />
           <InfoItem
-            label={t('fields.resolver')}
+            label={t('detail.fields.resolver')}
             value={
               task.resolver ? (
                 <span className="flex items-center gap-1">
@@ -116,7 +116,7 @@ export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
             }
           />
           <InfoItem
-            label={t('fields.createdAt')}
+            label={t('detail.fields.createdAt')}
             value={
               <span className="flex items-center gap-1">
                 <Calendar className="size-4 text-muted-foreground" />
@@ -125,7 +125,7 @@ export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
             }
           />
           <InfoItem
-            label={t('fields.updatedAt')}
+            label={t('detail.fields.updatedAt')}
             value={
               <span className="flex items-center gap-1">
                 <Calendar className="size-4 text-muted-foreground" />
@@ -138,13 +138,13 @@ export function TaskInfoCard({ task, loading }: TaskInfoCardProps) {
 
       <Card className="gap-1 py-4">
         <CardHeader>
-          <CardTitle>{t('description')}</CardTitle>
+          <CardTitle>{t('detail.description')}</CardTitle>
         </CardHeader>
         <CardContent>
           {task.description ? (
             <ReadOnlyEditor content={task.description} />
           ) : (
-            <p className="text-muted-foreground">{t('noDescription')}</p>
+            <p className="text-muted-foreground">{t('detail.noDescription')}</p>
           )}
         </CardContent>
       </Card>

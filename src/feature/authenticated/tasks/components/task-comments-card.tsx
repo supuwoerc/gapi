@@ -26,7 +26,7 @@ interface TaskCommentsCardProps {
 }
 
 export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
-  const { t } = useTranslation('task-detail')
+  const { t } = useTranslation('tasks')
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
   const [dialogOpen, setDialogOpen] = React.useState(false)
@@ -103,7 +103,7 @@ export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-1">
             <MessageSquare className="size-4" />
-            {t('comments.title')}
+            {t('detail.comments.title')}
           </CardTitle>
           <CardAction>
             <Tooltip>
@@ -112,13 +112,13 @@ export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
                   <MessageSquarePlus className="size-4 font-bold" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>{t('comments.create')}</TooltipContent>
+              <TooltipContent>{t('detail.comments.create')}</TooltipContent>
             </Tooltip>
           </CardAction>
         </CardHeader>
         <CardContent>
           {allItems.length === 0 ? (
-            <p className="text-sm text-muted-foreground">{t('comments.empty')}</p>
+            <p className="text-sm text-muted-foreground">{t('detail.comments.empty')}</p>
           ) : (
             <div ref={scrollRef} className="max-h-[500px] overflow-y-auto">
               <div
@@ -150,7 +150,7 @@ export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
                               <span className="text-sm font-medium">{comment.author}</span>
                               {comment.reply_to_user && (
                                 <span className="text-xs text-muted-foreground">
-                                  {t('comments.reply')} {comment.reply_to_user}
+                                  {t('detail.comments.reply')} {comment.reply_to_user}
                                 </span>
                               )}
                               <span className="text-xs text-muted-foreground">

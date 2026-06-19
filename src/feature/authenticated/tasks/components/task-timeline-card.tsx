@@ -13,7 +13,7 @@ interface TaskTimelineCardProps {
 }
 
 export function TaskTimelineCard({ taskId }: TaskTimelineCardProps) {
-  const { t } = useTranslation('task-detail')
+  const { t } = useTranslation('tasks')
 
   const { data, isLoading } = useQuery({
     queryKey: ['task-timeline', taskId],
@@ -46,7 +46,7 @@ export function TaskTimelineCard({ taskId }: TaskTimelineCardProps) {
   return (
     <Card className="gap-1 py-4">
       <CardHeader>
-        <CardTitle>{t('timeline.title')}</CardTitle>
+        <CardTitle>{t('detail.timeline.title')}</CardTitle>
       </CardHeader>
       <CardContent>
         {items.length > 0 ? (
@@ -62,10 +62,12 @@ export function TaskTimelineCard({ taskId }: TaskTimelineCardProps) {
                     <span className="font-medium">{event.actor}</span>{' '}
                     <span className="text-muted-foreground">
                       {event.action === 'assigned'
-                        ? t('timeline.assigned', { target: event.detail })
+                        ? t('detail.timeline.assigned', { target: event.detail })
                         : event.action === 'level_changed'
-                          ? t('timeline.levelChanged', { level: event.detail })
-                          : t(`timeline.${event.action as 'created' | 'resolved' | 'commented'}`)}
+                          ? t('detail.timeline.levelChanged', { level: event.detail })
+                          : t(
+                              `detail.timeline.${event.action as 'created' | 'resolved' | 'commented'}`
+                            )}
                     </span>
                   </p>
                   <p className="mt-0.5 text-xs text-muted-foreground">
