@@ -24,6 +24,7 @@ export interface VerifyOtpParams {
 
 export interface FetchPermissionsParams {
   module: string
+  projectId?: number
 }
 
 export interface FetchPermissionsResponse {
@@ -56,7 +57,9 @@ export function refreshToken() {
 }
 
 export function fetchPermissions(params: FetchPermissionsParams) {
-  return get<FetchPermissionsResponse>('/auth/permissions', {
-    searchParams: { module: params.module },
-  })
+  const searchParams: Record<string, string> = { module: params.module }
+  if (params.projectId != null) {
+    searchParams.projectId = String(params.projectId)
+  }
+  return get<FetchPermissionsResponse>('/auth/permissions', { searchParams })
 }

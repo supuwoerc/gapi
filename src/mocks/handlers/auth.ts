@@ -1,6 +1,12 @@
 import { delay, http } from 'msw'
 
 import { generateLoginResponse, modulePermissionsMap } from '../data/auth'
+import {
+  currentProjectUser,
+  projectMembers,
+  projectRolePermissions,
+  projects,
+} from '../data/projects'
 import { errorEnvelope, jsonEnvelope } from '../utils/response'
 
 const BASE = import.meta.env.VITE_APP_DEFAULT_SERVER
@@ -44,6 +50,35 @@ export const authHandlers = [
     await delay(300)
     const url = new URL(request.url)
     const module = url.searchParams.get('module') ?? ''
+    const projectId = url.searchParams.get('projectId')
+
+    if (projectId) {
+      const numericProjectId = Number(projectId)
+      const project = projects.find((p) => p.id === numericProjectId)
+
+      const membership = projectMembers.find(
+        (m) =>
+          m.project_id === numericProjectId &&
+          m.user.id === currentProjectUser.id &&
+          m.status === 'active'
+      )
+
+      if (!membership) {
+        if (project?.visibility === 'public') {
+          return jsonEnvelope({ permissions: [`${module}:read`] })
+        }
+        return jsonEnvelope({ permissions: [] })
+      }
+
+      const rolePerms = projectRolePermissions.filter(
+        (p) =>
+          p.project_role_id === membership.project_role_id &&
+          p.module === module &&
+          p.effect === 'allow'
+      )
+      return jsonEnvelope({ permissions: rolePerms.map((p) => `${p.module}:${p.action}`) })
+    }
+
     return jsonEnvelope({ permissions: modulePermissionsMap[module] ?? [] })
   }),
 ]
