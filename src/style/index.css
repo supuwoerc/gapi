@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import './transition.css';
+@import './lexical-code-highlight.css';
 @import './theme/theme-green.css';
 @import './theme/theme-orange.css';
 @import './theme/theme-red.css';

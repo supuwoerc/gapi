@@ -1,0 +1,49 @@
+.lexical-hl-keyword { color: #7c3aed; }
+.lexical-hl-atrule { color: #7c3aed; }
+.lexical-hl-function { color: #2563eb; }
+.lexical-hl-string { color: #16a34a; }
+.lexical-hl-char { color: #16a34a; }
+.lexical-hl-selector { color: #16a34a; }
+.lexical-hl-inserted { color: #16a34a; }
+.lexical-hl-number { color: #ea580c; }
+.lexical-hl-constant { color: #dc2626; }
+.lexical-hl-boolean { color: #dc2626; }
+.lexical-hl-deleted { color: #dc2626; }
+.lexical-hl-property { color: #dc2626; }
+.lexical-hl-tag { color: #dc2626; }
+.lexical-hl-variable { color: #dc2626; }
+.lexical-hl-attr { color: #ca8a04; }
+.lexical-hl-class { color: #ca8a04; }
+.lexical-hl-regex { color: #ca8a04; }
+.lexical-hl-builtin { color: #0891b2; }
+.lexical-hl-url { color: #2563eb; text-decoration: underline; }
+.lexical-hl-operator { color: #374151; }
+.lexical-hl-punctuation { color: #374151; }
+.lexical-hl-cdata { color: #6b7280; }
+.lexical-hl-comment { color: #6b7280; font-style: italic; }
+.lexical-hl-important { color: #dc2626; font-weight: bold; }
+
+.dark .lexical-hl-keyword { color: #c4b5fd; }
+.dark .lexical-hl-atrule { color: #c4b5fd; }
+.dark .lexical-hl-function { color: #93c5fd; }
+.dark .lexical-hl-string { color: #86efac; }
+.dark .lexical-hl-char { color: #86efac; }
+.dark .lexical-hl-selector { color: #86efac; }
+.dark .lexical-hl-inserted { color: #86efac; }
+.dark .lexical-hl-number { color: #fdba74; }
+.dark .lexical-hl-constant { color: #fca5a5; }
+.dark .lexical-hl-boolean { color: #fca5a5; }
+.dark .lexical-hl-deleted { color: #fca5a5; }
+.dark .lexical-hl-property { color: #fca5a5; }
+.dark .lexical-hl-tag { color: #fca5a5; }
+.dark .lexical-hl-variable { color: #fca5a5; }
+.dark .lexical-hl-attr { color: #fde047; }
+.dark .lexical-hl-class { color: #fde047; }
+.dark .lexical-hl-regex { color: #fde047; }
+.dark .lexical-hl-builtin { color: #67e8f9; }
+.dark .lexical-hl-url { color: #93c5fd; text-decoration: underline; }
+.dark .lexical-hl-operator { color: #e5e7eb; }
+.dark .lexical-hl-punctuation { color: #e5e7eb; }
+.dark .lexical-hl-cdata { color: #9ca3af; }
+.dark .lexical-hl-comment { color: #9ca3af; font-style: italic; }
+.dark .lexical-hl-important { color: #fca5a5; font-weight: bold; }

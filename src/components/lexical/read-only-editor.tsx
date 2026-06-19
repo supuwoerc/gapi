@@ -12,6 +12,7 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 
 import { ImageNode } from './nodes/image-node'
 import { MentionNode } from './nodes/mention-node'
+import { CodeHighlightPlugin } from './plugins/code-highlight-plugin'
 import { commentEditorTheme } from './theme'
 
 const nodes = [
@@ -52,6 +53,7 @@ export function ReadOnlyEditor({ content, format = 'markdown' }: ReadOnlyEditorP
         contentEditable={<ContentEditable className="lexical-readonly outline-none" />}
         ErrorBoundary={LexicalErrorBoundary}
       />
+      <CodeHighlightPlugin />
     </LexicalComposer>
   )
 }
