@@ -10,6 +10,10 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 
+import { ImageNode } from './nodes/image-node'
+import { MentionNode } from './nodes/mention-node'
+import { commentEditorTheme } from './theme'
+
 const nodes = [
   HeadingNode,
   QuoteNode,
@@ -18,23 +22,30 @@ const nodes = [
   ListNode,
   ListItemNode,
   LinkNode,
+  MentionNode,
+  ImageNode,
 ]
 
 interface ReadOnlyEditorProps {
   content: string
+  format?: 'markdown' | 'lexical-json'
 }
 
-export function ReadOnlyEditor({ content }: ReadOnlyEditorProps) {
+export function ReadOnlyEditor({ content, format = 'markdown' }: ReadOnlyEditorProps) {
   return (
     <LexicalComposer
       initialConfig={{
         namespace: 'ReadOnlyEditor',
         editable: false,
+        theme: commentEditorTheme,
         nodes,
         onError: (error) => console.error(error),
-        editorState: () => {
-          $convertFromMarkdownString(content, TRANSFORMERS)
-        },
+        editorState:
+          format === 'markdown'
+            ? () => {
+                $convertFromMarkdownString(content, TRANSFORMERS)
+              }
+            : content,
       }}
     >
       <RichTextPlugin

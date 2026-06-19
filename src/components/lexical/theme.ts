@@ -1,0 +1,62 @@
+'use no memo'
+
+import type { EditorThemeClasses } from 'lexical'
+
+export const commentEditorTheme: EditorThemeClasses = {
+  paragraph: 'mb-1 text-sm',
+  text: {
+    bold: 'font-bold',
+    italic: 'italic',
+    underline: 'underline',
+    strikethrough: 'line-through',
+    code: 'rounded bg-muted px-1 py-0.5 font-mono text-xs',
+  },
+  list: {
+    ul: 'list-disc ml-4 text-sm',
+    ol: 'list-decimal ml-4 text-sm',
+    listitem: 'ml-2',
+    nested: {
+      listitem: 'list-none',
+    },
+  },
+  quote: 'border-l-2 border-muted-foreground/30 pl-3 italic text-muted-foreground text-sm',
+  code: 'block rounded-md bg-muted p-3 font-mono text-xs overflow-x-auto',
+  codeHighlight: {
+    atrule: 'text-purple-600',
+    attr: 'text-yellow-600',
+    boolean: 'text-red-600',
+    builtin: 'text-cyan-600',
+    cdata: 'text-gray-500',
+    char: 'text-green-600',
+    class: 'text-yellow-600',
+    'class-name': 'text-yellow-600',
+    comment: 'text-gray-500 italic',
+    constant: 'text-red-600',
+    deleted: 'text-red-600',
+    doctype: 'text-gray-500',
+    entity: 'text-red-600',
+    function: 'text-blue-600',
+    important: 'text-red-600 font-bold',
+    inserted: 'text-green-600',
+    keyword: 'text-purple-600',
+    namespace: 'text-gray-500',
+    number: 'text-orange-600',
+    operator: 'text-gray-700',
+    prolog: 'text-gray-500',
+    property: 'text-red-600',
+    punctuation: 'text-gray-700',
+    regex: 'text-yellow-600',
+    selector: 'text-green-600',
+    string: 'text-green-600',
+    symbol: 'text-red-600',
+    tag: 'text-red-600',
+    url: 'text-blue-600 underline',
+    variable: 'text-red-600',
+  },
+  link: 'text-primary underline cursor-pointer',
+  heading: {
+    h1: 'text-xl font-bold mb-2',
+    h2: 'text-lg font-bold mb-1',
+    h3: 'text-base font-bold mb-1',
+  },
+}

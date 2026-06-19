@@ -7,19 +7,28 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import type { Comment } from '@/schema/task/detail'
 import { getTaskComments } from '@/service/tasks/detail'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { Download, FileIcon, Loader2, MessageSquare, MessageSquarePlus, Reply } from 'lucide-react'
+import { Loader2, MessageSquare, MessageSquarePlus, Reply } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
+import { ReadOnlyEditor } from '@/components/lexical/read-only-editor'
+
 import { CommentDialog } from './comment-dialog'
 
 const PAGE_SIZE = 10
+
+function CommentContent({ content }: { content: string }) {
+  const isLexicalJson = content.startsWith('{"root"')
+  if (isLexicalJson) {
+    return <ReadOnlyEditor content={content} format="lexical-json" />
+  }
+  return <p className="text-sm text-muted-foreground">{content}</p>
+}
 
 interface TaskCommentsCardProps {
   taskId: number
@@ -166,52 +175,9 @@ export function TaskCommentsCard({ taskId }: TaskCommentsCardProps) {
                               <Reply className="size-4 font-bold" />
                             </Button>
                           </div>
-                          <p className="mt-1 text-sm text-muted-foreground">{comment.content}</p>
-
-                          {comment.attachments.length > 0 && (
-                            <div className="mt-2 flex flex-wrap gap-2">
-                              {comment.attachments.map((attachment) =>
-                                attachment.mime_type.startsWith('image/') ? (
-                                  <HoverCard key={attachment.id}>
-                                    <HoverCardTrigger asChild>
-                                      <img
-                                        src={attachment.file_url}
-                                        alt={attachment.file_name}
-                                        className="size-12 cursor-pointer rounded border object-cover"
-                                      />
-                                    </HoverCardTrigger>
-                                    <HoverCardContent className="w-80 p-2">
-                                      <img
-                                        src={attachment.file_url}
-                                        alt={attachment.file_name}
-                                        className="w-full rounded"
-                                      />
-                                    </HoverCardContent>
-                                  </HoverCard>
-                                ) : (
-                                  <div
-                                    key={attachment.id}
-                                    className="flex items-center gap-1 rounded border px-2 py-1"
-                                  >
-                                    <FileIcon className="size-3.5 text-muted-foreground" />
-                                    <span className="max-w-24 truncate text-xs">
-                                      {attachment.file_name}
-                                    </span>
-                                    <a
-                                      href={attachment.file_url}
-                                      download={attachment.file_name}
-                                      target="_blank"
-                                      rel="noreferrer"
-                                    >
-                                      <Button variant="ghost" size="icon-xs">
-                                        <Download className="size-3" />
-                                      </Button>
-                                    </a>
-                                  </div>
-                                )
-                              )}
-                            </div>
-                          )}
+                          <div className="mt-1">
+                            <CommentContent content={comment.content} />
+                          </div>
 
                           {virtualItem.index < allItems.length - 1 && (
                             <Separator className="mt-2" />
