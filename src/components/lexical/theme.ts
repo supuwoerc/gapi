@@ -54,6 +54,8 @@ export const commentEditorTheme: EditorThemeClasses = {
     variable: 'lexical-hl-variable',
   },
   link: 'text-primary underline cursor-pointer',
+  mark: 'cursor-pointer rounded-sm bg-primary/15 px-0.5 text-foreground ring-1 ring-primary/20 transition-colors data-[active=true]:bg-primary/30 data-[active=true]:ring-primary/60',
+  markOverlap: 'bg-accent/70 ring-accent',
   heading: {
     h1: 'text-xl font-bold mb-2',
     h2: 'text-lg font-bold mb-1',

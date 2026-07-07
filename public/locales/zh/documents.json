@@ -17,6 +17,17 @@
   },
   "detail": {
     "content": "文档内容",
-    "noContent": "暂无内容"
+    "noContent": "暂无内容",
+    "selectionComments": {
+      "title": "选区评论",
+      "count": "{{count}} 条评论",
+      "add": "添加评论",
+      "create": "添加选区评论",
+      "quote": "引用内容",
+      "send": "发送",
+      "changed": "原文位置已变化",
+      "emptyTitle": "暂无选区评论",
+      "emptyDescription": "选中文档正文后可以添加评论"
+    }
   }
 }

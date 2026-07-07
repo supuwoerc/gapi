@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { ReadOnlyEditor } from '@/components/lexical/read-only-editor'
+import { DocumentSelectionComments } from './document-selection-comments'
 
 const visibilityMetaClassMap: Record<DocumentVisibility, string> = {
   public: 'border-primary/20 bg-primary/10 text-primary',
@@ -95,18 +95,18 @@ export function DocumentInfoCard({ document, loading }: DocumentInfoCardProps) {
         </div>
       </header>
 
-      <Card className="gap-4 py-5">
-        <CardHeader>
-          <CardTitle>{t('detail.content')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {document.content ? (
-            <ReadOnlyEditor content={document.content} />
-          ) : (
+      {document.content ? (
+        <DocumentSelectionComments documentId={document.id} content={document.content} />
+      ) : (
+        <Card className="gap-4 py-5">
+          <CardHeader>
+            <CardTitle>{t('detail.content')}</CardTitle>
+          </CardHeader>
+          <CardContent>
             <p className="text-muted-foreground">{t('detail.noContent')}</p>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

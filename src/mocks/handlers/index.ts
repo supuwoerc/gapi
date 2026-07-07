@@ -7,6 +7,7 @@ import { notificationsHandlers } from './notifications'
 import { permissionHandlers } from './permissions'
 import { projectHandlers } from './projects'
 import { roleHandlers } from './roles'
+import { selectionCommentHandlers } from './selection-comments'
 import { taskHandlers } from './tasks'
 import { taskDetailHandlers } from './tasks-detail'
 import { userProfileHandlers } from './user'
@@ -22,6 +23,7 @@ export const handlers = [
   ...permissionHandlers,
   ...projectHandlers,
   ...roleHandlers,
+  ...selectionCommentHandlers,
   ...taskHandlers,
   ...taskDetailHandlers,
   ...userProfileHandlers,

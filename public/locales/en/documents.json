@@ -17,6 +17,17 @@
   },
   "detail": {
     "content": "Content",
-    "noContent": "No content"
+    "noContent": "No content",
+    "selectionComments": {
+      "title": "Selection Comments",
+      "count": "{{count}} comments",
+      "add": "Add comment",
+      "create": "Add selection comment",
+      "quote": "Quote",
+      "send": "Send",
+      "changed": "Original text changed",
+      "emptyTitle": "No selection comments",
+      "emptyDescription": "Select text in the document body to add a comment"
+    }
   }
 }
