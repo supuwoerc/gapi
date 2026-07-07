@@ -37,19 +37,14 @@ const DocumentDetailPage = () => {
     <>
       <AppHeader fixed>
         <Search />
-        <div className="ms-auto flex items-center space-x-4">
+        <div className="ms-auto flex items-center gap-4">
           <ThemeModeSwitcher />
           <LanguageSwitcher />
           <ConfigDrawer />
           <ProfileDropdown />
         </div>
       </AppHeader>
-      <AppMain className="flex flex-col gap-2 sm:gap-4">
-        {document && (
-          <h2 className="max-w-[600px] truncate text-2xl font-bold tracking-tight text-primary">
-            {document.title}
-          </h2>
-        )}
+      <AppMain className="flex flex-col gap-4 sm:gap-6">
         <DocumentInfoCard document={document} loading={isLoading} />
       </AppMain>
     </>
