@@ -14,7 +14,17 @@ import { LexicalErrorBoundary } from '@lexical/react/LexicalErrorBoundary'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { registerNestedElementResolver } from '@lexical/utils'
-import { $createRangeSelection, $nodesOfType, type LexicalEditor, TextNode } from 'lexical'
+import {
+  $createRangeSelection,
+  $getSelection,
+  $isRangeSelection,
+  $nodesOfType,
+  COMMAND_PRIORITY_LOW,
+  type LexicalEditor,
+  type RangeSelection,
+  SELECTION_CHANGE_COMMAND,
+  TextNode,
+} from 'lexical'
 import { MessageSquarePlus } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -179,15 +189,14 @@ function SelectionCommentsPlugin({
       }
 
       statuses = comments.reduce<ReadOnlyEditorMarkStatuses>((next, comment) => {
-        const quote = getTextFromAnchor(segments, comment.anchor)
-        const isValid = quote === comment.quote
-        next[comment.mark_id] = isValid
+        const resolvedAnchor = resolveCommentAnchor(segments, comment)
+        next[comment.mark_id] = resolvedAnchor !== null
 
-        if (!isValid || existingMarkIds.has(comment.mark_id)) {
+        if (!resolvedAnchor || existingMarkIds.has(comment.mark_id)) {
           return next
         }
 
-        const selection = createRangeSelectionFromAnchor(segments, comment.anchor)
+        const selection = createRangeSelectionFromAnchor(segments, resolvedAnchor)
         if (selection) {
           $wrapSelectionInMarkNode(selection, false, comment.mark_id)
           existingMarkIds.add(comment.mark_id)
@@ -206,49 +215,61 @@ function SelectionCommentsPlugin({
   }, [activeMarkId, editor])
 
   React.useEffect(() => {
-    const rootElement = editor.getRootElement()
     const handleMarkClick = onMarkClick
-    if (!rootElement || !handleMarkClick) return
+    if (!handleMarkClick) return
 
-    const root = rootElement
     const callMarkClick: (markId: string) => void = handleMarkClick
+    let detachRoot: (() => void) | undefined
 
-    function handleClick(event: MouseEvent) {
-      const target = event.target
-      if (!(target instanceof HTMLElement)) return
+    const unregisterRoot = editor.registerRootListener((rootElement) => {
+      detachRoot?.()
+      detachRoot = undefined
+      if (!rootElement) return
 
-      const markElement = target.closest<HTMLElement>('mark[data-comment-mark-ids]')
-      if (!markElement || !root.contains(markElement)) return
+      const root = rootElement
 
-      const markId = markElement.dataset.commentMarkIds?.split(',').filter(Boolean)[0]
-      if (markId) callMarkClick(markId)
+      function handleClick(event: MouseEvent) {
+        const target = event.target
+        if (!(target instanceof HTMLElement)) return
+
+        const markElement = target.closest<HTMLElement>('mark[data-comment-mark-ids]')
+        if (!markElement || !root.contains(markElement)) return
+
+        const markId = markElement.dataset.commentMarkIds?.split(',').filter(Boolean)[0]
+        if (markId) callMarkClick(markId)
+      }
+
+      root.addEventListener('click', handleClick)
+      detachRoot = () => root.removeEventListener('click', handleClick)
+    })
+
+    return () => {
+      detachRoot?.()
+      unregisterRoot()
     }
-
-    root.addEventListener('click', handleClick)
-    return () => root.removeEventListener('click', handleClick)
   }, [editor, onMarkClick])
 
   React.useEffect(() => {
-    const rootElement = editor.getRootElement()
-    if (!rootElement || !onCreateSelectionComment) return
+    if (!onCreateSelectionComment) return
 
-    const root = rootElement
+    let detachRoot: (() => void) | undefined
 
-    function updateSelection() {
+    function applySelectionResult(result: DomSelectionResult | null) {
       const selection = window.getSelection()
-      if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      const root = editor.getRootElement()
+
+      if (!result || result.quote.trim() === '' || result.isCode) {
+        setFloatingSelection(null)
+        return
+      }
+
+      if (!selection || !root || selection.rangeCount === 0 || selection.isCollapsed) {
         setFloatingSelection(null)
         return
       }
 
       const range = selection.getRangeAt(0)
       if (!root.contains(range.commonAncestorContainer)) {
-        setFloatingSelection(null)
-        return
-      }
-
-      const result = getSelectionFromDomRange(editor, range)
-      if (!result || result.quote.trim() === '' || result.isCode) {
         setFloatingSelection(null)
         return
       }
@@ -267,18 +288,48 @@ function SelectionCommentsPlugin({
       })
     }
 
-    function scheduleSelectionUpdate() {
-      window.setTimeout(updateSelection, 0)
+    function readCurrentSelection() {
+      let result: DomSelectionResult | null = null
+      editor.getEditorState().read(() => {
+        result = getSelectionFromLexicalSelection()
+      })
+      applySelectionResult(result)
     }
 
-    root.addEventListener('mouseup', scheduleSelectionUpdate)
-    root.addEventListener('keyup', scheduleSelectionUpdate)
-    document.addEventListener('selectionchange', scheduleSelectionUpdate)
+    const unregisterSelectionCommand = editor.registerCommand(
+      SELECTION_CHANGE_COMMAND,
+      () => {
+        const result = getSelectionFromLexicalSelection()
+        window.setTimeout(() => applySelectionResult(result), 0)
+        return false
+      },
+      COMMAND_PRIORITY_LOW
+    )
+
+    const unregisterRoot = editor.registerRootListener((rootElement) => {
+      detachRoot?.()
+      detachRoot = undefined
+      if (!rootElement) return
+
+      function scheduleSelectionUpdate() {
+        window.setTimeout(readCurrentSelection, 0)
+      }
+
+      rootElement.addEventListener('mouseup', scheduleSelectionUpdate)
+      rootElement.addEventListener('keyup', scheduleSelectionUpdate)
+      document.addEventListener('selectionchange', scheduleSelectionUpdate)
+
+      detachRoot = () => {
+        rootElement.removeEventListener('mouseup', scheduleSelectionUpdate)
+        rootElement.removeEventListener('keyup', scheduleSelectionUpdate)
+        document.removeEventListener('selectionchange', scheduleSelectionUpdate)
+      }
+    })
 
     return () => {
-      root.removeEventListener('mouseup', scheduleSelectionUpdate)
-      root.removeEventListener('keyup', scheduleSelectionUpdate)
-      document.removeEventListener('selectionchange', scheduleSelectionUpdate)
+      detachRoot?.()
+      unregisterRoot()
+      unregisterSelectionCommand()
     }
   }, [editor, onCreateSelectionComment])
 
@@ -357,6 +408,83 @@ function getTextFromAnchor(segments: TextSegment[], anchor: ReadOnlyEditorAnchor
     .join('')
 }
 
+function isSameQuote(current: string, saved: string) {
+  if (current === saved) return true
+  return normalizeQuote(current) === normalizeQuote(saved)
+}
+
+function normalizeQuote(value: string) {
+  return value.replace(/\s+/g, ' ').trim()
+}
+
+function resolveCommentAnchor(
+  segments: TextSegment[],
+  comment: ReadOnlyEditorCommentMark
+): ReadOnlyEditorAnchor | null {
+  const savedAnchorText = getTextFromAnchor(segments, comment.anchor)
+  if (isSameQuote(savedAnchorText, comment.quote)) return comment.anchor
+
+  return findAnchorByQuote(segments, comment.quote, comment.anchor.start)
+}
+
+function findAnchorByQuote(segments: TextSegment[], quote: string, preferredStart: number) {
+  const text = segments.map((segment) => segment.text).join('')
+  const exactIndex = text.indexOf(quote)
+  if (exactIndex !== -1) return { start: exactIndex, end: exactIndex + quote.length }
+
+  const normalizedQuote = normalizeQuote(quote)
+  if (!normalizedQuote) return null
+
+  const normalizedText = buildNormalizedTextIndex(text)
+  let bestIndex = -1
+  let bestDistance = Number.POSITIVE_INFINITY
+  let index = normalizedText.text.indexOf(normalizedQuote)
+
+  while (index !== -1) {
+    const mappedStart = normalizedText.map[index]
+    const distance = Math.abs(mappedStart - preferredStart)
+
+    if (distance < bestDistance) {
+      bestDistance = distance
+      bestIndex = index
+    }
+
+    index = normalizedText.text.indexOf(normalizedQuote, index + 1)
+  }
+
+  if (bestIndex === -1) return null
+
+  const start = normalizedText.map[bestIndex]
+  const end = normalizedText.map[bestIndex + normalizedQuote.length - 1] + 1
+  return { start, end }
+}
+
+function buildNormalizedTextIndex(text: string) {
+  const chars: string[] = []
+  const map: number[] = []
+  let pendingWhitespace = false
+
+  for (let index = 0; index < text.length; index++) {
+    const char = text[index]
+
+    if (/\s/.test(char)) {
+      if (chars.length > 0) pendingWhitespace = true
+      continue
+    }
+
+    if (pendingWhitespace) {
+      chars.push(' ')
+      map.push(index)
+      pendingWhitespace = false
+    }
+
+    chars.push(char)
+    map.push(index)
+  }
+
+  return { text: chars.join(''), map }
+}
+
 function createRangeSelectionFromAnchor(segments: TextSegment[], anchor: ReadOnlyEditorAnchor) {
   const start = getPointForOffset(segments, anchor.start, 'forward')
   const end = getPointForOffset(segments, anchor.end, 'backward')
@@ -398,96 +526,43 @@ function getPointForOffset(
   return null
 }
 
-function getSelectionFromDomRange(editor: LexicalEditor, range: Range): DomSelectionResult | null {
-  return editor.getEditorState().read(() => {
-    const segments = collectTextSegments()
-    const selectedSegments: Array<{
-      segment: TextSegment
-      start: number
-      end: number
-    }> = []
+function getSelectionFromLexicalSelection(): DomSelectionResult | null {
+  const selection = $getSelection()
+  if (!$isRangeSelection(selection) || selection.isCollapsed()) return null
 
-    for (const segment of segments) {
-      const dom = editor.getElementByKey(segment.key)
-      if (!dom) continue
+  const segments = collectTextSegments()
+  const anchor = getAnchorFromRangeSelection(segments, selection)
+  if (!anchor) return null
 
-      const localSelection = getSelectedOffsetsWithinDom(range, dom, segment.text.length)
-      if (!localSelection) continue
-
-      selectedSegments.push({
-        segment,
-        start: localSelection.start,
-        end: localSelection.end,
-      })
-    }
-
-    const first = selectedSegments[0]
-    const last = selectedSegments.at(-1)
-    if (!first || !last) return null
-
-    const anchor = {
-      start: first.segment.start + first.start,
-      end: last.segment.start + last.end,
-    }
-    return {
-      quote: getTextFromAnchor(segments, anchor),
-      anchor,
-      isCode: selectedSegments.some(({ segment }) => segment.isCode),
-    }
-  })
-}
-
-function getSelectedOffsetsWithinDom(range: Range, dom: Node, textLength: number) {
-  const textNodes = getTextNodes(dom)
-  let cursor = 0
-  let start: number | null = null
-  let end: number | null = null
-
-  for (const textNode of textNodes) {
-    const length = textNode.textContent?.length ?? 0
-    if (length === 0) continue
-
-    const nodeRange = document.createRange()
-    nodeRange.selectNodeContents(textNode)
-
-    const startsAfterNodeEnd = range.compareBoundaryPoints(Range.START_TO_END, nodeRange) >= 0
-    const endsBeforeNodeStart = range.compareBoundaryPoints(Range.END_TO_START, nodeRange) <= 0
-    nodeRange.detach()
-
-    if (startsAfterNodeEnd || endsBeforeNodeStart) {
-      cursor += length
-      continue
-    }
-
-    const localStart = range.startContainer === textNode ? range.startOffset : 0
-    const localEnd = range.endContainer === textNode ? range.endOffset : length
-
-    if (start === null) start = cursor + localStart
-    end = cursor + localEnd
-    cursor += length
-  }
-
-  if (start === null || end === null || start === end) return null
-
+  const quote = getTextFromAnchor(segments, anchor)
   return {
-    start: Math.max(0, Math.min(start, textLength)),
-    end: Math.max(0, Math.min(end, textLength)),
+    quote,
+    anchor,
+    isCode: segments.some(
+      (segment) => segment.isCode && segment.start < anchor.end && segment.end > anchor.start
+    ),
   }
 }
 
-function getTextNodes(dom: Node) {
-  if (dom.nodeType === Node.TEXT_NODE) return [dom as Text]
+function getAnchorFromRangeSelection(segments: TextSegment[], selection: RangeSelection) {
+  const isBackward = selection.isBackward()
+  const startPoint = isBackward ? selection.focus : selection.anchor
+  const endPoint = isBackward ? selection.anchor : selection.focus
 
-  const textNodes: Text[] = []
-  const walker = document.createTreeWalker(dom, NodeFilter.SHOW_TEXT)
-  let node = walker.nextNode()
+  if (startPoint.type !== 'text' || endPoint.type !== 'text') return null
 
-  while (node) {
-    textNodes.push(node as Text)
-    node = walker.nextNode()
-  }
+  const start = getGlobalOffsetForTextPoint(segments, startPoint.key, startPoint.offset)
+  const end = getGlobalOffsetForTextPoint(segments, endPoint.key, endPoint.offset)
 
-  return textNodes
+  if (start === null || end === null || start >= end) return null
+  return { start, end }
+}
+
+function getGlobalOffsetForTextPoint(segments: TextSegment[], key: string, offset: number) {
+  const segment = segments.find((item) => item.key === key)
+  if (!segment) return null
+
+  return segment.start + Math.max(0, Math.min(offset, segment.text.length))
 }
 
 function getSelectionRect(range: Range) {
