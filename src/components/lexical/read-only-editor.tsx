@@ -16,14 +16,16 @@ import { HeadingNode, QuoteNode } from '@lexical/rich-text'
 import { registerNestedElementResolver } from '@lexical/utils'
 import {
   $createRangeSelection,
+  $getRoot,
   $getSelection,
+  $isElementNode,
   $isRangeSelection,
-  $nodesOfType,
   COMMAND_PRIORITY_LOW,
   type LexicalEditor,
+  type LexicalNode,
   type RangeSelection,
   SELECTION_CHANGE_COMMAND,
-  TextNode,
+  type TextNode,
 } from 'lexical'
 import { MessageSquarePlus } from 'lucide-react'
 
@@ -179,31 +181,37 @@ function SelectionCommentsPlugin({
     let statuses: ReadOnlyEditorMarkStatuses = {}
 
     editor.update(() => {
-      const segments = collectTextSegments()
+      let segments = collectTextSegments()
       const existingMarkIds = new Set<string>()
 
-      for (const markNode of $nodesOfType(MarkNode)) {
+      for (const markNode of collectMarkNodes()) {
         for (const id of markNode.getIDs()) {
           existingMarkIds.add(id)
         }
       }
 
-      statuses = comments.reduce<ReadOnlyEditorMarkStatuses>((next, comment) => {
+      const nextStatuses: ReadOnlyEditorMarkStatuses = {}
+
+      for (const comment of comments) {
         const resolvedAnchor = resolveCommentAnchor(segments, comment)
-        next[comment.mark_id] = resolvedAnchor !== null
+        nextStatuses[comment.mark_id] = resolvedAnchor !== null
 
         if (!resolvedAnchor || existingMarkIds.has(comment.mark_id)) {
-          return next
+          continue
         }
 
         const selection = createRangeSelectionFromAnchor(segments, resolvedAnchor)
-        if (selection) {
-          $wrapSelectionInMarkNode(selection, false, comment.mark_id)
-          existingMarkIds.add(comment.mark_id)
+        if (!selection) {
+          nextStatuses[comment.mark_id] = false
+          continue
         }
 
-        return next
-      }, {})
+        $wrapSelectionInMarkNode(selection, false, comment.mark_id)
+        existingMarkIds.add(comment.mark_id)
+        segments = collectTextSegments()
+      }
+
+      statuses = nextStatuses
     })
 
     onMarkStatusesChange?.(statuses)
@@ -368,7 +376,7 @@ function collectTextSegments() {
   let offset = 0
   const segments: TextSegment[] = []
 
-  for (const node of $nodesOfType(TextNode)) {
+  for (const node of $getRoot().getAllTextNodes()) {
     const text = node.getTextContent()
     const segment: TextSegment = {
       key: node.getKey(),
@@ -383,6 +391,25 @@ function collectTextSegments() {
   }
 
   return segments
+}
+
+function collectMarkNodes() {
+  const markNodes: MarkNode[] = []
+
+  function visit(node: LexicalNode) {
+    if ($isMarkNode(node)) {
+      markNodes.push(node)
+    }
+
+    if (!$isElementNode(node)) return
+
+    for (const child of node.getChildren()) {
+      visit(child)
+    }
+  }
+
+  visit($getRoot())
+  return markNodes
 }
 
 function isInsideCode(node: TextNode) {
@@ -574,7 +601,7 @@ function getSelectionRect(range: Range) {
 
 function syncMarkElements(editor: LexicalEditor, activeMarkId?: string) {
   editor.getEditorState().read(() => {
-    for (const markNode of $nodesOfType(MarkNode)) {
+    for (const markNode of collectMarkNodes()) {
       const element = editor.getElementByKey(markNode.getKey())
       if (!element || !$isMarkNode(markNode)) continue
 
