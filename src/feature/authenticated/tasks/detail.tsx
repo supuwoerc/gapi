@@ -16,7 +16,7 @@ import Search from '@/components/search'
 import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
 import { TaskCommentsCard } from './components/task-comments-card'
-import { TaskInfoCard, TaskLevelBadge } from './components/task-info-card'
+import { TaskInfoCard, TaskSidebarInfoCard } from './components/task-info-card'
 import { TaskTimelineCard } from './components/task-timeline-card'
 
 const TaskDetailPage = () => {
@@ -46,23 +46,18 @@ const TaskDetailPage = () => {
           <ProfileDropdown />
         </div>
       </AppHeader>
-      <AppMain className="flex flex-col gap-2 sm:gap-4">
-        {task && (
-          <div className="flex items-center gap-3">
-            <h2 className="max-w-[600px] truncate text-2xl font-bold tracking-tight text-primary">
-              {task.title}
-            </h2>
-            <TaskLevelBadge level={task.level} />
-          </div>
-        )}
-
+      <AppMain className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_380px]">
           <div className="space-y-3">
             <TaskInfoCard task={task} loading={isLoading} />
             <TaskCommentsCard taskId={taskId} />
           </div>
-          <div className="self-start">
-            <TaskTimelineCard taskId={taskId} />
+          <div className="space-y-3">
+            <TaskSidebarInfoCard task={task} loading={isLoading} />
+            <TaskTimelineCard
+              taskId={taskId}
+              className="lg:sticky lg:top-20 lg:max-h-[calc(100vh-7rem)]"
+            />
           </div>
         </div>
       </AppMain>

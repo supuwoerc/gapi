@@ -5,14 +5,17 @@ import { useQuery } from '@tanstack/react-query'
 import { getTaskTimeline } from '@/service/tasks/detail'
 import { useTranslation } from 'react-i18next'
 
+import { cn } from '@/lib/utils'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 interface TaskTimelineCardProps {
   taskId: number
+  className?: string
 }
 
-export function TaskTimelineCard({ taskId }: TaskTimelineCardProps) {
+export function TaskTimelineCard({ taskId, className }: TaskTimelineCardProps) {
   const { t } = useTranslation('tasks')
 
   const { data, isLoading } = useQuery({
@@ -24,7 +27,7 @@ export function TaskTimelineCard({ taskId }: TaskTimelineCardProps) {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className={className}>
         <CardHeader>
           <Skeleton className="h-6 w-20" />
         </CardHeader>
@@ -44,13 +47,13 @@ export function TaskTimelineCard({ taskId }: TaskTimelineCardProps) {
   }
 
   return (
-    <Card className="gap-1 py-4">
+    <Card className={cn('gap-1 py-4', className)}>
       <CardHeader>
         <CardTitle>{t('detail.timeline.title')}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="min-h-0 overflow-y-auto">
         {items.length > 0 ? (
-          <div className="max-h-[500px] space-y-0 overflow-y-auto">
+          <div className="space-y-0">
             {items.map((event, index) => (
               <div key={event.id} className="flex gap-1">
                 <div className="relative flex flex-col items-center">

@@ -6,7 +6,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import type { Column, ColumnDef } from '@tanstack/react-table'
 
-import type { Task, TaskLevel, TaskType } from '@/schema/task/task'
+import type { Task, TaskLevel, TaskType, TaskUser } from '@/schema/task/task'
 import { getTasks } from '@/service/tasks/tasks'
 import { Bug, ListTodo, Sparkles, Text, Zap } from 'lucide-react'
 import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs'
@@ -17,6 +17,7 @@ import { getSortingStateParser } from '@/lib/parsers'
 
 import { useDataTable } from '@/hooks/use-data-table'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
@@ -146,7 +147,7 @@ export function TasksTable() {
               </Link>
             </HoverCardTrigger>
             <HoverCardContent className="flex w-64 flex-col gap-0.5">
-              <div className="text-[14px] font-semibold">@{row.original.assignee}</div>
+              <PersonCell user={row.original.assignee} />
               <div className="line-clamp-2 text-xs">{row.original.title}</div>
               <div className="mt-1 text-xs text-muted-foreground">
                 {new Date(row.original.created_at).toLocaleDateString()}
@@ -210,8 +211,9 @@ export function TasksTable() {
       },
       {
         id: 'creator',
-        accessorKey: 'creator',
+        accessorFn: (row) => row.creator.name,
         header: t('columns.creator'),
+        cell: ({ row }) => <PersonCell user={row.original.creator} />,
         meta: {
           label: t('columns.creator'),
         },
@@ -219,8 +221,9 @@ export function TasksTable() {
       },
       {
         id: 'assignee',
-        accessorKey: 'assignee',
+        accessorFn: (row) => row.assignee.name,
         header: t('columns.assignee'),
+        cell: ({ row }) => <PersonCell user={row.original.assignee} />,
         meta: {
           label: t('columns.assignee'),
         },
@@ -228,12 +231,9 @@ export function TasksTable() {
       },
       {
         id: 'resolver',
-        accessorKey: 'resolver',
+        accessorFn: (row) => row.resolver?.name ?? '',
         header: t('columns.resolver'),
-        cell: ({ cell }) => {
-          const value = cell.getValue<string>()
-          return value || <span className="text-muted-foreground">-</span>
-        },
+        cell: ({ row }) => <PersonCell user={row.original.resolver} />,
         meta: {
           label: t('columns.resolver'),
         },
@@ -299,4 +299,22 @@ export function TasksTable() {
       </DataTable>
     </div>
   )
+}
+
+function PersonCell({ user }: { user: TaskUser | null }) {
+  if (!user) return <span className="text-muted-foreground">-</span>
+
+  return (
+    <div className="flex min-w-0 items-center gap-2" title={user.email}>
+      <Avatar size="sm">
+        <AvatarImage src={user.avatar} alt={user.name} />
+        <AvatarFallback>{getNameInitial(user.name)}</AvatarFallback>
+      </Avatar>
+      <span className="max-w-28 truncate">{user.name}</span>
+    </div>
+  )
+}
+
+function getNameInitial(name: string) {
+  return name.trim().charAt(0).toUpperCase()
 }

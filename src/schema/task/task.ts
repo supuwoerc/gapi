@@ -16,14 +16,22 @@ export const taskTypeSchema = z.union([
 ])
 export type TaskType = z.infer<typeof taskTypeSchema>
 
+export const taskUserSchema = z.object({
+  id: z.coerce.number(),
+  name: z.string(),
+  email: z.string(),
+  avatar: z.string(),
+})
+export type TaskUser = z.infer<typeof taskUserSchema>
+
 export const taskSchema = z.object({
   id: z.number(),
   level: taskLevelSchema,
   type: taskTypeSchema,
   title: z.string(),
-  creator: z.string(),
-  assignee: z.string(),
-  resolver: z.string(),
+  creator: taskUserSchema,
+  assignee: taskUserSchema,
+  resolver: taskUserSchema.nullable(),
   created_at: z.coerce.date(),
   updated_at: z.coerce.date(),
   deleted_at: z.coerce.date().nullable(),
