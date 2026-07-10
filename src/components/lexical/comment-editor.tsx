@@ -11,10 +11,10 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin'
 import { ListPlugin } from '@lexical/react/LexicalListPlugin'
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin'
 import { TabIndentationPlugin } from '@lexical/react/LexicalTabIndentationPlugin'
-import { $getRoot, $nodesOfType, CLEAR_EDITOR_COMMAND } from 'lexical'
+import { $getRoot, CLEAR_EDITOR_COMMAND } from 'lexical'
 
 import { commentEditorNodes } from './nodes'
-import { MentionNode } from './nodes/mention-node'
+import { $isMentionNode } from './nodes/mention-node'
 import { CodeHighlightPlugin } from './plugins/code-highlight-plugin'
 import { ImagesPlugin } from './plugins/images-plugin'
 import { MentionsPlugin } from './plugins/mentions-plugin'
@@ -42,9 +42,10 @@ function EditorRefPlugin({ editorRef }: { editorRef: React.RefObject<CommentEdit
     getMentionUserIds() {
       const ids: string[] = []
       editor.getEditorState().read(() => {
-        const mentions = $nodesOfType(MentionNode)
-        for (const mention of mentions) {
-          ids.push(mention.__userId)
+        for (const node of $getRoot().getAllTextNodes()) {
+          if ($isMentionNode(node)) {
+            ids.push(node.__userId)
+          }
         }
       })
       return [...new Set(ids)]
