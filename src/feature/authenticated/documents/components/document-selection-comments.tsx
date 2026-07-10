@@ -5,10 +5,20 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { getSelectionComments } from '@/service/selection-comments'
+import { MessageSquareText } from 'lucide-react'
 import { nanoid } from 'nanoid'
 import { useTranslation } from 'react-i18next'
 
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
 import type {
   ReadOnlyEditorMarkStatuses,
@@ -32,6 +42,7 @@ const selectionCommentsQueryBase = {
 export function DocumentSelectionComments({ documentId, content }: DocumentSelectionCommentsProps) {
   const { t } = useTranslation('documents')
   const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [mobileCommentsOpen, setMobileCommentsOpen] = React.useState(false)
   const [pendingSelection, setPendingSelection] = React.useState<PendingSelectionComment>()
   const [activeMarkId, setActiveMarkId] = React.useState<string>()
   const [markStatuses, setMarkStatuses] = React.useState<ReadOnlyEditorMarkStatuses>({})
@@ -79,6 +90,14 @@ export function DocumentSelectionComments({ documentId, content }: DocumentSelec
     setMarkStatuses(statuses)
   }, [])
 
+  const handleMobileCommentClick = React.useCallback(
+    (markId: string) => {
+      setMobileCommentsOpen(false)
+      showActiveMark(markId)
+    },
+    [showActiveMark]
+  )
+
   return (
     <>
       <div className="grid min-w-0 gap-4 xl:grid-cols-[minmax(0,1fr)_20rem]">
@@ -99,14 +118,52 @@ export function DocumentSelectionComments({ documentId, content }: DocumentSelec
           </CardContent>
         </Card>
 
-        <SelectionCommentsPanel
-          comments={comments}
-          loading={isLoading}
-          activeMarkId={activeMarkId}
-          markStatuses={markStatuses}
-          onCommentClick={showActiveMark}
-        />
+        <div className="hidden xl:block">
+          <SelectionCommentsPanel
+            comments={comments}
+            loading={isLoading}
+            activeMarkId={activeMarkId}
+            markStatuses={markStatuses}
+            onCommentClick={showActiveMark}
+          />
+        </div>
       </div>
+
+      <Sheet open={mobileCommentsOpen} onOpenChange={setMobileCommentsOpen}>
+        <SheetTrigger asChild>
+          <Button
+            className="fixed right-4 bottom-4 z-40 shadow-lg xl:hidden"
+            size="sm"
+            aria-label={t('detail.selectionComments.title')}
+          >
+            <MessageSquareText />
+            {t('detail.selectionComments.title')}
+            <span className="rounded-full bg-primary-foreground/20 px-1.5 text-xs">
+              {comments.length}
+            </span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent
+          side="bottom"
+          className="max-h-[82vh] min-h-[45vh] gap-0 overflow-hidden rounded-t-lg p-0 xl:hidden"
+        >
+          <SheetHeader className="pb-3 text-start">
+            <SheetTitle>{t('detail.selectionComments.title')}</SheetTitle>
+            <SheetDescription>
+              {t('detail.selectionComments.count', { count: comments.length })}
+            </SheetDescription>
+          </SheetHeader>
+          <SelectionCommentsPanel
+            comments={comments}
+            loading={isLoading}
+            activeMarkId={activeMarkId}
+            markStatuses={markStatuses}
+            onCommentClick={handleMobileCommentClick}
+            className="min-h-0 flex-1 rounded-none border-0 py-0 shadow-none xl:static xl:max-h-none"
+            hideHeader
+          />
+        </SheetContent>
+      </Sheet>
 
       <SelectionCommentDialog
         open={dialogOpen}

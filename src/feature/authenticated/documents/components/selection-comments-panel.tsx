@@ -20,6 +20,8 @@ interface SelectionCommentsPanelProps {
   activeMarkId?: string
   markStatuses: ReadOnlyEditorMarkStatuses
   onCommentClick: (markId: string) => void
+  className?: string
+  hideHeader?: boolean
 }
 
 export function SelectionCommentsPanel({
@@ -28,20 +30,24 @@ export function SelectionCommentsPanel({
   activeMarkId,
   markStatuses,
   onCommentClick,
+  className,
+  hideHeader,
 }: SelectionCommentsPanelProps) {
   const { t } = useTranslation('documents')
 
   return (
-    <Card className="gap-4 py-5 xl:sticky xl:top-20 xl:max-h-[calc(100vh-7rem)]">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MessageSquareText />
-          {t('detail.selectionComments.title')}
-        </CardTitle>
-        <CardDescription>
-          {t('detail.selectionComments.count', { count: comments.length })}
-        </CardDescription>
-      </CardHeader>
+    <Card className={cn('gap-4 py-5 xl:sticky xl:top-20 xl:max-h-[calc(100vh-7rem)]', className)}>
+      {!hideHeader ? (
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MessageSquareText />
+            {t('detail.selectionComments.title')}
+          </CardTitle>
+          <CardDescription>
+            {t('detail.selectionComments.count', { count: comments.length })}
+          </CardDescription>
+        </CardHeader>
+      ) : null}
       <CardContent className="min-h-0 overflow-y-auto">
         {loading ? (
           <div className="flex flex-col gap-3">
