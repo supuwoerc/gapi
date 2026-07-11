@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import type { Workflow } from '@/schema/workflow/workflow'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import { Search } from 'lucide-react'
+import { Link2, Search } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
@@ -11,10 +11,11 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const WorkflowCardMinWidth = 272
 const WorkflowGridGap = 12
-const WorkflowRowEstimate = 148
+const WorkflowRowEstimate = 156
 
 interface WorkflowsListProps {
   workflows: Workflow[]
@@ -163,18 +164,32 @@ export function WorkflowsList({
                       {rowWorkflows.map((workflow) => (
                         <article
                           key={workflow.id}
-                          className="flex min-h-36 flex-col justify-between gap-4 rounded-lg border bg-background p-4 text-start"
+                          className="flex h-36 min-w-0 flex-col gap-3 overflow-hidden rounded-lg border bg-background p-4 text-start"
                         >
-                          <span className="flex min-w-0 flex-col gap-2">
-                            <span className="truncate text-base font-medium">{workflow.name}</span>
-                            <span className="line-clamp-3 text-sm text-muted-foreground">
-                              {workflow.description}
+                          <span className="flex min-w-0 items-start justify-between gap-3">
+                            <span className="min-w-0 truncate text-base font-medium">
+                              {workflow.name}
                             </span>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Badge
+                                  variant="outline"
+                                  className="shrink-0 gap-1"
+                                  aria-label={t('referencedCount', {
+                                    count: workflow.used_count,
+                                  })}
+                                >
+                                  <Link2 className="size-3" />
+                                  {workflow.used_count}
+                                </Badge>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                {t('referencedCount', { count: workflow.used_count })}
+                              </TooltipContent>
+                            </Tooltip>
                           </span>
-                          <span className="flex flex-wrap items-center gap-2">
-                            <Badge variant="outline">
-                              {t('usedCount', { count: workflow.used_count })}
-                            </Badge>
+                          <span className="line-clamp-3 overflow-hidden text-sm leading-5 text-muted-foreground">
+                            {workflow.description}
                           </span>
                         </article>
                       ))}
