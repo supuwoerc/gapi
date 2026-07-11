@@ -123,6 +123,18 @@ const basePermissions: Permission[] = [
     created_at: new Date(now),
     updated_at: new Date(now),
   },
+  {
+    id: 11,
+    code: 'workflow:read',
+    name: 'View Workflow',
+    resource_type: 3,
+    module: 'workflow',
+    resource_path: '/workflow',
+    action: 'read',
+    description: 'View workflow list',
+    created_at: new Date(now),
+    updated_at: new Date(now),
+  },
 ]
 
 const generatedModules = [

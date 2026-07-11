@@ -12,6 +12,7 @@ import type route from '../../public/locales/zh/route.json'
 import type settings from '../../public/locales/zh/settings.json'
 import type tasks from '../../public/locales/zh/tasks.json'
 import type users from '../../public/locales/zh/users.json'
+import type workflows from '../../public/locales/zh/workflows.json'
 
 export interface Resources {
   auth: typeof auth
@@ -28,4 +29,5 @@ export interface Resources {
   settings: typeof settings
   tasks: typeof tasks
   users: typeof users
+  workflows: typeof workflows
 }

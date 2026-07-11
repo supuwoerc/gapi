@@ -1,0 +1,15 @@
+{
+  "title": "工作流",
+  "description": "查看可关联到项目的工作流，以及当前被项目使用的情况。",
+  "search": "搜索工作流...",
+  "searchResultCount": "已显示 {{count}} / {{total}} 个工作流",
+  "usedCount": "{{count}} 个项目使用",
+  "emptyWorkflows": {
+    "title": "暂无工作流",
+    "description": "创建工作流后，可以在项目中关联并复用。"
+  },
+  "emptySearch": {
+    "title": "未找到工作流",
+    "description": "没有匹配当前关键字的工作流。"
+  }
+}

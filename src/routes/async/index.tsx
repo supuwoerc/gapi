@@ -135,7 +135,7 @@ const asyncRoutes: CustomRouteObject[] = [
           icon: 'workflow',
         },
         errorElement: <RouteError />,
-        element: 'workflow',
+        lazy: loadComponent(() => import('@/feature/authenticated/workflows')),
       },
     ],
   },

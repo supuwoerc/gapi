@@ -12,6 +12,7 @@ import { taskHandlers } from './tasks'
 import { taskDetailHandlers } from './tasks-detail'
 import { userProfileHandlers } from './user'
 import { userHandlers } from './users'
+import { workflowHandlers } from './workflows'
 
 export const handlers = [
   ...authHandlers,
@@ -28,4 +29,5 @@ export const handlers = [
   ...taskDetailHandlers,
   ...userProfileHandlers,
   ...userHandlers,
+  ...workflowHandlers,
 ]

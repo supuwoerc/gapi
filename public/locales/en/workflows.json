@@ -1,0 +1,15 @@
+{
+  "title": "Workflow",
+  "description": "Browse workflows that can be associated with projects and see current project usage.",
+  "search": "Search workflows...",
+  "searchResultCount": "Showing {{count}} of {{total}} workflows",
+  "usedCount": "Used by {{count}} project(s)",
+  "emptyWorkflows": {
+    "title": "No workflows yet",
+    "description": "After workflows are created, they can be associated with projects and reused."
+  },
+  "emptySearch": {
+    "title": "No workflows found",
+    "description": "No workflows match the current keyword."
+  }
+}

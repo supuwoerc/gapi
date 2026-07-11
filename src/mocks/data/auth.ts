@@ -6,6 +6,7 @@ export const modulePermissionsMap: Record<string, string[]> = {
   notifications: ['notifications:read', 'notifications:manage'],
   projects: ['projects:read', 'projects:create', 'projects:edit', 'projects:delete'],
   documents: ['documents:read', 'documents:create', 'documents:edit', 'documents:delete'],
+  workflow: ['workflow:read'],
   admin: [
     'admin:users:read',
     'admin:users:write',
