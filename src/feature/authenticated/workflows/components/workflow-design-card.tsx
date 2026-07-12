@@ -11,6 +11,7 @@ import type {
 import {
   Background,
   type Connection,
+  ControlButton,
   Controls,
   type Edge,
   type EdgeChange,
@@ -27,14 +28,14 @@ import {
   useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { ListPlus } from 'lucide-react'
+import { Copy, ListPlus, Maximize2, Minus, Plus, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
@@ -71,6 +72,12 @@ interface NodeLibraryContextMenu {
   x: number
   y: number
   position: { x: number; y: number }
+}
+
+interface NodeActionsContextMenu {
+  x: number
+  y: number
+  nodeId: string
 }
 
 const miniMapNodeColor = (node: Node) => {
@@ -147,35 +154,21 @@ export function WorkflowDesignCard({
   editable,
   onFlowChange,
 }: WorkflowDesignCardProps) {
-  const { t } = useTranslation('workflows')
   const workflowFlow = flow ?? DraftWorkflowFlow
 
   if (loading) {
     return (
-      <Card className="gap-4 py-5">
-        <CardHeader>
-          <Skeleton className="h-6 w-24" />
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-[34rem] w-full rounded-lg" />
+      <Card className="min-w-0 gap-0 border-0 p-0 shadow-none">
+        <CardContent className="min-w-0 p-0">
+          <Skeleton className="h-[42rem] w-full rounded-lg lg:h-[calc(100svh-8rem)] lg:min-h-[42rem]" />
         </CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="min-w-0 gap-4 py-5">
-      <CardHeader className="gap-3">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <CardTitle>{t('createPage.design')}</CardTitle>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {t('createPage.designDescription')}
-            </p>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="min-w-0">
+    <Card className="min-w-0 gap-0 border-0 p-0 shadow-none">
+      <CardContent className="min-w-0 p-0">
         <ReactFlowProvider>
           <WorkflowDesignSurface
             key={getWorkflowFlowKey(workflowFlow)}
@@ -199,11 +192,13 @@ function WorkflowDesignSurface({
   onFlowChange?: (flow: WorkflowFlow) => void
 }) {
   const { t } = useTranslation('workflows')
-  const { screenToFlowPosition } = useReactFlow()
+  const { screenToFlowPosition, fitView, zoomIn, zoomOut } = useReactFlow()
   const viewportRef = React.useRef<HTMLDivElement>(null)
+  const [sheetContainer, setSheetContainer] = React.useState<HTMLDivElement | null>(null)
   const [nodeLibraryOpen, setNodeLibraryOpen] = React.useState(false)
   const [configOpen, setConfigOpen] = React.useState(false)
   const [contextMenu, setContextMenu] = React.useState<NodeLibraryContextMenu>()
+  const [nodeContextMenu, setNodeContextMenu] = React.useState<NodeActionsContextMenu>()
   const [selectedNodeId, setSelectedNodeId] = React.useState<string>()
   const initialNodes = React.useMemo(() => flow.nodes.map(toReactFlowNode), [flow.nodes])
   const initialEdges = React.useMemo(() => flow.edges.map(toReactFlowEdge), [flow.edges])
@@ -211,6 +206,11 @@ function WorkflowDesignSurface({
   const [edges, setEdges] = React.useState<Edge[]>(initialEdges)
   const selectedNode = nodes.find((node) => node.id === selectedNodeId)
   const hasStartNode = nodes.some((node) => node.data.kind === 'start')
+
+  const setViewportElement = React.useCallback((element: HTMLDivElement | null) => {
+    viewportRef.current = element
+    setSheetContainer(element)
+  }, [])
 
   React.useEffect(() => {
     onFlowChange?.(toWorkflowFlow(nodes, edges))
@@ -254,6 +254,7 @@ function WorkflowDesignSurface({
       setSelectedNodeId(nodeId)
       setNodeLibraryOpen(false)
       setContextMenu(undefined)
+      setNodeContextMenu(undefined)
       setConfigOpen(true)
     },
     [getViewportCenterPosition, hasStartNode, t]
@@ -277,6 +278,7 @@ function WorkflowDesignSurface({
       if (selectedChange?.type === 'select') {
         setSelectedNodeId(selectedChange.id)
         setContextMenu(undefined)
+        setNodeContextMenu(undefined)
         setConfigOpen(true)
       } else if (hasOnlyUnselectChanges) {
         setSelectedNodeId(undefined)
@@ -376,9 +378,43 @@ function WorkflowDesignSurface({
       )
       setSelectedNodeId(undefined)
       setContextMenu(undefined)
+      setNodeContextMenu(undefined)
       setConfigOpen(false)
     },
     [nodes]
+  )
+  const handleCopyNode = React.useCallback(
+    (nodeId: string) => {
+      const node = nodes.find((currentNode) => currentNode.id === nodeId)
+      if (!node || node.data.kind === 'start') return
+
+      const nextNodeId = `workflow-${node.data.kind}-${Date.now()}-${Math.random()
+        .toString(36)
+        .slice(2, 7)}`
+      const copiedNode: WorkflowDesignNodeType = {
+        id: nextNodeId,
+        type: 'workflow',
+        position: {
+          x: node.position.x + 48,
+          y: node.position.y + 48,
+        },
+        selected: true,
+        data: {
+          ...node.data,
+          title: `${node.data.title} ${t('editor.copySuffix')}`,
+        },
+      }
+
+      setNodes((currentNodes) => [
+        ...currentNodes.map((currentNode) => ({ ...currentNode, selected: false })),
+        copiedNode,
+      ])
+      setSelectedNodeId(nextNodeId)
+      setContextMenu(undefined)
+      setNodeContextMenu(undefined)
+      setConfigOpen(true)
+    },
+    [nodes, t]
   )
 
   const panelProps = {
@@ -393,6 +429,7 @@ function WorkflowDesignSurface({
   const handlePaneClick = React.useCallback(() => {
     setSelectedNodeId(undefined)
     setContextMenu(undefined)
+    setNodeContextMenu(undefined)
     setConfigOpen(false)
   }, [])
   const handlePaneContextMenu = React.useCallback(
@@ -401,6 +438,7 @@ function WorkflowDesignSurface({
 
       event.preventDefault()
       setSelectedNodeId(undefined)
+      setNodeContextMenu(undefined)
       setConfigOpen(false)
       setContextMenu({
         x: event.clientX,
@@ -410,6 +448,43 @@ function WorkflowDesignSurface({
     },
     [editable, screenToFlowPosition]
   )
+  const handleFitView = React.useCallback(() => {
+    void fitView({ padding: 0.22 })
+  }, [fitView])
+  const handleZoomIn = React.useCallback(() => {
+    void zoomIn()
+  }, [zoomIn])
+  const handleZoomOut = React.useCallback(() => {
+    void zoomOut()
+  }, [zoomOut])
+  const handleNodeContextMenu = React.useCallback(
+    (event: React.MouseEvent<Element, globalThis.MouseEvent>, node: WorkflowDesignNodeType) => {
+      if (!editable) return
+
+      event.preventDefault()
+      event.stopPropagation()
+      setSelectedNodeId(node.id)
+      setNodes((currentNodes) =>
+        currentNodes.map((currentNode) => ({
+          ...currentNode,
+          selected: currentNode.id === node.id,
+        }))
+      )
+      setContextMenu(undefined)
+      setNodeLibraryOpen(false)
+      setNodeContextMenu({
+        x: event.clientX,
+        y: event.clientY,
+        nodeId: node.id,
+      })
+    },
+    [editable]
+  )
+  const nodeContextMenuNode = nodeContextMenu
+    ? nodes.find((node) => node.id === nodeContextMenu.nodeId)
+    : undefined
+  const nodeContextMenuActionsDisabled =
+    !nodeContextMenuNode || nodeContextMenuNode.data.kind === 'start'
 
   return (
     <>
@@ -418,7 +493,9 @@ function WorkflowDesignSurface({
           <SheetContent
             side="right"
             showOverlay={false}
-            className="w-[min(22rem,calc(100vw-2rem))] p-0"
+            showCloseButton={false}
+            portalContainer={sheetContainer ?? undefined}
+            className="absolute w-[min(22rem,calc(100vw-2rem))] p-0"
           >
             <SheetHeader className="sr-only">
               <SheetTitle>{t('editor.config')}</SheetTitle>
@@ -429,43 +506,58 @@ function WorkflowDesignSurface({
         </Sheet>
       ) : null}
 
-      {editable ? (
-        <div className="mb-3 flex flex-wrap gap-2">
-          <DropdownMenu open={nodeLibraryOpen} onOpenChange={setNodeLibraryOpen}>
-            <DropdownMenuTrigger asChild>
-              <Button type="button" variant="outline">
-                <ListPlus />
-                {t('editor.nodeLibrary')}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-72 p-0">
-              <WorkflowNodeLibrary
-                className="max-h-[24rem] rounded-md border-0 shadow-none"
-                hasStartNode={hasStartNode}
-                onAddNode={handleAddNode}
-              />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ) : null}
-
       <div className="grid min-h-0 gap-3">
         <div
-          ref={viewportRef}
-          className="h-[34rem] min-w-0 overflow-hidden rounded-lg border bg-muted/20 lg:h-[calc(100svh-16rem)] lg:min-h-[34rem]"
+          ref={setViewportElement}
+          className="relative h-[42rem] min-w-0 overflow-hidden rounded-lg border bg-muted/20 lg:h-[calc(100svh-8rem)] lg:min-h-[42rem]"
         >
           {contextMenu ? (
             <div
-              className="fixed z-40 w-72"
+              className="fixed z-40 w-56"
               style={{ left: contextMenu.x, top: contextMenu.y }}
               onContextMenu={(event) => event.preventDefault()}
             >
               <WorkflowNodeLibrary
-                className="max-h-[24rem] rounded-md shadow-lg"
+                variant="compact"
+                className="max-h-[18rem] rounded-md shadow-lg"
                 hasStartNode={hasStartNode}
                 onAddNode={(kind) => handleAddNode(kind, contextMenu.position)}
               />
             </div>
+          ) : null}
+          {nodeContextMenu ? (
+            <DropdownMenu
+              open
+              onOpenChange={(open) => {
+                if (!open) setNodeContextMenu(undefined)
+              }}
+            >
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={t('editor.nodeActions')}
+                  className="fixed z-40 size-px opacity-0"
+                  style={{ left: nodeContextMenu.x, top: nodeContextMenu.y }}
+                />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="right" align="start" className="w-36">
+                <DropdownMenuItem
+                  disabled={nodeContextMenuActionsDisabled}
+                  onClick={() => handleCopyNode(nodeContextMenu.nodeId)}
+                >
+                  <Copy className="size-4" />
+                  {t('editor.copyNode')}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={nodeContextMenuActionsDisabled}
+                  variant="destructive"
+                  onClick={() => handleDeleteNode(nodeContextMenu.nodeId)}
+                >
+                  <Trash2 className="size-4" />
+                  {t('editor.deleteNode')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : null}
           <ReactFlow
             nodes={nodes}
@@ -488,12 +580,14 @@ function WorkflowDesignSurface({
                 ? (_event, node) => {
                     setSelectedNodeId(node.id)
                     setContextMenu(undefined)
+                    setNodeContextMenu(undefined)
                     setConfigOpen(true)
                   }
                 : undefined
             }
             onPaneClick={editable ? handlePaneClick : undefined}
             onPaneContextMenu={handlePaneContextMenu}
+            onNodeContextMenu={handleNodeContextMenu}
             proOptions={{ hideAttribution: true }}
           >
             <Background gap={18} size={1} />
@@ -509,7 +603,54 @@ function WorkflowDesignSurface({
               maskStrokeColor="#94a3b8"
               className="hidden overflow-hidden rounded-md border bg-background shadow-sm md:block"
             />
-            <Controls showInteractive={editable} position="bottom-left" />
+            <Controls
+              showZoom={false}
+              showFitView={false}
+              showInteractive={false}
+              position="top-left"
+            >
+              {editable ? (
+                <DropdownMenu open={nodeLibraryOpen} onOpenChange={setNodeLibraryOpen}>
+                  <DropdownMenuTrigger asChild>
+                    <ControlButton
+                      title={t('editor.nodeLibrary')}
+                      aria-label={t('editor.nodeLibrary')}
+                    >
+                      <ListPlus className="size-4" strokeWidth={2.5} />
+                    </ControlButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="right" align="start" className="w-56 p-0">
+                    <WorkflowNodeLibrary
+                      variant="compact"
+                      className="max-h-[18rem] rounded-md border-0 shadow-none"
+                      hasStartNode={hasStartNode}
+                      onAddNode={handleAddNode}
+                    />
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : null}
+              <ControlButton
+                title={t('editor.zoomIn')}
+                aria-label={t('editor.zoomIn')}
+                onClick={handleZoomIn}
+              >
+                <Plus className="size-4" strokeWidth={2.5} />
+              </ControlButton>
+              <ControlButton
+                title={t('editor.zoomOut')}
+                aria-label={t('editor.zoomOut')}
+                onClick={handleZoomOut}
+              >
+                <Minus className="size-4" strokeWidth={2.5} />
+              </ControlButton>
+              <ControlButton
+                title={t('editor.fitView')}
+                aria-label={t('editor.fitView')}
+                onClick={handleFitView}
+              >
+                <Maximize2 className="size-4" strokeWidth={2.5} />
+              </ControlButton>
+            </Controls>
           </ReactFlow>
         </div>
       </div>
