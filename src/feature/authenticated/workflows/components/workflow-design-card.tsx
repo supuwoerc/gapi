@@ -10,9 +10,12 @@ import {
   type Edge,
   MarkerType,
   MiniMap,
+  type Node,
+  type NodeChange,
   type NodeTypes,
   ReactFlow,
   addEdge,
+  applyNodeChanges,
   useEdgesState,
   useNodesState,
 } from '@xyflow/react'
@@ -35,6 +38,32 @@ const defaultEdgeOptions = {
     width: 18,
     height: 18,
   },
+}
+
+const miniMapNodeColor = (node: Node) => {
+  const status = (node.data as Partial<WorkflowDesignNodeType['data']>).status
+
+  switch (status) {
+    case 'done':
+      return '#34d399'
+    case 'active':
+      return '#38bdf8'
+    default:
+      return '#cbd5e1'
+  }
+}
+
+const miniMapNodeStrokeColor = (node: Node) => {
+  const status = (node.data as Partial<WorkflowDesignNodeType['data']>).status
+
+  switch (status) {
+    case 'done':
+      return '#047857'
+    case 'active':
+      return '#0369a1'
+    default:
+      return '#64748b'
+  }
 }
 
 const DraftWorkflowFlow: WorkflowFlow = {
@@ -108,6 +137,21 @@ export function WorkflowDesignCard({ flow, loading, editable }: WorkflowDesignCa
     [editable, setEdges]
   )
 
+  const handleNodesChange = React.useCallback(
+    (changes: NodeChange<WorkflowDesignNodeType>[]) => {
+      if (editable) {
+        onNodesChange(changes)
+        return
+      }
+
+      const dimensionChanges = changes.filter((change) => change.type === 'dimensions')
+      if (!dimensionChanges.length) return
+
+      setNodes((currentNodes) => applyNodeChanges(dimensionChanges, currentNodes))
+    },
+    [editable, onNodesChange, setNodes]
+  )
+
   if (loading) {
     return (
       <Card className="gap-4 py-5">
@@ -141,7 +185,7 @@ export function WorkflowDesignCard({ flow, loading, editable }: WorkflowDesignCa
             elementsSelectable={editable}
             edgesFocusable={editable}
             nodesFocusable={editable}
-            onNodesChange={editable ? onNodesChange : undefined}
+            onNodesChange={handleNodesChange}
             onEdgesChange={editable ? onEdgesChange : undefined}
             onConnect={editable ? handleConnect : undefined}
             proOptions={{ hideAttribution: true }}
@@ -151,7 +195,12 @@ export function WorkflowDesignCard({ flow, loading, editable }: WorkflowDesignCa
               pannable
               zoomable
               position="bottom-right"
+              nodeColor={miniMapNodeColor}
+              nodeStrokeColor={miniMapNodeStrokeColor}
+              nodeBorderRadius={8}
               nodeStrokeWidth={2}
+              maskColor="rgb(15 23 42 / 0.08)"
+              maskStrokeColor="#94a3b8"
               className="hidden overflow-hidden rounded-md border bg-background shadow-sm md:block"
             />
             <Controls showInteractive={editable} position="bottom-left" />
