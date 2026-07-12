@@ -57,7 +57,7 @@ export const workflowListSchema = z.array(workflowSchema)
 export const workflowDetailSchema = workflowSchema.extend({
   flow: workflowFlowSchema,
 })
-export const workflowMutationSchema = z.object({
+export const workflowBasicInfoSchema = z.object({
   name: z
     .string()
     .trim()
@@ -71,6 +71,36 @@ export const workflowMutationSchema = z.object({
       error: () => i18n.t('workflows:createPage.validation.descriptionRequired'),
     }),
 })
+export const workflowMutationSchema = workflowBasicInfoSchema.extend({
+  flow: workflowFlowSchema.superRefine((flow, ctx) => {
+    const startCount = flow.nodes.filter((node) => node.data.kind === 'start').length
+    const endCount = flow.nodes.filter((node) => node.data.kind === 'end').length
+
+    if (startCount === 0) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['nodes'],
+        message: i18n.t('workflows:createPage.validation.startRequired'),
+      })
+    }
+
+    if (startCount > 1) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['nodes'],
+        message: i18n.t('workflows:createPage.validation.singleStartRequired'),
+      })
+    }
+
+    if (endCount === 0) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['nodes'],
+        message: i18n.t('workflows:createPage.validation.endRequired'),
+      })
+    }
+  }),
+})
 
 export type WorkflowUser = z.infer<typeof workflowUserSchema>
 export type WorkflowNodeKind = z.infer<typeof workflowNodeKindSchema>
@@ -80,4 +110,5 @@ export type WorkflowFlowEdge = z.infer<typeof workflowFlowEdgeSchema>
 export type WorkflowFlow = z.infer<typeof workflowFlowSchema>
 export type Workflow = z.infer<typeof workflowSchema>
 export type WorkflowDetail = z.infer<typeof workflowDetailSchema>
+export type WorkflowBasicInfo = z.infer<typeof workflowBasicInfoSchema>
 export type WorkflowMutation = z.infer<typeof workflowMutationSchema>

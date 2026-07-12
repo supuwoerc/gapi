@@ -1,8 +1,12 @@
-import { workflowDetailSchema, workflowListSchema } from '@/schema/workflow/workflow'
-import type { WorkflowDetail } from '@/schema/workflow/workflow'
+import {
+  workflowDetailSchema,
+  workflowListSchema,
+  workflowMutationSchema,
+} from '@/schema/workflow/workflow'
+import type { WorkflowDetail, WorkflowMutation } from '@/schema/workflow/workflow'
 import type { PaginatedResponse } from '@/types/shared'
 
-import { get } from '@/lib/http'
+import { get, patch, post } from '@/lib/http'
 
 export interface GetWorkflowsParams {
   page: number
@@ -25,4 +29,16 @@ export async function getWorkflows(params: GetWorkflowsParams) {
 export async function getWorkflowDetail(params: { id: number }) {
   const res = await get<{ data: WorkflowDetail }>(`/workflows/${params.id}`)
   return { data: workflowDetailSchema.parse(res.data) }
+}
+
+export async function createWorkflow(data: WorkflowMutation) {
+  const payload = workflowMutationSchema.parse(data)
+  const res = await post<unknown>('/workflows', { json: payload })
+  return workflowDetailSchema.parse(res)
+}
+
+export async function updateWorkflow(id: number, data: WorkflowMutation) {
+  const payload = workflowMutationSchema.parse(data)
+  const res = await patch<unknown>(`/workflows/${id}`, { json: payload })
+  return workflowDetailSchema.parse(res)
 }

@@ -2,7 +2,7 @@
 
 import type { UseFormReturn } from 'react-hook-form'
 
-import type { WorkflowMutation } from '@/schema/workflow/workflow'
+import type { WorkflowBasicInfo } from '@/schema/workflow/workflow'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -28,7 +28,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 interface CreateWorkflowBasicInfoDialogProps {
-  form: UseFormReturn<WorkflowMutation>
+  form: UseFormReturn<WorkflowBasicInfo>
   open: boolean
   readOnly?: boolean
   onOpenChange: (open: boolean) => void

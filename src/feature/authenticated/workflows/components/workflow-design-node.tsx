@@ -3,9 +3,10 @@
 import type { WorkflowNodeKind, WorkflowNodeStatus } from '@/schema/workflow/workflow'
 import type { Node, NodeProps } from '@xyflow/react'
 import { Handle, Position } from '@xyflow/react'
-import { Bot, CheckCircle2, CircleDot, Flag, GitPullRequest, Play } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+
+import { workflowNodeKindIconMap } from './workflow-node-metadata'
 
 export interface WorkflowDesignNodeData extends Record<string, unknown> {
   title: string
@@ -29,27 +30,28 @@ const iconClassMap: Record<WorkflowNodeStatus, string> = {
   pending: 'bg-muted text-muted-foreground',
 }
 
-const kindIconMap = {
-  start: Play,
-  review: GitPullRequest,
-  approval: CheckCircle2,
-  automation: Bot,
-  end: Flag,
-} satisfies Record<WorkflowNodeKind, typeof CircleDot>
-
-export function WorkflowDesignNode({ data, selected }: NodeProps<WorkflowDesignNodeType>) {
-  const Icon = kindIconMap[data.kind]
+export function WorkflowDesignNode({
+  data,
+  selected,
+  isConnectable,
+}: NodeProps<WorkflowDesignNodeType>) {
+  const Icon = workflowNodeKindIconMap[data.kind]
 
   return (
     <div
       className={cn(
-        'relative w-56 rounded-lg border p-3 shadow-sm transition-shadow',
+        'relative w-56 rounded-lg border p-3 shadow-sm transition-[box-shadow,transform]',
         statusClassMap[data.status],
         selected && 'shadow-md ring-2 ring-ring/40'
       )}
     >
       {data.kind !== 'start' ? (
-        <Handle type="target" position={Position.Left} className="size-2 border-background" />
+        <Handle
+          type="target"
+          position={Position.Left}
+          isConnectable={isConnectable}
+          className="size-2.5 border-background"
+        />
       ) : null}
       <div className="flex min-w-0 items-start gap-2">
         <span
@@ -66,7 +68,12 @@ export function WorkflowDesignNode({ data, selected }: NodeProps<WorkflowDesignN
         </div>
       </div>
       {data.kind !== 'end' ? (
-        <Handle type="source" position={Position.Right} className="size-2 border-background" />
+        <Handle
+          type="source"
+          position={Position.Right}
+          isConnectable={isConnectable}
+          className="size-2.5 border-background"
+        />
       ) : null}
     </div>
   )

@@ -17,14 +17,60 @@
     "descriptionPlaceholder": "说明这个工作流适用的场景和处理范围。",
     "design": "流程设计",
     "designDescription": "先从起点和完成节点开始，后续可以继续扩展审批、自动化和通知节点。",
-    "draftOnly": "保存接口后续接入。",
+    "draftOnly": "当前保存到本地模拟数据。",
     "done": "完成",
     "save": "保存",
+    "saving": "保存中",
     "basicInfoRequired": "请先完善工作流名称和简介",
     "saveUnavailable": "保存接口后续接入",
+    "createSuccess": "工作流已创建",
+    "updateSuccess": "工作流已保存",
+    "flowInvalid": "请检查流程设计",
     "validation": {
       "nameRequired": "请输入工作流名称",
-      "descriptionRequired": "请输入工作流简介"
+      "descriptionRequired": "请输入工作流简介",
+      "startRequired": "流程需要一个起点节点",
+      "singleStartRequired": "流程只能有一个起点节点",
+      "endRequired": "流程需要至少一个结束节点"
+    }
+  },
+  "editor": {
+    "nodeLibrary": "节点",
+    "config": "配置",
+    "nodeTitle": "标题",
+    "nodeDescription": "简介",
+    "nodeType": "节点类型",
+    "nodeStatus": "状态",
+    "deleteNode": "删除节点",
+    "nodes": "节点",
+    "edges": "连线",
+    "advancedConfig": "高级配置",
+    "soon": "预留",
+    "nodeKinds": {
+      "start": "起点",
+      "review": "评审",
+      "approval": "审批",
+      "automation": "自动化",
+      "end": "结束"
+    },
+    "nodeKindDescriptions": {
+      "start": "流程入口",
+      "review": "人工评审",
+      "approval": "决策确认",
+      "automation": "自动处理",
+      "end": "流程完成"
+    },
+    "defaultNodeDescriptions": {
+      "start": "流程从这里开始。",
+      "review": "补充评审范围和负责人。",
+      "approval": "确认结果并推进后续动作。",
+      "automation": "执行自动化检查或同步。",
+      "end": "记录最终结果并结束流程。"
+    },
+    "nodeStatuses": {
+      "pending": "待处理",
+      "active": "进行中",
+      "done": "已完成"
     }
   },
   "detail": {

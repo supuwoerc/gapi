@@ -17,14 +17,60 @@
     "descriptionPlaceholder": "Describe where this workflow applies and what it handles.",
     "design": "Flow design",
     "designDescription": "Start with entry and completion nodes. Approval, automation, and notification nodes can be expanded later.",
-    "draftOnly": "Save API integration will follow.",
+    "draftOnly": "Currently saved to local mock data.",
     "done": "Done",
     "save": "Save",
+    "saving": "Saving",
     "basicInfoRequired": "Please complete the workflow name and description first",
     "saveUnavailable": "Save API integration will follow",
+    "createSuccess": "Workflow created",
+    "updateSuccess": "Workflow saved",
+    "flowInvalid": "Please check the flow design",
     "validation": {
       "nameRequired": "Please enter a workflow name",
-      "descriptionRequired": "Please enter a workflow description"
+      "descriptionRequired": "Please enter a workflow description",
+      "startRequired": "The flow needs one start node",
+      "singleStartRequired": "The flow can only have one start node",
+      "endRequired": "The flow needs at least one end node"
+    }
+  },
+  "editor": {
+    "nodeLibrary": "Nodes",
+    "config": "Config",
+    "nodeTitle": "Title",
+    "nodeDescription": "Description",
+    "nodeType": "Node type",
+    "nodeStatus": "Status",
+    "deleteNode": "Delete node",
+    "nodes": "Nodes",
+    "edges": "Edges",
+    "advancedConfig": "Advanced config",
+    "soon": "Reserved",
+    "nodeKinds": {
+      "start": "Start",
+      "review": "Review",
+      "approval": "Approval",
+      "automation": "Automation",
+      "end": "End"
+    },
+    "nodeKindDescriptions": {
+      "start": "Flow entry",
+      "review": "Manual review",
+      "approval": "Decision point",
+      "automation": "Automated step",
+      "end": "Flow completion"
+    },
+    "defaultNodeDescriptions": {
+      "start": "The flow starts here.",
+      "review": "Add review scope and owner.",
+      "approval": "Confirm the outcome and next action.",
+      "automation": "Run automated checks or syncs.",
+      "end": "Record the final outcome and finish the flow."
+    },
+    "nodeStatuses": {
+      "pending": "Pending",
+      "active": "Active",
+      "done": "Done"
     }
   },
   "detail": {

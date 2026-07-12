@@ -2,6 +2,7 @@ import type {
   Workflow,
   WorkflowDetail,
   WorkflowFlow,
+  WorkflowMutation,
   WorkflowUser,
 } from '@/schema/workflow/workflow'
 import { faker } from '@faker-js/faker'
@@ -11,6 +12,8 @@ import { users } from './users'
 faker.seed(97531)
 
 const now = new Date('2026-06-01T08:00:00.000Z')
+const workflowFlows = new Map<number, WorkflowFlow>()
+let nextWorkflowId = 10000
 
 const workflowSeeds = [
   ['API Review', 'Review API contracts, ownership, and release readiness before delivery.'],
@@ -162,9 +165,51 @@ export function getWorkflowDetail(id: number): WorkflowDetail | undefined {
   const workflow = workflows.find((item) => item.id === id)
   if (!workflow) return undefined
 
+  const flow = workflowFlows.get(workflow.id) ?? createWorkflowFlow(workflow.id, workflow.name)
+  workflowFlows.set(workflow.id, flow)
+
   return {
     ...workflow,
-    flow: createWorkflowFlow(workflow.id, workflow.name),
+    flow,
+  }
+}
+
+export function createWorkflowWithFlow(data: WorkflowMutation): WorkflowDetail {
+  const now = new Date()
+  const workflow: Workflow = {
+    id: nextWorkflowId++,
+    name: data.name,
+    description: data.description,
+    used_count: 0,
+    creator: toWorkflowUser(users[0]),
+    created_at: now,
+    updated_at: now,
+  }
+
+  workflows.unshift(workflow)
+  workflowFlows.set(workflow.id, data.flow)
+
+  return {
+    ...workflow,
+    flow: data.flow,
+  }
+}
+
+export function updateWorkflowWithFlow(
+  id: number,
+  data: WorkflowMutation
+): WorkflowDetail | undefined {
+  const workflow = workflows.find((item) => item.id === id)
+  if (!workflow) return undefined
+
+  workflow.name = data.name
+  workflow.description = data.description
+  workflow.updated_at = new Date()
+  workflowFlows.set(workflow.id, data.flow)
+
+  return {
+    ...workflow,
+    flow: data.flow,
   }
 }
 

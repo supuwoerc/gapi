@@ -1,13 +1,21 @@
 'use no memo'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { useForm, useWatch } from 'react-hook-form'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
-import type { WorkflowDetail, WorkflowMutation } from '@/schema/workflow/workflow'
-import { workflowMutationSchema } from '@/schema/workflow/workflow'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
+import type {
+  WorkflowBasicInfo,
+  WorkflowDetail,
+  WorkflowFlow,
+  WorkflowMutation,
+} from '@/schema/workflow/workflow'
+import { workflowBasicInfoSchema, workflowMutationSchema } from '@/schema/workflow/workflow'
+import { createWorkflow, updateWorkflow } from '@/service/workflows/workflows'
 import { ArrowLeft, CircleAlert, CircleCheck, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -26,7 +34,7 @@ import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
 import { CreateWorkflowBasicInfoDialog } from './create-workflow-basic-info-dialog'
 import { WorkflowBasicInfoHoverCard } from './workflow-basic-info-hover-card'
-import { WorkflowDesignCard } from './workflow-design-card'
+import { DraftWorkflowFlow, WorkflowDesignCard } from './workflow-design-card'
 
 interface WorkflowEditorPageProps {
   mode: 'create' | 'detail'
@@ -45,11 +53,13 @@ export function WorkflowEditorPage({
 }: WorkflowEditorPageProps) {
   const { t, i18n } = useTranslation('workflows')
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const [basicInfoOpen, setBasicInfoOpen] = useState(false)
+  const workflowFlowRef = useRef<WorkflowFlow>(workflow?.flow ?? DraftWorkflowFlow)
   const isEditable = mode === 'create' || !!canEdit
   const useBasicInfoHoverCard = mode === 'detail' && !isEditable
-  const basicInfoForm = useForm<WorkflowMutation>({
-    resolver: zodResolver(workflowMutationSchema),
+  const basicInfoForm = useForm<WorkflowBasicInfo>({
+    resolver: zodResolver(workflowBasicInfoSchema),
     mode: 'onChange',
     defaultValues: {
       name: '',
@@ -65,6 +75,30 @@ export function WorkflowEditorPage({
     mode === 'create'
       ? t('createPage.description')
       : basicInfoValues.description?.trim() || t('detail.description')
+  const createWorkflowMutation = useMutation({
+    mutationFn: createWorkflow,
+    onSuccess: (createdWorkflow) => {
+      queryClient.setQueryData(['workflow-detail', createdWorkflow.id], { data: createdWorkflow })
+      void queryClient.invalidateQueries({ queryKey: ['workflows'] })
+      toast.success(t('createPage.createSuccess'))
+      void navigate(`/workflow/${createdWorkflow.id}`)
+    },
+  })
+  const updateWorkflowMutation = useMutation({
+    mutationFn: (flow: WorkflowMutation) => {
+      if (!workflow) {
+        throw new Error('Workflow is required')
+      }
+
+      return updateWorkflow(workflow.id, flow)
+    },
+    onSuccess: (updatedWorkflow) => {
+      queryClient.setQueryData(['workflow-detail', updatedWorkflow.id], { data: updatedWorkflow })
+      void queryClient.invalidateQueries({ queryKey: ['workflows'] })
+      toast.success(t('createPage.updateSuccess'))
+    },
+  })
+  const isSaving = createWorkflowMutation.isPending || updateWorkflowMutation.isPending
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -77,6 +111,7 @@ export function WorkflowEditorPage({
       name: workflow.name,
       description: workflow.description,
     })
+    workflowFlowRef.current = workflow.flow
   }, [basicInfoForm, mode, workflow])
 
   useEffect(() => {
@@ -84,6 +119,10 @@ export function WorkflowEditorPage({
       void basicInfoForm.trigger()
     }
   }, [i18n.language, basicInfoForm])
+
+  const handleFlowChange = useCallback((flow: WorkflowFlow) => {
+    workflowFlowRef.current = flow
+  }, [])
 
   const handleSave = async () => {
     if (!isEditable) return
@@ -96,7 +135,24 @@ export function WorkflowEditorPage({
       return
     }
 
-    toast.info(t('createPage.saveUnavailable'))
+    const payload = workflowMutationSchema.safeParse({
+      ...basicInfoForm.getValues(),
+      flow: workflowFlowRef.current,
+    })
+
+    if (!payload.success) {
+      toast.warning(payload.error.issues[0]?.message ?? t('createPage.flowInvalid'))
+      return
+    }
+
+    if (mode === 'create') {
+      createWorkflowMutation.mutate(payload.data)
+      return
+    }
+
+    if (workflow) {
+      updateWorkflowMutation.mutate(payload.data)
+    }
   }
 
   return (
@@ -139,9 +195,12 @@ export function WorkflowEditorPage({
                 </Button>
               )}
               {isEditable ? (
-                <Button disabled={loading || notFound} onClick={() => void handleSave()}>
+                <Button
+                  disabled={loading || notFound || isSaving}
+                  onClick={() => void handleSave()}
+                >
                   <Save />
-                  {t('createPage.save')}
+                  {isSaving ? t('createPage.saving') : t('createPage.save')}
                 </Button>
               ) : null}
             </div>
@@ -160,6 +219,7 @@ export function WorkflowEditorPage({
               flow={workflow?.flow}
               loading={loading}
               editable={isEditable && !loading}
+              onFlowChange={handleFlowChange}
             />
           </div>
         )}
