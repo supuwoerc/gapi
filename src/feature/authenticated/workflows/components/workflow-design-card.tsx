@@ -27,11 +27,16 @@ import {
   useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { ListPlus, SlidersHorizontal } from 'lucide-react'
+import { ListPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   Sheet,
   SheetContent,
@@ -60,6 +65,12 @@ const defaultEdgeOptions = {
     width: 18,
     height: 18,
   },
+}
+
+interface NodeLibraryContextMenu {
+  x: number
+  y: number
+  position: { x: number; y: number }
 }
 
 const miniMapNodeColor = (node: Node) => {
@@ -190,8 +201,9 @@ function WorkflowDesignSurface({
   const { t } = useTranslation('workflows')
   const { screenToFlowPosition } = useReactFlow()
   const viewportRef = React.useRef<HTMLDivElement>(null)
-  const [libraryOpen, setLibraryOpen] = React.useState(false)
+  const [nodeLibraryOpen, setNodeLibraryOpen] = React.useState(false)
   const [configOpen, setConfigOpen] = React.useState(false)
+  const [contextMenu, setContextMenu] = React.useState<NodeLibraryContextMenu>()
   const [selectedNodeId, setSelectedNodeId] = React.useState<string>()
   const initialNodes = React.useMemo(() => flow.nodes.map(toReactFlowNode), [flow.nodes])
   const initialEdges = React.useMemo(() => flow.edges.map(toReactFlowEdge), [flow.edges])
@@ -218,14 +230,14 @@ function WorkflowDesignSurface({
   }, [screenToFlowPosition])
 
   const handleAddNode = React.useCallback(
-    (kind: WorkflowNodeKind) => {
+    (kind: WorkflowNodeKind, position?: { x: number; y: number }) => {
       if (kind === 'start' && hasStartNode) return
 
       const nodeId = `workflow-${kind}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
       const node: WorkflowDesignNodeType = {
         id: nodeId,
         type: 'workflow',
-        position: getViewportCenterPosition(),
+        position: position ?? getViewportCenterPosition(),
         selected: true,
         data: {
           title: t(`editor.nodeKinds.${kind}`),
@@ -240,7 +252,8 @@ function WorkflowDesignSurface({
         node,
       ])
       setSelectedNodeId(nodeId)
-      setLibraryOpen(false)
+      setNodeLibraryOpen(false)
+      setContextMenu(undefined)
       setConfigOpen(true)
     },
     [getViewportCenterPosition, hasStartNode, t]
@@ -263,8 +276,11 @@ function WorkflowDesignSurface({
 
       if (selectedChange?.type === 'select') {
         setSelectedNodeId(selectedChange.id)
+        setContextMenu(undefined)
+        setConfigOpen(true)
       } else if (hasOnlyUnselectChanges) {
         setSelectedNodeId(undefined)
+        setConfigOpen(false)
       }
 
       setNodes((currentNodes) => {
@@ -359,6 +375,7 @@ function WorkflowDesignSurface({
         currentEdges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
       )
       setSelectedNodeId(undefined)
+      setContextMenu(undefined)
       setConfigOpen(false)
     },
     [nodes]
@@ -373,68 +390,83 @@ function WorkflowDesignSurface({
     onNodeDataChange: handleNodeDataChange,
     onDeleteNode: handleDeleteNode,
   }
+  const handlePaneClick = React.useCallback(() => {
+    setSelectedNodeId(undefined)
+    setContextMenu(undefined)
+    setConfigOpen(false)
+  }, [])
+  const handlePaneContextMenu = React.useCallback(
+    (event: globalThis.MouseEvent | React.MouseEvent<Element, globalThis.MouseEvent>) => {
+      if (!editable) return
+
+      event.preventDefault()
+      setSelectedNodeId(undefined)
+      setConfigOpen(false)
+      setContextMenu({
+        x: event.clientX,
+        y: event.clientY,
+        position: screenToFlowPosition({ x: event.clientX, y: event.clientY }),
+      })
+    },
+    [editable, screenToFlowPosition]
+  )
 
   return (
     <>
       {editable ? (
-        <>
-          <Sheet open={libraryOpen} onOpenChange={setLibraryOpen}>
-            <SheetContent side="left" className="w-[min(20rem,calc(100vw-2rem))] p-0">
-              <SheetHeader className="sr-only">
-                <SheetTitle>{t('editor.nodeLibrary')}</SheetTitle>
-                <SheetDescription>{t('editor.nodeLibrary')}</SheetDescription>
-              </SheetHeader>
-              <WorkflowNodeLibrary
-                className="h-full rounded-none border-0"
-                hasStartNode={hasStartNode}
-                onAddNode={handleAddNode}
-              />
-            </SheetContent>
-          </Sheet>
-          <Sheet open={configOpen} onOpenChange={setConfigOpen}>
-            <SheetContent side="right" className="w-[min(22rem,calc(100vw-2rem))] p-0">
-              <SheetHeader className="sr-only">
-                <SheetTitle>{t('editor.config')}</SheetTitle>
-                <SheetDescription>{t('editor.config')}</SheetDescription>
-              </SheetHeader>
-              <WorkflowNodeConfigPanel className="h-full rounded-none border-0" {...panelProps} />
-            </SheetContent>
-          </Sheet>
-        </>
+        <Sheet modal={false} open={configOpen} onOpenChange={setConfigOpen}>
+          <SheetContent
+            side="right"
+            showOverlay={false}
+            className="w-[min(22rem,calc(100vw-2rem))] p-0"
+          >
+            <SheetHeader className="sr-only">
+              <SheetTitle>{t('editor.config')}</SheetTitle>
+              <SheetDescription>{t('editor.config')}</SheetDescription>
+            </SheetHeader>
+            <WorkflowNodeConfigPanel className="h-full rounded-none border-0" {...panelProps} />
+          </SheetContent>
+        </Sheet>
       ) : null}
 
       {editable ? (
-        <div className="mb-3 flex gap-2 lg:hidden">
-          <Button type="button" variant="outline" onClick={() => setLibraryOpen(true)}>
-            <ListPlus />
-            {t('editor.nodeLibrary')}
-          </Button>
-          <Button type="button" variant="outline" onClick={() => setConfigOpen(true)}>
-            <SlidersHorizontal />
-            {t('editor.config')}
-          </Button>
+        <div className="mb-3 flex flex-wrap gap-2">
+          <DropdownMenu open={nodeLibraryOpen} onOpenChange={setNodeLibraryOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button type="button" variant="outline">
+                <ListPlus />
+                {t('editor.nodeLibrary')}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-72 p-0">
+              <WorkflowNodeLibrary
+                className="max-h-[24rem] rounded-md border-0 shadow-none"
+                hasStartNode={hasStartNode}
+                onAddNode={handleAddNode}
+              />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ) : null}
 
-      <div
-        className={
-          editable
-            ? 'grid min-h-0 gap-3 lg:grid-cols-[13rem_minmax(0,1fr)_19rem]'
-            : 'grid min-h-0 gap-3'
-        }
-      >
-        {editable ? (
-          <WorkflowNodeLibrary
-            className="hidden h-[34rem] lg:flex lg:h-[calc(100svh-16rem)] lg:min-h-[34rem]"
-            hasStartNode={hasStartNode}
-            onAddNode={handleAddNode}
-          />
-        ) : null}
-
+      <div className="grid min-h-0 gap-3">
         <div
           ref={viewportRef}
           className="h-[34rem] min-w-0 overflow-hidden rounded-lg border bg-muted/20 lg:h-[calc(100svh-16rem)] lg:min-h-[34rem]"
         >
+          {contextMenu ? (
+            <div
+              className="fixed z-40 w-72"
+              style={{ left: contextMenu.x, top: contextMenu.y }}
+              onContextMenu={(event) => event.preventDefault()}
+            >
+              <WorkflowNodeLibrary
+                className="max-h-[24rem] rounded-md shadow-lg"
+                hasStartNode={hasStartNode}
+                onAddNode={(kind) => handleAddNode(kind, contextMenu.position)}
+              />
+            </div>
+          ) : null}
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -451,8 +483,17 @@ function WorkflowDesignSurface({
             onNodesChange={handleNodesChange}
             onEdgesChange={handleEdgesChange}
             onConnect={handleConnect}
-            onNodeClick={editable ? (_event, node) => setSelectedNodeId(node.id) : undefined}
-            onPaneClick={editable ? () => setSelectedNodeId(undefined) : undefined}
+            onNodeClick={
+              editable
+                ? (_event, node) => {
+                    setSelectedNodeId(node.id)
+                    setContextMenu(undefined)
+                    setConfigOpen(true)
+                  }
+                : undefined
+            }
+            onPaneClick={editable ? handlePaneClick : undefined}
+            onPaneContextMenu={handlePaneContextMenu}
             proOptions={{ hideAttribution: true }}
           >
             <Background gap={18} size={1} />
@@ -471,13 +512,6 @@ function WorkflowDesignSurface({
             <Controls showInteractive={editable} position="bottom-left" />
           </ReactFlow>
         </div>
-
-        {editable ? (
-          <WorkflowNodeConfigPanel
-            className="hidden h-[34rem] lg:flex lg:h-[calc(100svh-16rem)] lg:min-h-[34rem]"
-            {...panelProps}
-          />
-        ) : null}
       </div>
     </>
   )

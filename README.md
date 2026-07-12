@@ -9,18 +9,20 @@
 
 ## 📖 Project Introduction
 
-This project is a self-hosted API management platform designed to provide elegant API management services for developers, testers, and other personnel. It integrates modern UI and interaction logic, and if desired, can be connected to relevant AI services to enhance development and testing efficiency.
+GAPI is a self-hosted AI-driven software development collaboration platform. Users create projects, configure AI employees with different roles and skills, submit requirements through conversational interactions, and AI employees automatically execute development tasks following customizable workflows within sandboxed environments.
 
 ## ✨ Core Features
 
-- 📝 **API Management**: Create, edit, and maintain API documentation, and report related API issues
-- 🎭 **Mock Service**: Quickly define the format of interface response data
-- ⌚️ **Load Testing Service**: Rapidly collect interface pressure test results
-- 🧪 **API Testing**: API debugging functionality similar to Postman
-- 🤖 **Automated Testing**: Supports assertions on responses
-- 📥 **Data Import**: Supports importing data from Postman, HAR, and Swagger
-- 👥 **Permission Management**: RBAC-based permission management for relevant personnel
-- 📊 **Project/Personnel/Document Management**: Management of projects, personnel, organizations, and documents
+- 🤖 **AI Employees**: Configure fine-grained AI roles (developer, QA, architect, DevOps, designer, PM) with custom skills
+- 🔧 **Sandbox Management**: Full lifecycle management of sandboxed execution environments (create, configure, destroy)
+- 💬 **Conversational Requirements**: Submit requirements through natural dialogue within projects, automatically generating structured task cards
+- 📋 **Task Management**: Kanban-style tracking with layered execution status display (summary + expandable detailed logs)
+- 🔄 **Custom Workflows**: Visual workflow editor to define AI employee collaboration processes
+- 🗺️ **Roadmap**: Milestone planning with bidirectional requirement association
+- 🧪 **QA**: Test case management (natural language + Playwright code), code review, automated test reports
+- 📝 **Document Management**: Human-maintained documentation with AI-assisted generation
+- 👥 **Permission Management**: RBAC-based access control with project visibility settings
+- 📊 **Project Management**: Project creation, member management, and configuration
 
 ## 🛠️ Tech Stack
 
@@ -33,6 +35,8 @@ This project is a self-hosted API management platform designed to provide elegan
 - **Zustand** - Lightweight state management
 - **TanStack Query** - Server state management
 - **React Router** - Routing management
+- **React Flow** - Workflow visual editor
+- **Lexical** - Rich text editor
 - **ky** - HTTP client
 - **Zod** - Data validation
 
@@ -97,16 +101,20 @@ Follow Conventional Commits:
 
 - [x] Project initialization
 - [x] UI framework setup
-- [ ] Homepage redesign
-- [ ] Login/Registration pages
-- [ ] Project management module
-- [ ] API management module
-- [ ] Mock functionality
-- [ ] API testing functionality
-- [ ] User center
-- [ ] Permission management
-- [ ] Data import functionality
-- [ ] Automated testing
+- [x] Login/Registration
+- [x] Project management
+- [x] Task management
+- [x] Document management
+- [x] Workflow editor
+- [x] Notification system
+- [x] Admin panel (users, roles, permissions)
+- [ ] AI employee management
+- [ ] Sandbox management
+- [ ] Conversational requirements
+- [ ] Roadmap module
+- [ ] QA module (test cases, code review, reports)
+- [ ] Real-time execution status (WebSocket/SSE)
+- [ ] AI-assisted document generation
 
 ## 🤝 Contribution Guide
 
