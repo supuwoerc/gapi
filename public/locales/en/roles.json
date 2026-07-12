@@ -84,7 +84,11 @@
     "permissionRowsPerPage": "Per page",
     "permissionPageOf": "Page {{current}} / {{total}}",
     "permissionPreviousPage": "Previous page",
-    "permissionNextPage": "Next page"
+    "permissionNextPage": "Next page",
+    "validation": {
+      "nameRequired": "Please enter a role name",
+      "codeRequired": "Please enter a role code"
+    }
   },
   "permissionAction": {
     "create": "Create",

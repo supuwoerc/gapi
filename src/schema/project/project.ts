@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { i18n } from '@/lib/i18n'
+
 export const projectVisibilitySchema = z.enum(['public', 'private'])
 export const projectMemberStatusSchema = z.enum(['active', 'pending'])
 export const projectPermissionEffectSchema = z.enum(['allow', 'deny'])
@@ -72,15 +74,21 @@ export const projectMemberSchema = z.object({
 })
 
 export const projectMutationSchema = z.object({
-  name: z.string().min(1),
+  name: z.string().min(1, {
+    error: () => i18n.t('projects:createDialog.validation.nameRequired'),
+  }),
   description: z.string(),
   logo: z.string(),
   visibility: projectVisibilitySchema,
 })
 
 export const projectMemberInviteSchema = z.object({
-  username: z.string().min(1),
-  email: z.string().email(),
+  username: z.string().min(1, {
+    error: () => i18n.t('projects:inviteDialog.validation.usernameRequired'),
+  }),
+  email: z.string().email({
+    error: () => i18n.t('projects:inviteDialog.validation.emailInvalid'),
+  }),
   project_role_id: z.number(),
 })
 

@@ -36,7 +36,10 @@
     "rolesEmpty": "No roles found",
     "save": "Save",
     "saving": "Saving...",
-    "success": "User updated successfully"
+    "success": "User updated successfully",
+    "validation": {
+      "rolesRequired": "Please select at least one role"
+    }
   },
   "title": "User List",
   "description": "Manage your users and their permissions here"

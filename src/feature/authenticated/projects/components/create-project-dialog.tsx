@@ -54,7 +54,7 @@ export function CreateProjectDialog({
   onOpenChange,
   onSubmit,
 }: CreateProjectDialogProps) {
-  const { t } = useTranslation('projects')
+  const { t, i18n } = useTranslation('projects')
   const form = useForm<ProjectMutation>({
     resolver: zodResolver(projectMutationSchema),
     defaultValues: {
@@ -71,6 +71,12 @@ export function CreateProjectDialog({
       form.reset({ name: '', description: '', logo: DefaultProjectLogo, visibility: 'private' })
     }
   }, [form, open])
+
+  React.useEffect(() => {
+    if (Object.keys(form.formState.errors).length) {
+      void form.trigger()
+    }
+  }, [i18n.language, form])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

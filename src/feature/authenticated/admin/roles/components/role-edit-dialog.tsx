@@ -32,7 +32,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -717,7 +724,7 @@ export function RoleEditDialog({
   open,
   onOpenChange,
 }: RoleEditDialogProps) {
-  const { t } = useTranslation('roles')
+  const { t, i18n } = useTranslation('roles')
   const queryClient = useQueryClient()
   const isEditing = roleId !== null
   const [cachedPermissionById, setCachedPermissionById] = React.useState<Map<number, Permission>>(
@@ -738,6 +745,12 @@ export function RoleEditDialog({
       permissions: [],
     },
   })
+
+  React.useEffect(() => {
+    if (Object.keys(form.formState.errors).length) {
+      void form.trigger()
+    }
+  }, [i18n.language, form])
 
   React.useEffect(() => {
     if (!open) return
@@ -843,6 +856,7 @@ export function RoleEditDialog({
                             <FormControl>
                               <Input {...field} placeholder={t('editDialog.namePlaceholder')} />
                             </FormControl>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />
@@ -856,6 +870,7 @@ export function RoleEditDialog({
                             <FormControl>
                               <Input {...field} placeholder={t('editDialog.codePlaceholder')} />
                             </FormControl>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />

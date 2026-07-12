@@ -36,7 +36,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { ImageCropDialog } from '@/components/image-crop-dialog'
 
 const profileFormSchema = z.object({
-  email: z.email(),
+  email: z.email({
+    error: () => i18n.t('settings:profile.form.email.invalid'),
+  }),
   name: z
     .string()
     .min(1, {
@@ -158,6 +160,7 @@ const ProfilePage = () => {
                   <Input {...field} readOnly className="bg-muted" />
                 </FormControl>
                 <FormDescription>{t('profile.form.email.description')}</FormDescription>
+                <FormMessage />
               </FormItem>
             )}
           />

@@ -41,7 +41,9 @@ interface AuthFormProps {
 }
 
 const authFormSchema = z.object({
-  email: z.email(),
+  email: z.email({
+    error: () => i18n.t('auth:login.authForm.email.invalid'),
+  }),
   password: z
     .string()
     .min(8, {

@@ -21,7 +21,8 @@
       },
       "email": {
         "label": "邮箱",
-        "description": "您的邮箱地址不可更改"
+        "description": "您的邮箱地址不可更改",
+        "invalid": "请输入有效的邮箱地址"
       },
       "name": {
         "label": "显示名称",

@@ -21,7 +21,8 @@
       },
       "email": {
         "label": "Email",
-        "description": "Your email address cannot be changed"
+        "description": "Your email address cannot be changed",
+        "invalid": "Please enter a valid email address"
       },
       "name": {
         "label": "Display Name",

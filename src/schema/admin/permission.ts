@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { i18n } from '@/lib/i18n'
+
 export const resourceTypeSchema = z.union([
   z.literal(1),
   z.literal(2),
@@ -57,11 +59,19 @@ export const permissionDetailSchema = permissionSchema.extend({
 })
 
 export const permissionMutationSchema = z.object({
-  code: z.string().min(1),
-  name: z.string().min(1),
+  code: z.string().min(1, {
+    error: () => i18n.t('permissions:editDialog.validation.codeRequired'),
+  }),
+  name: z.string().min(1, {
+    error: () => i18n.t('permissions:editDialog.validation.nameRequired'),
+  }),
   resource_type: resourceTypeSchema,
-  module: z.string().min(1),
-  resource_path: z.string().min(1),
+  module: z.string().min(1, {
+    error: () => i18n.t('permissions:editDialog.validation.moduleRequired'),
+  }),
+  resource_path: z.string().min(1, {
+    error: () => i18n.t('permissions:editDialog.validation.resourcePathRequired'),
+  }),
   action: permissionActionSchema,
   description: z.string(),
   roles: z.array(permissionRoleAssignmentSchema),

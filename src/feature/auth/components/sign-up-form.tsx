@@ -40,9 +40,11 @@ interface SignUpFormProps {
 const signUpFormSchema = z
   .object({
     username: z.string().min(1, {
-      error: () => i18n.t('auth:signUp.form.username.name'),
+      error: () => i18n.t('auth:signUp.form.username.required'),
     }),
-    email: z.email(),
+    email: z.email({
+      error: () => i18n.t('auth:signUp.form.email.invalid'),
+    }),
     password: z
       .string()
       .min(8, {

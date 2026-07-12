@@ -50,7 +50,7 @@ export function InviteMemberDialog({
   onOpenChange,
   onSubmit,
 }: InviteMemberDialogProps) {
-  const { t } = useTranslation('projects')
+  const { t, i18n } = useTranslation('projects')
   const defaultRoleId = roles.find((role) => role.name === 'Editor')?.id ?? roles[0]?.id ?? 0
   const form = useForm<ProjectMemberInvite>({
     resolver: zodResolver(projectMemberInviteSchema),
@@ -66,6 +66,12 @@ export function InviteMemberDialog({
       form.reset({ username: '', email: '', project_role_id: defaultRoleId })
     }
   }, [defaultRoleId, form, open])
+
+  React.useEffect(() => {
+    if (Object.keys(form.formState.errors).length) {
+      void form.trigger()
+    }
+  }, [i18n.language, form])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { useDebounce } from 'react-use'
 import { toast } from 'sonner'
 
+import { i18n } from '@/lib/i18n'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -34,14 +36,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Separator } from '@/components/ui/separator'
 import { Spinner } from '@/components/ui/spinner'
 import { Switch } from '@/components/ui/switch'
 
 const formSchema = z.object({
   enabled: z.boolean(),
-  roles: z.array(z.string()).min(1),
+  roles: z.array(z.string()).min(1, {
+    error: () => i18n.t('users:editDialog.validation.rolesRequired'),
+  }),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -53,7 +64,7 @@ interface UserEditDialogProps {
 }
 
 export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps) {
-  const { t } = useTranslation('users')
+  const { t, i18n } = useTranslation('users')
   const queryClient = useQueryClient()
   const anchorRef = useComboboxAnchor()
   const [roleKeyword, setRoleKeyword] = React.useState('')
@@ -77,6 +88,12 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
       })
     }
   }, [user, open, form])
+
+  React.useEffect(() => {
+    if (Object.keys(form.formState.errors).length) {
+      void form.trigger()
+    }
+  }, [i18n.language, form])
 
   const { data: rolesData, isFetching: isRolesFetching } = useQuery({
     queryKey: ['roles', debouncedKeyword],
@@ -183,6 +200,7 @@ export function UserEditDialog({ user, open, onOpenChange }: UserEditDialogProps
                       </ComboboxContent>
                     </Combobox>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

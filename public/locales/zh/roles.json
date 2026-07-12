@@ -84,7 +84,11 @@
     "permissionRowsPerPage": "每页",
     "permissionPageOf": "第 {{current}} / {{total}} 页",
     "permissionPreviousPage": "上一页",
-    "permissionNextPage": "下一页"
+    "permissionNextPage": "下一页",
+    "validation": {
+      "nameRequired": "请输入角色名称",
+      "codeRequired": "请输入角色编码"
+    }
   },
   "permissionAction": {
     "create": "创建",

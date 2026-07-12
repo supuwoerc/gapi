@@ -36,7 +36,10 @@
     "rolesEmpty": "未找到角色",
     "save": "保存",
     "saving": "保存中...",
-    "success": "用户更新成功"
+    "success": "用户更新成功",
+    "validation": {
+      "rolesRequired": "请至少选择一个角色"
+    }
   },
   "title": "用户列表",
   "description": "在这里管理用户及其权限"

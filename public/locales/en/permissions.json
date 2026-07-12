@@ -56,7 +56,13 @@
     "save": "Save",
     "saving": "Saving...",
     "createSuccess": "Permission created successfully",
-    "updateSuccess": "Permission updated successfully"
+    "updateSuccess": "Permission updated successfully",
+    "validation": {
+      "nameRequired": "Please enter a permission name",
+      "codeRequired": "Please enter a permission code",
+      "moduleRequired": "Please enter a module",
+      "resourcePathRequired": "Please enter a resource path"
+    }
   },
   "action": {
     "create": "Create",

@@ -61,7 +61,10 @@
     "descriptionPlaceholder": "说明这个项目的用途",
     "visibility": "可见性",
     "save": "创建",
-    "saving": "创建中..."
+    "saving": "创建中...",
+    "validation": {
+      "nameRequired": "请输入项目名称"
+    }
   },
   "inviteDialog": {
     "title": "邀请成员",
@@ -72,7 +75,11 @@
     "emailPlaceholder": "name@example.com",
     "role": "项目角色",
     "save": "邀请",
-    "saving": "邀请中..."
+    "saving": "邀请中...",
+    "validation": {
+      "usernameRequired": "请输入用户名",
+      "emailInvalid": "请输入有效的邮箱地址"
+    }
   },
   "settings": {
     "logoTitle": "项目 Logo",

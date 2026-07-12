@@ -61,7 +61,10 @@
     "descriptionPlaceholder": "Describe what this project is for",
     "visibility": "Visibility",
     "save": "Create",
-    "saving": "Creating..."
+    "saving": "Creating...",
+    "validation": {
+      "nameRequired": "Please enter a project name"
+    }
   },
   "inviteDialog": {
     "title": "Invite member",
@@ -72,7 +75,11 @@
     "emailPlaceholder": "name@example.com",
     "role": "Project role",
     "save": "Invite",
-    "saving": "Inviting..."
+    "saving": "Inviting...",
+    "validation": {
+      "usernameRequired": "Please enter a username",
+      "emailInvalid": "Please enter a valid email address"
+    }
   },
   "settings": {
     "logoTitle": "Project logo",

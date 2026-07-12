@@ -302,7 +302,7 @@ export function PermissionEditDialog({
   open,
   onOpenChange,
 }: PermissionEditDialogProps) {
-  const { t } = useTranslation('permissions')
+  const { t, i18n } = useTranslation('permissions')
   const queryClient = useQueryClient()
   const isEditing = permissionId !== null
 
@@ -310,6 +310,12 @@ export function PermissionEditDialog({
     resolver: zodResolver(permissionMutationSchema),
     defaultValues: DefaultPermissionValues,
   })
+
+  React.useEffect(() => {
+    if (Object.keys(form.formState.errors).length) {
+      void form.trigger()
+    }
+  }, [i18n.language, form])
 
   React.useEffect(() => {
     if (!open) return

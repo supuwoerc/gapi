@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { i18n } from '@/lib/i18n'
+
 import { permissionAssignmentSchema, rolePermissionSchema } from './permission'
 
 const baseRoleSchema = z.object({
@@ -28,8 +30,12 @@ export const roleTreeSchema: z.ZodType<RoleTree> = baseRoleSchema.extend({
 export const roleTreeListSchema = z.array(roleTreeSchema)
 
 export const roleMutationSchema = z.object({
-  name: z.string().min(1),
-  code: z.string().min(1),
+  name: z.string().min(1, {
+    error: () => i18n.t('roles:editDialog.validation.nameRequired'),
+  }),
+  code: z.string().min(1, {
+    error: () => i18n.t('roles:editDialog.validation.codeRequired'),
+  }),
   parent_id: z.number().nullable(),
   description: z.string(),
   sort_order: z.number(),

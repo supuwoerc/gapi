@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { toast } from 'sonner'
 
+import { i18n } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -33,7 +34,9 @@ interface ForgotPasswordFormProps {
 }
 
 const forgotPasswordFormSchema = z.object({
-  email: z.email(),
+  email: z.email({
+    error: () => i18n.t('auth:forgotPassword.form.email.invalid'),
+  }),
 })
 
 type forgotPasswordForm = z.infer<typeof forgotPasswordFormSchema>
