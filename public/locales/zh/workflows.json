@@ -1,9 +1,32 @@
 {
   "title": "工作流",
   "description": "查看可关联到项目的工作流，以及当前被项目使用的情况。",
+  "create": "创建工作流",
   "search": "搜索工作流...",
   "searchResultCount": "已显示 {{count}} / {{total}} 个工作流",
   "referencedCount": "被引用 {{count}} 次",
+  "createPage": {
+    "back": "返回工作流",
+    "title": "创建工作流",
+    "description": "填写工作流基础信息，并设计后续可关联到项目的流程。",
+    "basicInfo": "基本信息",
+    "basicInfoDescription": "维护工作流的名称和简介，不影响下方流程设计空间。",
+    "name": "名称",
+    "namePlaceholder": "例如：发布审批流程",
+    "workflowDescription": "简介",
+    "descriptionPlaceholder": "说明这个工作流适用的场景和处理范围。",
+    "design": "流程设计",
+    "designDescription": "先从起点和完成节点开始，后续可以继续扩展审批、自动化和通知节点。",
+    "draftOnly": "当前仅创建界面，保存接口后续接入。",
+    "done": "完成",
+    "save": "保存",
+    "basicInfoRequired": "请先完善工作流名称和简介",
+    "saveUnavailable": "保存接口后续接入",
+    "validation": {
+      "nameRequired": "请输入工作流名称",
+      "descriptionRequired": "请输入工作流简介"
+    }
+  },
   "detail": {
     "back": "返回工作流",
     "notFound": "未找到工作流。",

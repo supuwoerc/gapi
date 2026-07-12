@@ -18,6 +18,7 @@
     "documents": "Documents",
     "documentDetail": "Document Detail",
     "workflow": "Workflow",
+    "workflowCreate": "Create Workflow",
     "workflowDetail": "Workflow Detail"
   },
   "other": {

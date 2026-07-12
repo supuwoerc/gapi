@@ -3,10 +3,12 @@ import * as React from 'react'
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
 
 import { getWorkflows } from '@/service/workflows/workflows'
+import { Plus } from 'lucide-react'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
+import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 
 import { ConfigDrawer } from '@/components/config-drawer'
@@ -96,6 +98,10 @@ const Workflows = () => {
             <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
             <p className="text-muted-foreground">{t('description')}</p>
           </div>
+          <Button onClick={() => void navigate('/workflow/create')}>
+            <Plus />
+            {t('create')}
+          </Button>
         </div>
 
         {isWorkflowsLoading ? (

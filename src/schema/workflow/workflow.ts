@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { i18n } from '@/lib/i18n'
+
 const timestampSchema = z.coerce.date()
 
 export const workflowUserSchema = z.object({
@@ -55,6 +57,20 @@ export const workflowListSchema = z.array(workflowSchema)
 export const workflowDetailSchema = workflowSchema.extend({
   flow: workflowFlowSchema,
 })
+export const workflowMutationSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(1, {
+      error: () => i18n.t('workflows:createPage.validation.nameRequired'),
+    }),
+  description: z
+    .string()
+    .trim()
+    .min(1, {
+      error: () => i18n.t('workflows:createPage.validation.descriptionRequired'),
+    }),
+})
 
 export type WorkflowUser = z.infer<typeof workflowUserSchema>
 export type WorkflowNodeKind = z.infer<typeof workflowNodeKindSchema>
@@ -64,3 +80,4 @@ export type WorkflowFlowEdge = z.infer<typeof workflowFlowEdgeSchema>
 export type WorkflowFlow = z.infer<typeof workflowFlowSchema>
 export type Workflow = z.infer<typeof workflowSchema>
 export type WorkflowDetail = z.infer<typeof workflowDetailSchema>
+export type WorkflowMutation = z.infer<typeof workflowMutationSchema>
