@@ -17,7 +17,7 @@
     "descriptionPlaceholder": "说明这个工作流适用的场景和处理范围。",
     "design": "流程设计",
     "designDescription": "先从起点和完成节点开始，后续可以继续扩展审批、自动化和通知节点。",
-    "draftOnly": "当前仅创建界面，保存接口后续接入。",
+    "draftOnly": "保存接口后续接入。",
     "done": "完成",
     "save": "保存",
     "basicInfoRequired": "请先完善工作流名称和简介",
@@ -29,6 +29,8 @@
   },
   "detail": {
     "back": "返回工作流",
+    "title": "工作流详情",
+    "description": "查看工作流信息，并在有权限时直接调整流程设计。",
     "notFound": "未找到工作流。",
     "basicInfo": {
       "title": "基本信息",

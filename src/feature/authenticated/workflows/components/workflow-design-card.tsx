@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import type { WorkflowDetail, WorkflowFlowEdge } from '@/schema/workflow/workflow'
+import type { WorkflowFlow, WorkflowFlowEdge } from '@/schema/workflow/workflow'
 import {
   Background,
   type Connection,
@@ -17,10 +17,8 @@ import {
   useNodesState,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { Eye, PencilLine } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -39,26 +37,60 @@ const defaultEdgeOptions = {
   },
 }
 
-interface WorkflowDesignCardProps {
-  workflow?: WorkflowDetail
-  loading?: boolean
-  canEdit?: boolean
+const DraftWorkflowFlow: WorkflowFlow = {
+  nodes: [
+    {
+      id: 'draft-start',
+      type: 'workflow',
+      position: { x: 0, y: 90 },
+      data: {
+        title: 'Start',
+        description: 'Workflow starts here.',
+        kind: 'start',
+        status: 'active',
+      },
+    },
+    {
+      id: 'draft-end',
+      type: 'workflow',
+      position: { x: 360, y: 90 },
+      data: {
+        title: 'Complete',
+        description: 'Workflow reaches a final outcome.',
+        kind: 'end',
+        status: 'pending',
+      },
+    },
+  ],
+  edges: [
+    {
+      id: 'draft-start-end',
+      source: 'draft-start',
+      target: 'draft-end',
+      type: 'smoothstep',
+    },
+  ],
 }
 
-export function WorkflowDesignCard({ workflow, loading, canEdit }: WorkflowDesignCardProps) {
+interface WorkflowDesignCardProps {
+  flow?: WorkflowFlow
+  loading?: boolean
+  editable?: boolean
+}
+
+export function WorkflowDesignCard({ flow, loading, editable }: WorkflowDesignCardProps) {
   const { t } = useTranslation('workflows')
+  const workflowFlow = flow ?? DraftWorkflowFlow
   const initialNodes = React.useMemo(
-    () => workflow?.flow.nodes ?? [],
-    [workflow?.flow.nodes]
+    () => workflowFlow.nodes,
+    [workflowFlow.nodes]
   ) as WorkflowDesignNodeType[]
   const initialEdges = React.useMemo(
-    () => workflow?.flow.edges.map(toReactFlowEdge) ?? [],
-    [workflow?.flow.edges]
+    () => workflowFlow.edges.map(toReactFlowEdge),
+    [workflowFlow.edges]
   )
   const [nodes, setNodes, onNodesChange] = useNodesState<WorkflowDesignNodeType>(initialNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges)
-  const [isEditing, setIsEditing] = React.useState(false)
-  const isWorkflowEditing = !!canEdit && isEditing
 
   React.useEffect(() => {
     setNodes(initialNodes)
@@ -70,10 +102,10 @@ export function WorkflowDesignCard({ workflow, loading, canEdit }: WorkflowDesig
 
   const handleConnect = React.useCallback(
     (connection: Connection) => {
-      if (!isWorkflowEditing) return
+      if (!editable) return
       setEdges((currentEdges) => addEdge({ ...connection, type: 'smoothstep' }, currentEdges))
     },
-    [isWorkflowEditing, setEdges]
+    [editable, setEdges]
   )
 
   if (loading) {
@@ -89,31 +121,11 @@ export function WorkflowDesignCard({ workflow, loading, canEdit }: WorkflowDesig
     )
   }
 
-  if (!workflow) return null
-
   return (
     <Card className="min-w-0 gap-4 py-5">
-      <CardHeader className="flex flex-row items-start justify-between gap-3">
-        <div className="min-w-0">
-          <CardTitle>{t('detail.design.title')}</CardTitle>
-          <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
-            {t('detail.design.nodeCount', {
-              nodes: workflow.flow.nodes.length,
-              edges: workflow.flow.edges.length,
-            })}
-          </p>
-        </div>
-        {canEdit ? (
-          <Button
-            variant={isWorkflowEditing ? 'default' : 'outline'}
-            size="sm"
-            className="shrink-0"
-            onClick={() => setIsEditing((current) => !current)}
-          >
-            {isWorkflowEditing ? <Eye /> : <PencilLine />}
-            {isWorkflowEditing ? t('detail.design.viewMode') : t('detail.design.editMode')}
-          </Button>
-        ) : null}
+      <CardHeader>
+        <CardTitle>{t('createPage.design')}</CardTitle>
+        <p className="text-sm text-muted-foreground">{t('createPage.designDescription')}</p>
       </CardHeader>
       <CardContent>
         <div className="h-[34rem] overflow-hidden rounded-lg border bg-muted/20">
@@ -124,14 +136,14 @@ export function WorkflowDesignCard({ workflow, loading, canEdit }: WorkflowDesig
             defaultEdgeOptions={defaultEdgeOptions}
             fitView
             fitViewOptions={{ padding: 0.22 }}
-            nodesDraggable={isWorkflowEditing}
-            nodesConnectable={isWorkflowEditing}
-            elementsSelectable={isWorkflowEditing}
-            edgesFocusable={isWorkflowEditing}
-            nodesFocusable={isWorkflowEditing}
-            onNodesChange={isWorkflowEditing ? onNodesChange : undefined}
-            onEdgesChange={isWorkflowEditing ? onEdgesChange : undefined}
-            onConnect={isWorkflowEditing ? handleConnect : undefined}
+            nodesDraggable={editable}
+            nodesConnectable={editable}
+            elementsSelectable={editable}
+            edgesFocusable={editable}
+            nodesFocusable={editable}
+            onNodesChange={editable ? onNodesChange : undefined}
+            onEdgesChange={editable ? onEdgesChange : undefined}
+            onConnect={editable ? handleConnect : undefined}
             proOptions={{ hideAttribution: true }}
           >
             <Background gap={18} size={1} />
@@ -142,7 +154,7 @@ export function WorkflowDesignCard({ workflow, loading, canEdit }: WorkflowDesig
               nodeStrokeWidth={2}
               className="hidden overflow-hidden rounded-md border bg-background shadow-sm md:block"
             />
-            <Controls showInteractive={false} position="bottom-left" />
+            <Controls showInteractive={editable} position="bottom-left" />
           </ReactFlow>
         </div>
       </CardContent>

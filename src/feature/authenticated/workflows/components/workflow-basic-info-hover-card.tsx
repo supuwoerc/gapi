@@ -38,7 +38,7 @@ export function WorkflowBasicInfoHoverCard({
       <HoverCardTrigger asChild>
         <Button variant="outline" className="max-w-full justify-start gap-2">
           <Info className="size-4 text-muted-foreground" />
-          <span className="max-w-48 truncate">{workflow.name}</span>
+          <span>{t('createPage.basicInfo')}</span>
           <Badge
             variant="outline"
             className={cn(

@@ -17,7 +17,7 @@
     "descriptionPlaceholder": "Describe where this workflow applies and what it handles.",
     "design": "Flow design",
     "designDescription": "Start with entry and completion nodes. Approval, automation, and notification nodes can be expanded later.",
-    "draftOnly": "This is the creation interface only. Save API integration will follow.",
+    "draftOnly": "Save API integration will follow.",
     "done": "Done",
     "save": "Save",
     "basicInfoRequired": "Please complete the workflow name and description first",
@@ -29,6 +29,8 @@
   },
   "detail": {
     "back": "Back to workflows",
+    "title": "Workflow detail",
+    "description": "Review workflow information and adjust the flow when you have permission.",
     "notFound": "Workflow not found.",
     "basicInfo": {
       "title": "Basic info",

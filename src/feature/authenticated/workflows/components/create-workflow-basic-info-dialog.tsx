@@ -30,12 +30,14 @@ import { Textarea } from '@/components/ui/textarea'
 interface CreateWorkflowBasicInfoDialogProps {
   form: UseFormReturn<WorkflowMutation>
   open: boolean
+  readOnly?: boolean
   onOpenChange: (open: boolean) => void
 }
 
 export function CreateWorkflowBasicInfoDialog({
   form,
   open,
+  readOnly,
   onOpenChange,
 }: CreateWorkflowBasicInfoDialogProps) {
   const { t } = useTranslation('workflows')
@@ -56,7 +58,11 @@ export function CreateWorkflowBasicInfoDialog({
                 <FormItem>
                   <FormLabel>{t('createPage.name')}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t('createPage.namePlaceholder')} {...field} />
+                    <Input
+                      placeholder={t('createPage.namePlaceholder')}
+                      disabled={readOnly}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -72,6 +78,7 @@ export function CreateWorkflowBasicInfoDialog({
                     <Textarea
                       className="min-h-28"
                       placeholder={t('createPage.descriptionPlaceholder')}
+                      disabled={readOnly}
                       {...field}
                     />
                   </FormControl>
