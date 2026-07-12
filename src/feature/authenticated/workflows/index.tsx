@@ -5,6 +5,7 @@ import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
 import { getWorkflows } from '@/service/workflows/workflows'
 import { parseAsString, useQueryState } from 'nuqs'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 
 import { Spinner } from '@/components/ui/spinner'
 
@@ -24,6 +25,7 @@ const WorkflowsPageSize = 20
 
 const Workflows = () => {
   const { t } = useTranslation('workflows')
+  const navigate = useNavigate()
   const [workflowKeyword, setWorkflowKeyword] = useQueryState(
     'workflowKeyword',
     parseAsString.withDefault('')
@@ -70,6 +72,13 @@ const Workflows = () => {
     void fetchNextWorkflowsPage()
   }, [fetchNextWorkflowsPage])
 
+  const handleSelectWorkflow = React.useCallback(
+    (workflowId: number) => {
+      void navigate(`/workflow/${workflowId}`)
+    },
+    [navigate]
+  )
+
   return (
     <>
       <AppHeader fixed>
@@ -106,6 +115,7 @@ const Workflows = () => {
               hasNextPage={hasNextWorkflowsPage}
               onKeywordChange={handleWorkflowKeywordChange}
               onLoadMore={handleLoadMoreWorkflows}
+              onSelectWorkflow={handleSelectWorkflow}
             />
           </div>
         )}

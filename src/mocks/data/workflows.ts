@@ -1,5 +1,12 @@
-import type { Workflow } from '@/schema/workflow/workflow'
+import type {
+  Workflow,
+  WorkflowDetail,
+  WorkflowFlow,
+  WorkflowUser,
+} from '@/schema/workflow/workflow'
 import { faker } from '@faker-js/faker'
+
+import { users } from './users'
 
 faker.seed(97531)
 
@@ -16,6 +23,123 @@ const workflowSeeds = [
   ['Dependency Audit', 'Track dependency review, security notes, and remediation progress.'],
 ]
 
+function toWorkflowUser(user: (typeof users)[number]): WorkflowUser {
+  return {
+    id: user.id,
+    name: user.username,
+    email: user.email,
+    avatar: user.avatar,
+  }
+}
+
+function createWorkflowFlow(index: number, name: string): WorkflowFlow {
+  const hasAutomation = index % 2 === 0
+  const subject = name.replace(/\s+\d+$/, '')
+  const reviewX = hasAutomation ? 260 : 300
+  const approvalX = hasAutomation ? 520 : 600
+  const endX = hasAutomation ? 780 : 900
+
+  return {
+    nodes: [
+      {
+        id: `workflow-${index}-start`,
+        type: 'workflow',
+        position: { x: 0, y: 96 },
+        data: {
+          title: 'Start',
+          description: `${subject} request is submitted.`,
+          kind: 'start',
+          status: 'done',
+        },
+      },
+      {
+        id: `workflow-${index}-review`,
+        type: 'workflow',
+        position: { x: reviewX, y: hasAutomation ? 24 : 96 },
+        data: {
+          title: 'Owner review',
+          description: 'Review scope, owner, and required context.',
+          kind: 'review',
+          status: 'active',
+        },
+      },
+      ...(hasAutomation
+        ? [
+            {
+              id: `workflow-${index}-automation`,
+              type: 'workflow' as const,
+              position: { x: reviewX, y: 168 },
+              data: {
+                title: 'Automated checks',
+                description: 'Run policy, dependency, and readiness checks.',
+                kind: 'automation' as const,
+                status: 'active' as const,
+              },
+            },
+          ]
+        : []),
+      {
+        id: `workflow-${index}-approval`,
+        type: 'workflow',
+        position: { x: approvalX, y: 96 },
+        data: {
+          title: 'Approval',
+          description: 'Confirm the decision and notify linked projects.',
+          kind: 'approval',
+          status: 'pending',
+        },
+      },
+      {
+        id: `workflow-${index}-end`,
+        type: 'workflow',
+        position: { x: endX, y: 96 },
+        data: {
+          title: 'Complete',
+          description: 'Archive outcome and publish the final status.',
+          kind: 'end',
+          status: 'pending',
+        },
+      },
+    ],
+    edges: [
+      {
+        id: `workflow-${index}-start-review`,
+        source: `workflow-${index}-start`,
+        target: `workflow-${index}-review`,
+        type: 'smoothstep',
+      },
+      ...(hasAutomation
+        ? [
+            {
+              id: `workflow-${index}-start-automation`,
+              source: `workflow-${index}-start`,
+              target: `workflow-${index}-automation`,
+              type: 'smoothstep',
+            },
+            {
+              id: `workflow-${index}-automation-approval`,
+              source: `workflow-${index}-automation`,
+              target: `workflow-${index}-approval`,
+              type: 'smoothstep',
+            },
+          ]
+        : []),
+      {
+        id: `workflow-${index}-review-approval`,
+        source: `workflow-${index}-review`,
+        target: `workflow-${index}-approval`,
+        type: 'smoothstep',
+      },
+      {
+        id: `workflow-${index}-approval-end`,
+        source: `workflow-${index}-approval`,
+        target: `workflow-${index}-end`,
+        type: 'smoothstep',
+      },
+    ],
+  }
+}
+
 function createWorkflow(index: number, name: string, description: string): Workflow {
   const createdAt = new Date(now)
   createdAt.setDate(createdAt.getDate() - index * 2)
@@ -28,8 +152,19 @@ function createWorkflow(index: number, name: string, description: string): Workf
     name,
     description,
     used_count: faker.number.int({ min: 0, max: 24 }),
+    creator: toWorkflowUser(index % 4 === 0 ? users[0] : users[(index % 12) + 1]),
     created_at: createdAt,
     updated_at: updatedAt,
+  }
+}
+
+export function getWorkflowDetail(id: number): WorkflowDetail | undefined {
+  const workflow = workflows.find((item) => item.id === id)
+  if (!workflow) return undefined
+
+  return {
+    ...workflow,
+    flow: createWorkflowFlow(workflow.id, workflow.name),
   }
 }
 

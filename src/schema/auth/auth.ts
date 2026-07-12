@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const loginUserSchema = z.object({
   user: z.object({
+    id: z.coerce.number().optional(),
     name: z.string(),
     email: z.string(),
     avatar: z.string(),

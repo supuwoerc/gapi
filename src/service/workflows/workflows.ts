@@ -1,4 +1,5 @@
-import { workflowListSchema } from '@/schema/workflow/workflow'
+import { workflowDetailSchema, workflowListSchema } from '@/schema/workflow/workflow'
+import type { WorkflowDetail } from '@/schema/workflow/workflow'
 import type { PaginatedResponse } from '@/types/shared'
 
 import { get } from '@/lib/http'
@@ -19,4 +20,9 @@ export async function getWorkflows(params: GetWorkflowsParams) {
 
   const res = await get<PaginatedResponse<unknown>>('/workflows', { searchParams })
   return { data: workflowListSchema.parse(res.data), total: res.total }
+}
+
+export async function getWorkflowDetail(params: { id: number }) {
+  const res = await get<{ data: WorkflowDetail }>(`/workflows/${params.id}`)
+  return { data: workflowDetailSchema.parse(res.data) }
 }

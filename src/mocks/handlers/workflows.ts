@@ -1,8 +1,8 @@
 import { delay, http } from 'msw'
 
-import { workflows } from '../data/workflows'
+import { getWorkflowDetail, workflows } from '../data/workflows'
 import { paginate } from '../utils/filter'
-import { jsonEnvelope } from '../utils/response'
+import { errorEnvelope, jsonEnvelope } from '../utils/response'
 
 const BASE = import.meta.env.VITE_APP_DEFAULT_SERVER
 
@@ -22,5 +22,17 @@ export const workflowHandlers = [
       : workflows
 
     return jsonEnvelope(paginate(result, page, perPage))
+  }),
+
+  http.get(`${BASE}/workflows/:id`, async ({ params }) => {
+    await delay(200)
+    const id = Number(params.id)
+    const workflow = getWorkflowDetail(id)
+
+    if (!workflow) {
+      return errorEnvelope(404, 'Workflow not found')
+    }
+
+    return jsonEnvelope({ data: workflow })
   }),
 ]

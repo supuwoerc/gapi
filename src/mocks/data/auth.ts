@@ -1,5 +1,9 @@
 import { faker } from '@faker-js/faker'
 
+import { users } from './users'
+
+const mockLoginUser = users[0]
+
 export const modulePermissionsMap: Record<string, string[]> = {
   dashboard: ['dashboard:read', 'dashboard:edit'],
   tasks: ['tasks:read', 'tasks:create', 'tasks:edit', 'tasks:delete'],
@@ -20,10 +24,11 @@ export const modulePermissionsMap: Record<string, string[]> = {
 export function generateLoginResponse(email?: string) {
   return {
     user: {
-      name: faker.person.fullName(),
-      email: email ?? faker.internet.email(),
-      avatar: faker.image.avatar(),
-      bio: faker.lorem.sentence({ min: 3, max: 8 }),
+      id: mockLoginUser.id,
+      name: mockLoginUser.username,
+      email: email ?? mockLoginUser.email,
+      avatar: mockLoginUser.avatar,
+      bio: mockLoginUser.bio,
     },
     token: faker.string.alphanumeric(64),
     refresh_token: faker.string.alphanumeric(64),

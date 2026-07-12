@@ -4,6 +4,26 @@
   "search": "Search workflows...",
   "searchResultCount": "Showing {{count}} of {{total}} workflows",
   "referencedCount": "Referenced {{count}} time(s)",
+  "detail": {
+    "back": "Back to workflows",
+    "notFound": "Workflow not found.",
+    "basicInfo": {
+      "title": "Basic info",
+      "creator": "Creator",
+      "usedCount": "References",
+      "createdAt": "Created",
+      "updatedAt": "Updated",
+      "permission": "Permission",
+      "editable": "Editable",
+      "readonly": "Read only"
+    },
+    "design": {
+      "title": "Flow design",
+      "nodeCount": "{{nodes}} nodes / {{edges}} edges",
+      "editMode": "Edit",
+      "viewMode": "View"
+    }
+  },
   "emptyWorkflows": {
     "title": "No workflows yet",
     "description": "After workflows are created, they can be associated with projects and reused."

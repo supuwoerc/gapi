@@ -26,6 +26,7 @@ interface WorkflowsListProps {
   hasNextPage: boolean
   onKeywordChange: (keyword: string) => void
   onLoadMore: () => void
+  onSelectWorkflow: (workflowId: number) => void
 }
 
 export function WorkflowsList({
@@ -37,6 +38,7 @@ export function WorkflowsList({
   hasNextPage,
   onKeywordChange,
   onLoadMore,
+  onSelectWorkflow,
 }: WorkflowsListProps) {
   const { t } = useTranslation('workflows')
   const scrollRef = React.useRef<HTMLDivElement>(null)
@@ -162,9 +164,11 @@ export function WorkflowsList({
                       }}
                     >
                       {rowWorkflows.map((workflow) => (
-                        <article
+                        <button
                           key={workflow.id}
-                          className="flex h-36 min-w-0 flex-col gap-3 overflow-hidden rounded-lg border bg-background p-4 text-start"
+                          type="button"
+                          className="flex h-36 min-w-0 flex-col gap-3 overflow-hidden rounded-lg border bg-background p-4 text-start transition-colors hover:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                          onClick={() => onSelectWorkflow(workflow.id)}
                         >
                           <span className="flex min-w-0 items-start justify-between gap-3">
                             <span className="min-w-0 truncate text-base font-medium">
@@ -191,7 +195,7 @@ export function WorkflowsList({
                           <span className="line-clamp-3 overflow-hidden text-sm leading-5 text-muted-foreground">
                             {workflow.description}
                           </span>
-                        </article>
+                        </button>
                       ))}
                     </div>
                   )}

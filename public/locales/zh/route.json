@@ -17,7 +17,8 @@
     "projects": "项目",
     "documents": "文档",
     "documentDetail": "文档详情",
-    "workflow": "工作流"
+    "workflow": "工作流",
+    "workflowDetail": "工作流详情"
   },
   "other": {
     "name": "其他",

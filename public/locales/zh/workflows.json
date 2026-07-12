@@ -4,6 +4,26 @@
   "search": "搜索工作流...",
   "searchResultCount": "已显示 {{count}} / {{total}} 个工作流",
   "referencedCount": "被引用 {{count}} 次",
+  "detail": {
+    "back": "返回工作流",
+    "notFound": "未找到工作流。",
+    "basicInfo": {
+      "title": "基本信息",
+      "creator": "创建者",
+      "usedCount": "引用数",
+      "createdAt": "创建时间",
+      "updatedAt": "更新时间",
+      "permission": "权限",
+      "editable": "可编辑",
+      "readonly": "只读"
+    },
+    "design": {
+      "title": "流程设计",
+      "nodeCount": "{{nodes}} 个节点 / {{edges}} 条连线",
+      "editMode": "编辑",
+      "viewMode": "查看"
+    }
+  },
   "emptyWorkflows": {
     "title": "暂无工作流",
     "description": "创建工作流后，可以在项目中关联并复用。"
