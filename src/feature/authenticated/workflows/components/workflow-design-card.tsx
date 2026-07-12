@@ -10,26 +10,46 @@ import type {
 } from '@/schema/workflow/workflow'
 import {
   Background,
+  BaseEdge,
   type Connection,
   ControlButton,
   Controls,
   type Edge,
   type EdgeChange,
+  type EdgeProps,
+  EdgeToolbar,
+  type EdgeTypes,
   MarkerType,
   MiniMap,
   type Node,
   type NodeChange,
   type NodeTypes,
+  type OnBeforeDelete,
   ReactFlow,
   ReactFlowProvider,
+  SelectionMode,
   addEdge,
   applyEdgeChanges,
   applyNodeChanges,
+  getSmoothStepPath,
   useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import { Copy, ListPlus, Maximize2, Minus, Plus, Trash2 } from 'lucide-react'
+import {
+  Copy,
+  ListPlus,
+  Maximize2,
+  Minus,
+  Move,
+  Pencil,
+  Plus,
+  SquareDashedMousePointer,
+  Trash2,
+  X,
+} from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
+import { cn } from '@/lib/utils'
 
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -46,6 +66,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 import {
   WorkflowDesignNode,
@@ -59,8 +80,13 @@ const nodeTypes = {
   workflow: WorkflowDesignNode,
 } satisfies NodeTypes
 
+const edgeTypes = {
+  workflow: WorkflowDesignEdge,
+} satisfies EdgeTypes
+
 const defaultEdgeOptions = {
-  type: 'smoothstep',
+  type: 'workflow',
+  interactionWidth: 28,
   markerEnd: {
     type: MarkerType.ArrowClosed,
     width: 18,
@@ -79,6 +105,10 @@ interface NodeActionsContextMenu {
   y: number
   nodeId: string
 }
+
+type WorkflowInteractionMode = 'pan' | 'select'
+
+type WorkflowDesignEdgeType = Edge<Record<string, unknown>, 'workflow'>
 
 const miniMapNodeColor = (node: Node) => {
   const status = (node.data as Partial<WorkflowDesignNodeType['data']>).status
@@ -104,6 +134,63 @@ const miniMapNodeStrokeColor = (node: Node) => {
     default:
       return '#64748b'
   }
+}
+
+function WorkflowDesignEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  sourcePosition,
+  targetPosition,
+  markerStart,
+  markerEnd,
+  style,
+  selected,
+  interactionWidth,
+}: EdgeProps<WorkflowDesignEdgeType>) {
+  const { t } = useTranslation('workflows')
+  const { deleteElements } = useReactFlow()
+  const [edgePath, labelX, labelY] = getSmoothStepPath({
+    sourceX,
+    sourceY,
+    sourcePosition,
+    targetX,
+    targetY,
+    targetPosition,
+  })
+
+  const handleDelete = React.useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+      void deleteElements({ edges: [{ id }] })
+    },
+    [deleteElements, id]
+  )
+
+  return (
+    <>
+      <BaseEdge
+        path={edgePath}
+        markerStart={markerStart}
+        markerEnd={markerEnd}
+        interactionWidth={interactionWidth}
+        style={style}
+      />
+      <EdgeToolbar edgeId={id} x={labelX} y={labelY} isVisible={selected}>
+        <button
+          type="button"
+          aria-label={t('editor.deleteSelected')}
+          className="nopan nodrag flex size-7 items-center justify-center rounded-md border bg-background text-muted-foreground shadow-sm transition-colors hover:bg-destructive hover:text-white focus-visible:bg-destructive focus-visible:text-white"
+          onClick={handleDelete}
+        >
+          <X className="size-4" strokeWidth={2.5} />
+        </button>
+      </EdgeToolbar>
+    </>
+  )
 }
 
 export const DraftWorkflowFlow: WorkflowFlow = {
@@ -197,6 +284,7 @@ function WorkflowDesignSurface({
   const [sheetContainer, setSheetContainer] = React.useState<HTMLDivElement | null>(null)
   const [nodeLibraryOpen, setNodeLibraryOpen] = React.useState(false)
   const [configOpen, setConfigOpen] = React.useState(false)
+  const [interactionMode, setInteractionMode] = React.useState<WorkflowInteractionMode>('pan')
   const [contextMenu, setContextMenu] = React.useState<NodeLibraryContextMenu>()
   const [nodeContextMenu, setNodeContextMenu] = React.useState<NodeActionsContextMenu>()
   const [selectedNodeId, setSelectedNodeId] = React.useState<string>()
@@ -204,7 +292,21 @@ function WorkflowDesignSurface({
   const initialEdges = React.useMemo(() => flow.edges.map(toReactFlowEdge), [flow.edges])
   const [nodes, setNodes] = React.useState<WorkflowDesignNodeType[]>(initialNodes)
   const [edges, setEdges] = React.useState<Edge[]>(initialEdges)
-  const selectedNode = nodes.find((node) => node.id === selectedNodeId)
+  const selectedNodes = React.useMemo(() => nodes.filter((node) => node.selected), [nodes])
+  const selectedEdges = React.useMemo(() => edges.filter((edge) => edge.selected), [edges])
+  const selectedNode =
+    selectedNodes.length === 1
+      ? selectedNodes[0]
+      : selectedNodes.length === 0 && selectedNodeId
+        ? nodes.find((node) => node.id === selectedNodeId)
+        : undefined
+  const selectedDeletableNodeIds = React.useMemo(
+    () => selectedNodes.filter((node) => node.data.kind !== 'start').map((node) => node.id),
+    [selectedNodes]
+  )
+  const selectedEdgeIds = React.useMemo(() => selectedEdges.map((edge) => edge.id), [selectedEdges])
+  const hasSelectedDeletableElements =
+    selectedDeletableNodeIds.length > 0 || selectedEdgeIds.length > 0
   const hasStartNode = nodes.some((node) => node.data.kind === 'start')
 
   const setViewportElement = React.useCallback((element: HTMLDivElement | null) => {
@@ -270,19 +372,40 @@ function WorkflowDesignSurface({
         return
       }
 
-      const selectedChange = changes.find((change) => change.type === 'select' && change.selected)
-      const hasOnlyUnselectChanges =
-        changes.length > 0 &&
-        changes.every((change) => change.type === 'select' && !change.selected)
+      const selectionChanges = changes.filter((change) => change.type === 'select')
 
-      if (selectedChange?.type === 'select') {
-        setSelectedNodeId(selectedChange.id)
-        setContextMenu(undefined)
-        setNodeContextMenu(undefined)
-        setConfigOpen(true)
-      } else if (hasOnlyUnselectChanges) {
-        setSelectedNodeId(undefined)
-        setConfigOpen(false)
+      if (selectionChanges.length) {
+        const nextSelectedNodeIds = new Set(selectedNodes.map((node) => node.id))
+
+        for (const change of selectionChanges) {
+          if (change.selected) {
+            nextSelectedNodeIds.add(change.id)
+          } else {
+            nextSelectedNodeIds.delete(change.id)
+          }
+        }
+
+        if (nextSelectedNodeIds.size === 1) {
+          const [nextSelectedNodeId] = nextSelectedNodeIds
+
+          setSelectedNodeId(nextSelectedNodeId)
+          setEdges((currentEdges) =>
+            withWorkflowEdgePresentations(
+              currentEdges.map((edge) => ({
+                ...edge,
+                selected: false,
+              }))
+            )
+          )
+          setContextMenu(undefined)
+          setNodeContextMenu(undefined)
+          setConfigOpen(false)
+        } else {
+          setSelectedNodeId(undefined)
+          setContextMenu(undefined)
+          setNodeContextMenu(undefined)
+          setConfigOpen(false)
+        }
       }
 
       setNodes((currentNodes) => {
@@ -296,13 +419,15 @@ function WorkflowDesignSurface({
         return applyNodeChanges(allowedChanges, currentNodes)
       })
     },
-    [editable]
+    [editable, selectedNodes]
   )
 
   const handleEdgesChange = React.useCallback(
     (changes: EdgeChange<Edge>[]) => {
       if (!editable) return
-      setEdges((currentEdges) => applyEdgeChanges(changes, currentEdges))
+      setEdges((currentEdges) =>
+        withWorkflowEdgePresentations(applyEdgeChanges(changes, currentEdges))
+      )
     },
     [editable]
   )
@@ -318,13 +443,15 @@ function WorkflowDesignSurface({
         )
         if (exists) return currentEdges
 
-        return addEdge(
-          {
-            ...connection,
-            id: `edge-${connection.source}-${connection.target}-${Date.now()}`,
-            type: 'smoothstep',
-          },
-          currentEdges
+        return withWorkflowEdgePresentations(
+          addEdge(
+            {
+              ...connection,
+              id: `edge-${connection.source}-${connection.target}-${Date.now()}`,
+              type: 'workflow',
+            },
+            currentEdges
+          )
         )
       })
     },
@@ -357,29 +484,116 @@ function WorkflowDesignSurface({
       )
 
       if (data.kind === 'start') {
-        setEdges((currentEdges) => currentEdges.filter((edge) => edge.target !== nodeId))
+        setEdges((currentEdges) =>
+          withWorkflowEdgePresentations(currentEdges.filter((edge) => edge.target !== nodeId))
+        )
       }
 
       if (data.kind === 'end') {
-        setEdges((currentEdges) => currentEdges.filter((edge) => edge.source !== nodeId))
+        setEdges((currentEdges) =>
+          withWorkflowEdgePresentations(currentEdges.filter((edge) => edge.source !== nodeId))
+        )
       }
     },
     []
   )
 
-  const handleDeleteNode = React.useCallback(
-    (nodeId: string) => {
-      const node = nodes.find((currentNode) => currentNode.id === nodeId)
-      if (!node || node.data.kind === 'start') return
+  const handleDeleteNodes = React.useCallback(
+    (nodeIds: string[], edgeIds: string[] = []) => {
+      const deletableNodeIds = nodeIds.filter((nodeId) => {
+        const node = nodes.find((currentNode) => currentNode.id === nodeId)
+        return node && node.data.kind !== 'start'
+      })
+      if (!deletableNodeIds.length && !edgeIds.length) return
 
-      setNodes((currentNodes) => currentNodes.filter((currentNode) => currentNode.id !== nodeId))
+      const deletableNodeIdSet = new Set(deletableNodeIds)
+      const edgeIdSet = new Set(edgeIds)
+
+      setNodes((currentNodes) =>
+        currentNodes.filter((currentNode) => !deletableNodeIdSet.has(currentNode.id))
+      )
       setEdges((currentEdges) =>
-        currentEdges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+        withWorkflowEdgePresentations(
+          currentEdges.filter(
+            (edge) =>
+              !edgeIdSet.has(edge.id) &&
+              !deletableNodeIdSet.has(edge.source) &&
+              !deletableNodeIdSet.has(edge.target)
+          )
+        )
       )
       setSelectedNodeId(undefined)
       setContextMenu(undefined)
       setNodeContextMenu(undefined)
       setConfigOpen(false)
+    },
+    [nodes]
+  )
+  const handleDeleteNode = React.useCallback(
+    (nodeId: string) => {
+      handleDeleteNodes([nodeId])
+    },
+    [handleDeleteNodes]
+  )
+  const handleDeleteSelectedElements = React.useCallback(() => {
+    handleDeleteNodes(selectedDeletableNodeIds, selectedEdgeIds)
+  }, [handleDeleteNodes, selectedDeletableNodeIds, selectedEdgeIds])
+  const handleBeforeDelete = React.useCallback<OnBeforeDelete<WorkflowDesignNodeType, Edge>>(
+    async ({ nodes: nodesToRemove, edges: edgesToRemove }) => {
+      const deletableNodeIds = new Set(
+        nodesToRemove.filter((node) => node.data.kind !== 'start').map((node) => node.id)
+      )
+
+      return {
+        nodes: nodesToRemove.filter((node) => node.data.kind !== 'start'),
+        edges: edgesToRemove.filter(
+          (edge) =>
+            edge.selected || deletableNodeIds.has(edge.source) || deletableNodeIds.has(edge.target)
+        ),
+      }
+    },
+    []
+  )
+  const handleNodesDelete = React.useCallback((deletedNodes: WorkflowDesignNodeType[]) => {
+    if (!deletedNodes.length) return
+
+    setSelectedNodeId(undefined)
+    setContextMenu(undefined)
+    setNodeContextMenu(undefined)
+    setConfigOpen(false)
+  }, [])
+  const handleEdgesDelete = React.useCallback((deletedEdges: Edge[]) => {
+    if (!deletedEdges.length) return
+
+    setSelectedNodeId(undefined)
+    setContextMenu(undefined)
+    setNodeContextMenu(undefined)
+    setConfigOpen(false)
+  }, [])
+  const handleEditNode = React.useCallback(
+    (nodeId: string) => {
+      const node = nodes.find((currentNode) => currentNode.id === nodeId)
+      if (!node) return
+
+      setSelectedNodeId(nodeId)
+      setNodes((currentNodes) =>
+        currentNodes.map((currentNode) => ({
+          ...currentNode,
+          selected: currentNode.id === nodeId,
+        }))
+      )
+      setEdges((currentEdges) =>
+        withWorkflowEdgePresentations(
+          currentEdges.map((currentEdge) => ({
+            ...currentEdge,
+            selected: false,
+          }))
+        )
+      )
+      setContextMenu(undefined)
+      setNodeLibraryOpen(false)
+      setNodeContextMenu(undefined)
+      setConfigOpen(true)
     },
     [nodes]
   )
@@ -409,6 +623,14 @@ function WorkflowDesignSurface({
         ...currentNodes.map((currentNode) => ({ ...currentNode, selected: false })),
         copiedNode,
       ])
+      setEdges((currentEdges) =>
+        withWorkflowEdgePresentations(
+          currentEdges.map((currentEdge) => ({
+            ...currentEdge,
+            selected: false,
+          }))
+        )
+      )
       setSelectedNodeId(nextNodeId)
       setContextMenu(undefined)
       setNodeContextMenu(undefined)
@@ -422,12 +644,19 @@ function WorkflowDesignSurface({
     nodeCount: nodes.length,
     edgeCount: edges.length,
     editable,
-    hasStartNode,
     onNodeDataChange: handleNodeDataChange,
     onDeleteNode: handleDeleteNode,
   }
   const handlePaneClick = React.useCallback(() => {
     setSelectedNodeId(undefined)
+    setEdges((currentEdges) =>
+      withWorkflowEdgePresentations(
+        currentEdges.map((edge) => ({
+          ...edge,
+          selected: false,
+        }))
+      )
+    )
     setContextMenu(undefined)
     setNodeContextMenu(undefined)
     setConfigOpen(false)
@@ -470,6 +699,14 @@ function WorkflowDesignSurface({
           selected: currentNode.id === node.id,
         }))
       )
+      setEdges((currentEdges) =>
+        withWorkflowEdgePresentations(
+          currentEdges.map((currentEdge) => ({
+            ...currentEdge,
+            selected: false,
+          }))
+        )
+      )
       setContextMenu(undefined)
       setNodeLibraryOpen(false)
       setNodeContextMenu({
@@ -477,6 +714,32 @@ function WorkflowDesignSurface({
         y: event.clientY,
         nodeId: node.id,
       })
+    },
+    [editable]
+  )
+  const handleEdgeClick = React.useCallback(
+    (event: React.MouseEvent<Element, globalThis.MouseEvent>, edge: Edge) => {
+      if (!editable) return
+
+      event.stopPropagation()
+      setSelectedNodeId(undefined)
+      setNodes((currentNodes) =>
+        currentNodes.map((currentNode) => ({
+          ...currentNode,
+          selected: false,
+        }))
+      )
+      setEdges((currentEdges) =>
+        withWorkflowEdgePresentations(
+          currentEdges.map((currentEdge) => ({
+            ...currentEdge,
+            selected: currentEdge.id === edge.id,
+          }))
+        )
+      )
+      setContextMenu(undefined)
+      setNodeContextMenu(undefined)
+      setConfigOpen(false)
     },
     [editable]
   )
@@ -542,6 +805,15 @@ function WorkflowDesignSurface({
               </DropdownMenuTrigger>
               <DropdownMenuContent side="right" align="start" className="w-36">
                 <DropdownMenuItem
+                  className="cursor-pointer"
+                  disabled={!nodeContextMenuNode}
+                  onClick={() => handleEditNode(nodeContextMenu.nodeId)}
+                >
+                  <Pencil className="size-4" />
+                  {t('editor.editNode')}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
                   disabled={nodeContextMenuActionsDisabled}
                   onClick={() => handleCopyNode(nodeContextMenu.nodeId)}
                 >
@@ -549,6 +821,7 @@ function WorkflowDesignSurface({
                   {t('editor.copyNode')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  className="cursor-pointer"
                   disabled={nodeContextMenuActionsDisabled}
                   variant="destructive"
                   onClick={() => handleDeleteNode(nodeContextMenu.nodeId)}
@@ -563,6 +836,7 @@ function WorkflowDesignSurface({
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}
+            edgeTypes={edgeTypes}
             defaultEdgeOptions={defaultEdgeOptions}
             fitView
             fitViewOptions={{ padding: 0.22 }}
@@ -571,20 +845,36 @@ function WorkflowDesignSurface({
             elementsSelectable={editable}
             edgesFocusable={editable}
             nodesFocusable={editable}
-            deleteKeyCode={null}
+            deleteKeyCode={editable ? ['Backspace', 'Delete'] : null}
+            selectionKeyCode={null}
+            selectionOnDrag={editable && interactionMode === 'select'}
+            selectionMode={SelectionMode.Partial}
+            panOnDrag={editable ? interactionMode === 'pan' : true}
             onNodesChange={handleNodesChange}
             onEdgesChange={handleEdgesChange}
             onConnect={handleConnect}
+            onBeforeDelete={handleBeforeDelete}
+            onNodesDelete={handleNodesDelete}
+            onEdgesDelete={handleEdgesDelete}
             onNodeClick={
               editable
                 ? (_event, node) => {
                     setSelectedNodeId(node.id)
+                    setEdges((currentEdges) =>
+                      withWorkflowEdgePresentations(
+                        currentEdges.map((edge) => ({
+                          ...edge,
+                          selected: false,
+                        }))
+                      )
+                    )
                     setContextMenu(undefined)
                     setNodeContextMenu(undefined)
-                    setConfigOpen(true)
+                    setConfigOpen(false)
                   }
                 : undefined
             }
+            onEdgeClick={editable ? handleEdgeClick : undefined}
             onPaneClick={editable ? handlePaneClick : undefined}
             onPaneContextMenu={handlePaneContextMenu}
             onNodeContextMenu={handleNodeContextMenu}
@@ -609,52 +899,97 @@ function WorkflowDesignSurface({
               showInteractive={false}
               position="top-left"
             >
-              {editable ? (
-                <DropdownMenu open={nodeLibraryOpen} onOpenChange={setNodeLibraryOpen}>
-                  <DropdownMenuTrigger asChild>
-                    <ControlButton
-                      title={t('editor.nodeLibrary')}
-                      aria-label={t('editor.nodeLibrary')}
-                    >
-                      <ListPlus className="size-4" strokeWidth={2.5} />
-                    </ControlButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent side="right" align="start" className="w-56 p-0">
-                    <WorkflowNodeLibrary
-                      variant="compact"
-                      className="max-h-[18rem] rounded-md border-0 shadow-none"
-                      hasStartNode={hasStartNode}
-                      onAddNode={handleAddNode}
-                    />
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : null}
-              <ControlButton
-                title={t('editor.zoomIn')}
-                aria-label={t('editor.zoomIn')}
-                onClick={handleZoomIn}
-              >
-                <Plus className="size-4" strokeWidth={2.5} />
-              </ControlButton>
-              <ControlButton
-                title={t('editor.zoomOut')}
-                aria-label={t('editor.zoomOut')}
-                onClick={handleZoomOut}
-              >
-                <Minus className="size-4" strokeWidth={2.5} />
-              </ControlButton>
-              <ControlButton
-                title={t('editor.fitView')}
-                aria-label={t('editor.fitView')}
-                onClick={handleFitView}
-              >
-                <Maximize2 className="size-4" strokeWidth={2.5} />
-              </ControlButton>
+              <TooltipProvider delayDuration={200}>
+                {editable ? (
+                  <>
+                    <WorkflowControlTooltip label={t('editor.selectionMode')}>
+                      <ControlButton
+                        aria-label={t('editor.selectionMode')}
+                        aria-pressed={interactionMode === 'select'}
+                        className={cn(
+                          interactionMode === 'select' && '!bg-accent !text-accent-foreground'
+                        )}
+                        onClick={() => setInteractionMode('select')}
+                      >
+                        <SquareDashedMousePointer className="size-4" strokeWidth={2.5} />
+                      </ControlButton>
+                    </WorkflowControlTooltip>
+                    <WorkflowControlTooltip label={t('editor.panMode')}>
+                      <ControlButton
+                        aria-label={t('editor.panMode')}
+                        aria-pressed={interactionMode === 'pan'}
+                        className={cn(
+                          interactionMode === 'pan' && '!bg-accent !text-accent-foreground'
+                        )}
+                        onClick={() => setInteractionMode('pan')}
+                      >
+                        <Move className="size-4" strokeWidth={2.5} />
+                      </ControlButton>
+                    </WorkflowControlTooltip>
+                    <DropdownMenu open={nodeLibraryOpen} onOpenChange={setNodeLibraryOpen}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <DropdownMenuTrigger asChild>
+                            <ControlButton aria-label={t('editor.nodeLibrary')}>
+                              <ListPlus className="size-4" strokeWidth={2.5} />
+                            </ControlButton>
+                          </DropdownMenuTrigger>
+                        </TooltipTrigger>
+                        <TooltipContent side="right">{t('editor.nodeLibrary')}</TooltipContent>
+                      </Tooltip>
+                      <DropdownMenuContent side="right" align="start" className="w-56 p-0">
+                        <WorkflowNodeLibrary
+                          variant="compact"
+                          className="max-h-[18rem] rounded-md border-0 shadow-none"
+                          hasStartNode={hasStartNode}
+                          onAddNode={handleAddNode}
+                        />
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <WorkflowControlTooltip label={t('editor.deleteSelected')}>
+                      <ControlButton
+                        aria-label={t('editor.deleteSelected')}
+                        aria-disabled={!hasSelectedDeletableElements}
+                        className={cn(
+                          !hasSelectedDeletableElements && '!cursor-not-allowed !opacity-45'
+                        )}
+                        onClick={handleDeleteSelectedElements}
+                      >
+                        <X className="size-4" strokeWidth={2.5} />
+                      </ControlButton>
+                    </WorkflowControlTooltip>
+                  </>
+                ) : null}
+                <WorkflowControlTooltip label={t('editor.zoomIn')}>
+                  <ControlButton aria-label={t('editor.zoomIn')} onClick={handleZoomIn}>
+                    <Plus className="size-4" strokeWidth={2.5} />
+                  </ControlButton>
+                </WorkflowControlTooltip>
+                <WorkflowControlTooltip label={t('editor.zoomOut')}>
+                  <ControlButton aria-label={t('editor.zoomOut')} onClick={handleZoomOut}>
+                    <Minus className="size-4" strokeWidth={2.5} />
+                  </ControlButton>
+                </WorkflowControlTooltip>
+                <WorkflowControlTooltip label={t('editor.fitView')}>
+                  <ControlButton aria-label={t('editor.fitView')} onClick={handleFitView}>
+                    <Maximize2 className="size-4" strokeWidth={2.5} />
+                  </ControlButton>
+                </WorkflowControlTooltip>
+              </TooltipProvider>
             </Controls>
           </ReactFlow>
         </div>
       </div>
     </>
+  )
+}
+
+function WorkflowControlTooltip({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent side="right">{label}</TooltipContent>
+    </Tooltip>
   )
 }
 
@@ -677,10 +1012,26 @@ function getWorkflowFlowKey(flow: WorkflowFlow) {
 }
 
 function toReactFlowEdge(edge: WorkflowFlowEdge): Edge {
+  return withWorkflowEdgePresentation({
+    ...edge,
+    type: 'workflow',
+    animated: edge.animated ?? false,
+  })
+}
+
+function withWorkflowEdgePresentations(edges: Edge[]) {
+  return edges.map(withWorkflowEdgePresentation)
+}
+
+function withWorkflowEdgePresentation(edge: Edge): Edge {
   return {
     ...edge,
-    type: edge.type ?? 'smoothstep',
-    animated: edge.animated ?? false,
+    interactionWidth: edge.interactionWidth ?? 28,
+    style: {
+      ...edge.style,
+      stroke: edge.selected ? 'var(--primary)' : 'var(--muted-foreground)',
+      strokeWidth: edge.selected ? 2.5 : 1.75,
+    },
   }
 }
 
@@ -702,7 +1053,7 @@ function toWorkflowFlow(nodes: WorkflowDesignNodeType[], edges: Edge[]): Workflo
       source: edge.source,
       target: edge.target,
       label: typeof edge.label === 'string' ? edge.label : undefined,
-      type: edge.type ?? 'smoothstep',
+      type: edge.type === 'workflow' ? 'smoothstep' : (edge.type ?? 'smoothstep'),
       animated: edge.animated ?? false,
     })),
   }

@@ -168,10 +168,16 @@ export function WorkflowEditorPage({
       </AppHeader>
       <AppMain className="flex flex-col gap-4 sm:gap-6">
         <div className="flex flex-col gap-4">
-          <Button variant="ghost" className="w-fit px-2" onClick={() => void navigate('/workflow')}>
-            <ArrowLeft />
-            {t(mode === 'create' ? 'createPage.back' : 'detail.back')}
-          </Button>
+          {mode === 'create' ? (
+            <Button
+              variant="ghost"
+              className="w-fit px-2"
+              onClick={() => void navigate('/workflow')}
+            >
+              <ArrowLeft />
+              {t('createPage.back')}
+            </Button>
+          ) : null}
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="max-w-4xl">
               <h2 className="text-2xl font-bold tracking-tight">{pageTitle}</h2>

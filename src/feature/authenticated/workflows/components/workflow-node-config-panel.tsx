@@ -1,6 +1,5 @@
 'use no memo'
 
-import type { WorkflowNodeKind, WorkflowNodeStatus } from '@/schema/workflow/workflow'
 import { Settings2, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -10,24 +9,15 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import type { WorkflowDesignNodeData, WorkflowDesignNodeType } from './workflow-design-node'
-import { WorkflowNodeKinds, WorkflowNodeStatuses } from './workflow-node-metadata'
 
 interface WorkflowNodeConfigPanelProps {
   selectedNode?: WorkflowDesignNodeType
   nodeCount: number
   edgeCount: number
   editable: boolean
-  hasStartNode: boolean
   className?: string
   onNodeDataChange: (nodeId: string, data: Partial<WorkflowDesignNodeData>) => void
   onDeleteNode: (nodeId: string) => void
@@ -38,7 +28,6 @@ export function WorkflowNodeConfigPanel({
   nodeCount,
   edgeCount,
   editable,
-  hasStartNode,
   className,
   onNodeDataChange,
   onDeleteNode,
@@ -69,7 +58,6 @@ export function WorkflowNodeConfigPanel({
           <NodeForm
             node={selectedNode}
             editable={editable}
-            hasStartNode={hasStartNode}
             onNodeDataChange={onNodeDataChange}
             onDeleteNode={onDeleteNode}
           />
@@ -84,13 +72,11 @@ export function WorkflowNodeConfigPanel({
 function NodeForm({
   node,
   editable,
-  hasStartNode,
   onNodeDataChange,
   onDeleteNode,
 }: {
   node: WorkflowDesignNodeType
   editable: boolean
-  hasStartNode: boolean
   onNodeDataChange: WorkflowNodeConfigPanelProps['onNodeDataChange']
   onDeleteNode: WorkflowNodeConfigPanelProps['onDeleteNode']
 }) {
@@ -118,52 +104,6 @@ function NodeForm({
           disabled={!editable}
           onChange={(event) => onNodeDataChange(node.id, { description: event.target.value })}
         />
-      </div>
-
-      <div className="grid gap-2">
-        <Label>{t('editor.nodeType')}</Label>
-        <Select
-          value={node.data.kind}
-          disabled={!editable || isStartNode}
-          onValueChange={(value) => onNodeDataChange(node.id, { kind: value as WorkflowNodeKind })}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {WorkflowNodeKinds.map((kind) => (
-              <SelectItem
-                key={kind}
-                value={kind}
-                disabled={kind === 'start' && hasStartNode && !isStartNode}
-              >
-                {t(`editor.nodeKinds.${kind}`)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="grid gap-2">
-        <Label>{t('editor.nodeStatus')}</Label>
-        <Select
-          value={node.data.status}
-          disabled={!editable}
-          onValueChange={(value) =>
-            onNodeDataChange(node.id, { status: value as WorkflowNodeStatus })
-          }
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {WorkflowNodeStatuses.map((status) => (
-              <SelectItem key={status} value={status}>
-                {t(`editor.nodeStatuses.${status}`)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       <AdvancedConfig />
