@@ -9,17 +9,17 @@
 
 ## 📖 Project Introduction
 
-GAPI is a self-hosted AI-driven software development collaboration platform. Users create projects, configure AI employees with different roles and skills, submit requirements through conversational interactions, and AI employees automatically execute development tasks following customizable workflows within sandboxed environments.
+GAPI is a self-hosted AI-driven universal collaboration platform. Users create projects, configure AI employees with different roles and skills, submit requirements through conversational interactions, and AI employees automatically execute tasks following customizable workflows. The platform is not limited to any specific industry — it supports software development, design, operations, finance, customer service, and other team collaboration scenarios.
 
 ## ✨ Core Features
 
-- 🤖 **AI Employees**: Configure fine-grained AI roles (developer, QA, architect, DevOps, designer, PM) with custom skills
-- 🔧 **Sandbox Management**: Full lifecycle management of sandboxed execution environments (create, configure, destroy)
+- 🤖 **AI Employees**: Configure fine-grained AI roles with custom skills and behaviors. Adaptable to any domain (development, design, operations, finance, customer service, etc.)
+- 🔄 **Custom Workflows**: Visual workflow editor to define AI employee collaboration processes. Supports event-driven triggers, conditional branching, and cross-workflow orchestration
 - 💬 **Conversational Requirements**: Submit requirements through natural dialogue within projects, automatically generating structured task cards
 - 📋 **Task Management**: Kanban-style tracking with layered execution status display (summary + expandable detailed logs)
-- 🔄 **Custom Workflows**: Visual workflow editor to define AI employee collaboration processes
+- 🔗 **Events & Integrations**: Connect external systems (code repositories, IM, enterprise apps, etc.) via event source templates, driving workflow execution through a unified event bus
+- 🔧 **Execution Environments**: Extensible task execution environment management (sandboxes, API calls, third-party service connections)
 - 🗺️ **Roadmap**: Milestone planning with bidirectional requirement association
-- 🧪 **QA**: Test case management (natural language + Playwright code), code review, automated test reports
 - 📝 **Document Management**: Human-maintained documentation with AI-assisted generation
 - 👥 **Permission Management**: RBAC-based access control with project visibility settings
 - 📊 **Project Management**: Project creation, member management, and configuration
@@ -109,12 +109,13 @@ Follow Conventional Commits:
 - [x] Notification system
 - [x] Admin panel (users, roles, permissions)
 - [ ] AI employee management
-- [ ] Sandbox management
+- [ ] Event-driven system (event source templates, connection management, event bus)
+- [ ] Execution environment management
 - [ ] Conversational requirements
 - [ ] Roadmap module
-- [ ] QA module (test cases, code review, reports)
 - [ ] Real-time execution status (WebSocket/SSE)
 - [ ] AI-assisted document generation
+- [ ] Event source template marketplace
 
 ## 🤝 Contribution Guide
 
