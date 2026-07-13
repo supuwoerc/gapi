@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import type { Workflow } from '@/schema/workflow/workflow'
 import { getWorkflows } from '@/service/workflows/workflows'
-import { Plus, RotateCcw, Save, Search, WorkflowIcon, X } from 'lucide-react'
+import { Plus, RotateCcw, Save, Search, Trash2, WorkflowIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
@@ -179,7 +179,7 @@ export function ProjectWorkflowSettings({
               {selectedWorkflows.map((workflow) => (
                 <div
                   key={workflow.id}
-                  className="flex items-start gap-2 border-b p-3 last:border-b-0"
+                  className="group flex items-start gap-2 border-b p-3 last:border-b-0"
                 >
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="truncate font-medium">{workflow.name}</span>
@@ -191,13 +191,14 @@ export function ProjectWorkflowSettings({
                     type="button"
                     variant="ghost"
                     size="icon-sm"
+                    className="opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:opacity-100"
                     aria-label={t('settings.workflows.removeWorkflow', {
                       name: workflow.name,
                     })}
                     disabled={isDisabled}
                     onClick={() => handleRemoveWorkflow(workflow.id)}
                   >
-                    <X />
+                    <Trash2 />
                   </Button>
                 </div>
               ))}

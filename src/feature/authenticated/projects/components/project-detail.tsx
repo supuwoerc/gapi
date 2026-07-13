@@ -102,29 +102,15 @@ export function ProjectDetail({
         ) : null}
       </div>
 
-      <Tabs defaultValue="members" className="min-h-0 w-full min-w-0 flex-1 gap-4 overflow-hidden">
+      <Tabs
+        defaultValue={isOwner ? 'settings' : 'members'}
+        className="min-h-0 w-full min-w-0 flex-1 gap-4 overflow-hidden"
+      >
         <TabsList className="shrink-0">
-          <TabsTrigger value="members">{t('tabs.members')}</TabsTrigger>
           {isOwner && <TabsTrigger value="settings">{t('tabs.settings')}</TabsTrigger>}
           {isOwner && <TabsTrigger value="workflows">{t('tabs.workflows')}</TabsTrigger>}
+          <TabsTrigger value="members">{t('tabs.members')}</TabsTrigger>
         </TabsList>
-
-        <TabsContent
-          value="members"
-          className="flex min-h-0 w-full min-w-0 flex-col overflow-hidden data-[state=inactive]:hidden"
-        >
-          <MembersTable
-            members={members}
-            membersTotal={membersTotal}
-            roles={roles}
-            canManageMembers={isOwner}
-            isFetching={isMembersFetching || isRolesFetching}
-            isUpdatingRole={isUpdatingRole}
-            isRemoving={isRemoving}
-            onRoleChange={onRoleChange}
-            onRemove={onRemove}
-          />
-        </TabsContent>
 
         {isOwner && (
           <TabsContent
@@ -156,6 +142,23 @@ export function ProjectDetail({
             />
           </TabsContent>
         )}
+
+        <TabsContent
+          value="members"
+          className="flex min-h-0 w-full min-w-0 flex-col overflow-hidden data-[state=inactive]:hidden"
+        >
+          <MembersTable
+            members={members}
+            membersTotal={membersTotal}
+            roles={roles}
+            canManageMembers={isOwner}
+            isFetching={isMembersFetching || isRolesFetching}
+            isUpdatingRole={isUpdatingRole}
+            isRemoving={isRemoving}
+            onRoleChange={onRoleChange}
+            onRemove={onRemove}
+          />
+        </TabsContent>
       </Tabs>
     </div>
   )
