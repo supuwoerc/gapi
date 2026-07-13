@@ -28,6 +28,10 @@
     "createTitle": "New AI employee",
     "editTitle": "Edit AI employee",
     "description": "Configure the sandbox agent. Repository credentials are configured on project workflow nodes.",
+    "tabs": {
+      "basic": "Basic info",
+      "workflows": "Workflows"
+    },
     "avatar": "Avatar",
     "avatarPlaceholder": "Avatar URL",
     "name": "Name",

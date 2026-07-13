@@ -28,6 +28,10 @@
     "createTitle": "新建 AI 员工",
     "editTitle": "编辑 AI 员工",
     "description": "配置沙盒 agent 的基础信息；代码仓库密钥在项目工作流节点中单独配置。",
+    "tabs": {
+      "basic": "基本信息",
+      "workflows": "工作流"
+    },
     "avatar": "头像",
     "avatarPlaceholder": "头像 URL",
     "name": "名称",

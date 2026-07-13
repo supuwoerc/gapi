@@ -54,9 +54,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 
 const WorkflowSearchPageSize = 20
@@ -104,6 +104,43 @@ function areSameWorkflowIds(left: number[], right: number[]) {
   return right.every((value) => leftSet.has(value))
 }
 
+function EmployeeWorkflowSettingsSkeleton() {
+  return (
+    <section className="grid min-h-0 gap-4 lg:grid-cols-[minmax(16rem,0.9fr)_minmax(0,1.1fr)]">
+      <div className="flex min-h-72 flex-col gap-3 overflow-hidden">
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-3 w-28" />
+        </div>
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="h-14 rounded-lg" />
+          ))}
+        </div>
+      </div>
+
+      <div className="flex min-h-72 flex-col gap-3 overflow-hidden">
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-28" />
+          <Skeleton className="h-3 w-56 max-w-full" />
+        </div>
+        <Skeleton className="h-9 w-full" />
+        <div className="flex min-h-0 flex-1 flex-col gap-2 rounded-lg border p-3">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="flex items-start justify-between gap-3">
+              <div className="min-w-0 flex-1 space-y-2">
+                <Skeleton className="h-4 w-36 max-w-full" />
+                <Skeleton className="h-3 w-full" />
+              </div>
+              <Skeleton className="h-8 w-16 shrink-0" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function AiEmployeeEditDialog({ employee, open, onOpenChange }: AiEmployeeEditDialogProps) {
   const { t, i18n } = useTranslation('aiEmployees')
   const queryClient = useQueryClient()
@@ -149,167 +186,181 @@ export function AiEmployeeEditDialog({ employee, open, onOpenChange }: AiEmploye
           <DialogDescription>{t('editDialog.description')}</DialogDescription>
         </DialogHeader>
 
-        <div className="min-h-0 overflow-y-auto pr-1">
-          <Form {...form}>
-            <form
-              className="grid gap-4"
-              onSubmit={form.handleSubmit((values) => mutation.mutate(values))}
-            >
-              <FormField
-                control={form.control}
-                name="avatar"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('editDialog.avatar')}</FormLabel>
-                    <FormControl>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="size-12">
-                          <AvatarImage src={field.value} alt={employeeName} />
-                          <AvatarFallback>{getInitial(employeeName)}</AvatarFallback>
-                        </Avatar>
-                        <Input placeholder={t('editDialog.avatarPlaceholder')} {...field} />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <Tabs defaultValue="basic" className="min-h-0 flex-1 overflow-hidden">
+          <TabsList className="shrink-0">
+            <TabsTrigger value="basic">{t('editDialog.tabs.basic')}</TabsTrigger>
+            <TabsTrigger value="workflows">{t('editDialog.tabs.workflows')}</TabsTrigger>
+          </TabsList>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+          <TabsContent
+            forceMount
+            value="basic"
+            className="min-h-0 overflow-y-auto pr-1 data-[state=inactive]:hidden"
+          >
+            <Form {...form}>
+              <form
+                className="grid gap-4"
+                onSubmit={form.handleSubmit((values) => mutation.mutate(values))}
+              >
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="avatar"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('editDialog.name')}</FormLabel>
+                      <FormLabel>{t('editDialog.avatar')}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t('editDialog.namePlaceholder')} {...field} />
+                        <div className="flex items-center gap-3">
+                          <Avatar className="size-12">
+                            <AvatarImage src={field.value} alt={employeeName} />
+                            <AvatarFallback>{getInitial(employeeName)}</AvatarFallback>
+                          </Avatar>
+                          <Input placeholder={t('editDialog.avatarPlaceholder')} {...field} />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('editDialog.name')}</FormLabel>
+                        <FormControl>
+                          <Input placeholder={t('editDialog.namePlaceholder')} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="default_model"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('editDialog.defaultModel')}</FormLabel>
+                        <FormControl>
+                          <Input placeholder={t('editDialog.defaultModelPlaceholder')} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('editDialog.status')}</FormLabel>
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="active">{t('status.active')}</SelectItem>
+                              <SelectItem value="disabled">{t('status.disabled')}</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="code_provider"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{t('editDialog.codeProvider')}</FormLabel>
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <FormControl>
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="github">{t('codeProvider.github')}</SelectItem>
+                              <SelectItem value="gitlab">{t('codeProvider.gitlab')}</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
                 <FormField
                   control={form.control}
-                  name="default_model"
+                  name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('editDialog.defaultModel')}</FormLabel>
+                      <FormLabel>{t('editDialog.employeeDescription')}</FormLabel>
                       <FormControl>
-                        <Input placeholder={t('editDialog.defaultModelPlaceholder')} {...field} />
+                        <Textarea
+                          className="min-h-20"
+                          placeholder={t('editDialog.descriptionPlaceholder')}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
                 <FormField
                   control={form.control}
-                  name="status"
+                  name="system_prompt"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t('editDialog.status')}</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="active">{t('status.active')}</SelectItem>
-                            <SelectItem value="disabled">{t('status.disabled')}</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
+                      <FormLabel>{t('editDialog.systemPrompt')}</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          className="min-h-28"
+                          placeholder={t('editDialog.systemPromptPlaceholder')}
+                          {...field}
+                        />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="code_provider"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t('editDialog.codeProvider')}</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectItem value="github">{t('codeProvider.github')}</SelectItem>
-                            <SelectItem value="gitlab">{t('codeProvider.gitlab')}</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
 
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('editDialog.employeeDescription')}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="min-h-20"
-                        placeholder={t('editDialog.descriptionPlaceholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <DialogFooter>
+                  <Button type="submit" disabled={mutation.isPending}>
+                    {mutation.isPending ? <Spinner /> : <Save />}
+                    {mutation.isPending ? t('editDialog.saving') : t('editDialog.save')}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </Form>
+          </TabsContent>
 
-              <FormField
-                control={form.control}
-                name="system_prompt"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('editDialog.systemPrompt')}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        className="min-h-28"
-                        placeholder={t('editDialog.systemPromptPlaceholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <DialogFooter>
-                <Button type="submit" disabled={mutation.isPending}>
-                  {mutation.isPending ? <Spinner /> : <Save />}
-                  {mutation.isPending ? t('editDialog.saving') : t('editDialog.save')}
-                </Button>
-              </DialogFooter>
-            </form>
-          </Form>
-
-          {employee ? (
-            <>
-              <Separator className="my-5" />
+          <TabsContent
+            forceMount
+            value="workflows"
+            className="min-h-0 overflow-y-auto pr-1 data-[state=inactive]:hidden"
+          >
+            {employee ? (
               <EmployeeWorkflowSettings employee={employee} />
-            </>
-          ) : (
-            <div className="mt-4 rounded-md border border-dashed p-3 text-sm text-muted-foreground">
-              <Bot className="mb-2 size-4" />
-              {t('editDialog.workflowAfterCreate')}
-            </div>
-          )}
-        </div>
+            ) : (
+              <div className="rounded-md border border-dashed p-3 text-sm text-muted-foreground">
+                <Bot className="mb-2 size-4" />
+                {t('editDialog.workflowAfterCreate')}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   )
@@ -325,12 +376,20 @@ function EmployeeWorkflowSettings({ employee }: { employee: AiEmployee }) {
     setWorkflowKeyword(value.trim())
   }, 300)
 
-  const { data: workflows = EmptyWorkflows, isFetching } = useQuery({
+  const {
+    data: workflows = EmptyWorkflows,
+    isFetching,
+    isPending: isWorkflowLinksPending,
+  } = useQuery({
     queryKey: ['ai-employee-workflows', employee.id],
     queryFn: () => getAiEmployeeWorkflows(employee.id),
   })
 
-  const { data: workflowOptionsPage, isFetching: isFetchingOptions } = useQuery({
+  const {
+    data: workflowOptionsPage,
+    isFetching: isFetchingOptions,
+    isPending: isWorkflowOptionsPending,
+  } = useQuery({
     queryKey: ['workflows', 'ai-employee-options', { keyword: workflowKeyword }],
     queryFn: () =>
       getWorkflows({
@@ -342,6 +401,7 @@ function EmployeeWorkflowSettings({ employee }: { employee: AiEmployee }) {
     placeholderData: (previousData) => previousData,
   })
 
+  const isInitialLoading = isWorkflowLinksPending || isWorkflowOptionsPending
   const workflowOptions = workflowOptionsPage?.data ?? EmptyWorkflows
   const workflowIds = React.useMemo(() => workflows.map((workflow) => workflow.id), [workflows])
   const selectedWorkflowIds = draftWorkflowIds ?? workflowIds
@@ -367,8 +427,8 @@ function EmployeeWorkflowSettings({ employee }: { employee: AiEmployee }) {
       updateAiEmployeeWorkflows(employee.id, { workflow_ids: workflowIds }),
     onSuccess: (updatedWorkflows) => {
       toast.success(t('toast.workflowsSuccess'))
-      setDraftWorkflowIds(null)
       queryClient.setQueryData(['ai-employee-workflows', employee.id], updatedWorkflows)
+      setDraftWorkflowIds(null)
       void queryClient.invalidateQueries({ queryKey: ['ai-employees'] })
       void queryClient.invalidateQueries({ queryKey: ['workflows'] })
     },
@@ -378,6 +438,8 @@ function EmployeeWorkflowSettings({ employee }: { employee: AiEmployee }) {
   })
 
   const isDisabled = isFetching || mutation.isPending
+
+  if (isInitialLoading) return <EmployeeWorkflowSettingsSkeleton />
 
   return (
     <section className="grid min-h-0 gap-4 lg:grid-cols-[minmax(16rem,0.9fr)_minmax(0,1.1fr)]">
@@ -471,9 +533,12 @@ function EmployeeWorkflowSettings({ employee }: { employee: AiEmployee }) {
         </div>
         <div className="relative p-0.5">
           <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          {isFetchingOptions ? (
+            <Spinner className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-muted-foreground" />
+          ) : null}
           <Input
             value={searchValue}
-            className="pl-9"
+            className="pr-9 pl-9"
             placeholder={t('workflows.searchPlaceholder')}
             aria-label={t('workflows.searchPlaceholder')}
             disabled={isDisabled}
@@ -485,7 +550,7 @@ function EmployeeWorkflowSettings({ employee }: { employee: AiEmployee }) {
           />
         </div>
 
-        {isFetchingOptions ? (
+        {isFetchingOptions && workflowOptions.length === 0 ? (
           <div className="flex min-h-0 flex-1 items-center justify-center rounded-lg border">
             <Spinner className="text-muted-foreground" />
           </div>

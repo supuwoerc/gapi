@@ -171,13 +171,8 @@ export function WorkflowsList({
                           onClick={() => onSelectWorkflow(workflow.id)}
                         >
                           <span className="flex min-w-0 items-start justify-between gap-3">
-                            <span className="flex min-w-0 flex-col gap-1">
-                              <span className="min-w-0 truncate text-base font-medium">
-                                {workflow.name}
-                              </span>
-                              <Badge variant="secondary" className="w-fit">
-                                {t(`types.${workflow.type}`)}
-                              </Badge>
+                            <span className="min-w-0 truncate text-base font-medium">
+                              {workflow.name}
                             </span>
                             <Tooltip>
                               <TooltipTrigger asChild>
