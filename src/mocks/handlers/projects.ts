@@ -4,7 +4,9 @@ import type {
   ProjectMemberRoleMutation,
   ProjectMutation,
   ProjectVisibilityMutation,
+  ProjectWorkflowIdsMutation,
 } from '@/schema/project/project'
+import { projectWorkflowIdsMutationSchema } from '@/schema/project/project'
 import { delay, http } from 'msw'
 
 import {
@@ -15,6 +17,7 @@ import {
   getProjectMembers,
   getProjectRole,
   getProjectRoles,
+  getProjectWorkflows,
   hasProjectMember,
   inviteProjectMember,
   isCurrentUserOwner,
@@ -22,6 +25,7 @@ import {
   removeProjectMember,
   updateProjectLogo,
   updateProjectMemberRole,
+  updateProjectWorkflows,
 } from '../data/projects'
 import { paginate } from '../utils/filter'
 import { errorEnvelope, jsonEnvelope } from '../utils/response'
@@ -61,6 +65,42 @@ export const projectHandlers = [
     await delay(200)
     const projectId = getProjectId(params.projectId)
     return jsonEnvelope(getProjectRoles(projectId))
+  }),
+
+  http.get(`${BASE}/projects/:projectId/workflows`, async ({ params }) => {
+    await delay(200)
+    const projectId = getProjectId(params.projectId)
+    const project = projects.find((item) => item.id === projectId)
+
+    if (!project) {
+      return errorEnvelope(400404, 'Project not found')
+    }
+
+    return jsonEnvelope(getProjectWorkflows(projectId))
+  }),
+
+  http.patch(`${BASE}/projects/:projectId/workflows`, async ({ params, request }) => {
+    await delay(300)
+    const projectId = getProjectId(params.projectId)
+    const body = projectWorkflowIdsMutationSchema.parse(
+      (await request.json()) as ProjectWorkflowIdsMutation
+    )
+    const project = projects.find((item) => item.id === projectId)
+
+    if (!project) {
+      return errorEnvelope(400404, 'Project not found')
+    }
+
+    if (!isCurrentUserOwner(projectId)) {
+      return errorEnvelope(400403, 'Only project owners can update project workflows')
+    }
+
+    const updatedWorkflows = updateProjectWorkflows(projectId, body.workflow_ids)
+    if (!updatedWorkflows) {
+      return errorEnvelope(400404, 'Workflow not found')
+    }
+
+    return jsonEnvelope(updatedWorkflows)
   }),
 
   http.get(`${BASE}/projects/:projectId/members`, async ({ params, request }) => {

@@ -26,7 +26,8 @@
   },
   "tabs": {
     "members": "Members",
-    "settings": "Settings"
+    "settings": "Basic settings",
+    "workflows": "Workflows"
   },
   "columns": {
     "member": "Member",
@@ -87,7 +88,26 @@
     "logoDialogTitle": "Crop project logo",
     "visibilityTitle": "Project visibility",
     "visibilityDescription": "Public projects can be discovered by non-members; private projects are invite-only.",
-    "currentVisibility": "Current state"
+    "currentVisibility": "Current state",
+    "workflows": {
+      "title": "Workflow configuration",
+      "description": "Choose the workflows this project can use when coordinating task execution.",
+      "placeholder": "Search and select workflows",
+      "configuredTitle": "Configured workflows",
+      "configuredCount": "{{count}} workflow(s) configured",
+      "searchTitle": "Add workflows",
+      "searchDescription": "Search the remote workflow list by keyword and add matches.",
+      "searchPlaceholder": "Search workflows",
+      "emptyOptions": "No matching workflows",
+      "emptySelectedTitle": "No linked workflows",
+      "emptySelected": "No workflows are linked to this project.",
+      "reset": "Reset",
+      "save": "Save workflows",
+      "saving": "Saving...",
+      "add": "Add",
+      "added": "Added",
+      "removeWorkflow": "Remove {{name}}"
+    }
   },
   "roles": {
     "preset": "Preset"
@@ -103,6 +123,7 @@
     "removeSuccess": "Member removed",
     "visibilitySuccess": "Project visibility updated",
     "logoSuccess": "Project logo updated",
+    "workflowsSuccess": "Project workflows updated",
     "applySuccess": "Join request submitted",
     "failed": "Action failed"
   }

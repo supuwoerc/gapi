@@ -11,6 +11,7 @@ import type {
 import { faker } from '@faker-js/faker'
 
 import { users } from './users'
+import { workflows } from './workflows'
 
 faker.seed(24680)
 
@@ -31,6 +32,7 @@ export const projects: Project[] = []
 export const projectRoles: ProjectRole[] = []
 export const projectRolePermissions: ProjectRolePermission[] = []
 export const projectMembers: ProjectMember[] = []
+export const projectWorkflowLinks: { project_id: number; workflow_id: number }[] = []
 
 function toProjectUser(user: (typeof users)[number]): ProjectMemberUser {
   return {
@@ -144,6 +146,30 @@ function syncProjectState(projectId: number) {
   project.updated_at = new Date()
 }
 
+function syncWorkflowUsedCounts() {
+  const usedCounts = new Map<number, number>()
+
+  for (const link of projectWorkflowLinks) {
+    usedCounts.set(link.workflow_id, (usedCounts.get(link.workflow_id) ?? 0) + 1)
+  }
+
+  for (const workflow of workflows) {
+    workflow.used_count = usedCounts.get(workflow.id) ?? 0
+  }
+}
+
+function seedProjectWorkflowLinks(projectId: number) {
+  if (workflows.length === 0 || projectId % 5 === 0) return
+
+  const count = (projectId % 3) + 1
+  const start = (projectId - 1000) % workflows.length
+
+  for (let index = 0; index < count; index++) {
+    const workflow = workflows[(start + index * 7) % workflows.length]
+    projectWorkflowLinks.push({ project_id: projectId, workflow_id: workflow.id })
+  }
+}
+
 function seedProject(
   name: string,
   description: string,
@@ -173,6 +199,7 @@ function seedProject(
   projectRoles.push(...roles)
   projectRolePermissions.push(...createPresetPermissions(roles))
   projectMembers.push(makeMember(project.id, owner, ownerRole))
+  seedProjectWorkflowLinks(project.id)
 
   members.forEach((member, index) => {
     projectMembers.push(
@@ -221,6 +248,39 @@ export function getProjectRoles(projectId: number) {
 
 export function getProjectMembers(projectId: number) {
   return projectMembers.filter((member) => member.project_id === projectId)
+}
+
+export function getProjectWorkflows(projectId: number) {
+  return projectWorkflowLinks
+    .filter((link) => link.project_id === projectId)
+    .map((link) => workflows.find((workflow) => workflow.id === link.workflow_id))
+    .filter((workflow): workflow is (typeof workflows)[number] => Boolean(workflow))
+}
+
+export function updateProjectWorkflows(projectId: number, workflowIds: number[]) {
+  const project = projects.find((item) => item.id === projectId)
+  if (!project) return null
+
+  const existingWorkflowIds = new Set(workflows.map((workflow) => workflow.id))
+  const uniqueWorkflowIds = Array.from(new Set(workflowIds))
+
+  if (uniqueWorkflowIds.some((workflowId) => !existingWorkflowIds.has(workflowId))) {
+    return null
+  }
+
+  for (let index = projectWorkflowLinks.length - 1; index >= 0; index--) {
+    if (projectWorkflowLinks[index].project_id === projectId) {
+      projectWorkflowLinks.splice(index, 1)
+    }
+  }
+
+  for (const workflowId of uniqueWorkflowIds) {
+    projectWorkflowLinks.push({ project_id: projectId, workflow_id: workflowId })
+  }
+
+  project.updated_at = new Date()
+  syncWorkflowUsedCounts()
+  return getProjectWorkflows(projectId)
 }
 
 export function getProjectRole(projectId: number, roleId: number) {
@@ -411,3 +471,4 @@ projectMembers.push(
   )
 )
 syncProjectState(pendingProject.project.id)
+syncWorkflowUsedCounts()

@@ -26,7 +26,8 @@
   },
   "tabs": {
     "members": "成员",
-    "settings": "设置"
+    "settings": "基础设置",
+    "workflows": "工作流"
   },
   "columns": {
     "member": "成员",
@@ -87,7 +88,26 @@
     "logoDialogTitle": "裁剪项目 Logo",
     "visibilityTitle": "项目可见性",
     "visibilityDescription": "公开项目可被非成员看到并申请加入；私有项目仅邀请加入。",
-    "currentVisibility": "当前状态"
+    "currentVisibility": "当前状态",
+    "workflows": {
+      "title": "工作流配置",
+      "description": "选择此项目可使用的工作流，任务执行时可按这些流程协作。",
+      "placeholder": "搜索并选择工作流",
+      "configuredTitle": "已配置工作流",
+      "configuredCount": "已配置 {{count}} 个工作流",
+      "searchTitle": "添加工作流",
+      "searchDescription": "输入关键字从远端工作流列表中搜索并添加。",
+      "searchPlaceholder": "搜索工作流",
+      "emptyOptions": "暂无匹配的工作流",
+      "emptySelectedTitle": "未关联工作流",
+      "emptySelected": "当前项目未关联工作流。",
+      "reset": "重置",
+      "save": "保存工作流",
+      "saving": "保存中...",
+      "add": "添加",
+      "added": "已添加",
+      "removeWorkflow": "移除 {{name}}"
+    }
   },
   "roles": {
     "preset": "预置"
@@ -103,6 +123,7 @@
     "removeSuccess": "成员已移除",
     "visibilitySuccess": "项目可见性已更新",
     "logoSuccess": "项目 Logo 已更新",
+    "workflowsSuccess": "项目工作流已更新",
     "applySuccess": "加入申请已提交",
     "failed": "操作失败"
   }

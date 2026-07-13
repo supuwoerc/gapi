@@ -18,12 +18,14 @@ import {
   createProject,
   getProjectMembers,
   getProjectRoles,
+  getProjectWorkflows,
   getProjects,
   inviteProjectMember,
   removeProjectMember,
   updateProjectLogo,
   updateProjectMemberRole,
   updateProjectVisibility,
+  updateProjectWorkflows,
 } from '@/service/projects/projects'
 import { Plus } from 'lucide-react'
 import { parseAsInteger, parseAsString, useQueryState } from 'nuqs'
@@ -46,7 +48,7 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import Search from '@/components/search'
 import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
-import { EmptyMembersPage, EmptyProjects, EmptyRoles } from './components/constants'
+import { EmptyMembersPage, EmptyProjects, EmptyRoles, EmptyWorkflows } from './components/constants'
 import { CreateProjectDialog } from './components/create-project-dialog'
 import { EmptyProjectsState } from './components/empty-projects-state'
 import { InviteMemberDialog } from './components/invite-member-dialog'
@@ -108,6 +110,9 @@ const Projects = () => {
     [projects, selectedProjectId]
   )
   const activeProjectId = selectedProject?.id ?? null
+  const isSelectedProjectOwner =
+    selectedProject?.current_user_membership?.status === 'active' &&
+    selectedProject.current_user_membership.project_role.name === 'Owner'
 
   React.useEffect(() => {
     void setMemberPage(1)
@@ -117,6 +122,12 @@ const Projects = () => {
     queryKey: ['project-roles', activeProjectId],
     queryFn: () => getProjectRoles(activeProjectId!),
     enabled: detailOpen && activeProjectId !== null,
+  })
+
+  const { data: workflows = EmptyWorkflows, isFetching: isWorkflowsFetching } = useQuery({
+    queryKey: ['project-workflows', activeProjectId],
+    queryFn: () => getProjectWorkflows(activeProjectId!),
+    enabled: detailOpen && activeProjectId !== null && isSelectedProjectOwner,
   })
 
   const { data: membersPage = EmptyMembersPage, isFetching: isMembersFetching } = useQuery({
@@ -240,6 +251,19 @@ const Projects = () => {
     },
   })
 
+  const workflowsMutation = useMutation({
+    mutationFn: ({ projectId, workflowIds }: { projectId: number; workflowIds: number[] }) =>
+      updateProjectWorkflows(projectId, { workflow_ids: workflowIds }),
+    onSuccess: (updatedWorkflows, variables) => {
+      toast.success(t('toast.workflowsSuccess'))
+      queryClient.setQueryData(['project-workflows', variables.projectId], updatedWorkflows)
+      void queryClient.invalidateQueries({ queryKey: ['workflows'] })
+    },
+    onError: (error) => {
+      toast.error(getErrorMessage(error, t('toast.failed')))
+    },
+  })
+
   if (location.key !== prevLocationKey) {
     setPrevLocationKey(location.key)
     if (routeAdd) {
@@ -304,14 +328,17 @@ const Projects = () => {
               <ProjectDetail
                 project={selectedProject}
                 roles={roles}
+                workflows={workflows}
                 members={membersPage.data}
                 membersTotal={membersPage.total}
                 isRolesFetching={isRolesFetching}
                 isMembersFetching={isMembersFetching}
+                isWorkflowsFetching={isWorkflowsFetching}
                 isUpdatingRole={roleMutation.isPending}
                 isRemoving={removeMutation.isPending}
                 isUpdatingLogo={logoMutation.isPending}
                 isUpdatingVisibility={visibilityMutation.isPending}
+                isUpdatingWorkflows={workflowsMutation.isPending}
                 isApplying={applyMutation.isPending}
                 onInvite={() => setInviteOpen(true)}
                 onApply={() => applyMutation.mutate()}
@@ -319,6 +346,11 @@ const Projects = () => {
                 onRemove={setMemberToRemove}
                 onLogoChange={(logo) => logoMutation.mutate(logo)}
                 onVisibilityChange={(visibility) => visibilityMutation.mutate(visibility)}
+                onWorkflowsChange={(workflowIds) => {
+                  if (activeProjectId !== null) {
+                    workflowsMutation.mutate({ projectId: activeProjectId, workflowIds })
+                  }
+                }}
               />
             </div>
           ) : null}

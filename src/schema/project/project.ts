@@ -104,6 +104,10 @@ export const projectLogoMutationSchema = z.object({
   logo: z.string(),
 })
 
+export const projectWorkflowIdsMutationSchema = z.object({
+  workflow_ids: z.array(z.coerce.number().int()).transform((ids) => Array.from(new Set(ids))),
+})
+
 export const projectListSchema = z.array(projectSchema)
 export const projectRoleListSchema = z.array(projectRoleSchema)
 export const projectMemberListSchema = z.array(projectMemberSchema)
@@ -121,3 +125,4 @@ export type ProjectMemberInvite = z.infer<typeof projectMemberInviteSchema>
 export type ProjectMemberRoleMutation = z.infer<typeof projectMemberRoleMutationSchema>
 export type ProjectVisibilityMutation = z.infer<typeof projectVisibilityMutationSchema>
 export type ProjectLogoMutation = z.infer<typeof projectLogoMutationSchema>
+export type ProjectWorkflowIdsMutation = z.infer<typeof projectWorkflowIdsMutationSchema>

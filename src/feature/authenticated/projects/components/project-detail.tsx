@@ -4,6 +4,7 @@ import type {
   ProjectRole,
   ProjectVisibility,
 } from '@/schema/project/project'
+import type { Workflow } from '@/schema/workflow/workflow'
 import { Send, UserPlus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -14,18 +15,22 @@ import { MembersTable } from './members-table'
 import { ProjectLogo } from './project-logo'
 import { ProjectSettingsCard } from './project-settings-card'
 import { ProjectVisibilityBadge } from './project-visibility-badge'
+import { ProjectWorkflowSettings } from './project-workflow-settings'
 
 interface ProjectDetailProps {
   project: Project
   roles: ProjectRole[]
+  workflows: Workflow[]
   members: ProjectMember[]
   membersTotal: number
   isRolesFetching: boolean
   isMembersFetching: boolean
+  isWorkflowsFetching: boolean
   isUpdatingRole: boolean
   isRemoving: boolean
   isUpdatingLogo: boolean
   isUpdatingVisibility: boolean
+  isUpdatingWorkflows: boolean
   isApplying: boolean
   onInvite: () => void
   onApply: () => void
@@ -33,19 +38,23 @@ interface ProjectDetailProps {
   onRemove: (member: ProjectMember) => void
   onLogoChange: (logo: string) => void
   onVisibilityChange: (visibility: ProjectVisibility) => void
+  onWorkflowsChange: (workflowIds: number[]) => void
 }
 
 export function ProjectDetail({
   project,
   roles,
+  workflows,
   members,
   membersTotal,
   isRolesFetching,
   isMembersFetching,
+  isWorkflowsFetching,
   isUpdatingRole,
   isRemoving,
   isUpdatingLogo,
   isUpdatingVisibility,
+  isUpdatingWorkflows,
   isApplying,
   onInvite,
   onApply,
@@ -53,6 +62,7 @@ export function ProjectDetail({
   onRemove,
   onLogoChange,
   onVisibilityChange,
+  onWorkflowsChange,
 }: ProjectDetailProps) {
   const { t } = useTranslation('projects')
   const currentMembership = project.current_user_membership
@@ -96,6 +106,7 @@ export function ProjectDetail({
         <TabsList className="shrink-0">
           <TabsTrigger value="members">{t('tabs.members')}</TabsTrigger>
           {isOwner && <TabsTrigger value="settings">{t('tabs.settings')}</TabsTrigger>}
+          {isOwner && <TabsTrigger value="workflows">{t('tabs.workflows')}</TabsTrigger>}
         </TabsList>
 
         <TabsContent
@@ -127,6 +138,21 @@ export function ProjectDetail({
               isUpdatingVisibility={isUpdatingVisibility}
               onLogoChange={onLogoChange}
               onVisibilityChange={onVisibilityChange}
+            />
+          </TabsContent>
+        )}
+
+        {isOwner && (
+          <TabsContent
+            value="workflows"
+            className="flex min-h-0 w-full min-w-0 flex-col data-[state=inactive]:hidden"
+          >
+            <ProjectWorkflowSettings
+              key={project.id}
+              workflows={workflows}
+              isFetching={isWorkflowsFetching}
+              isSaving={isUpdatingWorkflows}
+              onSave={onWorkflowsChange}
             />
           </TabsContent>
         )}

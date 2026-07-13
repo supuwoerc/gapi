@@ -9,6 +9,7 @@ import {
   projectRoleListSchema,
   projectSchema,
   projectVisibilityMutationSchema,
+  projectWorkflowIdsMutationSchema,
 } from '@/schema/project/project'
 import type {
   ProjectLogoMutation,
@@ -16,7 +17,9 @@ import type {
   ProjectMemberRoleMutation,
   ProjectMutation,
   ProjectVisibilityMutation,
+  ProjectWorkflowIdsMutation,
 } from '@/schema/project/project'
+import { workflowListSchema } from '@/schema/workflow/workflow'
 import type { PaginatedResponse } from '@/types/shared'
 
 import { del, get, patch, post } from '@/lib/http'
@@ -48,6 +51,17 @@ export async function createProject(data: ProjectMutation) {
 export async function getProjectRoles(projectId: number) {
   const res = await get<unknown>(`/projects/${projectId}/roles`)
   return projectRoleListSchema.parse(res)
+}
+
+export async function getProjectWorkflows(projectId: number) {
+  const res = await get<unknown>(`/projects/${projectId}/workflows`)
+  return workflowListSchema.parse(res)
+}
+
+export async function updateProjectWorkflows(projectId: number, data: ProjectWorkflowIdsMutation) {
+  const payload = projectWorkflowIdsMutationSchema.parse(data)
+  const res = await patch<unknown>(`/projects/${projectId}/workflows`, { json: payload })
+  return workflowListSchema.parse(res)
 }
 
 export interface GetProjectMembersParams {
