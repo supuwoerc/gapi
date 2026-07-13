@@ -4,6 +4,8 @@ import { i18n } from '@/lib/i18n'
 
 const timestampSchema = z.coerce.date()
 
+export const workflowTypeSchema = z.enum(['project', 'employee'])
+
 export const workflowUserSchema = z.object({
   id: z.coerce.number(),
   name: z.string(),
@@ -11,7 +13,14 @@ export const workflowUserSchema = z.object({
   avatar: z.string(),
 })
 
-export const workflowNodeKindSchema = z.enum(['start', 'review', 'approval', 'automation', 'end'])
+export const workflowNodeKindSchema = z.enum([
+  'start',
+  'review',
+  'approval',
+  'automation',
+  'ai_employee',
+  'end',
+])
 export const workflowNodeStatusSchema = z.enum(['done', 'active', 'pending'])
 
 export const workflowFlowNodeSchema = z.object({
@@ -26,6 +35,8 @@ export const workflowFlowNodeSchema = z.object({
     description: z.string(),
     kind: workflowNodeKindSchema,
     status: workflowNodeStatusSchema,
+    ai_employee_id: z.coerce.number().nullable().optional(),
+    employee_workflow_id: z.coerce.number().nullable().optional(),
   }),
 })
 
@@ -47,6 +58,7 @@ export const workflowSchema = z.object({
   id: z.coerce.number(),
   name: z.string(),
   description: z.string(),
+  type: workflowTypeSchema.default('project'),
   used_count: z.number(),
   creator: workflowUserSchema,
   created_at: timestampSchema,
@@ -58,6 +70,7 @@ export const workflowDetailSchema = workflowSchema.extend({
   flow: workflowFlowSchema,
 })
 export const workflowBasicInfoSchema = z.object({
+  type: workflowTypeSchema,
   name: z
     .string()
     .trim()
@@ -71,38 +84,52 @@ export const workflowBasicInfoSchema = z.object({
       error: () => i18n.t('workflows:createPage.validation.descriptionRequired'),
     }),
 })
-export const workflowMutationSchema = workflowBasicInfoSchema.extend({
-  flow: workflowFlowSchema.superRefine((flow, ctx) => {
-    const startCount = flow.nodes.filter((node) => node.data.kind === 'start').length
-    const endCount = flow.nodes.filter((node) => node.data.kind === 'end').length
+export const workflowMutationSchema = workflowBasicInfoSchema
+  .extend({
+    flow: workflowFlowSchema.superRefine((flow, ctx) => {
+      const startCount = flow.nodes.filter((node) => node.data.kind === 'start').length
+      const endCount = flow.nodes.filter((node) => node.data.kind === 'end').length
 
-    if (startCount === 0) {
+      if (startCount === 0) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['nodes'],
+          message: i18n.t('workflows:createPage.validation.startRequired'),
+        })
+      }
+
+      if (startCount > 1) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['nodes'],
+          message: i18n.t('workflows:createPage.validation.singleStartRequired'),
+        })
+      }
+
+      if (endCount === 0) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['nodes'],
+          message: i18n.t('workflows:createPage.validation.endRequired'),
+        })
+      }
+    }),
+  })
+  .superRefine((workflow, ctx) => {
+    if (
+      workflow.type === 'employee' &&
+      workflow.flow.nodes.some((node) => node.data.kind === 'ai_employee')
+    ) {
       ctx.addIssue({
         code: 'custom',
-        path: ['nodes'],
-        message: i18n.t('workflows:createPage.validation.startRequired'),
+        path: ['flow', 'nodes'],
+        message: i18n.t('workflows:createPage.validation.employeeNodeNotAllowed'),
       })
     }
-
-    if (startCount > 1) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['nodes'],
-        message: i18n.t('workflows:createPage.validation.singleStartRequired'),
-      })
-    }
-
-    if (endCount === 0) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['nodes'],
-        message: i18n.t('workflows:createPage.validation.endRequired'),
-      })
-    }
-  }),
-})
+  })
 
 export type WorkflowUser = z.infer<typeof workflowUserSchema>
+export type WorkflowType = z.infer<typeof workflowTypeSchema>
 export type WorkflowNodeKind = z.infer<typeof workflowNodeKindSchema>
 export type WorkflowNodeStatus = z.infer<typeof workflowNodeStatusSchema>
 export type WorkflowFlowNode = z.infer<typeof workflowFlowNodeSchema>

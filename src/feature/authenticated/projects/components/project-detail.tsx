@@ -135,6 +135,7 @@ export function ProjectDetail({
           >
             <ProjectWorkflowSettings
               key={project.id}
+              projectId={project.id}
               workflows={workflows}
               isFetching={isWorkflowsFetching}
               isSaving={isUpdatingWorkflows}

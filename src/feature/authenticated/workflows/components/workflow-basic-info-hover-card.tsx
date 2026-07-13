@@ -98,6 +98,12 @@ export function WorkflowBasicInfoHoverCard({
               <span className="text-sm font-medium">{workflow.used_count}</span>
             </InfoRow>
             <InfoRow
+              label={t('detail.basicInfo.type')}
+              icon={<Info className="size-4 text-muted-foreground" />}
+            >
+              <Badge variant="secondary">{t(`types.${workflow.type}`)}</Badge>
+            </InfoRow>
+            <InfoRow
               label={t('detail.basicInfo.createdAt')}
               icon={<Calendar className="size-4 text-muted-foreground" />}
             >

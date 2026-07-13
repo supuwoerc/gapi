@@ -19,7 +19,8 @@
     "documentDetail": "Document Detail",
     "workflow": "Workflow",
     "workflowCreate": "Create Workflow",
-    "workflowDetail": "Workflow Detail"
+    "workflowDetail": "Workflow Detail",
+    "aiEmployees": "AI Employees"
   },
   "other": {
     "name": "Other",

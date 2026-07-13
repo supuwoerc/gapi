@@ -13,12 +13,13 @@ import type {
   WorkflowDetail,
   WorkflowFlow,
   WorkflowMutation,
+  WorkflowType,
 } from '@/schema/workflow/workflow'
 import { workflowBasicInfoSchema, workflowMutationSchema } from '@/schema/workflow/workflow'
 import { createWorkflow, updateWorkflow } from '@/service/workflows/workflows'
 import { ArrowLeft, CircleAlert, CircleCheck, Save } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -53,8 +54,11 @@ export function WorkflowEditorPage({
 }: WorkflowEditorPageProps) {
   const { t, i18n } = useTranslation('workflows')
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const queryClient = useQueryClient()
   const [basicInfoOpen, setBasicInfoOpen] = useState(false)
+  const initialWorkflowType: WorkflowType =
+    searchParams.get('type') === 'employee' ? 'employee' : 'project'
   const workflowFlowRef = useRef<WorkflowFlow>(workflow?.flow ?? DraftWorkflowFlow)
   const isEditable = mode === 'create' || !!canEdit
   const useBasicInfoHoverCard = mode === 'detail' && !isEditable
@@ -62,6 +66,7 @@ export function WorkflowEditorPage({
     resolver: zodResolver(workflowBasicInfoSchema),
     mode: 'onChange',
     defaultValues: {
+      type: initialWorkflowType,
       name: '',
       description: '',
     },
@@ -75,6 +80,9 @@ export function WorkflowEditorPage({
     mode === 'create'
       ? t('createPage.description')
       : basicInfoValues.description?.trim() || t('detail.description')
+  const workflowType = (basicInfoValues.type ??
+    workflow?.type ??
+    initialWorkflowType) as WorkflowType
   const createWorkflowMutation = useMutation({
     mutationFn: createWorkflow,
     onSuccess: (createdWorkflow) => {
@@ -108,6 +116,7 @@ export function WorkflowEditorPage({
     if (mode !== 'detail' || !workflow) return
 
     basicInfoForm.reset({
+      type: workflow.type,
       name: workflow.name,
       description: workflow.description,
     })
@@ -223,6 +232,7 @@ export function WorkflowEditorPage({
           <div className="min-w-0">
             <WorkflowDesignCard
               flow={workflow?.flow}
+              workflowType={workflowType}
               loading={loading}
               editable={isEditable && !loading}
               onFlowChange={handleFlowChange}

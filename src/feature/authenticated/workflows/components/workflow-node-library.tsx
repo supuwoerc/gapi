@@ -1,6 +1,6 @@
 'use no memo'
 
-import type { WorkflowNodeKind } from '@/schema/workflow/workflow'
+import type { WorkflowNodeKind, WorkflowType } from '@/schema/workflow/workflow'
 import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -14,6 +14,7 @@ interface WorkflowNodeLibraryProps {
   hasStartNode: boolean
   className?: string
   variant?: 'default' | 'compact'
+  workflowType: WorkflowType
   onAddNode: (kind: WorkflowNodeKind) => void
 }
 
@@ -21,6 +22,7 @@ export function WorkflowNodeLibrary({
   hasStartNode,
   className,
   variant = 'default',
+  workflowType,
   onAddNode,
 }: WorkflowNodeLibraryProps) {
   const { t } = useTranslation('workflows')
@@ -40,7 +42,9 @@ export function WorkflowNodeLibrary({
         </div>
       )}
       <div className={cn('grid overflow-y-auto', compact ? 'gap-1' : 'gap-2 p-2')}>
-        {WorkflowNodeKinds.map((kind) => {
+        {WorkflowNodeKinds.filter(
+          (kind) => workflowType === 'project' || kind !== 'ai_employee'
+        ).map((kind) => {
           const Icon = workflowNodeKindIconMap[kind]
           const disabled = kind === 'start' && hasStartNode
 

@@ -57,4 +57,10 @@ describe('project workflow mock data', () => {
     expect(updatedWorkflows).toEqual([])
     expect(getProjectWorkflows(project.id)).toEqual([])
   })
+
+  test('rejects employee workflows for projects', () => {
+    const employeeWorkflow = workflows.find((workflow) => workflow.type === 'employee')!
+
+    expect(updateProjectWorkflows(project.id, [employeeWorkflow.id])).toBeNull()
+  })
 })

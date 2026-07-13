@@ -177,6 +177,11 @@ export const topMenu = [
     permissionKey: 'workflow',
   },
   {
+    title: 'route:pages.aiEmployees',
+    href: '/ai-employees',
+    permissionKey: 'ai-employees',
+  },
+  {
     title: 'route:pages.documents',
     href: '/documents',
     permissionKey: 'documents',

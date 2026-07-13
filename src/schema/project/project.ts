@@ -108,10 +108,32 @@ export const projectWorkflowIdsMutationSchema = z.object({
   workflow_ids: z.array(z.coerce.number().int()).transform((ids) => Array.from(new Set(ids))),
 })
 
+export const projectWorkflowAiNodeConfigSchema = z.object({
+  node_id: z.string(),
+  ai_employee_id: z.coerce.number().nullable(),
+  employee_workflow_id: z.coerce.number().nullable(),
+  code_provider: z.enum(['github', 'gitlab']),
+  repository_url: z.string(),
+  default_branch: z.string(),
+  has_token: z.boolean(),
+  token_mask: z.string().nullable(),
+  updated_at: timestampSchema,
+})
+
+export const projectWorkflowAiNodeConfigMutationSchema = z.object({
+  ai_employee_id: z.coerce.number().nullable(),
+  employee_workflow_id: z.coerce.number().nullable(),
+  code_provider: z.enum(['github', 'gitlab']),
+  repository_url: z.string(),
+  default_branch: z.string(),
+  token: z.string().optional(),
+})
+
 export const projectListSchema = z.array(projectSchema)
 export const projectRoleListSchema = z.array(projectRoleSchema)
 export const projectMemberListSchema = z.array(projectMemberSchema)
 export const projectRolePermissionListSchema = z.array(projectRolePermissionSchema)
+export const projectWorkflowAiNodeConfigListSchema = z.array(projectWorkflowAiNodeConfigSchema)
 
 export type Project = z.infer<typeof projectSchema>
 export type ProjectVisibility = z.infer<typeof projectVisibilitySchema>
@@ -126,3 +148,7 @@ export type ProjectMemberRoleMutation = z.infer<typeof projectMemberRoleMutation
 export type ProjectVisibilityMutation = z.infer<typeof projectVisibilityMutationSchema>
 export type ProjectLogoMutation = z.infer<typeof projectLogoMutationSchema>
 export type ProjectWorkflowIdsMutation = z.infer<typeof projectWorkflowIdsMutationSchema>
+export type ProjectWorkflowAiNodeConfig = z.infer<typeof projectWorkflowAiNodeConfigSchema>
+export type ProjectWorkflowAiNodeConfigMutation = z.infer<
+  typeof projectWorkflowAiNodeConfigMutationSchema
+>

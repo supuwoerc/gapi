@@ -13,6 +13,8 @@ export interface WorkflowDesignNodeData extends Record<string, unknown> {
   description: string
   kind: WorkflowNodeKind
   status: WorkflowNodeStatus
+  ai_employee_id?: number | null
+  employee_workflow_id?: number | null
 }
 
 export type WorkflowDesignNodeType = Node<WorkflowDesignNodeData, 'workflow'>

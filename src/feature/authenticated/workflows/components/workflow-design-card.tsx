@@ -7,6 +7,7 @@ import type {
   WorkflowFlowEdge,
   WorkflowFlowNode,
   WorkflowNodeKind,
+  WorkflowType,
 } from '@/schema/workflow/workflow'
 import {
   Background,
@@ -230,6 +231,7 @@ export const DraftWorkflowFlow: WorkflowFlow = {
 
 interface WorkflowDesignCardProps {
   flow?: WorkflowFlow
+  workflowType?: WorkflowType
   loading?: boolean
   editable?: boolean
   onFlowChange?: (flow: WorkflowFlow) => void
@@ -237,6 +239,7 @@ interface WorkflowDesignCardProps {
 
 export function WorkflowDesignCard({
   flow,
+  workflowType = 'project',
   loading,
   editable,
   onFlowChange,
@@ -260,6 +263,7 @@ export function WorkflowDesignCard({
           <WorkflowDesignSurface
             key={getWorkflowFlowKey(workflowFlow)}
             flow={workflowFlow}
+            workflowType={workflowType}
             editable={!!editable}
             onFlowChange={onFlowChange}
           />
@@ -271,10 +275,12 @@ export function WorkflowDesignCard({
 
 function WorkflowDesignSurface({
   flow,
+  workflowType,
   editable,
   onFlowChange,
 }: {
   flow: WorkflowFlow
+  workflowType: WorkflowType
   editable: boolean
   onFlowChange?: (flow: WorkflowFlow) => void
 }) {
@@ -334,6 +340,7 @@ function WorkflowDesignSurface({
   const handleAddNode = React.useCallback(
     (kind: WorkflowNodeKind, position?: { x: number; y: number }) => {
       if (kind === 'start' && hasStartNode) return
+      if (kind === 'ai_employee' && workflowType !== 'project') return
 
       const nodeId = `workflow-${kind}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
       const node: WorkflowDesignNodeType = {
@@ -359,7 +366,7 @@ function WorkflowDesignSurface({
       setNodeContextMenu(undefined)
       setConfigOpen(true)
     },
-    [getViewportCenterPosition, hasStartNode, t]
+    [getViewportCenterPosition, hasStartNode, t, workflowType]
   )
 
   const handleNodesChange = React.useCallback(
@@ -784,6 +791,7 @@ function WorkflowDesignSurface({
                 variant="compact"
                 className="max-h-[18rem] rounded-md shadow-lg"
                 hasStartNode={hasStartNode}
+                workflowType={workflowType}
                 onAddNode={(kind) => handleAddNode(kind, contextMenu.position)}
               />
             </div>
@@ -942,6 +950,7 @@ function WorkflowDesignSurface({
                           variant="compact"
                           className="max-h-[18rem] rounded-md border-0 shadow-none"
                           hasStartNode={hasStartNode}
+                          workflowType={workflowType}
                           onAddNode={handleAddNode}
                         />
                       </DropdownMenuContent>
@@ -1046,6 +1055,8 @@ function toWorkflowFlow(nodes: WorkflowDesignNodeType[], edges: Edge[]): Workflo
         description: node.data.description,
         kind: node.data.kind,
         status: node.data.status,
+        ai_employee_id: node.data.ai_employee_id,
+        employee_workflow_id: node.data.employee_workflow_id,
       },
     })),
     edges: edges.map((edge) => ({

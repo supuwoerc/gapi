@@ -1,5 +1,8 @@
 'use no memo'
 
+import { useQuery } from '@tanstack/react-query'
+
+import { getAiEmployeeWorkflows, getAiEmployees } from '@/service/ai-employees/ai-employees'
 import { Settings2, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
@@ -9,6 +12,14 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 import type { WorkflowDesignNodeData, WorkflowDesignNodeType } from './workflow-design-node'
@@ -82,6 +93,7 @@ function NodeForm({
 }) {
   const { t } = useTranslation('workflows')
   const isStartNode = node.data.kind === 'start'
+  const isAiEmployeeNode = node.data.kind === 'ai_employee'
 
   return (
     <div className="grid gap-4">
@@ -106,7 +118,11 @@ function NodeForm({
         />
       </div>
 
-      <AdvancedConfig />
+      {isAiEmployeeNode ? (
+        <AiEmployeeNodeConfig node={node} editable={editable} onNodeDataChange={onNodeDataChange} />
+      ) : (
+        <AdvancedConfig />
+      )}
 
       <Button
         type="button"
@@ -117,6 +133,99 @@ function NodeForm({
         <Trash2 />
         {t('editor.deleteNode')}
       </Button>
+    </div>
+  )
+}
+
+function AiEmployeeNodeConfig({
+  node,
+  editable,
+  onNodeDataChange,
+}: {
+  node: WorkflowDesignNodeType
+  editable: boolean
+  onNodeDataChange: WorkflowNodeConfigPanelProps['onNodeDataChange']
+}) {
+  const { t } = useTranslation('workflows')
+  const aiEmployeeId = node.data.ai_employee_id ?? null
+  const employeeWorkflowId = node.data.employee_workflow_id ?? null
+
+  const { data: aiEmployeesPage, isFetching: isAiEmployeesFetching } = useQuery({
+    queryKey: ['ai-employees', 'workflow-node-options'],
+    queryFn: () => getAiEmployees({ page: 1, perPage: 20, status: ['active'] }),
+  })
+
+  const { data: employeeWorkflows = [], isFetching: isEmployeeWorkflowsFetching } = useQuery({
+    queryKey: ['ai-employee-workflows', aiEmployeeId],
+    queryFn: () => getAiEmployeeWorkflows(aiEmployeeId!),
+    enabled: aiEmployeeId !== null,
+  })
+
+  const aiEmployees = aiEmployeesPage?.data ?? []
+
+  return (
+    <div className="grid gap-3 rounded-md border border-dashed p-3">
+      <div className="grid gap-1">
+        <div className="text-sm font-medium">{t('editor.aiEmployeeConfig.title')}</div>
+        <p className="text-xs text-muted-foreground">{t('editor.aiEmployeeConfig.description')}</p>
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="workflow-node-ai-employee">{t('editor.aiEmployeeConfig.employee')}</Label>
+        <Select
+          value={aiEmployeeId === null ? 'none' : String(aiEmployeeId)}
+          disabled={!editable || isAiEmployeesFetching}
+          onValueChange={(value) => {
+            onNodeDataChange(node.id, {
+              ai_employee_id: value === 'none' ? null : Number(value),
+              employee_workflow_id: null,
+            })
+          }}
+        >
+          <SelectTrigger id="workflow-node-ai-employee" className="w-full">
+            <SelectValue placeholder={t('editor.aiEmployeeConfig.employeePlaceholder')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="none">{t('editor.aiEmployeeConfig.none')}</SelectItem>
+              {aiEmployees.map((employee) => (
+                <SelectItem key={employee.id} value={String(employee.id)}>
+                  {employee.name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid gap-2">
+        <Label htmlFor="workflow-node-employee-workflow">
+          {t('editor.aiEmployeeConfig.employeeWorkflow')}
+        </Label>
+        <Select
+          value={employeeWorkflowId === null ? 'none' : String(employeeWorkflowId)}
+          disabled={!editable || aiEmployeeId === null || isEmployeeWorkflowsFetching}
+          onValueChange={(value) => {
+            onNodeDataChange(node.id, {
+              employee_workflow_id: value === 'none' ? null : Number(value),
+            })
+          }}
+        >
+          <SelectTrigger id="workflow-node-employee-workflow" className="w-full">
+            <SelectValue placeholder={t('editor.aiEmployeeConfig.employeeWorkflowPlaceholder')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="none">{t('editor.aiEmployeeConfig.none')}</SelectItem>
+              {employeeWorkflows.map((workflow) => (
+                <SelectItem key={workflow.id} value={String(workflow.id)}>
+                  {workflow.name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   )
 }

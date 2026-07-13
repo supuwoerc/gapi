@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { keepPreviousData, useInfiniteQuery } from '@tanstack/react-query'
 
+import type { WorkflowType } from '@/schema/workflow/workflow'
 import { getWorkflows } from '@/service/workflows/workflows'
 import { Plus } from 'lucide-react'
 import { parseAsString, useQueryState } from 'nuqs'
@@ -10,6 +11,7 @@ import { useNavigate } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 import { ConfigDrawer } from '@/components/config-drawer'
 import { LanguageSwitcher } from '@/components/language-switcher'
@@ -32,6 +34,11 @@ const Workflows = () => {
     'workflowKeyword',
     parseAsString.withDefault('')
   )
+  const [workflowType, setWorkflowType] = useQueryState(
+    'workflowType',
+    parseAsString.withDefault('project')
+  )
+  const selectedWorkflowType: WorkflowType = workflowType === 'employee' ? 'employee' : 'project'
 
   const {
     data: workflowsPages,
@@ -40,12 +47,13 @@ const Workflows = () => {
     isFetchingNextPage: isFetchingNextWorkflowsPage,
     isLoading: isWorkflowsLoading,
   } = useInfiniteQuery({
-    queryKey: ['workflows', { keyword: workflowKeyword }],
+    queryKey: ['workflows', { keyword: workflowKeyword, type: selectedWorkflowType }],
     queryFn: ({ pageParam }) =>
       getWorkflows({
         page: pageParam,
         perPage: WorkflowsPageSize,
         keyword: workflowKeyword || undefined,
+        type: selectedWorkflowType,
       }),
     getNextPageParam: (_lastPage, allPages) => {
       const loaded = allPages.reduce((count, page) => count + page.data.length, 0)
@@ -98,10 +106,23 @@ const Workflows = () => {
             <h2 className="text-2xl font-bold tracking-tight">{t('title')}</h2>
             <p className="text-muted-foreground">{t('description')}</p>
           </div>
-          <Button onClick={() => void navigate('/workflow/create')}>
-            <Plus />
-            {t('create')}
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <ToggleGroup
+              type="single"
+              value={selectedWorkflowType}
+              onValueChange={(value) => {
+                if (value) void setWorkflowType(value)
+              }}
+              variant="outline"
+            >
+              <ToggleGroupItem value="project">{t('types.project')}</ToggleGroupItem>
+              <ToggleGroupItem value="employee">{t('types.employee')}</ToggleGroupItem>
+            </ToggleGroup>
+            <Button onClick={() => void navigate(`/workflow/create?type=${selectedWorkflowType}`)}>
+              <Plus />
+              {t('create')}
+            </Button>
+          </div>
         </div>
 
         {isWorkflowsLoading ? (

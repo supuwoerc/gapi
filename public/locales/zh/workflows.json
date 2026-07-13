@@ -5,12 +5,18 @@
   "search": "搜索工作流...",
   "searchResultCount": "已显示 {{count}} / {{total}} 个工作流",
   "referencedCount": "被引用 {{count}} 次",
+  "types": {
+    "project": "项目工作流",
+    "employee": "员工工作流"
+  },
   "createPage": {
     "back": "返回工作流",
     "title": "创建工作流",
     "description": "填写工作流基础信息，并设计后续可关联到项目的流程。",
     "basicInfo": "基本信息",
     "basicInfoDescription": "维护工作流的名称和简介，不影响下方流程设计空间。",
+    "type": "工作流类型",
+    "typeDescription": "项目工作流可关联到项目；员工工作流只供 AI 员工执行。",
     "name": "名称",
     "namePlaceholder": "例如：发布审批流程",
     "workflowDescription": "简介",
@@ -31,7 +37,8 @@
       "descriptionRequired": "请输入工作流简介",
       "startRequired": "流程需要一个起点节点",
       "singleStartRequired": "流程只能有一个起点节点",
-      "endRequired": "流程需要至少一个结束节点"
+      "endRequired": "流程需要至少一个结束节点",
+      "employeeNodeNotAllowed": "员工工作流不能包含 AI 员工节点"
     }
   },
   "editor": {
@@ -61,6 +68,7 @@
       "review": "评审",
       "approval": "审批",
       "automation": "自动化",
+      "ai_employee": "AI 员工",
       "end": "结束"
     },
     "nodeKindDescriptions": {
@@ -68,6 +76,7 @@
       "review": "人工评审",
       "approval": "决策确认",
       "automation": "自动处理",
+      "ai_employee": "沙盒 agent 处理 issue 或 PR",
       "end": "流程完成"
     },
     "defaultNodeDescriptions": {
@@ -75,7 +84,17 @@
       "review": "补充评审范围和负责人。",
       "approval": "确认结果并推进后续动作。",
       "automation": "执行自动化检查或同步。",
+      "ai_employee": "选择 AI 员工和员工工作流。",
       "end": "记录最终结果并结束流程。"
+    },
+    "aiEmployeeConfig": {
+      "title": "AI 员工",
+      "description": "选择负责此节点的 AI 员工及其员工工作流。",
+      "employee": "AI 员工",
+      "employeePlaceholder": "选择 AI 员工",
+      "employeeWorkflow": "员工工作流",
+      "employeeWorkflowPlaceholder": "选择员工工作流",
+      "none": "未选择"
     },
     "nodeStatuses": {
       "pending": "待处理",
@@ -92,6 +111,7 @@
       "title": "基本信息",
       "creator": "创建者",
       "usedCount": "引用数",
+      "type": "类型",
       "createdAt": "创建时间",
       "updatedAt": "更新时间",
       "permission": "权限",

@@ -2,8 +2,9 @@ import {
   workflowDetailSchema,
   workflowListSchema,
   workflowMutationSchema,
+  workflowTypeSchema,
 } from '@/schema/workflow/workflow'
-import type { WorkflowDetail, WorkflowMutation } from '@/schema/workflow/workflow'
+import type { WorkflowDetail, WorkflowMutation, WorkflowType } from '@/schema/workflow/workflow'
 import type { PaginatedResponse } from '@/types/shared'
 
 import { get, patch, post } from '@/lib/http'
@@ -12,6 +13,7 @@ export interface GetWorkflowsParams {
   page: number
   perPage: number
   keyword?: string
+  type?: WorkflowType
 }
 
 export async function getWorkflows(params: GetWorkflowsParams) {
@@ -21,6 +23,7 @@ export async function getWorkflows(params: GetWorkflowsParams) {
   }
 
   if (params.keyword) searchParams.keyword = params.keyword
+  if (params.type) searchParams.type = workflowTypeSchema.parse(params.type)
 
   const res = await get<PaginatedResponse<unknown>>('/workflows', { searchParams })
   return { data: workflowListSchema.parse(res.data), total: res.total }

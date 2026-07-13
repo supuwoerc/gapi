@@ -1,0 +1,78 @@
+{
+  "title": "AI Employees",
+  "description": "Manage sandbox agents that can help with issues and pull requests.",
+  "create": "New AI employee",
+  "search": "Search AI employees...",
+  "edit": "Edit",
+  "enable": "Enable",
+  "disable": "Disable",
+  "delete": "Delete",
+  "openMenu": "Open menu",
+  "status": {
+    "active": "Active",
+    "disabled": "Disabled"
+  },
+  "codeProvider": {
+    "github": "GitHub",
+    "gitlab": "GitLab"
+  },
+  "columns": {
+    "name": "AI employee",
+    "status": "Status",
+    "codeProvider": "Code provider",
+    "defaultModel": "Default model",
+    "workflowCount": "Employee workflows",
+    "updatedAt": "Updated"
+  },
+  "editDialog": {
+    "createTitle": "New AI employee",
+    "editTitle": "Edit AI employee",
+    "description": "Configure the sandbox agent. Repository credentials are configured on project workflow nodes.",
+    "avatar": "Avatar",
+    "avatarPlaceholder": "Avatar URL",
+    "name": "Name",
+    "namePlaceholder": "Example: Issue fixer",
+    "defaultModel": "Default model",
+    "defaultModelPlaceholder": "Example: gpt-5",
+    "status": "Status",
+    "codeProvider": "Code provider",
+    "employeeDescription": "Description",
+    "descriptionPlaceholder": "Describe the work this agent is good at.",
+    "systemPrompt": "System prompt",
+    "systemPromptPlaceholder": "Describe the agent behavior boundaries and output preferences.",
+    "workflowAfterCreate": "Save the AI employee before configuring employee workflows.",
+    "save": "Save",
+    "saving": "Saving...",
+    "validation": {
+      "nameRequired": "Please enter an AI employee name",
+      "defaultModelRequired": "Please enter a default model"
+    }
+  },
+  "workflows": {
+    "configuredTitle": "Linked employee workflows",
+    "configuredCount": "{{count}} employee workflow(s) linked",
+    "emptySelectedTitle": "No employee workflows",
+    "emptySelected": "This AI employee has no linked employee workflows.",
+    "searchTitle": "Add employee workflows",
+    "searchDescription": "Search employee workflows and add them to this AI employee.",
+    "searchPlaceholder": "Search employee workflows",
+    "emptyOptions": "No matching employee workflows",
+    "reset": "Reset",
+    "save": "Save workflows",
+    "saving": "Saving...",
+    "add": "Add",
+    "added": "Added",
+    "removeWorkflow": "Remove {{name}}"
+  },
+  "deleteConfirm": {
+    "title": "Delete AI employee",
+    "single": "Delete \"{{name}}\"? This does not delete any real account."
+  },
+  "toast": {
+    "createSuccess": "AI employee created",
+    "updateSuccess": "AI employee updated",
+    "deleteSuccess": "AI employee deleted",
+    "workflowsSuccess": "Employee workflows updated",
+    "failed": "Action failed"
+  }
+}

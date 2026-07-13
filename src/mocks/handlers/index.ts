@@ -1,3 +1,4 @@
+import { aiEmployeeHandlers } from './ai-employees'
 import { authHandlers } from './auth'
 import { captchaHandlers } from './captcha'
 import { documentHandlers } from './documents'
@@ -15,6 +16,7 @@ import { userHandlers } from './users'
 import { workflowHandlers } from './workflows'
 
 export const handlers = [
+  ...aiEmployeeHandlers,
   ...authHandlers,
   ...captchaHandlers,
   ...documentDetailHandlers,

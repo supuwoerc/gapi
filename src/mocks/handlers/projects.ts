@@ -4,9 +4,13 @@ import type {
   ProjectMemberRoleMutation,
   ProjectMutation,
   ProjectVisibilityMutation,
+  ProjectWorkflowAiNodeConfigMutation,
   ProjectWorkflowIdsMutation,
 } from '@/schema/project/project'
-import { projectWorkflowIdsMutationSchema } from '@/schema/project/project'
+import {
+  projectWorkflowAiNodeConfigMutationSchema,
+  projectWorkflowIdsMutationSchema,
+} from '@/schema/project/project'
 import { delay, http } from 'msw'
 
 import {
@@ -17,6 +21,7 @@ import {
   getProjectMembers,
   getProjectRole,
   getProjectRoles,
+  getProjectWorkflowAiNodeConfigs,
   getProjectWorkflows,
   hasProjectMember,
   inviteProjectMember,
@@ -25,6 +30,7 @@ import {
   removeProjectMember,
   updateProjectLogo,
   updateProjectMemberRole,
+  updateProjectWorkflowAiNodeConfig,
   updateProjectWorkflows,
 } from '../data/projects'
 import { paginate } from '../utils/filter'
@@ -102,6 +108,56 @@ export const projectHandlers = [
 
     return jsonEnvelope(updatedWorkflows)
   }),
+
+  http.get(
+    `${BASE}/projects/:projectId/workflows/:workflowId/ai-employee-node-configs`,
+    async ({ params }) => {
+      await delay(200)
+      const projectId = getProjectId(params.projectId)
+      const workflowId = Number(params.workflowId)
+      const project = projects.find((item) => item.id === projectId)
+
+      if (!project) {
+        return errorEnvelope(400404, 'Project not found')
+      }
+
+      const configs = getProjectWorkflowAiNodeConfigs(projectId, workflowId)
+      if (!configs) {
+        return errorEnvelope(400404, 'Project workflow or AI employee node not found')
+      }
+
+      return jsonEnvelope(configs)
+    }
+  ),
+
+  http.patch(
+    `${BASE}/projects/:projectId/workflows/:workflowId/ai-employee-node-configs/:nodeId`,
+    async ({ params, request }) => {
+      await delay(300)
+      const projectId = getProjectId(params.projectId)
+      const workflowId = Number(params.workflowId)
+      const nodeId = String(params.nodeId)
+      const body = projectWorkflowAiNodeConfigMutationSchema.parse(
+        (await request.json()) as ProjectWorkflowAiNodeConfigMutation
+      )
+      const project = projects.find((item) => item.id === projectId)
+
+      if (!project) {
+        return errorEnvelope(400404, 'Project not found')
+      }
+
+      if (!isCurrentUserOwner(projectId)) {
+        return errorEnvelope(400403, 'Only project owners can update AI employee node configs')
+      }
+
+      const configs = updateProjectWorkflowAiNodeConfig(projectId, workflowId, nodeId, body)
+      if (!configs) {
+        return errorEnvelope(400404, 'Project workflow or AI employee node not found')
+      }
+
+      return jsonEnvelope(configs)
+    }
+  ),
 
   http.get(`${BASE}/projects/:projectId/members`, async ({ params, request }) => {
     await delay(200)

@@ -8,6 +8,7 @@ export const WorkflowNodeKinds = [
   'review',
   'approval',
   'automation',
+  'ai_employee',
   'end',
 ] satisfies WorkflowNodeKind[]
 
@@ -18,5 +19,6 @@ export const workflowNodeKindIconMap = {
   review: GitPullRequest,
   approval: CheckCircle2,
   automation: Bot,
+  ai_employee: Bot,
   end: Flag,
 } satisfies Record<WorkflowNodeKind, typeof CircleDot>

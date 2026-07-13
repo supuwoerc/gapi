@@ -7,11 +7,13 @@ import type {
   ProjectMutation,
   ProjectRole,
   ProjectRolePermission,
+  ProjectWorkflowAiNodeConfig,
+  ProjectWorkflowAiNodeConfigMutation,
 } from '@/schema/project/project'
 import { faker } from '@faker-js/faker'
 
 import { users } from './users'
-import { workflows } from './workflows'
+import { getWorkflowDetail, syncProjectWorkflowUsedCounts, workflows } from './workflows'
 
 faker.seed(24680)
 
@@ -33,6 +35,18 @@ export const projectRoles: ProjectRole[] = []
 export const projectRolePermissions: ProjectRolePermission[] = []
 export const projectMembers: ProjectMember[] = []
 export const projectWorkflowLinks: { project_id: number; workflow_id: number }[] = []
+export const projectWorkflowAiNodeConfigs: Array<{
+  project_id: number
+  workflow_id: number
+  node_id: string
+  ai_employee_id: number | null
+  employee_workflow_id: number | null
+  code_provider: 'github' | 'gitlab'
+  repository_url: string
+  default_branch: string
+  token: string | null
+  updated_at: Date
+}> = []
 
 function toProjectUser(user: (typeof users)[number]): ProjectMemberUser {
   return {
@@ -147,25 +161,18 @@ function syncProjectState(projectId: number) {
 }
 
 function syncWorkflowUsedCounts() {
-  const usedCounts = new Map<number, number>()
-
-  for (const link of projectWorkflowLinks) {
-    usedCounts.set(link.workflow_id, (usedCounts.get(link.workflow_id) ?? 0) + 1)
-  }
-
-  for (const workflow of workflows) {
-    workflow.used_count = usedCounts.get(workflow.id) ?? 0
-  }
+  syncProjectWorkflowUsedCounts(projectWorkflowLinks)
 }
 
 function seedProjectWorkflowLinks(projectId: number) {
   if (workflows.length === 0 || projectId % 5 === 0) return
 
   const count = (projectId % 3) + 1
-  const start = (projectId - 1000) % workflows.length
+  const projectWorkflows = workflows.filter((workflow) => workflow.type === 'project')
+  const start = (projectId - 1000) % projectWorkflows.length
 
   for (let index = 0; index < count; index++) {
-    const workflow = workflows[(start + index * 7) % workflows.length]
+    const workflow = projectWorkflows[(start + index * 7) % projectWorkflows.length]
     projectWorkflowLinks.push({ project_id: projectId, workflow_id: workflow.id })
   }
 }
@@ -254,14 +261,19 @@ export function getProjectWorkflows(projectId: number) {
   return projectWorkflowLinks
     .filter((link) => link.project_id === projectId)
     .map((link) => workflows.find((workflow) => workflow.id === link.workflow_id))
-    .filter((workflow): workflow is (typeof workflows)[number] => Boolean(workflow))
+    .filter(
+      (workflow): workflow is (typeof workflows)[number] =>
+        workflow !== undefined && workflow.type === 'project'
+    )
 }
 
 export function updateProjectWorkflows(projectId: number, workflowIds: number[]) {
   const project = projects.find((item) => item.id === projectId)
   if (!project) return null
 
-  const existingWorkflowIds = new Set(workflows.map((workflow) => workflow.id))
+  const existingWorkflowIds = new Set(
+    workflows.filter((workflow) => workflow.type === 'project').map((workflow) => workflow.id)
+  )
   const uniqueWorkflowIds = Array.from(new Set(workflowIds))
 
   if (uniqueWorkflowIds.some((workflowId) => !existingWorkflowIds.has(workflowId))) {
@@ -281,6 +293,120 @@ export function updateProjectWorkflows(projectId: number, workflowIds: number[])
   project.updated_at = new Date()
   syncWorkflowUsedCounts()
   return getProjectWorkflows(projectId)
+}
+
+function getAiEmployeeNodeIds(workflowId: number) {
+  const workflow = getWorkflowDetail(workflowId)
+  if (!workflow || workflow.type !== 'project') return null
+
+  return workflow.flow.nodes
+    .filter((node) => node.data.kind === 'ai_employee')
+    .map((node) => ({
+      node_id: node.id,
+      ai_employee_id: node.data.ai_employee_id ?? null,
+      employee_workflow_id: node.data.employee_workflow_id ?? null,
+    }))
+}
+
+function getTokenMask(token: string | null) {
+  if (!token) return null
+
+  return `****${token.slice(-4)}`
+}
+
+function ensureProjectWorkflowAiNodeConfig(
+  projectId: number,
+  workflowId: number,
+  node: {
+    node_id: string
+    ai_employee_id: number | null
+    employee_workflow_id: number | null
+  }
+) {
+  let config = projectWorkflowAiNodeConfigs.find(
+    (item) =>
+      item.project_id === projectId &&
+      item.workflow_id === workflowId &&
+      item.node_id === node.node_id
+  )
+
+  if (!config) {
+    config = {
+      project_id: projectId,
+      workflow_id: workflowId,
+      node_id: node.node_id,
+      ai_employee_id: node.ai_employee_id,
+      employee_workflow_id: node.employee_workflow_id,
+      code_provider: 'github',
+      repository_url: '',
+      default_branch: 'main',
+      token: null,
+      updated_at: new Date(),
+    }
+    projectWorkflowAiNodeConfigs.push(config)
+  }
+
+  return config
+}
+
+function toReadableAiNodeConfig(
+  config: (typeof projectWorkflowAiNodeConfigs)[number]
+): ProjectWorkflowAiNodeConfig {
+  return {
+    node_id: config.node_id,
+    ai_employee_id: config.ai_employee_id,
+    employee_workflow_id: config.employee_workflow_id,
+    code_provider: config.code_provider,
+    repository_url: config.repository_url,
+    default_branch: config.default_branch,
+    has_token: Boolean(config.token),
+    token_mask: getTokenMask(config.token),
+    updated_at: config.updated_at,
+  }
+}
+
+export function getProjectWorkflowAiNodeConfigs(projectId: number, workflowId: number) {
+  const linked = projectWorkflowLinks.some(
+    (link) => link.project_id === projectId && link.workflow_id === workflowId
+  )
+  if (!linked) return null
+
+  const nodes = getAiEmployeeNodeIds(workflowId)
+  if (!nodes) return null
+
+  return nodes
+    .map((node) => ensureProjectWorkflowAiNodeConfig(projectId, workflowId, node))
+    .map(toReadableAiNodeConfig)
+}
+
+export function updateProjectWorkflowAiNodeConfig(
+  projectId: number,
+  workflowId: number,
+  nodeId: string,
+  data: ProjectWorkflowAiNodeConfigMutation
+) {
+  const nodes = getAiEmployeeNodeIds(workflowId)
+  const node = nodes?.find((item) => item.node_id === nodeId)
+  if (!node) return null
+
+  const linked = projectWorkflowLinks.some(
+    (link) => link.project_id === projectId && link.workflow_id === workflowId
+  )
+  if (!linked) return null
+
+  const config = ensureProjectWorkflowAiNodeConfig(projectId, workflowId, node)
+  config.ai_employee_id = data.ai_employee_id
+  config.employee_workflow_id = data.employee_workflow_id
+  config.code_provider = data.code_provider
+  config.repository_url = data.repository_url
+  config.default_branch = data.default_branch
+  if (data.token !== undefined) {
+    const token = data.token.trim()
+    config.token = token ? token : null
+  }
+  config.updated_at = new Date()
+
+  return getProjectWorkflowAiNodeConfigs(projectId, workflowId)
 }
 
 export function getProjectRole(projectId: number, roleId: number) {

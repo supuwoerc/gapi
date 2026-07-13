@@ -106,7 +106,26 @@
       "saving": "Saving...",
       "add": "Add",
       "added": "Added",
-      "removeWorkflow": "Remove {{name}}"
+      "removeWorkflow": "Remove {{name}}",
+      "configureAiNodes": "Configure AI employee nodes for {{name}}",
+      "aiConfigTitle": "AI employee node configuration",
+      "aiConfigDescription": "Configure project-level repositories and credentials for AI employee nodes in \"{{name}}\".",
+      "emptyAiConfigTitle": "No AI employee nodes",
+      "emptyAiConfig": "This workflow has no AI employee nodes, so no project-level credentials are needed.",
+      "aiConfigNode": "Node {{node}}",
+      "tokenConfigured": "Token configured {{token}}",
+      "tokenMissing": "Token not configured",
+      "aiEmployee": "AI employee",
+      "employeeWorkflow": "Employee workflow",
+      "none": "None",
+      "codeProvider": "Code provider",
+      "defaultBranch": "Default branch",
+      "repositoryUrl": "Repository URL",
+      "repositoryPlaceholder": "https://github.com/org/repo",
+      "token": "Access token",
+      "tokenPlaceholder": "Enter GitHub/GitLab token",
+      "keepTokenPlaceholder": "Leave empty to keep current token",
+      "saveConfig": "Save config"
     }
   },
   "roles": {
@@ -124,6 +143,7 @@
     "visibilitySuccess": "Project visibility updated",
     "logoSuccess": "Project logo updated",
     "workflowsSuccess": "Project workflows updated",
+    "aiNodeConfigSuccess": "AI employee node config updated",
     "applySuccess": "Join request submitted",
     "failed": "Action failed"
   }

@@ -5,12 +5,18 @@
   "search": "Search workflows...",
   "searchResultCount": "Showing {{count}} of {{total}} workflows",
   "referencedCount": "Referenced {{count}} time(s)",
+  "types": {
+    "project": "Project workflow",
+    "employee": "Employee workflow"
+  },
   "createPage": {
     "back": "Back to workflows",
     "title": "Create workflow",
     "description": "Add the workflow basics and design the flow that projects can reuse later.",
     "basicInfo": "Basic info",
     "basicInfoDescription": "Manage the workflow name and description without taking space from the flow designer.",
+    "type": "Workflow type",
+    "typeDescription": "Project workflows can be linked to projects; employee workflows are executed by AI employees.",
     "name": "Name",
     "namePlaceholder": "Example: Release approval flow",
     "workflowDescription": "Description",
@@ -31,7 +37,8 @@
       "descriptionRequired": "Please enter a workflow description",
       "startRequired": "The flow needs one start node",
       "singleStartRequired": "The flow can only have one start node",
-      "endRequired": "The flow needs at least one end node"
+      "endRequired": "The flow needs at least one end node",
+      "employeeNodeNotAllowed": "Employee workflows cannot contain AI employee nodes"
     }
   },
   "editor": {
@@ -61,6 +68,7 @@
       "review": "Review",
       "approval": "Approval",
       "automation": "Automation",
+      "ai_employee": "AI employee",
       "end": "End"
     },
     "nodeKindDescriptions": {
@@ -68,6 +76,7 @@
       "review": "Manual review",
       "approval": "Decision point",
       "automation": "Automated step",
+      "ai_employee": "Sandbox agent for issues or pull requests",
       "end": "Flow completion"
     },
     "defaultNodeDescriptions": {
@@ -75,7 +84,17 @@
       "review": "Add review scope and owner.",
       "approval": "Confirm the outcome and next action.",
       "automation": "Run automated checks or syncs.",
+      "ai_employee": "Choose an AI employee and employee workflow.",
       "end": "Record the final outcome and finish the flow."
+    },
+    "aiEmployeeConfig": {
+      "title": "AI employee",
+      "description": "Choose the AI employee and employee workflow for this node.",
+      "employee": "AI employee",
+      "employeePlaceholder": "Select AI employee",
+      "employeeWorkflow": "Employee workflow",
+      "employeeWorkflowPlaceholder": "Select employee workflow",
+      "none": "None"
     },
     "nodeStatuses": {
       "pending": "Pending",
@@ -92,6 +111,7 @@
       "title": "Basic info",
       "creator": "Creator",
       "usedCount": "References",
+      "type": "Type",
       "createdAt": "Created",
       "updatedAt": "Updated",
       "permission": "Permission",

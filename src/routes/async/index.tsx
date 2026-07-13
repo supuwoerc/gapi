@@ -161,6 +161,18 @@ const asyncRoutes: CustomRouteObject[] = [
         errorElement: <RouteError />,
         lazy: loadComponent(() => import('@/feature/authenticated/workflows/detail')),
       },
+      {
+        path: '/ai-employees',
+        loader: withPermissions('ai-employees'),
+        handle: {
+          title: 'route:pages.aiEmployees',
+          authMode: 'permissionRequired',
+          key: 'ai-employees',
+          icon: 'bot',
+        },
+        errorElement: <RouteError />,
+        lazy: loadComponent(() => import('@/feature/authenticated/ai-employees')),
+      },
     ],
   },
   {

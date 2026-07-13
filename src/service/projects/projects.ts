@@ -9,6 +9,8 @@ import {
   projectRoleListSchema,
   projectSchema,
   projectVisibilityMutationSchema,
+  projectWorkflowAiNodeConfigListSchema,
+  projectWorkflowAiNodeConfigMutationSchema,
   projectWorkflowIdsMutationSchema,
 } from '@/schema/project/project'
 import type {
@@ -17,6 +19,7 @@ import type {
   ProjectMemberRoleMutation,
   ProjectMutation,
   ProjectVisibilityMutation,
+  ProjectWorkflowAiNodeConfigMutation,
   ProjectWorkflowIdsMutation,
 } from '@/schema/project/project'
 import { workflowListSchema } from '@/schema/workflow/workflow'
@@ -62,6 +65,27 @@ export async function updateProjectWorkflows(projectId: number, data: ProjectWor
   const payload = projectWorkflowIdsMutationSchema.parse(data)
   const res = await patch<unknown>(`/projects/${projectId}/workflows`, { json: payload })
   return workflowListSchema.parse(res)
+}
+
+export async function getProjectWorkflowAiNodeConfigs(projectId: number, workflowId: number) {
+  const res = await get<unknown>(
+    `/projects/${projectId}/workflows/${workflowId}/ai-employee-node-configs`
+  )
+  return projectWorkflowAiNodeConfigListSchema.parse(res)
+}
+
+export async function updateProjectWorkflowAiNodeConfig(
+  projectId: number,
+  workflowId: number,
+  nodeId: string,
+  data: ProjectWorkflowAiNodeConfigMutation
+) {
+  const payload = projectWorkflowAiNodeConfigMutationSchema.parse(data)
+  const res = await patch<unknown>(
+    `/projects/${projectId}/workflows/${workflowId}/ai-employee-node-configs/${nodeId}`,
+    { json: payload }
+  )
+  return projectWorkflowAiNodeConfigListSchema.parse(res)
 }
 
 export interface GetProjectMembersParams {

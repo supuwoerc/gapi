@@ -25,6 +25,14 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
 interface CreateWorkflowBasicInfoDialogProps {
@@ -51,6 +59,30 @@ export function CreateWorkflowBasicInfoDialog({
         </DialogHeader>
         <Form {...form}>
           <form className="grid gap-4" onSubmit={(event) => event.preventDefault()}>
+            <FormField
+              control={form.control}
+              name="type"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('createPage.type')}</FormLabel>
+                  <Select value={field.value} disabled={readOnly} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="project">{t('types.project')}</SelectItem>
+                        <SelectItem value="employee">{t('types.employee')}</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>{t('createPage.typeDescription')}</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="name"

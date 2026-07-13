@@ -135,6 +135,18 @@ const basePermissions: Permission[] = [
     created_at: new Date(now),
     updated_at: new Date(now),
   },
+  {
+    id: 12,
+    code: 'ai-employees:read',
+    name: 'View AI Employees',
+    resource_type: 3,
+    module: 'ai-employees',
+    resource_path: '/ai-employees',
+    action: 'read',
+    description: 'View AI employee agents',
+    created_at: new Date(now),
+    updated_at: new Date(now),
+  },
 ]
 
 const generatedModules = [
@@ -157,6 +169,10 @@ const generatedModules = [
   {
     module: 'notifications',
     resources: ['channels', 'templates', 'subscriptions', 'delivery-logs'],
+  },
+  {
+    module: 'ai-employees',
+    resources: ['agents', 'workflows', 'sandbox-configs'],
   },
 ]
 

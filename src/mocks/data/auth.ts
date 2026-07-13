@@ -11,6 +11,12 @@ export const modulePermissionsMap: Record<string, string[]> = {
   projects: ['projects:read', 'projects:create', 'projects:edit', 'projects:delete'],
   documents: ['documents:read', 'documents:create', 'documents:edit', 'documents:delete'],
   workflow: ['workflow:read'],
+  'ai-employees': [
+    'ai-employees:read',
+    'ai-employees:create',
+    'ai-employees:edit',
+    'ai-employees:delete',
+  ],
   admin: [
     'admin:users:read',
     'admin:users:write',
@@ -40,6 +46,7 @@ export function generateLoginResponse(email?: string) {
       'projects',
       'documents',
       'workflow',
+      'ai-employees',
       'admin',
       'admin:users',
       'admin:roles',
@@ -52,6 +59,7 @@ export function generateLoginResponse(email?: string) {
       'projects',
       'documents',
       'workflow',
+      'ai-employees',
       'admin',
       'admin:users',
       'admin:roles',

@@ -1,3 +1,4 @@
+import type aiEmployees from '../../public/locales/zh/aiEmployees.json'
 import type auth from '../../public/locales/zh/auth.json'
 import type component from '../../public/locales/zh/component.json'
 import type dashboard from '../../public/locales/zh/dashboard.json'
@@ -15,6 +16,7 @@ import type users from '../../public/locales/zh/users.json'
 import type workflows from '../../public/locales/zh/workflows.json'
 
 export interface Resources {
+  aiEmployees: typeof aiEmployees
   auth: typeof auth
   component: typeof component
   dashboard: typeof dashboard

@@ -48,6 +48,7 @@ const workflowA: Workflow = {
   id: 2000,
   name: 'API Review',
   description: 'Review API contracts before delivery.',
+  type: 'project',
   used_count: 1,
   creator: {
     id: 1,

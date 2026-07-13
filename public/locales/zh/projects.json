@@ -106,7 +106,26 @@
       "saving": "保存中...",
       "add": "添加",
       "added": "已添加",
-      "removeWorkflow": "移除 {{name}}"
+      "removeWorkflow": "移除 {{name}}",
+      "configureAiNodes": "配置 {{name}} 的 AI 员工节点",
+      "aiConfigTitle": "AI 员工节点配置",
+      "aiConfigDescription": "为「{{name}}」中的 AI 员工节点配置项目级仓库和密钥。",
+      "emptyAiConfigTitle": "暂无 AI 员工节点",
+      "emptyAiConfig": "此工作流没有 AI 员工节点，无需配置项目级密钥。",
+      "aiConfigNode": "节点 {{node}}",
+      "tokenConfigured": "已配置密钥 {{token}}",
+      "tokenMissing": "未配置密钥",
+      "aiEmployee": "AI 员工",
+      "employeeWorkflow": "员工工作流",
+      "none": "未选择",
+      "codeProvider": "代码平台",
+      "defaultBranch": "默认分支",
+      "repositoryUrl": "仓库地址",
+      "repositoryPlaceholder": "https://github.com/org/repo",
+      "token": "访问 Token",
+      "tokenPlaceholder": "输入 GitHub/GitLab token",
+      "keepTokenPlaceholder": "留空则保留当前密钥",
+      "saveConfig": "保存配置"
     }
   },
   "roles": {
@@ -124,6 +143,7 @@
     "visibilitySuccess": "项目可见性已更新",
     "logoSuccess": "项目 Logo 已更新",
     "workflowsSuccess": "项目工作流已更新",
+    "aiNodeConfigSuccess": "AI 员工节点配置已更新",
     "applySuccess": "加入申请已提交",
     "failed": "操作失败"
   }

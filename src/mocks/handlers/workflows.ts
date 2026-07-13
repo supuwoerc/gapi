@@ -19,13 +19,18 @@ export const workflowHandlers = [
     const page = Number(url.searchParams.get('page') ?? 1)
     const perPage = Number(url.searchParams.get('perPage') ?? 20)
     const keyword = url.searchParams.get('keyword')?.toLowerCase().trim() ?? ''
+    const type = url.searchParams.get('type')
+    const filteredByType =
+      type === 'project' || type === 'employee'
+        ? workflows.filter((workflow) => workflow.type === type)
+        : workflows
     const result = keyword
-      ? workflows.filter(
+      ? filteredByType.filter(
           (workflow) =>
             workflow.name.toLowerCase().includes(keyword) ||
             workflow.description.toLowerCase().includes(keyword)
         )
-      : workflows
+      : filteredByType
 
     return jsonEnvelope(paginate(result, page, perPage))
   }),
