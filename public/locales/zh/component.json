@@ -47,10 +47,6 @@
   "themeSwitcher": {
     "tips": "切换主题为{{mode}}"
   },
-  "topMenu": {
-    "overview": "概览",
-    "projects": "项目"
-  },
   "dataTable": {
     "noResults": "暂无数据",
     "columnHeader": {

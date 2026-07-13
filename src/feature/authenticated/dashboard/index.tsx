@@ -1,16 +1,15 @@
-import { ArrowDown, ArrowUp, DollarSign, MoreHorizontal, ShoppingCart } from 'lucide-react'
+import * as React from 'react'
+
+import { ArrowUp, Bot, ClipboardList, FileText, Folder } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+
+import { useActiveProjectStore } from '@/store/active-project'
+import { useLoginUserStore } from '@/store/login-user'
 
 import { useTour } from '@/hooks/tour/use-tour'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Stat, StatIndicator, StatLabel, StatTrend, StatValue } from '@/components/ui/stat'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -24,17 +23,38 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import Search from '@/components/search'
 import { ThemeModeSwitcher } from '@/components/theme-mode-switcher'
 
-import { Analytics } from './components/analytics'
+import { ProjectAnalytics } from './components/analytics'
 import { Overview } from './components/overview'
-import { RecentSales } from './components/recent-sales'
+import { RecentActivity } from './components/recent-sales'
+
+const EmptyMenuPermissions: string[] = []
+
+type DashboardTab = 'overview' | 'project'
 
 const Dashboard = () => {
   const { t } = useTranslation(['dashboard', 'global'])
+  const activeProject = useActiveProjectStore((state) => state.activeProject)
+  const menuPermissions = useLoginUserStore(
+    (state) => state.loginUser?.menu_permissions ?? EmptyMenuPermissions
+  )
+  const [tab, setTab] = React.useState<DashboardTab>('overview')
+
   useTour()
+  const selectedTab = activeProject || tab !== 'project' ? tab : 'overview'
+  const visibleTopMenu = React.useMemo(
+    () => topMenu.filter((item) => menuPermissions.includes(item.permissionKey)),
+    [menuPermissions]
+  )
+
+  const handleTabChange = (value: string) => {
+    if (value === 'project' && !activeProject) return
+    setTab(value as DashboardTab)
+  }
+
   return (
     <>
       <AppHeader fixed>
-        <TopMenu links={topMenu} />
+        <TopMenu links={visibleTopMenu} />
         <div className="ms-auto flex items-center space-x-4">
           <Search />
           <ThemeModeSwitcher />
@@ -50,70 +70,76 @@ const Dashboard = () => {
             <Button size="default">{t('global:button.reload')}</Button>
           </div>
         </div>
-        <Tabs orientation="horizontal" defaultValue="overview" className="space-y-4">
+        <Tabs
+          orientation="horizontal"
+          value={selectedTab}
+          onValueChange={handleTabChange}
+          className="space-y-4"
+        >
           <div className="w-full overflow-x-auto pb-2">
             <TabsList>
               <TabsTrigger value="overview">{t('tabs.overview')}</TabsTrigger>
-              <TabsTrigger value="analytics">{t('tabs.analytics')}</TabsTrigger>
+              <TabsTrigger
+                value="project"
+                disabled={!activeProject}
+                title={!activeProject ? t('tabs.projectDisabled') : undefined}
+              >
+                {t('tabs.project')}
+              </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="overview" className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <Stat>
-                <StatLabel>Total Revenue</StatLabel>
+                <StatLabel>{t('overview.stats.projects.label')}</StatLabel>
                 <StatIndicator variant="icon" color="success">
-                  <DollarSign />
+                  <Folder />
                 </StatIndicator>
-                <StatValue>$45,231</StatValue>
+                <StatValue>{t('overview.stats.projects.value')}</StatValue>
                 <StatTrend trend="up">
                   <ArrowUp />
-                  +20.1% from last month
+                  {t('overview.stats.projects.trend')}
                 </StatTrend>
               </Stat>
               <Stat>
-                <StatLabel>Active Users</StatLabel>
-                <StatIndicator variant="badge" color="info">
-                  +24
+                <StatLabel>{t('overview.stats.tasks.label')}</StatLabel>
+                <StatIndicator variant="icon" color="info">
+                  <ClipboardList />
                 </StatIndicator>
-                <StatValue>2,350</StatValue>
+                <StatValue>{t('overview.stats.tasks.value')}</StatValue>
                 <StatTrend trend="up">
                   <ArrowUp />
-                  +180 from last week
+                  {t('overview.stats.tasks.trend')}
                 </StatTrend>
               </Stat>
               <Stat>
-                <StatLabel>Total Orders</StatLabel>
+                <StatLabel>{t('overview.stats.aiEmployees.label')}</StatLabel>
                 <StatIndicator variant="icon" color="warning">
-                  <ShoppingCart />
+                  <Bot />
                 </StatIndicator>
-                <StatValue>1,234</StatValue>
-                <StatTrend trend="down">
-                  <ArrowDown />
-                  -4.3% from last month
+                <StatValue>{t('overview.stats.aiEmployees.value')}</StatValue>
+                <StatTrend trend="up">
+                  <ArrowUp />
+                  {t('overview.stats.aiEmployees.trend')}
                 </StatTrend>
               </Stat>
               <Stat>
-                <StatLabel>Conversion Rate</StatLabel>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <StatIndicator variant="action">
-                      <MoreHorizontal />
-                    </StatIndicator>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>View details</DropdownMenuItem>
-                    <DropdownMenuItem>Export data</DropdownMenuItem>
-                    <DropdownMenuItem>Share</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <StatValue>3.2%</StatValue>
-                <StatTrend trend="neutral">No change from last week</StatTrend>
+                <StatLabel>{t('overview.stats.documents.label')}</StatLabel>
+                <StatIndicator variant="icon" color="default">
+                  <FileText />
+                </StatIndicator>
+                <StatValue>{t('overview.stats.documents.value')}</StatValue>
+                <StatTrend trend="up">
+                  <ArrowUp />
+                  {t('overview.stats.documents.trend')}
+                </StatTrend>
               </Stat>
             </div>
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-7">
               <Card className="col-span-1 lg:col-span-4">
                 <CardHeader>
-                  <CardTitle>Overview</CardTitle>
+                  <CardTitle>{t('overview.chart.title')}</CardTitle>
+                  <CardDescription>{t('overview.chart.description')}</CardDescription>
                 </CardHeader>
                 <CardContent className="ps-2">
                   <Overview />
@@ -121,17 +147,17 @@ const Dashboard = () => {
               </Card>
               <Card className="col-span-1 lg:col-span-3">
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
-                  <CardDescription>You made 265 sales this month.</CardDescription>
+                  <CardTitle>{t('overview.activity.title')}</CardTitle>
+                  <CardDescription>{t('overview.activity.description')}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  <RecentActivity />
                 </CardContent>
               </Card>
             </div>
           </TabsContent>
-          <TabsContent value="analytics" className="space-y-4">
-            <Analytics />
+          <TabsContent value="project" className="space-y-4">
+            {activeProject ? <ProjectAnalytics projectName={activeProject.name} /> : null}
           </TabsContent>
         </Tabs>
       </AppMain>

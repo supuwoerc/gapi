@@ -47,10 +47,6 @@
   "themeSwitcher": {
     "tips": "Switch theme to {{mode}}"
   },
-  "topMenu": {
-    "overview": "Overview",
-    "projects": "Projects"
-  },
   "dataTable": {
     "noResults": "No results.",
     "columnHeader": {

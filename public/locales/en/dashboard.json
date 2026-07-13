@@ -2,6 +2,136 @@
   "name": "Dashboard",
   "tabs": {
     "overview": "Overview",
-    "analytics": "Analytics"
+    "project": "Project",
+    "projectDisabled": "Select a global project to view project metrics"
+  },
+  "overview": {
+    "stats": {
+      "projects": {
+        "label": "Joined Projects",
+        "value": "12",
+        "trend": "3 added this month"
+      },
+      "tasks": {
+        "label": "Open Tasks",
+        "value": "18",
+        "trend": "5 added this week"
+      },
+      "aiEmployees": {
+        "label": "AI Employees",
+        "value": "7",
+        "trend": "2 roles added"
+      },
+      "documents": {
+        "label": "Document Updates",
+        "value": "24",
+        "trend": "9 updated this week"
+      }
+    },
+    "chart": {
+      "title": "My Collaboration Trend",
+      "description": "User-level summary of requirement cards, delivered tasks, and maintained docs.",
+      "requirements": "Requirement Cards",
+      "tasks": "Delivered Tasks",
+      "documents": "Document Updates",
+      "months": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun"
+      }
+    },
+    "activity": {
+      "title": "Recent Collaboration",
+      "description": "Requirement, workflow, sandbox, and QA progress related to you.",
+      "items": {
+        "requirement": {
+          "actor": "PM Assistant",
+          "description": "Generated task cards from conversation requirements",
+          "metric": "+6"
+        },
+        "workflow": {
+          "actor": "AI Developer",
+          "description": "Completed custom workflow runs",
+          "metric": "4"
+        },
+        "document": {
+          "actor": "Document Owner",
+          "description": "Updated project knowledge base docs",
+          "metric": "9"
+        },
+        "sandbox": {
+          "actor": "DevOps Assistant",
+          "description": "Prepared sandbox execution environments",
+          "metric": "3"
+        },
+        "qa": {
+          "actor": "QA Employee",
+          "description": "Submitted automated test reports",
+          "metric": "2"
+        }
+      }
+    }
+  },
+  "project": {
+    "chart": {
+      "title": "Project Execution Trend",
+      "description": "{{projectName}} requirement, task, and sandbox volume for the last week.",
+      "requirements": "Requirement Cards",
+      "tasks": "Delivered Tasks",
+      "sandboxes": "Sandbox Runs",
+      "days": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      }
+    },
+    "stats": {
+      "tasks": {
+        "label": "Task Delivery",
+        "value": "42",
+        "description": "Completed in the current iteration"
+      },
+      "workflows": {
+        "label": "Workflow Runs",
+        "value": "9",
+        "description": "Collaboration flows currently running"
+      },
+      "sandboxes": {
+        "label": "Sandbox Runs",
+        "value": "16",
+        "description": "Automated executions this week"
+      },
+      "qa": {
+        "label": "QA Pass Rate",
+        "value": "91%",
+        "description": "Automated tests and reviews passed"
+      }
+    },
+    "aiEmployees": {
+      "title": "AI Employee Setup",
+      "description": "Role coverage and staffing for the current project.",
+      "developer": "Developer",
+      "qa": "QA",
+      "architect": "Architect",
+      "designer": "Designer",
+      "pm": "PM",
+      "unit": "{{count}}"
+    },
+    "workflowStages": {
+      "title": "Workflow Stages",
+      "description": "Key collaboration stages waiting for progress.",
+      "requirements": "Requirement breakdown",
+      "implementation": "Implementation",
+      "review": "Code review",
+      "qa": "QA report",
+      "unit": "{{count}}"
+    }
   }
 }

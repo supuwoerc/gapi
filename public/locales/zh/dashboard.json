@@ -2,6 +2,136 @@
   "name": "仪表盘",
   "tabs": {
     "overview": "概览",
-    "analytics": "分析"
+    "project": "项目",
+    "projectDisabled": "请选择全局项目后查看项目维度"
+  },
+  "overview": {
+    "stats": {
+      "projects": {
+        "label": "参与项目",
+        "value": "12",
+        "trend": "本月新增 3 个"
+      },
+      "tasks": {
+        "label": "待处理任务",
+        "value": "18",
+        "trend": "本周新增 5 个"
+      },
+      "aiEmployees": {
+        "label": "AI 员工协作",
+        "value": "7",
+        "trend": "新增 2 个角色"
+      },
+      "documents": {
+        "label": "文档更新",
+        "value": "24",
+        "trend": "本周更新 9 篇"
+      }
+    },
+    "chart": {
+      "title": "我的协作趋势",
+      "description": "按用户维度汇总需求卡片、任务交付和文档维护。",
+      "requirements": "需求卡片",
+      "tasks": "任务交付",
+      "documents": "文档更新",
+      "months": {
+        "jan": "1月",
+        "feb": "2月",
+        "mar": "3月",
+        "apr": "4月",
+        "may": "5月",
+        "jun": "6月"
+      }
+    },
+    "activity": {
+      "title": "近期协作动态",
+      "description": "与你相关的需求、工作流、沙盒和 QA 进展。",
+      "items": {
+        "requirement": {
+          "actor": "产品经理助手",
+          "description": "从对话需求生成任务卡片",
+          "metric": "+6"
+        },
+        "workflow": {
+          "actor": "AI 开发员工",
+          "description": "完成自定义工作流执行",
+          "metric": "4 条"
+        },
+        "document": {
+          "actor": "文档维护者",
+          "description": "更新项目知识库文档",
+          "metric": "9 篇"
+        },
+        "sandbox": {
+          "actor": "DevOps 助手",
+          "description": "准备沙盒执行环境",
+          "metric": "3 个"
+        },
+        "qa": {
+          "actor": "QA 员工",
+          "description": "提交自动化测试报告",
+          "metric": "2 份"
+        }
+      }
+    }
+  },
+  "project": {
+    "chart": {
+      "title": "项目执行趋势",
+      "description": "{{projectName}} 最近一周的需求、任务和沙盒执行量。",
+      "requirements": "需求卡片",
+      "tasks": "任务交付",
+      "sandboxes": "沙盒执行",
+      "days": {
+        "mon": "周一",
+        "tue": "周二",
+        "wed": "周三",
+        "thu": "周四",
+        "fri": "周五",
+        "sat": "周六",
+        "sun": "周日"
+      }
+    },
+    "stats": {
+      "tasks": {
+        "label": "任务交付",
+        "value": "42",
+        "description": "本迭代已完成任务"
+      },
+      "workflows": {
+        "label": "工作流运行",
+        "value": "9",
+        "description": "正在执行的协作流程"
+      },
+      "sandboxes": {
+        "label": "沙盒执行",
+        "value": "16",
+        "description": "本周自动执行次数"
+      },
+      "qa": {
+        "label": "QA 通过率",
+        "value": "91%",
+        "description": "自动化测试与审查通过率"
+      }
+    },
+    "aiEmployees": {
+      "title": "AI 员工配置",
+      "description": "当前项目覆盖的角色与人员规模。",
+      "developer": "开发员工",
+      "qa": "QA 员工",
+      "architect": "架构师",
+      "designer": "设计师",
+      "pm": "产品经理",
+      "unit": "{{count}} 名"
+    },
+    "workflowStages": {
+      "title": "工作流阶段",
+      "description": "当前项目待推进的关键协作环节。",
+      "requirements": "需求拆解",
+      "implementation": "实现中",
+      "review": "代码审查",
+      "qa": "QA 报告",
+      "unit": "{{count}} 项"
+    }
   }
 }

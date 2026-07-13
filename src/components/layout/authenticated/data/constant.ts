@@ -157,15 +157,28 @@ export const sidebarData: Menu[] = [
 
 export const topMenu = [
   {
-    title: 'component:topMenu.overview',
+    title: 'route:general.dashboard',
     href: '/dashboard',
-    isActive: true,
-    disabled: false,
+    permissionKey: 'dashboard',
   },
   {
-    title: 'component:topMenu.projects',
+    title: 'route:pages.projects',
     href: '/projects',
-    isActive: false,
-    disabled: true,
+    permissionKey: 'projects',
+  },
+  {
+    title: 'route:general.tasks',
+    href: '/tasks',
+    permissionKey: 'tasks',
+  },
+  {
+    title: 'route:pages.workflow',
+    href: '/workflow',
+    permissionKey: 'workflow',
+  },
+  {
+    title: 'route:pages.documents',
+    href: '/documents',
+    permissionKey: 'documents',
   },
 ]
